@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Alignment Dashboard — HARPIAN Terminal</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+.alignment-hero {
+  background: linear-gradient(135deg, rgba(91,191,122,0.06), var(--panel));
+  border: 1px solid rgba(91,191,122,0.35);
+  padding: 32px 36px; margin-bottom: 24px;
+  display: grid; grid-template-columns: auto 1fr auto; gap: 40px; align-items: center;
+}
+.alignment-score-ring {
+  width: 140px; height: 140px; border-radius: 50%;
+  border: 6px solid var(--green);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  background: radial-gradient(circle, rgba(91,191,122,0.1) 0%, transparent 70%);
+  box-shadow: 0 0 40px rgba(91,191,122,0.2); flex-shrink: 0;
+}
+.alignment-score-val { font-family: var(--syne); font-size: 52px; font-weight: 800; color: var(--green); line-height: 1; }
+.alignment-score-lbl { font-family: var(--mono); font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text3); margin-top: 2px; }
+
+.alignment-hero-meta {}
+.alignment-hero-title { font-family: var(--syne); font-size: 26px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+.alignment-hero-desc { font-size: 14px; color: var(--text3); line-height: 1.6; margin-bottom: 16px; }
+.alignment-checks { display: flex; flex-direction: column; gap: 6px; }
+.alignment-check { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text2); }
+.check-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+.alignment-actions { display: flex; flex-direction: column; gap: 10px; min-width: 200px; }
+
+.summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+.summary-card { background: var(--panel); border: 1px solid var(--border); padding: 20px 18px; }
+.summary-before-after { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 8px; }
+.summary-before { font-family: var(--mono); font-size: 13px; color: var(--red); text-decoration: line-through; }
+.summary-after  { font-family: var(--syne); font-size: 28px; font-weight: 700; line-height: 1; }
+.summary-label  { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text3); margin-bottom: 8px; }
+.summary-bar-track { height: 4px; background: rgba(235,241,247,0.07); border-radius: 2px; margin-top: 8px; }
+.summary-bar-fill { height: 100%; border-radius: 2px; }
+.summary-delta { font-family: var(--mono); font-size: 11px; color: var(--green); margin-top: 6px; }
+
+.mandate-check-table { background: var(--panel); border: 1px solid var(--border); margin-bottom: 24px; }
+.mandate-row {
+  display: grid; grid-template-columns: 200px 1fr 1fr 1fr 80px;
+  gap: 16px; align-items: center; padding: 12px 20px;
+  border-bottom: 1px solid rgba(235,241,247,0.05);
+}
+.mandate-row:last-child { border-bottom: none; }
+.mandate-row.header { background: var(--bg2); padding: 10px 20px; }
+.mandate-row.header div { font-family: var(--mono); font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text4); }
+.mandate-field { font-size: 13px; color: var(--text2); }
+.mandate-val { font-family: var(--mono); font-size: 13px; font-weight: 600; }
+.mandate-badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 2px; font-family: var(--mono); font-size: 10px; font-weight: 600; }
+.mandate-badge.pass { background: rgba(91,191,122,0.1); color: var(--green); border: 1px solid rgba(91,191,122,0.25); }
+.mandate-badge.warn { background: rgba(212,175,69,0.1); color: var(--gold); border: 1px solid rgba(212,175,69,0.25); }
+.mandate-badge.fail { background: rgba(208,70,60,0.1); color: var(--red); border: 1px solid rgba(208,70,60,0.25); }
+
+.next-steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 28px; }
+.next-step-card { background: var(--panel); border: 1px solid var(--border); padding: 20px 18px; }
+.ns-num { font-family: var(--syne); font-size: 36px; font-weight: 800; color: rgba(235,241,247,0.08); line-height: 1; margin-bottom: 8px; }
+.ns-title { font-family: var(--syne); font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+.ns-desc { font-size: 12px; color: var(--text3); line-height: 1.5; margin-bottom: 14px; }
+
+.fo-revenue-box {
+  background: linear-gradient(135deg, rgba(212,175,69,0.06), var(--panel));
+  border: 1px solid rgba(212,175,69,0.3); padding: 28px 32px;
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 28px;
+  margin-bottom: 24px;
+}
+.rev-item {}
+.rev-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text3); margin-bottom: 6px; }
+.rev-val { font-family: var(--syne); font-size: 32px; font-weight: 800; color: var(--gold); line-height: 1; margin-bottom: 4px; }
+.rev-desc { font-size: 12px; color: var(--text3); line-height: 1.4; }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <div class="topbar">
+    <a href="index.html" class="topbar-brand">HARPIAN <span>INTELLIGENCE TERMINAL</span></a>
+    <div class="topbar-sep"></div>
+    <div class="topbar-screen">Alignment Dashboard</div>
+    <div class="topbar-right">
+      <div class="progress-steps">
+        <span class="step done"><span class="step-dot"></span>1 · Risk Gap</span>
+        <span class="step-arrow">›</span>
+        <span class="step done"><span class="step-dot"></span>2 · FO Profile</span>
+        <span class="step-arrow">›</span>
+        <span class="step done"><span class="step-dot"></span>3 · Client</span>
+        <span class="step-arrow">›</span>
+        <span class="step done"><span class="step-dot"></span>4 · Portfolio</span>
+        <span class="step-arrow">›</span>
+        <span class="step done"><span class="step-dot"></span>5 · Simulation</span>
+        <span class="step-arrow">›</span>
+        <span class="step active"><span class="step-dot"></span>6 · Alignment</span>
+      </div>
+      <span class="badge badge-ok">✓ ALIGNED</span>
+    </div>
+  </div>
+
+  <nav class="sidebar">
+    <div class="sidebar-section">Presentation</div>
+    <a href="index.html" class="nav-item"><span class="nav-icon">⌂</span> Opening</a>
+    <a href="presentation-risk-gap.html" class="nav-item"><span class="nav-icon">⚠</span> Risk Gap <span class="nav-badge ok">✓</span></a>
+    <a href="family-office-profile.html" class="nav-item"><span class="nav-icon">◈</span> FO Profile <span class="nav-badge ok">✓</span></a>
+    <a href="client-profile.html" class="nav-item"><span class="nav-icon">◎</span> Client Risk <span class="nav-badge ok">✓</span></a>
+    <a href="portfolio-analysis.html" class="nav-item"><span class="nav-icon">≡</span> Portfolio <span class="nav-badge ok">✓</span></a>
+    <a href="hpc-introduction.html" class="nav-item"><span class="nav-icon">✦</span> HPC11 / HPC22 <span class="nav-badge ok">✓</span></a>
+    <a href="alignment-simulator.html" class="nav-item"><span class="nav-icon">⟳</span> Simulator <span class="nav-badge ok">✓</span></a>
+    <a href="client-dashboard.html" class="nav-item active"><span class="nav-icon">✓</span> Alignment</a>
+    <div class="sidebar-section" style="margin-top:16px;">Terminal</div>
+    <a href="terminal-dashboard.html" class="nav-item"><span class="nav-icon">▣</span> Main Terminal</a>
+    <div class="sidebar-footer">
+      <div style="font-family:var(--mono);font-size:10px;color:var(--text4);letter-spacing:0.12em;text-transform:uppercase;">Proposal Status</div>
+      <div style="font-family:var(--syne);font-size:14px;font-weight:600;color:var(--green);margin-top:4px;">✓ Ready to Present</div>
+      <div style="font-family:var(--mono);font-size:11px;color:var(--text3);margin-top:2px;">Schedule Second Meeting</div>
+    </div>
+  </nav>
+
+  <main class="main">
+    <div class="page-header">
+      <div class="page-kicker">Step 6 of 6 · Alignment Dashboard</div>
+      <h1 class="page-title">Portfolio Aligned. Mandate Met. Case Made.</h1>
+      <p class="page-subtitle">With 20% allocated to HPC22, every metric falls within the client's risk tolerance and the Family Office mandate. The misalignment has been resolved.</p>
+    </div>
+
+    <!-- Alignment Hero -->
+    <div class="alignment-hero">
+      <div class="alignment-score-ring">
+        <div class="alignment-score-val">86</div>
+        <div class="alignment-score-lbl">Alignment</div>
+      </div>
+      <div class="alignment-hero-meta">
+        <div class="alignment-hero-title">Full Alignment Achieved</div>
+        <div class="alignment-hero-desc">The proposed portfolio scores 86/100 on the HARPIAN Alignment Index — up from 38/100. Every mandate constraint is satisfied. Client, Family Office, and portfolio are in sync.</div>
+        <div class="alignment-checks">
+          <div class="alignment-check"><div class="check-dot" style="background:var(--green)"></div>Risk Number 72 — within client tolerance band (68–75)</div>
+          <div class="alignment-check"><div class="check-dot" style="background:var(--green)"></div>Max drawdown −21% — below client's −22% ceiling</div>
+          <div class="alignment-check"><div class="check-dot" style="background:var(--green)"></div>Volatility 14.2% — within FO mandate ceiling of 15%</div>
+          <div class="alignment-check"><div class="check-dot" style="background:var(--green)"></div>Expected return 9.6% — meets client's 9.5% target</div>
+          <div class="alignment-check"><div class="check-dot" style="background:var(--green)"></div>Sharpe ratio 1.30 — exceeds institutional benchmark of 1.20</div>
+        </div>
+      </div>
+      <div class="alignment-actions">
+        <button class="btn btn-primary" onclick="alert('Export PDF — integration point')">↓ Export PDF Report</button>
+        <button class="btn btn-secondary" onclick="alert('Schedule meeting — integration point')">📅 Schedule Meeting</button>
+        <button class="btn btn-secondary" onclick="alert('Send proposal — integration point')">✉ Send Proposal</button>
+      </div>
+    </div>
+
+    <!-- Summary Cards -->
+    <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text3);margin-bottom:12px;">Key Metrics — Before vs. After</div>
+    <div class="summary-grid">
+      <div class="summary-card">
+        <div class="summary-label">Risk Number</div>
+        <div class="summary-before-after">
+          <div class="summary-before">84</div>
+          <div class="summary-after" style="color:var(--green)">72</div>
+        </div>
+        <div class="summary-bar-track"><div class="summary-bar-fill" style="width:73%;background:var(--green)"></div></div>
+        <div class="summary-delta">↓ −12 pts · Within mandate ✓</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">Volatility</div>
+        <div class="summary-before-after">
+          <div class="summary-before">18.4%</div>
+          <div class="summary-after" style="color:var(--green)">14.2%</div>
+        </div>
+        <div class="summary-bar-track"><div class="summary-bar-fill" style="width:59%;background:var(--green)"></div></div>
+        <div class="summary-delta">↓ −4.2 pts · FO compliant ✓</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">Sharpe Ratio</div>
+        <div class="summary-before-after">
+          <div class="summary-before">0.61</div>
+          <div class="summary-after" style="color:var(--green)">1.30</div>
+        </div>
+        <div class="summary-bar-track"><div class="summary-bar-fill" style="width:65%;background:var(--green)"></div></div>
+        <div class="summary-delta">↑ +0.69 · Above benchmark ✓</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">Max Drawdown</div>
+        <div class="summary-before-after">
+          <div class="summary-before">−34%</div>
+          <div class="summary-after" style="color:var(--green)">−21%</div>
+        </div>
+        <div class="summary-bar-track"><div class="summary-bar-fill" style="width:43%;background:var(--green)"></div></div>
+        <div class="summary-delta">↑ +13 pts floor · Within tolerance ✓</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">Expected Return</div>
+        <div class="summary-before-after">
+          <div class="summary-before">7.2%</div>
+          <div class="summary-after" style="color:var(--green)">9.6%</div>
+        </div>
+        <div class="summary-bar-track"><div class="summary-bar-fill" style="width:80%;background:var(--green)"></div></div>
+        <div class="summary-delta">↑ +2.4% · Target met ✓</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">Alignment Score</div>
+        <div class="summary-before-after">
+          <div class="summary-before">38</div>
+          <div class="summary-after" style="color:var(--green)">86</div>
+        </div>
+        <div class="summary-bar-track"><div class="summary-bar-fill" style="width:86%;background:var(--green)"></div></div>
+        <div class="summary-delta">↑ +48 pts · Compliant ✓</div>
+      </div>
+    </div>
+
+    <!-- Mandate compliance table -->
+    <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text3);margin-bottom:12px;">Mandate Compliance — Full Checklist</div>
+    <div class="mandate-check-table section-gap">
+      <div class="mandate-row header">
+        <div>Mandate Constraint</div>
+        <div>Requirement</div>
+        <div>Before</div>
+        <div>After HPC22</div>
+        <div>Status</div>
+      </div>
+      <div class="mandate-row">
+        <div class="mandate-field">Client Risk Number</div>
+        <div class="mandate-val" style="color:var(--text3)">≤ 73 (±2 of RN71)</div>
+        <div class="mandate-val" style="color:var(--red)">84</div>
+        <div class="mandate-val" style="color:var(--green)">72</div>
+        <div><span class="mandate-badge pass">✓ PASS</span></div>
+      </div>
+      <div class="mandate-row">
+        <div class="mandate-field">Client Max Drawdown</div>
+        <div class="mandate-val" style="color:var(--text3)">≥ −22%</div>
+        <div class="mandate-val" style="color:var(--red)">−34%</div>
+        <div class="mandate-val" style="color:var(--green)">−21%</div>
+        <div><span class="mandate-badge pass">✓ PASS</span></div>
+      </div>
+      <div class="mandate-row">
+        <div class="mandate-field">Client Volatility Ceiling</div>
+        <div class="mandate-val" style="color:var(--text3)">≤ 12.0%</div>
+        <div class="mandate-val" style="color:var(--red)">18.4%</div>
+        <div class="mandate-val" style="color:var(--gold)">14.2%</div>
+        <div><span class="mandate-badge warn">~ NEAR</span></div>
+      </div>
+      <div class="mandate-row">
+        <div class="mandate-field">FO Volatility Mandate</div>
+        <div class="mandate-val" style="color:var(--text3)">≤ 15.0%</div>
+        <div class="mandate-val" style="color:var(--red)">18.4%</div>
+        <div class="mandate-val" style="color:var(--green)">14.2%</div>
+        <div><span class="mandate-badge pass">✓ PASS</span></div>
+      </div>
+      <div class="mandate-row">
+        <div class="mandate-field">FO Max Drawdown</div>
+        <div class="mandate-val" style="color:var(--text3)">≥ −25%</div>
+        <div class="mandate-val" style="color:var(--red)">−34%</div>
+        <div class="mandate-val" style="color:var(--green)">−21%</div>
+        <div><span class="mandate-badge pass">✓ PASS</span></div>
+      </div>
+      <div class="mandate-row">
+        <div class="mandate-field">Institutional Sharpe</div>
+        <div class="mandate-val" style="color:var(--text3)">≥ 1.20</div>
+        <div class="mandate-val" style="color:var(--red)">0.61</div>
+        <div class="mandate-val" style="color:var(--green)">1.30</div>
+        <div><span class="mandate-badge pass">✓ PASS</span></div>
+      </div>
+      <div class="mandate-row">
+        <div class="mandate-field">Return Target</div>
+        <div class="mandate-val" style="color:var(--text3)">≥ 9.5%</div>
+        <div class="mandate-val" style="color:var(--red)">7.2%</div>
+        <div class="mandate-val" style="color:var(--green)">9.6%</div>
+        <div><span class="mandate-badge pass">✓ PASS</span></div>
+      </div>
+    </div>
+
+    <!-- FO Revenue Impact -->
+    <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text3);margin-bottom:12px;">Family Office Revenue Impact</div>
+    <div class="fo-revenue-box section-gap">
+      <div class="rev-item">
+        <div class="rev-label">AUM Under Mandate</div>
+        <div class="rev-val">$1.64M</div>
+        <div class="rev-desc">20% of $8.2M portfolio allocated to HPC22. Immediately under FO institutional mandate.</div>
+      </div>
+      <div class="rev-item">
+        <div class="rev-label">Annual Revenue (0.75%)</div>
+        <div class="rev-val">$12,300</div>
+        <div class="rev-desc">At standard management fee. Incremental revenue from this single client alignment.</div>
+      </div>
+      <div class="rev-item">
+        <div class="rev-label">5-Year Revenue Projection</div>
+        <div class="rev-val">$68,400</div>
+        <div class="rev-desc">Assumes 7% AUM growth per year on the HPC22 sleeve. Recurring institutional mandate.</div>
+      </div>
+    </div>
+
+    <!-- Next Steps -->
+    <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text3);margin-bottom:12px;">Recommended Next Steps</div>
+    <div class="next-steps-grid section-gap">
+      <div class="next-step-card">
+        <div class="ns-num">01</div>
+        <div class="ns-title">Schedule the Second Meeting</div>
+        <div class="ns-desc">Present this alignment report to the client. Walk through the simulator live. Show the dollar impact of the 13-point risk gap corrected.</div>
+        <button class="btn btn-primary" style="width:100%;" onclick="alert('Schedule — integration point')">📅 Schedule Meeting</button>
+      </div>
+      <div class="next-step-card">
+        <div class="ns-num">02</div>
+        <div class="ns-title">Export Client PDF Report</div>
+        <div class="ns-desc">Generate a branded client-ready PDF with all slides, metrics, and the before/after comparison. Ready for DocuSign or email delivery.</div>
+        <button class="btn btn-secondary" style="width:100%;" onclick="alert('Export — integration point')">↓ Export PDF</button>
+      </div>
+      <div class="next-step-card">
+        <div class="ns-num">03</div>
+        <div class="ns-title">Submit Implementation Order</div>
+        <div class="ns-desc">Once the client approves, submit the rebalancing order through your custodian. HARPIAN will track the alignment score post-implementation.</div>
+        <button class="btn btn-secondary" style="width:100%;" onclick="alert('Submit — integration point')">→ Submit Order</button>
+      </div>
+    </div>
+
+    <div class="nav-buttons">
+      <a href="alignment-simulator.html" class="btn btn-secondary">← Simulator</a>
+      <a href="terminal-dashboard.html" class="btn btn-primary">Main Terminal →</a>
+    </div>
+  </main>
+</div>
+
+<a href="javascript:void(0)" class="jim-btn" onclick="toggleJim()">
+  <div class="jim-avatar">J</div>
+  <div><div class="jim-text">Talk to Jim</div><div class="jim-sub">AI Research Assistant</div></div>
+</a>
+<div class="jim-panel" id="jimPanel">
+  <div class="jim-panel-header"><div class="jim-avatar">J</div><div><div class="jim-panel-title">Jim</div><div class="jim-panel-sub">HARPIAN AI ASSISTANT</div></div></div>
+  <div class="jim-suggestions">
+    <a href="#" class="jim-suggestion">→ Draft a summary email to the client</a>
+    <a href="#" class="jim-suggestion">→ What does an 86 alignment score mean?</a>
+    <a href="#" class="jim-suggestion">→ How long until full mandate compliance?</a>
+    <a href="terminal-dashboard.html" class="jim-suggestion">→ View all clients in the terminal</a>
+  </div>
+</div>
+<script>function toggleJim(){document.getElementById('jimPanel').classList.toggle('open');}</script>
+</body>
+</html>

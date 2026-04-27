@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Main Terminal — HARPIAN Intelligence Terminal</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+/* Terminal uses a wider sidebar */
+.shell { grid-template-columns: 260px 1fr; }
+
+.terminal-topbar-extras { display: flex; align-items: center; gap: 16px; }
+.terminal-clock { font-family: var(--mono); font-size: 12px; color: var(--text3); letter-spacing: 0.12em; }
+.terminal-live { display: flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 11px; color: var(--green); }
+.terminal-live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px var(--green); animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+/* Client list in sidebar */
+.client-list { display: flex; flex-direction: column; gap: 2px; }
+.client-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 12px; cursor: pointer; border-radius: 1px;
+  transition: background 0.15s; text-decoration: none;
+}
+.client-row:hover, .client-row.active { background: var(--bg2); }
+.client-row.active { border-left: 2px solid var(--gold); }
+.client-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.client-name { font-size: 13px; color: var(--text2); flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.client-rn { font-family: var(--mono); font-size: 11px; }
+.client-aum { font-family: var(--mono); font-size: 10px; color: var(--text4); }
+
+/* Main terminal grid */
+.terminal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto;
+  gap: 16px;
+}
+.t-panel { background: var(--panel); border: 1px solid var(--border); padding: 18px 16px; }
+.t-panel.span2 { grid-column: span 2; }
+.t-panel.span3 { grid-column: span 3; }
+.t-panel-title { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text3); margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+
+/* Clients table */
+.clients-table { width: 100%; border-collapse: collapse; }
+.clients-table th { font-family: var(--mono); font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text4); text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border); }
+.clients-table td { padding: 10px 10px; border-bottom: 1px solid rgba(235,241,247,0.04); font-size: 12px; vertical-align: middle; }
+.clients-table tr:last-child td { border-bottom: none; }
+.clients-table tr:hover td { background: rgba(235,241,247,0.02); }
+.rn-chip { display: inline-block; padding: 2px 8px; border-radius: 2px; font-family: var(--mono); font-size: 11px; font-weight: 600; }
+.align-bar-mini { height: 4px; border-radius: 2px; display: inline-block; vertical-align: middle; margin-right: 6px; }
+
+/* Market intelligence quick panel */
+.market-rows { display: flex; flex-direction: column; gap: 0; }
+.market-row { display: flex; align-items: center; gap: 12px; padding: 9px 0; border-bottom: 1px solid rgba(235,241,247,0.05); }
+.market-row:last-child { border-bottom: none; }
+.market-icon { font-size: 14px; width: 22px; text-align: center; }
+.market-name { font-size: 12px; color: var(--text2); flex: 1; }
+.market-val { font-family: var(--mono); font-size: 12px; font-weight: 600; }
+.market-chg { font-family: var(--mono); font-size: 11px; }
+
+/* Activity feed */
+.activity-feed { display: flex; flex-direction: column; gap: 0; }
+.activity-item { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; border-bottom: 1px solid rgba(235,241,247,0.05); }
+.activity-item:last-child { border-bottom: none; }
+.activity-time { font-family: var(--mono); font-size: 10px; color: var(--text4); white-space: nowrap; letter-spacing: 0.08em; }
+.activity-icon { font-size: 12px; margin-top: 1px; }
+.activity-text { font-size: 12px; color: var(--text2); line-height: 1.5; flex: 1; }
+.activity-text strong { color: var(--text); }
+
+/* AUM summary big numbers */
+.aum-row { display: flex; gap: 0; }
+.aum-block { flex: 1; padding: 16px; border-right: 1px solid var(--border); }
+.aum-block:last-child { border-right: none; }
+.aum-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text4); margin-bottom: 6px; }
+.aum-val { font-family: var(--syne); font-size: 24px; font-weight: 700; color: var(--text); line-height: 1; }
+.aum-sub { font-family: var(--mono); font-size: 11px; color: var(--text4); margin-top: 4px; }
+
+/* Intelligence module grid */
+.intel-module-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.intel-mod { background: var(--bg2); border: 1px solid var(--border); padding: 14px 12px; text-decoration: none; transition: border-color 0.15s; cursor: pointer; }
+.intel-mod:hover { border-color: rgba(212,175,69,0.35); }
+.intel-mod-icon { font-size: 16px; margin-bottom: 8px; display: block; }
+.intel-mod-name { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text3); margin-bottom: 4px; }
+.intel-mod-status { font-size: 11px; color: var(--text4); }
+
+/* Alerts panel */
+.alert-item { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid rgba(235,241,247,0.05); }
+.alert-item:last-child { border-bottom: none; }
+.alert-sev { width: 4px; border-radius: 2px; flex-shrink: 0; align-self: stretch; min-height: 40px; }
+.alert-body { flex: 1; }
+.alert-title { font-size: 13px; color: var(--text); margin-bottom: 3px; }
+.alert-desc { font-size: 11px; color: var(--text3); line-height: 1.4; }
+.alert-time { font-family: var(--mono); font-size: 10px; color: var(--text4); }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <div class="topbar">
+    <a href="index.html" class="topbar-brand">HARPIAN <span>INTELLIGENCE TERMINAL</span></a>
+    <div class="topbar-sep"></div>
+    <div class="topbar-screen">Main Terminal</div>
+    <div class="topbar-right">
+      <div class="terminal-topbar-extras">
+        <div class="terminal-clock" id="termClock">--:--:--</div>
+        <div class="terminal-live"><div class="terminal-live-dot"></div>LIVE</div>
+      </div>
+      <span class="badge badge-warn">1 Client · Misaligned</span>
+    </div>
+  </div>
+
+  <nav class="sidebar">
+    <div class="sidebar-section">Clients</div>
+    <div class="client-list">
+      <a href="presentation-risk-gap.html" class="client-row active">
+        <div class="client-dot" style="background:var(--red)"></div>
+        <div>
+          <div class="client-name">Demo Client</div>
+          <div class="client-aum">$8.2M · RN 84 → <span style="color:var(--orange)">71</span></div>
+        </div>
+        <span class="badge badge-warn" style="font-size:9px;padding:2px 6px;">⚠</span>
+      </a>
+      <a href="#" class="client-row">
+        <div class="client-dot" style="background:var(--green)"></div>
+        <div>
+          <div class="client-name">Client Alpha</div>
+          <div class="client-aum">$3.4M · RN 55 · ✓ Aligned</div>
+        </div>
+      </a>
+      <a href="#" class="client-row">
+        <div class="client-dot" style="background:var(--green)"></div>
+        <div>
+          <div class="client-name">Client Beta</div>
+          <div class="client-aum">$12.1M · RN 68 · ✓ Aligned</div>
+        </div>
+      </a>
+    </div>
+
+    <div class="sidebar-section" style="margin-top:16px;">Presentation</div>
+    <a href="index.html" class="nav-item"><span class="nav-icon">⌂</span> Opening</a>
+    <a href="presentation-risk-gap.html" class="nav-item"><span class="nav-icon">⚠</span> Risk Gap</a>
+    <a href="family-office-profile.html" class="nav-item"><span class="nav-icon">◈</span> FO Profile</a>
+    <a href="client-profile.html" class="nav-item"><span class="nav-icon">◎</span> Client Risk</a>
+    <a href="portfolio-analysis.html" class="nav-item"><span class="nav-icon">≡</span> Portfolio</a>
+    <a href="hpc-introduction.html" class="nav-item"><span class="nav-icon">✦</span> HPC11/HPC22</a>
+    <a href="alignment-simulator.html" class="nav-item"><span class="nav-icon">⟳</span> Simulator</a>
+    <a href="client-dashboard.html" class="nav-item"><span class="nav-icon">✓</span> Alignment</a>
+
+    <div class="sidebar-footer">
+      <div style="font-family:var(--mono);font-size:10px;color:var(--text4);letter-spacing:0.12em;text-transform:uppercase;">Family Office</div>
+      <div style="font-family:var(--syne);font-size:14px;font-weight:600;color:var(--text2);margin-top:4px;">Demo Family Office</div>
+      <div style="font-family:var(--mono);font-size:11px;color:var(--text3);margin-top:2px;">Total AUM: $23.7M · 3 clients</div>
+    </div>
+  </nav>
+
+  <main class="main">
+    <!-- AUM Summary Row -->
+    <div class="t-panel" style="padding:0;margin-bottom:16px;">
+      <div class="aum-row">
+        <div class="aum-block">
+          <div class="aum-label">Total AUM</div>
+          <div class="aum-val">$23.7M</div>
+          <div class="aum-sub">3 active clients</div>
+        </div>
+        <div class="aum-block">
+          <div class="aum-label">Aligned AUM</div>
+          <div class="aum-val" style="color:var(--green)">$15.5M</div>
+          <div class="aum-sub">65% · 2 of 3 clients</div>
+        </div>
+        <div class="aum-block">
+          <div class="aum-label">Misaligned AUM</div>
+          <div class="aum-val" style="color:var(--red)">$8.2M</div>
+          <div class="aum-sub">35% · 1 client at risk</div>
+        </div>
+        <div class="aum-block">
+          <div class="aum-label">HPC Under Mandate</div>
+          <div class="aum-val" style="color:var(--gold)">$4.1M</div>
+          <div class="aum-sub">17% · Proposed: +$1.64M</div>
+        </div>
+        <div class="aum-block">
+          <div class="aum-label">FO Revenue (yr)</div>
+          <div class="aum-val" style="color:var(--gold)">$30,750</div>
+          <div class="aum-sub">0.75% fee on HPC AUM</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="terminal-grid">
+
+      <!-- All Clients -->
+      <div class="t-panel span3">
+        <div class="t-panel-title">
+          <span>Client Portfolio Monitor</span>
+          <span class="badge badge-neutral">3 clients</span>
+        </div>
+        <table class="clients-table">
+          <thead>
+            <tr>
+              <th>Client</th>
+              <th>AUM</th>
+              <th>Client RN</th>
+              <th>Portfolio RN</th>
+              <th>Gap</th>
+              <th>Volatility</th>
+              <th>Drawdown</th>
+              <th>Sharpe</th>
+              <th>Alignment</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Demo Client</strong></td>
+              <td style="font-family:var(--mono);">$8.2M</td>
+              <td><span class="rn-chip" style="background:rgba(212,175,69,0.1);color:var(--gold);">71</span></td>
+              <td><span class="rn-chip" style="background:rgba(208,70,60,0.1);color:var(--red);">84</span></td>
+              <td style="font-family:var(--mono);color:var(--red);font-weight:600;">+13 ⚠</td>
+              <td style="font-family:var(--mono);color:var(--red);">18.4%</td>
+              <td style="font-family:var(--mono);color:var(--red);">−34%</td>
+              <td style="font-family:var(--mono);color:var(--red);">0.61</td>
+              <td>
+                <div style="display:flex;align-items:center;">
+                  <div class="align-bar-mini" style="width:38px;background:var(--red);"></div>
+                  <span style="font-family:var(--mono);font-size:11px;color:var(--red);">38</span>
+                </div>
+              </td>
+              <td><a href="presentation-risk-gap.html" class="btn btn-primary" style="padding:4px 12px;font-size:11px;">Present →</a></td>
+            </tr>
+            <tr>
+              <td><strong>Client Alpha</strong></td>
+              <td style="font-family:var(--mono);">$3.4M</td>
+              <td><span class="rn-chip" style="background:rgba(91,191,122,0.1);color:var(--green);">55</span></td>
+              <td><span class="rn-chip" style="background:rgba(91,191,122,0.1);color:var(--green);">57</span></td>
+              <td style="font-family:var(--mono);color:var(--green);">+2 ✓</td>
+              <td style="font-family:var(--mono);color:var(--green);">10.2%</td>
+              <td style="font-family:var(--mono);color:var(--green);">−16%</td>
+              <td style="font-family:var(--mono);color:var(--green);">1.41</td>
+              <td>
+                <div style="display:flex;align-items:center;">
+                  <div class="align-bar-mini" style="width:88px;background:var(--green);"></div>
+                  <span style="font-family:var(--mono);font-size:11px;color:var(--green);">88</span>
+                </div>
+              </td>
+              <td><a href="#" class="btn btn-secondary" style="padding:4px 12px;font-size:11px;">Review</a></td>
+            </tr>
+            <tr>
+              <td><strong>Client Beta</strong></td>
+              <td style="font-family:var(--mono);">$12.1M</td>
+              <td><span class="rn-chip" style="background:rgba(212,175,69,0.1);color:var(--gold);">68</span></td>
+              <td><span class="rn-chip" style="background:rgba(91,191,122,0.1);color:var(--green);">70</span></td>
+              <td style="font-family:var(--mono);color:var(--green);">+2 ✓</td>
+              <td style="font-family:var(--mono);color:var(--green);">13.8%</td>
+              <td style="font-family:var(--mono);color:var(--green);">−20%</td>
+              <td style="font-family:var(--mono);color:var(--green);">1.28</td>
+              <td>
+                <div style="display:flex;align-items:center;">
+                  <div class="align-bar-mini" style="width:82px;background:var(--green);"></div>
+                  <span style="font-family:var(--mono);font-size:11px;color:var(--green);">82</span>
+                </div>
+              </td>
+              <td><a href="#" class="btn btn-secondary" style="padding:4px 12px;font-size:11px;">Review</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Market Intelligence -->
+      <div class="t-panel">
+        <div class="t-panel-title">
+          <span>Market Intelligence</span>
+          <a href="#" style="font-family:var(--mono);font-size:9px;color:var(--gold);letter-spacing:0.12em;">VIEW ALL →</a>
+        </div>
+        <div class="market-rows">
+          <div class="market-row">
+            <div class="market-icon">📈</div>
+            <div class="market-name">S&amp;P 500</div>
+            <div class="market-val">5,218</div>
+            <div class="market-chg" style="color:var(--green);">+0.42%</div>
+          </div>
+          <div class="market-row">
+            <div class="market-icon">📉</div>
+            <div class="market-name">10Y Treasury</div>
+            <div class="market-val">4.28%</div>
+            <div class="market-chg" style="color:var(--red);">+0.06%</div>
+          </div>
+          <div class="market-row">
+            <div class="market-icon">💵</div>
+            <div class="market-name">VIX</div>
+            <div class="market-val">14.2</div>
+            <div class="market-chg" style="color:var(--green);">−0.8</div>
+          </div>
+          <div class="market-row">
+            <div class="market-icon">🏦</div>
+            <div class="market-name">Fed Funds Rate</div>
+            <div class="market-val">5.25%</div>
+            <div class="market-chg" style="color:var(--text4);">—</div>
+          </div>
+          <div class="market-row">
+            <div class="market-icon">📊</div>
+            <div class="market-name">CPI (latest)</div>
+            <div class="market-val">3.2%</div>
+            <div class="market-chg" style="color:var(--gold);">YoY</div>
+          </div>
+          <div class="market-row">
+            <div class="market-icon">🔗</div>
+            <div class="market-name">BTC / USD</div>
+            <div class="market-val">$67,420</div>
+            <div class="market-chg" style="color:var(--green);">+1.8%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Alerts -->
+      <div class="t-panel">
+        <div class="t-panel-title">
+          <span>Active Alerts</span>
+          <span class="badge badge-critical" style="font-size:9px;padding:2px 8px;">3 Open</span>
+        </div>
+        <div>
+          <div class="alert-item">
+            <div class="alert-sev" style="background:var(--red)"></div>
+            <div class="alert-body">
+              <div class="alert-title">Demo Client — Risk Misalignment</div>
+              <div class="alert-desc">Portfolio RN 84 exceeds client tolerance RN 71 by +13 points. Immediate rebalancing recommended.</div>
+            </div>
+            <div class="alert-time">NOW</div>
+          </div>
+          <div class="alert-item">
+            <div class="alert-sev" style="background:var(--orange)"></div>
+            <div class="alert-body">
+              <div class="alert-title">AAPL Position — Concentration</div>
+              <div class="alert-desc">AAPL reached 14.2% of Demo Client portfolio. FO concentration limit: 12%.</div>
+            </div>
+            <div class="alert-time">2h ago</div>
+          </div>
+          <div class="alert-item">
+            <div class="alert-sev" style="background:var(--gold)"></div>
+            <div class="alert-body">
+              <div class="alert-title">Fed Speech — Hawkish Tone Detected</div>
+              <div class="alert-desc">Powell speech flagged as hawkish by Jim. Rate-sensitive positions may need review.</div>
+            </div>
+            <div class="alert-time">4h ago</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Intelligence Modules -->
+      <div class="t-panel">
+        <div class="t-panel-title">
+          <span>Intelligence Modules</span>
+          <a href="#" style="font-family:var(--mono);font-size:9px;color:var(--gold);letter-spacing:0.12em;">MANAGE →</a>
+        </div>
+        <div class="intel-module-grid">
+          <div class="intel-mod">
+            <span class="intel-mod-icon">📋</span>
+            <div class="intel-mod-name">Form 4</div>
+            <div class="intel-mod-status" style="color:var(--green);">● Live</div>
+          </div>
+          <div class="intel-mod">
+            <span class="intel-mod-icon">🏛</span>
+            <div class="intel-mod-name">13F Inst.</div>
+            <div class="intel-mod-status" style="color:var(--green);">● Live</div>
+          </div>
+          <div class="intel-mod">
+            <span class="intel-mod-icon">📊</span>
+            <div class="intel-mod-name">Macro</div>
+            <div class="intel-mod-status" style="color:var(--green);">● Live</div>
+          </div>
+          <div class="intel-mod">
+            <span class="intel-mod-icon">🏦</span>
+            <div class="intel-mod-name">Fed Speech</div>
+            <div class="intel-mod-status" style="color:var(--green);">● Live</div>
+          </div>
+          <div class="intel-mod">
+            <span class="intel-mod-icon">🐳</span>
+            <div class="intel-mod-name">On-Chain</div>
+            <div class="intel-mod-status" style="color:var(--text4);">○ Pending</div>
+          </div>
+          <div class="intel-mod">
+            <span class="intel-mod-icon">⟳</span>
+            <div class="intel-mod-name">StormGuard</div>
+            <div class="intel-mod-status" style="color:var(--green);">● Bull Mode</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Activity Feed -->
+      <div class="t-panel span2">
+        <div class="t-panel-title"><span>Activity Feed</span></div>
+        <div class="activity-feed">
+          <div class="activity-item">
+            <div class="activity-time">09:42</div>
+            <div class="activity-icon">⚠</div>
+            <div class="activity-text">Risk misalignment confirmed for <strong>Demo Client</strong>. Portfolio RN 84 vs. tolerance 71. Presentation mode launched.</div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-time">09:31</div>
+            <div class="activity-icon">📋</div>
+            <div class="activity-text">Form 4 alert: <strong>AAPL insider buy</strong> detected — Tim Cook, 12,400 shares at $182.40. EDGAR link available.</div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-time">08:55</div>
+            <div class="activity-icon">🏦</div>
+            <div class="activity-text">Fed Speech analyzed by Jim: <strong>Hawkish tone</strong> detected in Powell remarks. Duration risk elevated for bond sleeves.</div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-time">08:00</div>
+            <div class="activity-icon">📊</div>
+            <div class="activity-text">FRED macro refresh: <strong>CPI unchanged at 3.2%</strong>. UNRATE 3.9%. 10Y-2Y spread: +0.18 (steepening).</div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-time">Yesterday</div>
+            <div class="activity-icon">✓</div>
+            <div class="activity-text"><strong>Client Beta</strong> rebalance complete. Alignment score updated 79 → 82. FO mandate satisfied.</div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-time">Yesterday</div>
+            <div class="activity-icon">🏛</div>
+            <div class="activity-text">13F filing: <strong>Bridgewater Associates</strong> increased equity exposure +8.2%. New position in QQQ noted.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- StormGuard Status -->
+      <div class="t-panel">
+        <div class="t-panel-title"><span>StormGuard Status</span></div>
+        <div style="text-align:center;padding:16px 0 20px;">
+          <div style="width:80px;height:80px;border-radius:50%;border:4px solid var(--green);display:inline-flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle,rgba(91,191,122,0.1),transparent);box-shadow:0 0 30px rgba(91,191,122,0.2);">
+            <div style="font-family:var(--syne);font-size:11px;font-weight:700;color:var(--green);line-height:1;">BULL</div>
+            <div style="font-family:var(--mono);font-size:8px;color:var(--text4);margin-top:2px;">MODE</div>
+          </div>
+          <div style="font-family:var(--mono);font-size:11px;color:var(--green);margin-top:12px;">● Full Equity Exposure Active</div>
+        </div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:10px;">Market Breadth Signals</div>
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <div style="display:flex;justify-content:space-between;font-size:12px;padding:6px 0;border-bottom:1px solid rgba(235,241,247,0.05);">
+            <span style="color:var(--text3);">NYSE Adv/Dec</span>
+            <span style="font-family:var(--mono);color:var(--green);">2.1 : 1 ↑</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;padding:6px 0;border-bottom:1px solid rgba(235,241,247,0.05);">
+            <span style="color:var(--text3);">200-Day Trend</span>
+            <span style="font-family:var(--mono);color:var(--green);">+4.8% ↑</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;padding:6px 0;border-bottom:1px solid rgba(235,241,247,0.05);">
+            <span style="color:var(--text3);">High-Yield Spreads</span>
+            <span style="font-family:var(--mono);color:var(--green);">3.2% ↓ (tightening)</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;padding:6px 0;">
+            <span style="color:var(--text3);">Defensive Trigger</span>
+            <span style="font-family:var(--mono);color:var(--text4);">Not Active</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="height:32px;"></div>
+  </main>
+</div>
+
+<a href="javascript:void(0)" class="jim-btn" onclick="toggleJim()">
+  <div class="jim-avatar">J</div>
+  <div><div class="jim-text">Talk to Jim</div><div class="jim-sub">AI Research Assistant</div></div>
+</a>
+<div class="jim-panel" id="jimPanel">
+  <div class="jim-panel-header"><div class="jim-avatar">J</div><div><div class="jim-panel-title">Jim</div><div class="jim-panel-sub">HARPIAN AI ASSISTANT</div></div></div>
+  <div class="jim-suggestions">
+    <a href="presentation-risk-gap.html" class="jim-suggestion">→ Start presentation for Demo Client</a>
+    <a href="#" class="jim-suggestion">→ Summarize today's Fed speech tone</a>
+    <a href="#" class="jim-suggestion">→ Which clients have concentration risk above 10%?</a>
+    <a href="alignment-simulator.html" class="jim-suggestion">→ Run HPC22 simulation for Demo Client</a>
+    <a href="#" class="jim-suggestion">→ What is StormGuard watching right now?</a>
+  </div>
+</div>
+
+<script>
+function toggleJim(){document.getElementById('jimPanel').classList.toggle('open');}
+
+// Live clock
+function updateClock() {
+  const now = new Date();
+  const h = String(now.getHours()).padStart(2,'0');
+  const m = String(now.getMinutes()).padStart(2,'0');
+  const s = String(now.getSeconds()).padStart(2,'0');
+  const el = document.getElementById('termClock');
+  if (el) el.textContent = h + ':' + m + ':' + s;
+}
+updateClock();
+setInterval(updateClock, 1000);
+</script>
+</body>
+</html>

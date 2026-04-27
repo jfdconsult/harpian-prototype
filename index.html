@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HARPIAN Intelligence Terminal</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+  body { display: flex; align-items: center; justify-content: center; min-height: 100vh; flex-direction: column; background: var(--bg); }
+
+  .opening-shell {
+    width: 100%; max-width: 1100px;
+    padding: 48px 32px;
+  }
+
+  .opening-top {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    margin-bottom: 56px;
+  }
+
+  .brand-block {}
+  .brand-eyebrow {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.28em;
+    text-transform: uppercase; color: var(--text3); margin-bottom: 10px;
+  }
+  .brand-name {
+    font-family: var(--syne); font-size: 52px; font-weight: 800;
+    color: var(--text); letter-spacing: -0.02em; line-height: 1;
+    margin-bottom: 4px;
+  }
+  .brand-sub {
+    font-family: var(--mono); font-size: 14px; letter-spacing: 0.16em;
+    color: var(--gold); text-transform: uppercase;
+  }
+
+  .status-cluster { display: flex; flex-direction: column; gap: 10px; align-items: flex-end; }
+  .status-item {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em;
+    color: var(--text3); display: flex; align-items: center; gap: 8px;
+  }
+  .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 6px var(--green); }
+
+  .tagline {
+    font-family: var(--syne); font-size: 22px; font-weight: 600;
+    color: var(--text2); max-width: 640px; line-height: 1.4;
+    margin-bottom: 48px;
+  }
+
+  .module-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 14px; margin-bottom: 48px;
+  }
+  .module-card {
+    background: var(--panel); border: 1px solid var(--border);
+    padding: 24px 22px; text-decoration: none;
+    transition: border-color 0.2s, transform 0.15s;
+    cursor: pointer;
+  }
+  .module-card:hover { border-color: rgba(212,175,69,0.4); transform: translateY(-2px); }
+  .module-icon { font-size: 22px; margin-bottom: 14px; display: block; }
+  .module-label {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 6px;
+  }
+  .module-title {
+    font-family: var(--syne); font-size: 17px; font-weight: 700;
+    color: var(--text); margin-bottom: 8px;
+  }
+  .module-desc { font-size: 13px; color: var(--text3); line-height: 1.5; }
+
+  .start-row {
+    display: flex; align-items: center; gap: 20px;
+    margin-bottom: 32px;
+  }
+
+  .flow-indicator {
+    display: flex; align-items: center; gap: 0;
+    font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    margin-top: 32px;
+  }
+  .flow-step {
+    padding: 6px 14px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    color: var(--text3);
+    white-space: nowrap;
+  }
+  .flow-step.first { border-radius: 2px 0 0 2px; }
+  .flow-step.last  { border-radius: 0 2px 2px 0; }
+  .flow-arrow {
+    padding: 6px 8px;
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    color: var(--gold);
+  }
+
+  .bottom-bar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    height: 36px;
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    display: flex; align-items: center; padding: 0 28px; gap: 24px;
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--text4);
+  }
+  .bottom-bar span { color: var(--text3); }
+</style>
+</head>
+<body>
+
+<div class="opening-shell">
+
+  <div class="opening-top">
+    <div class="brand-block">
+      <div class="brand-eyebrow">Portfolio Intelligence Terminal</div>
+      <div class="brand-name">HARPIAN</div>
+      <div class="brand-sub">Intelligence Terminal · Family Office Edition</div>
+    </div>
+    <div class="status-cluster">
+      <div class="status-item"><span class="status-dot"></span> Systems Operational</div>
+      <div class="status-item" style="color: var(--gold)">AlphaDroid ◈ Connected</div>
+      <div class="status-item">Session: Presentation Mode</div>
+    </div>
+  </div>
+
+  <div class="tagline">
+    Diagnose portfolio misalignment. Show the cost of inaction.<br>Present the solution. Schedule the second meeting.
+  </div>
+
+  <div class="start-row">
+    <a href="presentation-risk-gap.html" class="btn btn-primary btn-large">▶ Start Guided Presentation</a>
+    <a href="terminal-dashboard.html" class="btn btn-secondary btn-large">Enter Terminal →</a>
+  </div>
+
+  <div class="module-grid">
+    <a href="presentation-risk-gap.html" class="module-card">
+      <span class="module-icon">⚠</span>
+      <div class="module-label">Step 1</div>
+      <div class="module-title">Risk Gap Diagnosis</div>
+      <div class="module-desc">Show the misalignment between current portfolio risk and client's true tolerance.</div>
+    </a>
+    <a href="portfolio-analysis.html" class="module-card">
+      <span class="module-icon">◈</span>
+      <div class="module-label">Step 2</div>
+      <div class="module-title">Portfolio Diagnostics</div>
+      <div class="module-desc">Allocation breakdown, drawdown exposure, concentration risk, efficiency score.</div>
+    </a>
+    <a href="alignment-simulator.html" class="module-card">
+      <span class="module-icon">⟳</span>
+      <div class="module-label">Step 3</div>
+      <div class="module-title">HPC11 / HPC22 Simulation</div>
+      <div class="module-desc">Before vs After. Show exactly how the proposed allocation improves every metric.</div>
+    </a>
+    <a href="client-dashboard.html" class="module-card">
+      <span class="module-icon">✦</span>
+      <div class="module-label">Step 4</div>
+      <div class="module-title">Family Office Revenue</div>
+      <div class="module-desc">Alignment score, AUM capture, institutional revenue model, mandate proposal.</div>
+    </a>
+  </div>
+
+  <div class="flow-indicator">
+    <span class="flow-step first">1 · Risk Gap</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">2 · FO Profile</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">3 · Client Profile</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">4 · Portfolio</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step">5 · HPC Simulation</span>
+    <span class="flow-arrow">→</span>
+    <span class="flow-step last" style="color: var(--gold)">6 · Alignment ✦</span>
+  </div>
+
+</div>
+
+<!-- Jim Button -->
+<a href="javascript:void(0)" class="jim-btn" onclick="toggleJim()">
+  <div class="jim-avatar">J</div>
+  <div><div class="jim-text">Talk to Jim</div><div class="jim-sub">AI Research Assistant</div></div>
+</a>
+
+<div class="jim-panel" id="jimPanel">
+  <div class="jim-panel-header">
+    <div class="jim-avatar">J</div>
+    <div><div class="jim-panel-title">Jim</div><div class="jim-panel-sub">HARPIAN AI ASSISTANT</div></div>
+  </div>
+  <div class="jim-suggestions">
+    <a href="presentation-risk-gap.html" class="jim-suggestion">→ Show the risk gap for this client</a>
+    <a href="alignment-simulator.html" class="jim-suggestion">→ Simulate 20% HPC22 allocation</a>
+    <a href="hpc-introduction.html" class="jim-suggestion">→ Explain HPC11 vs HPC22</a>
+    <a href="client-dashboard.html" class="jim-suggestion">→ Prepare second meeting summary</a>
+    <a href="presentation-risk-gap.html" class="jim-suggestion">→ Show crisis scenario analysis</a>
+  </div>
+</div>
+
+<div class="bottom-bar">
+  <span>HARPIAN INTELLIGENCE</span> · Version 2.0 · Presentation Mode ·
+  <span style="color:var(--green)">● LIVE</span>
+</div>
+
+<script>
+function toggleJim() {
+  const p = document.getElementById('jimPanel');
+  p.classList.toggle('open');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,2904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HARPIAN — Guided Presentation</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#0B0F14;--bg2:#0F1520;--panel:#131B26;
+  --border:rgba(255,255,255,0.07);
+  --gold:#D4AF45;--gold-bg:rgba(212,175,69,0.08);
+  --green:#5BBF7A;--red:#D0463C;--orange:#C97830;
+  --text:#EBF1F7;--text2:#B8C8D8;--text3:#6B7F95;--text4:#3A4A5A;
+  --syne:'Syne',sans-serif;--mono:'DM Mono',monospace;--sans:'DM Sans',sans-serif;
+}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--sans);font-size:16px;line-height:1.5;overflow:hidden;}
+
+/* HEADER */
+.ph{position:fixed;top:0;left:0;right:0;height:62px;background:rgba(11,15,20,0.97);border-bottom:1px solid var(--border);backdrop-filter:blur(12px);z-index:1000;display:flex;align-items:center;padding:0 24px;gap:16px;}
+.ph-brand{font-family:var(--syne);font-size:16px;font-weight:800;color:var(--text);flex-shrink:0;}
+.ph-brand span{color:var(--gold);}
+.ph-sep{width:1px;height:26px;background:var(--border);flex-shrink:0;}
+.steps-bar{display:flex;align-items:center;flex:1;overflow:hidden;}
+.si{display:flex;align-items:center;gap:5px;padding:4px 8px;font-family:var(--mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text4);cursor:pointer;transition:color 0.2s;white-space:nowrap;}
+.si.done{color:var(--text3);}
+.si.active{color:var(--gold);}
+.si-dot{width:5px;height:5px;border-radius:50%;background:var(--text4);flex-shrink:0;transition:background 0.2s;}
+.si.done .si-dot{background:var(--green);}
+.si.active .si-dot{background:var(--gold);box-shadow:0 0 6px var(--gold);}
+.sa{color:var(--text4);font-size:10px;padding:0 1px;}
+.ph-right{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.ph-mode-lbl{font-family:var(--mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text3);}
+.btn-terminal{font-family:var(--mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text3);text-decoration:none;border:1px solid var(--border);padding:6px 12px;transition:all 0.15s;}
+.btn-terminal:hover{border-color:var(--gold);color:var(--gold);}
+
+/* BOTTOM NAV */
+.nav-bar{position:fixed;bottom:0;left:0;right:0;height:72px;background:rgba(11,15,20,0.97);border-top:1px solid var(--border);backdrop-filter:blur(12px);z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:0 36px;}
+.nav-counter{font-family:var(--mono);font-size:12px;color:var(--text3);letter-spacing:0.1em;}
+.nav-counter strong{color:var(--gold);font-size:15px;}
+.nav-btns{display:flex;gap:12px;align-items:center;}
+.nav-hint{font-family:var(--mono);font-size:10px;color:var(--text4);letter-spacing:0.1em;}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 28px;font-family:var(--mono);font-size:12px;letter-spacing:0.12em;text-transform:uppercase;border:none;cursor:pointer;text-decoration:none;transition:all 0.15s;border-radius:2px;}
+.btn-primary{background:var(--gold);color:#0B0F14;font-weight:600;}
+.btn-primary:hover:not(:disabled){background:#e0bc4a;transform:translateY(-1px);}
+.btn-primary:disabled{opacity:0.35;cursor:not-allowed;transform:none !important;}
+.btn-secondary{background:transparent;color:var(--text3);border:1px solid var(--border);}
+.btn-secondary:hover{border-color:rgba(255,255,255,0.2);color:var(--text);}
+.btn-xl{padding:18px 40px;font-size:14px;letter-spacing:0.16em;}
+.btn-ghost{background:transparent;color:var(--text4);border:none;padding:8px 16px;}
+.btn-ghost:hover{color:var(--text3);}
+.btn-video{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;background:transparent;border:1px solid rgba(212,175,69,0.22);color:rgba(212,175,69,0.7);cursor:pointer;border-radius:2px;transition:all 0.18s;}
+.btn-video:hover{border-color:rgba(212,175,69,0.55);color:var(--gold);background:rgba(212,175,69,0.05);}
+.btn-video-icon{width:16px;height:16px;border-radius:50%;border:1px solid currentColor;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.btn-video-icon::after{content:'';display:block;width:0;height:0;border-top:4px solid transparent;border-bottom:4px solid transparent;border-left:6px solid currentColor;margin-left:1px;}
+
+/* STEPS */
+.step{display:none;position:fixed;top:62px;left:0;right:0;bottom:72px;overflow-y:auto;opacity:0;transition:opacity 0.3s ease;}
+.step.active{display:flex;flex-direction:column;opacity:1;}
+
+/* BADGES */
+.badge{display:inline-block;padding:4px 10px;font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;border-radius:2px;}
+.badge-gold{background:rgba(212,175,69,0.12);color:var(--gold);border:1px solid rgba(212,175,69,0.3);}
+.badge-green{background:rgba(91,191,122,0.1);color:var(--green);border:1px solid rgba(91,191,122,0.25);}
+.badge-red{background:rgba(208,70,60,0.1);color:var(--red);border:1px solid rgba(208,70,60,0.3);}
+.badge-warn{background:rgba(201,120,48,0.12);color:var(--orange);border:1px solid rgba(201,120,48,0.3);}
+.badge-neutral{background:rgba(255,255,255,0.05);color:var(--text3);border:1px solid var(--border);}
+
+/* HEADINGS */
+.kicker{font-family:var(--mono);font-size:11px;letter-spacing:0.26em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;}
+.section-title{font-family:var(--syne);font-size:38px;font-weight:800;color:var(--text);letter-spacing:-0.02em;line-height:1.1;margin-bottom:12px;}
+.section-sub{font-size:16px;color:var(--text3);line-height:1.6;}
+
+/* KPI */
+.kpi{background:var(--panel);border:1px solid var(--border);padding:20px 18px;}
+.kpi.alert{border-color:rgba(208,70,60,0.3);}
+.kpi.ok{border-color:rgba(91,191,122,0.3);}
+.kpi-lbl{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:8px;}
+.kpi-val{font-family:var(--syne);font-size:34px;font-weight:800;line-height:1;margin-bottom:4px;}
+.kpi-val.red{color:var(--red);}
+.kpi-val.gold{color:var(--gold);}
+.kpi-val.green{color:var(--green);}
+.kpi-desc{font-size:13px;color:var(--text3);line-height:1.4;}
+
+/* START SCREEN */
+.start-bg{flex:1;display:flex;align-items:center;justify-content:center;padding:40px;background:radial-gradient(ellipse at 60% 40%,rgba(212,175,69,0.04) 0%,transparent 65%);}
+.start-card{width:100%;max-width:480px;background:var(--panel);border:1px solid var(--border);padding:52px 48px;box-shadow:0 32px 80px rgba(0,0,0,0.5);}
+.start-logo{font-family:var(--syne);font-size:13px;font-weight:800;letter-spacing:0.14em;color:var(--text3);text-transform:uppercase;margin-bottom:36px;}
+.start-logo span{color:var(--gold);}
+.start-title{font-family:var(--syne);font-size:28px;font-weight:800;color:var(--text);letter-spacing:-0.02em;line-height:1.15;margin-bottom:8px;}
+.start-sub{font-size:14px;color:var(--text3);line-height:1.6;margin-bottom:36px;}
+.start-field{margin-bottom:18px;}
+.start-lbl{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:7px;display:block;}
+.start-inp{width:100%;background:var(--bg2);border:1px solid var(--border);padding:12px 14px;font-family:var(--sans);font-size:14px;color:var(--text);outline:none;transition:border-color 0.15s;border-radius:1px;}
+.start-inp:focus{border-color:rgba(212,175,69,0.45);}
+.start-btn{width:100%;margin-top:28px;padding:18px;font-family:var(--mono);font-size:13px;letter-spacing:0.16em;text-transform:uppercase;background:var(--gold);color:#0B0F14;font-weight:700;border:none;cursor:pointer;transition:all 0.15s;border-radius:2px;}
+.start-btn:hover:not(:disabled){background:#e0bc4a;transform:translateY(-1px);}
+.start-btn:disabled{opacity:0.35;cursor:not-allowed;}
+
+/* INTRO */
+.s1-container{flex:1;position:relative;background:#000;overflow:hidden;min-height:0;}
+.s1-iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;}
+.s1-overlay{position:absolute;bottom:0;left:0;right:0;padding:48px 72px;background:linear-gradient(0deg,rgba(11,15,20,0.98) 0%,rgba(11,15,20,0.75) 50%,transparent 100%);pointer-events:none;}
+.s1-tag{font-family:var(--mono);font-size:11px;letter-spacing:0.28em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;}
+.s1-headline{font-family:var(--syne);font-size:52px;font-weight:800;color:var(--text);line-height:1.08;letter-spacing:-0.025em;max-width:780px;}
+.s1-headline em{color:var(--gold);font-style:normal;}
+.s1-sub{font-size:18px;color:var(--text2);max-width:560px;margin-top:16px;line-height:1.6;}
+
+/* QUESTIONNAIRE */
+.q-layout{flex:1;display:grid;grid-template-columns:320px 1fr;min-height:0;}
+.q-left{padding:44px 36px 44px 44px;display:flex;flex-direction:column;justify-content:center;border-right:1px solid var(--border);background:var(--bg2);}
+.q-right{padding:28px 36px 80px;overflow-y:auto;}
+.q-block{background:var(--panel);border:1px solid var(--border);padding:20px 22px;margin-bottom:10px;}
+.q-num{font-family:var(--mono);font-size:9px;color:var(--text4);letter-spacing:0.18em;margin-bottom:6px;}
+.q-text{font-family:var(--syne);font-size:15px;font-weight:600;color:var(--text);margin-bottom:12px;}
+.q-opts{display:flex;flex-wrap:wrap;gap:8px;}
+.q-opt{padding:8px 14px;border:1px solid var(--border);font-family:var(--mono);font-size:11px;letter-spacing:0.08em;color:var(--text3);cursor:pointer;transition:all 0.15s;border-radius:2px;}
+.q-opt:hover{border-color:rgba(212,175,69,0.4);color:var(--text2);}
+.q-opt.sel{border-color:var(--gold);color:var(--gold);background:var(--gold-bg);}
+
+/* LOCKED CARD */
+.locked-card{background:var(--panel);border:1px solid var(--border);padding:28px 20px;text-align:center;transition:all 0.4s;}
+.locked-card.complete{border-color:rgba(91,191,122,0.4);background:linear-gradient(135deg,rgba(91,191,122,0.04),var(--panel));}
+.locked-icon{font-size:28px;margin-bottom:10px;}
+.locked-lbl{font-family:var(--syne);font-size:17px;font-weight:700;color:var(--text);margin-bottom:6px;}
+.locked-status{font-family:var(--mono);font-size:11px;color:var(--text3);letter-spacing:0.1em;}
+
+/* REVEAL */
+.reveal-grid{display:grid;grid-template-columns:1fr 1px 1fr 1px 1fr;background:var(--panel);border:1px solid var(--border);overflow:hidden;}
+.reveal-col{padding:44px 32px;text-align:center;}
+.reveal-divider{background:var(--border);}
+.reveal-lbl{font-family:var(--mono);font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text3);margin-bottom:20px;}
+.reveal-rn{font-family:var(--syne);font-size:80px;font-weight:800;line-height:1;}
+.reveal-scale{font-family:var(--mono);font-size:10px;color:var(--text4);letter-spacing:0.12em;margin-top:4px;}
+.reveal-cat{font-family:var(--syne);font-size:14px;font-weight:700;margin-top:14px;}
+
+/* DIAGNOSIS */
+.diag-tri{display:grid;grid-template-columns:1fr 56px 1fr 56px 1fr;margin-bottom:20px;}
+.diag-col{background:var(--panel);border:1px solid var(--border);padding:28px 20px;text-align:center;}
+.diag-col.danger{border-color:rgba(208,70,60,0.35);}
+.diag-col.warn{border-color:rgba(212,175,69,0.35);}
+.diag-col.ok{border-color:rgba(91,191,122,0.35);}
+.diag-arr{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;}
+.diag-rn{font-family:var(--syne);font-size:64px;font-weight:800;line-height:1;}
+.diag-lbl{font-family:var(--mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:12px;}
+.diag-cat{font-family:var(--mono);font-size:10px;letter-spacing:0.1em;margin-top:8px;}
+.diag-gap{font-family:var(--syne);font-size:18px;font-weight:800;}
+.diag-gap-lbl{font-family:var(--mono);font-size:9px;color:var(--text4);letter-spacing:0.08em;text-align:center;line-height:1.4;}
+
+/* COMPARISON */
+.comp-row{display:grid;grid-template-columns:1fr 160px 1fr;border-bottom:1px solid var(--border);}
+.comp-row:last-child{border-bottom:none;}
+.comp-left-cell{padding:18px 20px;text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:8px;background:rgba(208,70,60,0.04);}
+.comp-center-cell{padding:18px 14px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;background:var(--bg2);border-left:1px solid var(--border);border-right:1px solid var(--border);}
+.comp-right-cell{padding:18px 20px;text-align:left;display:flex;flex-direction:column;align-items:flex-start;gap:8px;background:rgba(91,191,122,0.04);}
+.comp-val-big{font-family:var(--syne);font-size:30px;font-weight:800;line-height:1;}
+.comp-metric-name{font-family:var(--syne);font-size:13px;font-weight:700;color:var(--text);}
+.comp-delta{font-family:var(--mono);font-size:10px;color:var(--green);letter-spacing:0.1em;}
+
+/* HPC SOLUTION */
+.hpc-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.hpc-card{background:var(--panel);border:1px solid var(--border);padding:28px 24px;position:relative;overflow:hidden;transition:transform 0.2s;}
+.hpc-card:hover{transform:translateY(-2px);}
+.hpc-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.hpc-gold::before{background:var(--gold);}
+.hpc-green::before{background:var(--green);}
+.hpc-gold{border-color:rgba(212,175,69,0.35);}
+.hpc-green{border-color:rgba(91,191,122,0.35);}
+.hpc-tag{font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:6px;}
+.hpc-name{font-family:var(--syne);font-size:42px;font-weight:800;letter-spacing:-0.03em;line-height:1;margin-bottom:4px;}
+.hpc-tagline{font-family:var(--mono);font-size:11px;letter-spacing:0.08em;color:var(--text3);margin-bottom:20px;}
+.hpc-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:14px;}
+.hpc-row:last-child{border-bottom:none;}
+.hpc-row-lbl{color:var(--text3);}
+.hpc-row-val{font-family:var(--mono);font-weight:600;}
+.hpc-badge-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;}
+.rec-tag{position:absolute;top:14px;right:14px;font-family:var(--mono);font-size:9px;letter-spacing:0.16em;background:rgba(91,191,122,0.15);color:var(--green);padding:3px 8px;border:1px solid rgba(91,191,122,0.3);}
+
+/* SIMULATION */
+.sim-layout{flex:1;display:grid;grid-template-columns:320px 1fr;min-height:0;}
+.sim-ctrl{background:var(--bg2);border-right:1px solid var(--border);padding:20px 22px;overflow-y:auto;display:flex;flex-direction:column;gap:18px;}
+.slider-lbl{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:6px;}
+.slider-val{font-family:var(--syne);font-size:38px;font-weight:800;line-height:1;margin-bottom:8px;}
+.slider-val.hpc11-color{color:var(--gold);}
+.slider-val.hpc22-color{color:var(--green);}
+input[type=range]{width:100%;-webkit-appearance:none;height:4px;background:rgba(255,255,255,0.1);border-radius:2px;outline:none;margin-bottom:4px;cursor:pointer;}
+input[type=range].hpc11::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--gold);cursor:pointer;box-shadow:0 0 8px rgba(212,175,69,0.5);}
+input[type=range].hpc22::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--green);cursor:pointer;box-shadow:0 0 8px rgba(91,191,122,0.5);}
+.slider-range-lbl{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--text4);}
+.remain-box{background:var(--panel);border:1px solid var(--border);padding:12px 14px;}
+.remain-lbl{font-family:var(--mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text3);margin-bottom:4px;}
+.remain-val{font-family:var(--syne);font-size:24px;font-weight:700;}
+.status-checks{display:flex;flex-direction:column;gap:8px;}
+.status-check{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text2);}
+.status-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;transition:background 0.3s;}
+.sim-results{padding:24px 28px;overflow-y:auto;display:flex;flex-direction:column;gap:18px;}
+.ba-grid{display:grid;grid-template-columns:1fr auto 1fr;}
+.ba-col{background:var(--panel);border:1px solid var(--border);padding:22px 20px;}
+.ba-col.after{border-color:rgba(91,191,122,0.3);background:linear-gradient(135deg,var(--panel),rgba(91,191,122,0.03));}
+.ba-head{font-family:var(--mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:10px;}
+.ba-rn{font-family:var(--syne);font-size:64px;font-weight:800;line-height:1;letter-spacing:-0.03em;margin-bottom:2px;}
+.ba-rn-lbl{font-family:var(--mono);font-size:9px;color:var(--text4);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:16px;}
+.ba-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:14px;}
+.ba-row:last-child{border-bottom:none;}
+.ba-row-lbl{color:var(--text3);}
+.ba-row-val{font-family:var(--mono);font-weight:600;}
+.ba-arrow-col{width:52px;background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;}
+.ba-arrow-sym{font-size:20px;color:var(--green);}
+.ba-arrow-lbl{font-family:var(--mono);font-size:9px;color:var(--text4);text-align:center;letter-spacing:0.08em;}
+.delta-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.delta-card{background:var(--panel);border:1px solid rgba(91,191,122,0.18);padding:12px;}
+.delta-lbl{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text3);margin-bottom:4px;}
+.delta-prev{font-family:var(--mono);font-size:11px;color:var(--red);text-decoration:line-through;margin-bottom:2px;}
+.delta-now{font-family:var(--syne);font-size:22px;font-weight:700;color:var(--green);line-height:1;}
+.delta-chg{font-family:var(--mono);font-size:10px;color:var(--green);margin-top:3px;}
+.proj-bar-wrap{background:var(--panel);border:1px solid var(--border);padding:18px 22px;}
+.proj-title{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:14px;}
+
+/* MODEL CARD */
+.model-card{background:var(--panel);border:1px solid var(--border);padding:22px 20px;cursor:pointer;transition:all 0.15s;}
+.model-card:hover{transform:translateY(-2px);border-color:rgba(212,175,69,0.3);}
+.model-card.sel{border-color:var(--gold);background:var(--gold-bg);}
+.model-name{font-family:var(--syne);font-size:17px;font-weight:700;color:var(--text);margin-bottom:4px;}
+.model-desc{font-size:13px;color:var(--text3);line-height:1.5;}
+
+/* SCORE RING */
+.score-ring{width:140px;height:140px;border-radius:50%;border:5px solid var(--green);display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle,rgba(91,191,122,0.12),transparent 70%);box-shadow:0 0 50px rgba(91,191,122,0.18);}
+.score-ring-val{font-family:var(--syne);font-size:52px;font-weight:800;color:var(--green);line-height:1;}
+.score-ring-lbl{font-family:var(--mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text4);margin-top:2px;}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:3000;display:none;align-items:center;justify-content:center;backdrop-filter:blur(6px);}
+.modal-overlay.open{display:flex;}
+.modal-box{background:var(--panel);border:1px solid var(--border);width:480px;max-width:90vw;box-shadow:0 24px 80px rgba(0,0,0,0.6);}
+.modal-head{padding:20px 26px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.modal-title{font-family:var(--syne);font-size:18px;font-weight:700;color:var(--text);}
+.modal-close{background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer;padding:2px 8px;line-height:1;}
+.modal-close:hover{color:var(--text);}
+.modal-body{padding:26px;}
+.field-grp{margin-bottom:18px;}
+.field-lbl{font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text3);margin-bottom:7px;display:block;}
+.field-inp{width:100%;background:var(--bg2);border:1px solid var(--border);padding:11px 14px;font-family:var(--sans);font-size:14px;color:var(--text);outline:none;transition:border-color 0.15s;}
+.field-inp:focus{border-color:rgba(212,175,69,0.45);}
+.modal-foot{padding:14px 26px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px;}
+.video-modal-box{background:var(--panel);border:1px solid var(--border);width:800px;max-width:92vw;box-shadow:0 32px 100px rgba(0,0,0,0.7);}
+.video-modal-head{padding:16px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.video-modal-title{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);}
+.video-modal-body{padding:0;line-height:0;position:relative;background:#000;}
+.video-modal-body iframe{width:100%;aspect-ratio:16/9;border:none;display:block;}
+
+/* JIM */
+.jim-trigger{position:fixed;bottom:88px;right:24px;z-index:2000;display:flex;align-items:center;gap:12px;background:var(--panel);border:1px solid var(--border);padding:10px 16px;cursor:pointer;text-decoration:none;transition:all 0.15s;box-shadow:0 8px 32px rgba(0,0,0,0.5);}
+.jim-trigger:hover{border-color:var(--gold);transform:translateY(-2px);}
+.jim-av{width:32px;height:32px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-family:var(--syne);font-weight:800;font-size:14px;color:#0B0F14;flex-shrink:0;}
+.jim-text-main{font-family:var(--syne);font-size:13px;font-weight:700;color:var(--text);line-height:1;}
+.jim-text-sub{font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:0.1em;margin-top:2px;}
+.jim-panel{position:fixed;bottom:88px;right:24px;width:340px;background:var(--panel);border:1px solid var(--border);z-index:1999;box-shadow:0 12px 48px rgba(0,0,0,0.6);display:none;flex-direction:column;}
+.jim-panel.open{display:flex;}
+.jim-ph{display:flex;align-items:center;gap:12px;padding:16px 18px;border-bottom:1px solid var(--border);}
+.jim-suggs{padding:8px;display:flex;flex-direction:column;gap:3px;}
+.jim-sug{display:block;padding:9px 12px;font-size:13px;color:var(--text2);border:1px solid transparent;transition:all 0.12s;border-radius:2px;cursor:pointer;}
+.jim-sug:hover{background:var(--bg2);border-color:var(--border);color:var(--text);}
+
+/* ══════════════════════════════════════
+   MODULE 1 — TARGET RISK ENGINE
+══════════════════════════════════════ */
+.tre-layout{display:grid;grid-template-columns:1fr 1fr;flex:1;overflow:hidden;min-height:0;}
+.tre-left{padding:28px 36px;overflow-y:auto;border-right:1px solid var(--border);}
+.tre-right{padding:28px 36px;overflow-y:auto;display:flex;flex-direction:column;gap:12px;background:var(--bg2);}
+.tre-goal-wrap{display:flex;align-items:baseline;gap:8px;border-bottom:2px solid var(--border);padding-bottom:8px;transition:border-color 0.25s;}
+.tre-goal-wrap:focus-within{border-color:rgba(212,175,69,0.55);}
+.tre-goal-symbol{font-family:var(--syne);font-size:32px;font-weight:700;color:var(--text3);}
+.tre-goal-input{flex:1;background:transparent;border:none;font-family:var(--syne);font-size:44px;font-weight:800;color:var(--gold);outline:none;width:100%;min-width:0;}
+input[type=range].tre-slider{-webkit-appearance:none;appearance:none;width:100%;height:3px;background:rgba(255,255,255,0.1);border-radius:2px;outline:none;cursor:pointer;margin:8px 0 4px;}
+input[type=range].tre-slider::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--gold);border:2px solid var(--bg);cursor:pointer;box-shadow:0 0 8px rgba(212,175,69,0.45);}
+input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--gold);border:2px solid var(--bg);cursor:pointer;}
+.tre-slider-ends{display:flex;justify-content:space-between;font-family:var(--mono);font-size:9px;color:var(--text4);margin-top:2px;}
+.tre-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.tre-card{background:var(--panel);border:1px solid var(--border);padding:14px 16px;transition:border-color 0.3s;}
+.tre-card-lbl{font-family:var(--mono);font-size:8px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text4);margin-bottom:6px;}
+.tre-card-val{font-family:var(--syne);font-size:22px;font-weight:800;color:var(--text);transition:color 0.35s;line-height:1.1;}
+.tre-card-sub{font-family:var(--mono);font-size:9px;color:var(--text4);margin-top:4px;line-height:1.4;}
+.tre-rn-card{background:var(--panel);border:1px solid var(--border);padding:18px 20px;display:flex;align-items:center;gap:18px;transition:border-color 0.35s;}
+.tre-rn-ring{width:70px;height:70px;border-radius:50%;border:3px solid var(--text4);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;transition:border-color 0.35s,background 0.35s;}
+.tre-rn-ring-val{font-family:var(--syne);font-size:22px;font-weight:800;line-height:1;transition:color 0.35s;}
+.tre-rn-ring-lbl{font-family:var(--mono);font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text4);margin-top:1px;}
+.tre-rn-body{flex:1;}
+.tre-rn-title{font-family:var(--syne);font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px;}
+.tre-rn-desc{font-size:12px;color:var(--text3);line-height:1.5;}
+.tre-nitrogen{font-family:var(--mono);font-size:8px;color:var(--text4);letter-spacing:0.1em;margin-top:4px;}
+.tre-alert{background:rgba(208,70,60,0.05);border:1px solid rgba(208,70,60,0.25);padding:16px 20px;margin-top:20px;display:none;animation:fadeInSlide 0.25s ease;}
+.tre-alert.visible{display:block;}
+@keyframes fadeInSlide{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
+.tre-alert-title{font-family:var(--mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--red);margin-bottom:8px;}
+.tre-alert-body{font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:12px;}
+.tre-alert-btns{display:flex;gap:8px;}
+.tre-alert-confirm{font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;padding:8px 16px;background:rgba(208,70,60,0.12);border:1px solid rgba(208,70,60,0.4);color:var(--red);cursor:pointer;transition:all 0.15s;}
+.tre-alert-confirm:hover{background:rgba(208,70,60,0.2);}
+.tre-alert-adjust{font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;padding:8px 16px;background:transparent;border:1px solid var(--border);color:var(--text3);cursor:pointer;transition:all 0.15s;}
+.tre-alert-adjust:hover{border-color:rgba(255,255,255,0.2);color:var(--text);}
+.tre-risk-low{color:var(--green);}
+.tre-risk-mid{color:var(--gold);}
+.tre-risk-high{color:var(--orange);}
+.tre-risk-vhigh{color:var(--red);}
+.tre-ring-low{border-color:var(--green);background:rgba(91,191,122,0.08);}
+.tre-ring-mid{border-color:var(--gold);background:rgba(212,175,69,0.08);}
+.tre-ring-high{border-color:var(--orange);background:rgba(201,120,48,0.08);}
+.tre-ring-vhigh{border-color:var(--red);background:rgba(208,70,60,0.08);}
+.tre-microcopy{font-family:var(--mono);font-size:10px;color:var(--text4);line-height:1.7;padding:14px 0;border-top:1px solid var(--border);letter-spacing:0.05em;}
+.tre-confirm-area{margin-top:20px;}
+
+/* ══════════════════════════════════════
+   MODULE 2 — ASSET EFFICIENCY ENGINE
+══════════════════════════════════════ */
+.ace-overlay{position:fixed;inset:0;z-index:4000;display:none;flex-direction:column;background:var(--bg);overflow:hidden;}
+.ace-overlay.open{display:flex;}
+.ace-header{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:13px 28px;border-bottom:1px solid var(--border);background:rgba(11,15,20,0.98);}
+.ace-title{font-family:var(--syne);font-size:16px;font-weight:700;color:var(--text);}
+.ace-subtitle{font-family:var(--mono);font-size:8px;letter-spacing:0.15em;text-transform:uppercase;color:var(--text4);margin-top:2px;}
+.ace-close-btn{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;background:transparent;border:1px solid var(--border);color:var(--text3);padding:7px 14px;cursor:pointer;transition:all 0.15s;}
+.ace-close-btn:hover{border-color:rgba(255,255,255,0.25);color:var(--text);}
+.ace-tabs-bar{flex-shrink:0;display:flex;padding:0 28px;border-bottom:1px solid var(--border);background:var(--bg2);}
+.ace-tab{font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;padding:11px 16px;color:var(--text4);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.15s;}
+.ace-tab:hover{color:var(--text3);}
+.ace-tab.active{color:var(--gold);border-bottom-color:var(--gold);}
+.ace-body{flex:1;display:flex;overflow:hidden;min-height:0;}
+.ace-sidebar{flex-shrink:0;width:210px;padding:18px 16px;border-right:1px solid var(--border);overflow-y:auto;background:var(--panel);}
+.ace-sidebar-title{font-family:var(--mono);font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;}
+.ace-chip{display:flex;align-items:center;gap:7px;padding:4px 0;cursor:pointer;font-size:12px;color:var(--text3);transition:color 0.15s;user-select:none;}
+.ace-chip:hover{color:var(--text);}
+.ace-chip-check{width:12px;height:12px;border:1.5px solid var(--text4);border-radius:1px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.15s;}
+.ace-chip.on .ace-chip-check{background:var(--gold);border-color:var(--gold);}
+.ace-chip.on .ace-chip-check::after{content:'✓';font-size:8px;color:#0B0F14;font-weight:700;line-height:1;}
+.ace-chip-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.ace-chip-sep{height:1px;background:var(--border);margin:8px 0;}
+.ace-group-lbl{font-family:var(--mono);font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text4);margin-top:10px;margin-bottom:4px;}
+.ace-main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.ace-chart-area{flex:1;display:flex;flex-direction:column;padding:20px 24px;overflow:hidden;}
+.ace-microcopy{font-family:var(--mono);font-size:9px;color:var(--text4);margin-bottom:10px;letter-spacing:0.06em;}
+.ace-chart-wrap{flex:1;min-height:0;position:relative;overflow:hidden;}
+.ace-insight-bar{flex-shrink:0;display:flex;align-items:flex-start;justify-content:space-between;gap:20px;padding:10px 24px;border-top:1px solid var(--border);background:var(--bg2);}
+.ace-insight-text{font-family:var(--mono);font-size:10px;color:var(--text3);line-height:1.6;max-width:580px;letter-spacing:0.04em;}
+.ace-nitrogen-lbl{font-family:var(--mono);font-size:8px;color:var(--text4);letter-spacing:0.1em;white-space:nowrap;margin-top:2px;flex-shrink:0;}
+.ace-compliance-bar{flex-shrink:0;padding:8px 24px;border-top:1px solid var(--border);background:var(--bg2);}
+.ace-compliance-bar p{font-family:var(--mono);font-size:8px;color:var(--text4);letter-spacing:0.05em;line-height:1.7;}
+.ace-tooltip{position:fixed;pointer-events:none;background:var(--panel);border:1px solid var(--border);padding:12px 16px;min-width:190px;box-shadow:0 8px 40px rgba(0,0,0,0.6);z-index:5000;display:none;border-radius:2px;}
+.ace-tooltip-ticker{font-family:var(--syne);font-size:16px;font-weight:800;color:var(--text);}
+.ace-tooltip-name{font-family:var(--mono);font-size:9px;color:var(--text4);margin-bottom:8px;letter-spacing:0.05em;}
+.ace-tooltip-row{display:flex;justify-content:space-between;gap:24px;font-family:var(--mono);font-size:10px;padding:2px 0;}
+.ace-tooltip-lbl{color:var(--text4);}
+.ace-tooltip-val{color:var(--text2);font-weight:500;}
+.ace-tbl-wrap{flex:1;overflow:auto;}
+.ace-tbl{width:100%;border-collapse:collapse;}
+.ace-tbl th{font-family:var(--mono);font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text4);padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);cursor:pointer;white-space:nowrap;background:var(--panel);position:sticky;top:0;}
+.ace-tbl th:hover{color:var(--text3);}
+.ace-tbl th span{opacity:0.5;margin-left:3px;}
+.ace-tbl td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.035);font-family:var(--mono);font-size:11px;color:var(--text2);}
+.ace-tbl tr:hover td{background:rgba(255,255,255,0.02);}
+.ace-tbl .harp-row td{background:rgba(212,175,69,0.04);}
+.ace-tbl .harp-row td:first-child{border-left:2px solid rgba(212,175,69,0.6);}
+.ace-tbl .client-row td{background:rgba(208,70,60,0.03);}
+.ace-tbl .client-row td:first-child{border-left:2px solid rgba(208,70,60,0.45);}
+.ace-eff-bar{display:inline-block;height:6px;background:var(--green);border-radius:1px;vertical-align:middle;margin-left:6px;transition:width 0.3s;}
+
+/* ══════════════════════════════════════
+   RETURN EXPECTATION ENGINE — Step 4 compact bar
+══════════════════════════════════════ */
+.ree-bar{flex-shrink:0;background:rgba(212,175,69,0.025);border-bottom:1px solid var(--border);padding:12px 28px;display:flex;align-items:center;gap:24px;flex-wrap:wrap;}
+.ree-title-col{flex-shrink:0;min-width:160px;}
+.ree-lbl{font-family:var(--mono);font-size:8px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:3px;}
+.ree-title{font-family:var(--syne);font-size:13px;font-weight:700;color:var(--text);line-height:1.2;}
+.ree-slider-col{flex:1;min-width:180px;max-width:320px;}
+.ree-slider-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px;}
+.ree-slider-lbl{font-family:var(--mono);font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text3);}
+.ree-slider-val{font-family:var(--syne);font-size:15px;font-weight:800;color:var(--gold);}
+.ree-slider-marks{display:flex;justify-content:space-between;font-family:var(--mono);font-size:8px;color:var(--text4);margin-top:2px;}
+.ree-outs{display:flex;gap:8px;flex-shrink:0;}
+.ree-out{background:var(--panel);border:1px solid var(--border);padding:8px 13px;min-width:90px;}
+.ree-out-lbl{font-family:var(--mono);font-size:7px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text4);margin-bottom:3px;}
+.ree-out-val{font-family:var(--syne);font-size:17px;font-weight:800;color:var(--gold);line-height:1;}
+.ree-micro{font-family:var(--mono);font-size:9px;color:var(--text4);line-height:1.55;flex-shrink:0;max-width:190px;display:none;}
+@media(min-width:1200px){.ree-micro{display:block;}}
+
+/* ══════════════════════════════════════
+   PORTFOLIO ALIGNMENT ENGINE — Step 6
+══════════════════════════════════════ */
+.pae-layout{flex:1;display:grid;grid-template-columns:1fr 2fr;overflow:hidden;min-height:0;}
+.pae-left{padding:18px 20px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:9px;overflow-y:auto;background:var(--bg2);}
+.pae-right{padding:18px 22px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;}
+.pae-ref-card{background:var(--panel);border:1px solid var(--border);padding:12px 14px;cursor:pointer;transition:border-color 0.18s,background 0.18s;flex-shrink:0;}
+.pae-ref-card:hover{border-color:rgba(212,175,69,0.35);}
+.pae-ref-card.active{border-color:var(--gold);background:rgba(212,175,69,0.06);}
+.pae-ref-lbl{font-family:var(--mono);font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text4);margin-bottom:3px;}
+.pae-ref-rn{font-family:var(--syne);font-size:38px;font-weight:800;line-height:1;margin-bottom:1px;transition:color 0.25s;}
+.pae-ref-sub{font-family:var(--mono);font-size:9px;color:var(--text3);}
+.pae-rn-main-card{background:var(--panel);border:1px solid var(--border);padding:16px 20px;display:flex;align-items:center;gap:20px;transition:border-color 0.3s;flex-shrink:0;}
+.pae-rn-num{font-family:var(--syne);font-size:58px;font-weight:800;line-height:1;transition:color 0.3s;}
+.pae-metrics{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;flex-shrink:0;}
+.pae-metric{background:var(--panel);border:1px solid var(--border);padding:11px 13px;transition:border-color 0.3s;}
+.pae-metric-lbl{font-family:var(--mono);font-size:7px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text4);margin-bottom:4px;}
+.pae-metric-val{font-family:var(--syne);font-size:20px;font-weight:800;line-height:1;transition:color 0.3s;}
+.pae-badge-mis{display:inline-flex;align-items:center;gap:4px;padding:4px 9px;background:rgba(208,70,60,0.08);border:1px solid rgba(208,70,60,0.28);font-family:var(--mono);font-size:8px;letter-spacing:0.13em;text-transform:uppercase;color:var(--red);}
+.pae-badge-ok{display:inline-flex;align-items:center;gap:4px;padding:4px 9px;background:rgba(91,191,122,0.06);border:1px solid rgba(91,191,122,0.25);font-family:var(--mono);font-size:8px;letter-spacing:0.13em;text-transform:uppercase;color:var(--green);}
+.pae-alert{background:rgba(208,70,60,0.05);border:1px solid rgba(208,70,60,0.22);padding:12px 16px;display:none;animation:fadeInSlide 0.25s ease;}
+.pae-alert.visible{display:block;}
+.pae-alert-title{font-family:var(--mono);font-size:8px;letter-spacing:0.16em;text-transform:uppercase;color:var(--red);margin-bottom:7px;}
+.pae-alert-btns{display:flex;gap:7px;margin-top:10px;}
+.pae-btn-confirm{font-family:var(--mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;padding:7px 13px;background:rgba(208,70,60,0.1);border:1px solid rgba(208,70,60,0.35);color:var(--red);cursor:pointer;transition:all 0.15s;}
+.pae-btn-confirm:hover{background:rgba(208,70,60,0.2);}
+.pae-btn-adjust{font-family:var(--mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;padding:7px 13px;background:transparent;border:1px solid var(--border);color:var(--text3);cursor:pointer;transition:all 0.15s;}
+.pae-btn-adjust:hover{border-color:rgba(255,255,255,0.18);color:var(--text);}
+@keyframes paeCountUp{from{opacity:0.4;transform:scale(0.97);}to{opacity:1;transform:scale(1);}}
+.pae-counting{animation:paeCountUp 0.35s ease;}
+</style>
+</head>
+<body>
+
+<!-- ═══ PROGRESS HEADER ═══ -->
+<div class="ph">
+  <div class="ph-brand">HARPIAN <span>·</span> GUIDED PRESENTATION</div>
+  <div class="ph-sep"></div>
+  <div class="steps-bar" id="stepsBar">
+    <div class="si active" onclick="goStep(1)"><span class="si-dot"></span>1·Start</div><span class="sa">›</span>
+    <div class="si" onclick="goStep(2)"><span class="si-dot"></span>2·Intro</div><span class="sa">›</span>
+    <div class="si" onclick="goStep(3)"><span class="si-dot"></span>3·FO Mandate</div><span class="sa">›</span>
+    <div class="si" onclick="goStep(4)"><span class="si-dot"></span>4·Client</div><span class="sa">›</span>
+    <div class="si" onclick="goStep(5)"><span class="si-dot"></span>5·Objective</div><span class="sa">›</span>
+    <div class="si" onclick="goStep(6)"><span class="si-dot"></span>6·Alignment</div><span class="sa">›</span>
+    <div class="si" onclick="goStep(7)"><span class="si-dot"></span>7·Portfolio</div><span class="sa">›</span>
+    <div class="si" onclick="goStep(8)"><span class="si-dot"></span>8·Diagnosis</div><span class="sa">›</span>
+    <div class="si" onclick="goStep(9)"><span class="si-dot"></span>9·Comparison</div><span class="sa">›</span>
+    <div class="si" onclick="goStep(10)"><span class="si-dot"></span>10·Solution</div><span class="sa">›</span>
+    <div class="si" onclick="goStep(11)"><span class="si-dot"></span>11·Positioning</div><span class="sa">›</span>
+    <div class="si" onclick="goStep(12)"><span class="si-dot"></span>12·Next Steps</div>
+  </div>
+  <div class="ph-right">
+    <span class="ph-mode-lbl">Presentation</span>
+    <a href="terminal.html" class="btn-terminal">Terminal →</a>
+  </div>
+</div>
+
+<!-- ═══ STEP 1 — START PRESENTATION ═══ -->
+<div class="step active" id="step1">
+  <div class="start-bg">
+    <div class="start-card">
+      <div class="start-logo">HARPIAN <span>·</span> Intelligence Terminal</div>
+      <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;">Before We Begin</div>
+      <div class="start-title">Set up your<br>session.</div>
+      <div class="start-sub">Enter the details below to personalise this guided presentation for your client.</div>
+      <div class="start-field">
+        <label class="start-lbl">Family Office Name</label>
+        <input type="text" id="sp-fo-name" class="start-inp" placeholder="e.g. Wellington Capital Family Office" oninput="updateNextBtn()">
+      </div>
+      <div class="start-field">
+        <label class="start-lbl">Manager / Advisor Name</label>
+        <input type="text" id="sp-manager-name" class="start-inp" placeholder="e.g. John Hartwell" oninput="updateNextBtn()">
+      </div>
+      <div class="start-field" style="margin-bottom:0;">
+        <label class="start-lbl">Contact Email <span style="color:var(--text4);font-size:9px;">(optional)</span></label>
+        <input type="email" id="sp-email" class="start-inp" placeholder="manager@familyoffice.com">
+      </div>
+      <div id="sp-error" style="display:none;margin-top:14px;font-family:var(--mono);font-size:11px;color:var(--red);letter-spacing:0.08em;">Please fill in Family Office Name and Manager Name.</div>
+      <button class="start-btn" id="sp-start-btn" onclick="startPresentation()" disabled>Start Guided Presentation →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 2 — INTRO VIDEO ═══ -->
+<div class="step" id="step2">
+  <div class="s1-container">
+    <iframe class="s1-iframe"
+      src="https://www.youtube.com/embed/F_1lKtrAIUU?rel=0&modestbranding=1&showinfo=0"
+      allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <div class="s1-overlay">
+      <div class="s1-tag">HARPIAN Intelligence Terminal · Family Office Edition</div>
+      <div class="s1-headline">Your environment is<br><em>ready.</em></div>
+      <div class="s1-sub">Family Office data loaded. We'll guide you through a complete risk alignment diagnostic — step by step, without friction.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 3 — FO QUESTIONNAIRE (score hidden) ═══ -->
+<div class="step" id="step3">
+  <div class="q-layout">
+    <div class="q-left">
+      <div class="kicker">Step 3 · Family Office</div>
+      <div class="section-title" style="font-size:24px;margin-bottom:10px;">Family Office<br>Mandate</div>
+      <div class="section-sub" style="font-size:13px;margin-bottom:22px;">13 institutional questions. The FO Risk Score will be revealed at the end of collection.</div>
+      <div class="locked-card" id="fo-locked">
+        <div class="locked-icon" id="fo-locked-icon">🔒</div>
+        <div class="locked-lbl">FO Risk Score</div>
+        <div class="locked-status" id="fo-locked-status">Waiting for answers</div>
+      </div>
+      <div style="margin-top:18px;">
+        <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:5px;letter-spacing:0.1em;">
+          <span>PROGRESS</span><span id="fo-count">0 / 13</span>
+        </div>
+        <div style="background:rgba(255,255,255,0.06);height:5px;border-radius:2px;overflow:hidden;">
+          <div id="fo-prog" style="height:100%;background:var(--gold);border-radius:2px;width:0%;transition:width 0.3s;"></div>
+        </div>
+        <div id="fo-complete-msg" style="display:none;margin-top:10px;font-family:var(--mono);font-size:10px;color:var(--green);letter-spacing:0.12em;text-align:center;">✓ ALL QUESTIONS ANSWERED</div>
+      </div>
+    </div>
+    <div class="q-right">
+      <div class="q-block"><div class="q-num">01 / 13</div><div class="q-text">What is the primary objective of the mandate/ETP for the Family Office client base?</div><div class="q-opts"><div class="q-opt" onclick="foSel(this,1,1)">A. Capital preservation above all else</div><div class="q-opt" onclick="foSel(this,1,2)">B. Moderate growth with strong protection</div><div class="q-opt" onclick="foSel(this,1,3)">C. Above-market growth with partial protection</div><div class="q-opt" onclick="foSel(this,1,4)">D. Return maximization accepting high volatility</div></div></div>
+      <div class="q-block"><div class="q-num">02 / 13</div><div class="q-text">What maximum drawdown (peak-to-trough) do you consider acceptable before revising the strategy?</div><div class="q-opts"><div class="q-opt" onclick="foSel(this,2,1)">A. 5–8%</div><div class="q-opt" onclick="foSel(this,2,2)">B. 9–12%</div><div class="q-opt" onclick="foSel(this,2,3)">C. 13–20%</div><div class="q-opt" onclick="foSel(this,2,4)">D. &gt;20%</div></div></div>
+      <div class="q-block"><div class="q-num">03 / 13</div><div class="q-text">In a scenario of −12% in 30 days (rapid stress), which action do you consider most appropriate?</div><div class="q-opts"><div class="q-opt" onclick="foSel(this,3,1)">A. Reduce risk quickly and prioritize preservation</div><div class="q-opt" onclick="foSel(this,3,2)">B. Reduce partially and reassess regime</div><div class="q-opt" onclick="foSel(this,3,3)">C. Hold and wait; minimal adjustments</div><div class="q-opt" onclick="foSel(this,3,4)">D. Increase risk to capture recovery</div></div></div>
+      <div class="q-block"><div class="q-num">04 / 13</div><div class="q-text">What horizon do you consider "true" for evaluating mandate success?</div><div class="q-opts"><div class="q-opt" onclick="foSel(this,4,1)">A. 12–24 months</div><div class="q-opt" onclick="foSel(this,4,2)">B. 3–5 years</div><div class="q-opt" onclick="foSel(this,4,3)">C. 5–10 years</div><div class="q-opt" onclick="foSel(this,4,4)">D. 10+ years (multigenerational)</div></div></div>
+      <div class="q-block"><div class="q-num">05 / 13</div><div class="q-text">What is the capital usage pattern by your clients (withdrawal flow) within the mandate?</div><div class="q-opts"><div class="q-opt" onclick="foSel(this,5,1)">A. Predictable and frequent withdrawals; total priority is capital stability</div><div class="q-opt" onclick="foSel(this,5,2)">B. Occasional withdrawals; stability is priority but accepts moderate variation</div><div class="q-opt" onclick="foSel(this,5,3)">C. Rare withdrawals; focus is growth with regime-based protection</div><div class="q-opt" onclick="foSel(this,5,4)">D. Capital mostly locked by conviction; accepts greater variability for superior return</div></div></div>
+      <div class="q-block"><div class="q-num">06 / 13</div><div class="q-text">What investment universe do you authorize for the mandate (ex-crypto)?</div><div class="q-opts"><div class="q-opt" onclick="foSel(this,6,1)">A. Broad global multi-asset with clear limits</div><div class="q-opt" onclick="foSel(this,6,2)">B. Broad global, more conservative (less EM/FX)</div><div class="q-opt" onclick="foSel(this,6,3)">C. Global with strong risk asset bias</div><div class="q-opt" onclick="foSel(this,6,4)">D. Maximum freedom within traditional assets</div></div></div>
+      <div class="q-block"><div class="q-num">07 / 13</div><div class="q-text">How do you define "real risk" in multigenerational management?</div><div class="q-opts"><div class="q-opt" onclick="foSel(this,7,1)">A. Volatility and nominal loss risk</div><div class="q-opt" onclick="foSel(this,7,2)">B. Drawdown and recovery time</div><div class="q-opt" onclick="foSel(this,7,3)">C. Relative underperformance in the cycle</div><div class="q-opt" onclick="foSel(this,7,4)">D. Missing upside opportunities</div></div></div>
+      <div class="q-block"><div class="q-num">08 / 13</div><div class="q-text">What stance do you prefer in systemic crisis regimes?</div><div class="q-opts"><div class="q-opt" onclick="foSel(this,8,1)">A. Automatic risk-off and active protection</div><div class="q-opt" onclick="foSel(this,8,2)">B. Progressive exposure reduction and partial hedge</div><div class="q-opt" onclick="foSel(this,8,3)">C. Maintain core and reduce only if it persists</div><div class="q-opt" onclick="foSel(this,8,4)">D. Maintain / increase risk to capture reversals</div></div></div>
+      <div class="q-block"><div class="q-num">09 / 13</div><div class="q-text">For the committee and stakeholders, which success KPI is most valued?</div><div class="q-opts"><div class="q-opt" onclick="foSel(this,9,1)">A. Stability and preservation (low maximum loss)</div><div class="q-opt" onclick="foSel(this,9,2)">B. Consistency with moderate volatility</div><div class="q-opt" onclick="foSel(this,9,3)">C. Long-term outperformance accepting variations</div><div class="q-opt" onclick="foSel(this,9,4)">D. High absolute return (even with high dispersion)</div></div></div>
+      <div class="q-block"><div class="q-num">10 / 13</div><div class="q-text">In periods of stress, what level of "downgrade" (temporary risk reduction) do you expect the mandate to execute?</div><div class="q-opts"><div class="q-opt" onclick="foSel(this,10,1)">A. Fast and strong downgrade (priority: preservation)</div><div class="q-opt" onclick="foSel(this,10,2)">B. Moderate and progressive downgrade</div><div class="q-opt" onclick="foSel(this,10,3)">C. Light downgrade (preference for maintaining exposure)</div><div class="q-opt" onclick="foSel(this,10,4)">D. Minimal or no downgrade (priority: capture recoveries)</div></div></div>
+      <div class="q-block"><div class="q-num">11 / 13</div><div class="q-text">How much discretion do you accept on top of the quantitative system?</div><div class="q-opts"><div class="q-opt" onclick="foSel(this,11,1)">A. Minimal; clear rules and few exceptions</div><div class="q-opt" onclick="foSel(this,11,2)">B. Some; rare exceptions in extreme events</div><div class="q-opt" onclick="foSel(this,11,3)">C. Moderate; committee can guide adjustments</div><div class="q-opt" onclick="foSel(this,11,4)">D. High; committee decides allocations frequently</div></div></div>
+      <div class="q-block"><div class="q-num">12 / 13</div><div class="q-text">What level of operational complexity can your MFO sustain?</div><div class="q-opts"><div class="q-opt" onclick="foSel(this,12,1)">A. Low complexity (simple reports and predictability)</div><div class="q-opt" onclick="foSel(this,12,2)">B. Moderate (explanation of regimes and overlays)</div><div class="q-opt" onclick="foSel(this,12,3)">C. High (multi-asset, rotation, technical discussions)</div><div class="q-opt" onclick="foSel(this,12,4)">D. Very high (frequent changes and greater technical depth)</div></div></div>
+      <div class="q-block"><div class="q-num">13 / 13</div><div class="q-text">In terms of "ideal mandate", which phrase do you most agree with?</div><div class="q-opts"><div class="q-opt" onclick="foSel(this,13,1)">A. "Not losing is more important than winning."</div><div class="q-opt" onclick="foSel(this,13,2)">B. "Winning well and losing little is the balance."</div><div class="q-opt" onclick="foSel(this,13,3)">C. "I accept losing more to gain more in the cycle."</div><div class="q-opt" onclick="foSel(this,13,4)">D. "I prefer high variance if the upside is superior."</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 4 — CLIENT QUESTIONNAIRE (score hidden) ═══ -->
+<div class="step" id="step4">
+
+  <!-- ── Return Expectation Engine — compact bar ── -->
+  <div class="ree-bar">
+    <div class="ree-title-col">
+      <div class="ree-lbl">Return Expectation</div>
+      <div class="ree-title">5-Year Horizon</div>
+    </div>
+    <div class="ree-slider-col">
+      <div class="ree-slider-head">
+        <span class="ree-slider-lbl">Target Portfolio Value</span>
+        <span class="ree-slider-val" id="ree4-target">$200,000</span>
+      </div>
+      <input type="range" id="ree4Slider" class="tre-slider" min="100000" max="400000" step="10000" value="200000" oninput="onRee4Slider(this.value)">
+      <div class="ree-slider-marks"><span>$100k</span><span>$200k</span><span>$300k</span><span>$400k</span></div>
+    </div>
+    <div class="ree-outs">
+      <div class="ree-out">
+        <div class="ree-out-lbl">Total Return</div>
+        <div class="ree-out-val" id="ree4-total">+100%</div>
+      </div>
+      <div class="ree-out">
+        <div class="ree-out-lbl">Annual CAGR</div>
+        <div class="ree-out-val" id="ree4-cagr">14.9%</div>
+      </div>
+    </div>
+    <div class="ree-micro">Define your desired outcome before we assess the risk required to pursue it.</div>
+  </div>
+
+  <div class="q-layout" style="flex:1;min-height:0;">
+    <div class="q-left">
+      <div class="kicker">Step 4 · Individual Client</div>
+      <div class="section-title" style="font-size:24px;margin-bottom:10px;">Client's True<br>Risk Tolerance</div>
+      <div class="section-sub" style="font-size:13px;margin-bottom:22px;">13 behavioural questions. The real Risk Number is revealed at the end — not what the client thinks they can tolerate.</div>
+      <div class="locked-card" id="ind-locked">
+        <div class="locked-icon" id="ind-locked-icon">🔒</div>
+        <div class="locked-lbl">Client Risk Score</div>
+        <div class="locked-status" id="ind-locked-status">Waiting for answers</div>
+      </div>
+      <div style="margin-top:18px;">
+        <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:5px;letter-spacing:0.1em;">
+          <span>PROGRESS</span><span id="ind-count">0 / 13</span>
+        </div>
+        <div style="background:rgba(255,255,255,0.06);height:5px;border-radius:2px;overflow:hidden;">
+          <div id="ind-prog" style="height:100%;background:var(--gold);border-radius:2px;width:0%;transition:width 0.3s;"></div>
+        </div>
+        <div id="ind-complete-msg" style="display:none;margin-top:10px;font-family:var(--mono);font-size:10px;color:var(--green);letter-spacing:0.12em;text-align:center;">✓ ALL QUESTIONS ANSWERED</div>
+      </div>
+    </div>
+    <div class="q-right">
+      <div class="q-block"><div class="q-num">01 / 13</div><div class="q-text">In general, how would your best friend describe you as a risk taker?</div><div class="q-opts"><div class="q-opt" onclick="indSel(this,1,4)">A. A real gambler</div><div class="q-opt" onclick="indSel(this,1,3)">B. Willing to take risks after completing adequate research</div><div class="q-opt" onclick="indSel(this,1,2)">C. Cautious</div><div class="q-opt" onclick="indSel(this,1,1)">D. A real risk avoider</div></div></div>
+      <div class="q-block"><div class="q-num">02 / 13</div><div class="q-text">You are on a TV game show and can choose one of the following. Which would you take?</div><div class="q-opts"><div class="q-opt" onclick="indSel(this,2,1)">A. $1,000 in cash</div><div class="q-opt" onclick="indSel(this,2,2)">B. A 50% chance at winning $5,000</div><div class="q-opt" onclick="indSel(this,2,3)">C. A 25% chance at winning $10,000</div><div class="q-opt" onclick="indSel(this,2,4)">D. A 5% chance at winning $100,000</div></div></div>
+      <div class="q-block"><div class="q-num">03 / 13</div><div class="q-text">You have just finished saving for a "once-in-a-lifetime" vacation. Three weeks before you plan to leave, you lose your job. You would:</div><div class="q-opts"><div class="q-opt" onclick="indSel(this,3,1)">A. Cancel the vacation</div><div class="q-opt" onclick="indSel(this,3,2)">B. Take a much more modest vacation</div><div class="q-opt" onclick="indSel(this,3,3)">C. Go as scheduled, reasoning that you need the time to prepare for a job search</div><div class="q-opt" onclick="indSel(this,3,4)">D. Extend your vacation, because this might be your last chance to go first-class</div></div></div>
+      <div class="q-block"><div class="q-num">04 / 13</div><div class="q-text">If you unexpectedly received $20,000 to invest, what would you do?</div><div class="q-opts"><div class="q-opt" onclick="indSel(this,4,1)">A. Deposit it in a bank account, money market account, or an insured CD</div><div class="q-opt" onclick="indSel(this,4,2)">B. Invest it in safe high quality bonds or bond mutual funds</div><div class="q-opt" onclick="indSel(this,4,3)">C. Invest it in stocks or stock mutual funds</div></div></div>
+      <div class="q-block"><div class="q-num">05 / 13</div><div class="q-text">In terms of experience, how comfortable are you investing in stocks or stock mutual funds?</div><div class="q-opts"><div class="q-opt" onclick="indSel(this,5,1)">A. Not at all comfortable</div><div class="q-opt" onclick="indSel(this,5,2)">B. Somewhat comfortable</div><div class="q-opt" onclick="indSel(this,5,3)">C. Very comfortable</div></div></div>
+      <div class="q-block"><div class="q-num">06 / 13</div><div class="q-text">When you think of the word "risk" which of the following words comes to mind first?</div><div class="q-opts"><div class="q-opt" onclick="indSel(this,6,1)">A. Loss</div><div class="q-opt" onclick="indSel(this,6,2)">B. Uncertainty</div><div class="q-opt" onclick="indSel(this,6,3)">C. Opportunity</div><div class="q-opt" onclick="indSel(this,6,4)">D. Thrill</div></div></div>
+      <div class="q-block"><div class="q-num">07 / 13</div><div class="q-text">Some experts are predicting hard asset prices (gold, real estate) to increase; bond prices may fall. Most of your assets are in high-interest government bonds. What would you do?</div><div class="q-opts"><div class="q-opt" onclick="indSel(this,7,1)">A. Hold the bonds</div><div class="q-opt" onclick="indSel(this,7,2)">B. Sell half bonds → money market; half → hard assets</div><div class="q-opt" onclick="indSel(this,7,3)">C. Sell all bonds and put the total proceeds into hard assets</div><div class="q-opt" onclick="indSel(this,7,4)">D. Sell bonds, put all in hard assets, and borrow more to buy more</div></div></div>
+      <div class="q-block"><div class="q-num">08 / 13</div><div class="q-text">Given the best and worst case returns of the four investment choices below, which would you prefer?</div><div class="q-opts"><div class="q-opt" onclick="indSel(this,8,1)">A. Best: +$200 / Worst: $0</div><div class="q-opt" onclick="indSel(this,8,2)">B. Best: +$800 / Worst: −$200</div><div class="q-opt" onclick="indSel(this,8,3)">C. Best: +$2,600 / Worst: −$800</div><div class="q-opt" onclick="indSel(this,8,4)">D. Best: +$4,800 / Worst: −$2,400</div></div></div>
+      <div class="q-block"><div class="q-num">09 / 13</div><div class="q-text">In addition to whatever you own, you have been given $1,000. You are now asked to choose between:</div><div class="q-opts"><div class="q-opt" onclick="indSel(this,9,1)">A. A sure gain of $500</div><div class="q-opt" onclick="indSel(this,9,3)">B. A 50% chance to gain $1,000 and a 50% chance to gain nothing</div></div></div>
+      <div class="q-block"><div class="q-num">10 / 13</div><div class="q-text">In addition to whatever you own, you have been given $2,000. You are now asked to choose between:</div><div class="q-opts"><div class="q-opt" onclick="indSel(this,10,1)">A. A sure loss of $500</div><div class="q-opt" onclick="indSel(this,10,3)">B. A 50% chance to lose $1,000 and a 50% chance to lose nothing</div></div></div>
+      <div class="q-block"><div class="q-num">11 / 13</div><div class="q-text">Suppose a relative left you an inheritance of $100,000, stipulating that you invest ALL the money in ONE of the following choices. Which one would you select?</div><div class="q-opts"><div class="q-opt" onclick="indSel(this,11,1)">A. A savings account or money market mutual fund</div><div class="q-opt" onclick="indSel(this,11,2)">B. A mutual fund that owns stocks and bonds</div><div class="q-opt" onclick="indSel(this,11,3)">C. A portfolio of 15 common stocks</div><div class="q-opt" onclick="indSel(this,11,4)">D. Commodities like gold, silver, and oil</div></div></div>
+      <div class="q-block"><div class="q-num">12 / 13</div><div class="q-text">If you had to invest $20,000, which of the following investment choices would you find most appealing?</div><div class="q-opts"><div class="q-opt" onclick="indSel(this,12,1)">A. 60% low-risk / 30% medium-risk / 10% high-risk</div><div class="q-opt" onclick="indSel(this,12,2)">B. 30% low-risk / 40% medium-risk / 30% high-risk</div><div class="q-opt" onclick="indSel(this,12,3)">C. 10% low-risk / 40% medium-risk / 50% high-risk</div></div></div>
+      <div class="q-block"><div class="q-num">13 / 13</div><div class="q-text">Your trusted friend, an experienced geologist, is putting together a group to fund an exploratory gold mining venture. It could pay 50–100× the investment if successful, but is worthless if it fails. Success probability: 20%. How much would you invest?</div><div class="q-opts"><div class="q-opt" onclick="indSel(this,13,1)">A. Nothing</div><div class="q-opt" onclick="indSel(this,13,2)">B. One month's salary</div><div class="q-opt" onclick="indSel(this,13,3)">C. Three month's salary</div><div class="q-opt" onclick="indSel(this,13,4)">D. Six month's salary</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 5 — FINANCIAL OBJECTIVE / TARGET RISK ENGINE ═══ -->
+<div class="step" id="step5">
+  <div style="flex:1;display:flex;flex-direction:column;overflow:hidden;">
+
+    <!-- Header strip -->
+    <div style="flex-shrink:0;padding:16px 40px 12px;border-bottom:1px solid var(--border);display:flex;align-items:baseline;gap:24px;">
+      <div>
+        <div class="kicker" style="margin-bottom:2px;">Step 5 · Financial Objective</div>
+        <div style="font-family:var(--syne);font-size:24px;font-weight:800;color:var(--text);line-height:1.1;">Target Risk Engine</div>
+      </div>
+      <div style="font-size:13px;color:var(--text3);line-height:1.5;max-width:440px;">Over a <strong style="color:var(--gold)">5-year horizon</strong> from <strong style="color:var(--gold)">$100,000</strong> — every target implies a level of risk you must be prepared to take.</div>
+    </div>
+
+    <!-- Two-column body -->
+    <div class="tre-layout">
+
+      <!-- LEFT — input + slider + context -->
+      <div class="tre-left">
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:12px;">Target Portfolio Value in 5 Years (USD)</div>
+
+        <div class="tre-goal-wrap" id="goal-input-wrap">
+          <span class="tre-goal-symbol">$</span>
+          <input type="number" id="goalInput" placeholder="200000" min="100001" max="500000" step="5000"
+            class="tre-goal-input" oninput="onGoalInput(this.value)" value="200000">
+        </div>
+
+        <!-- Slider -->
+        <div style="margin-top:20px;">
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text3);margin-bottom:8px;">Adjust your target outcome</div>
+          <input type="range" id="goalSlider" class="tre-slider" min="110000" max="500000" step="5000" value="200000" oninput="onGoalSlider(this.value)">
+          <div class="tre-slider-ends"><span>$100k</span><span>$200k</span><span>$300k</span><span>$400k</span><span>$500k</span></div>
+        </div>
+
+        <!-- Microcopy -->
+        <div class="tre-microcopy" style="margin-top:16px;">
+          Target return is not risk tolerance. This engine translates your desired outcome into the volatility and downside you may need to withstand. Two clients can share the same return target while having very different risk capacities.
+        </div>
+
+        <!-- High-risk alert -->
+        <div class="tre-alert" id="tre-alert">
+          <div class="tre-alert-title">⚠ High-Risk Path Detected</div>
+          <div class="tre-alert-body" id="tre-alert-body">
+            Your target implies a high-risk path. In a 6-month stress scenario, this portfolio may need to withstand a drawdown of approximately <strong id="tre-alert-dd" style="color:var(--red);">—</strong>.
+            <br><br><em style="color:var(--text3);">Are you prepared to tolerate this level of downside in pursuit of your target?</em>
+          </div>
+          <div class="tre-alert-btns">
+            <button class="tre-alert-confirm" onclick="treAlertConfirm()">Yes, Continue</button>
+            <button class="tre-alert-adjust" onclick="treAlertAdjust()">Adjust Target</button>
+          </div>
+        </div>
+
+        <!-- Bottom note -->
+        <div style="margin-top:24px;font-family:var(--mono);font-size:10px;color:var(--text4);letter-spacing:0.08em;">
+          * Required to proceed · Initial investment: $100,000
+        </div>
+      </div>
+
+      <!-- RIGHT — live calculation cards -->
+      <div class="tre-right">
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:4px;">Live Calculations</div>
+        <div style="font-size:12px;color:var(--text4);margin-bottom:14px;font-family:var(--mono);">All figures update in real time as you adjust your target.</div>
+
+        <div class="tre-cards">
+          <div class="tre-card">
+            <div class="tre-card-lbl">Required Annual Return</div>
+            <div class="tre-card-val" id="tre-cagr">—</div>
+            <div class="tre-card-sub">CAGR over 5 years</div>
+          </div>
+          <div class="tre-card">
+            <div class="tre-card-lbl">Required 6-Month Return</div>
+            <div class="tre-card-val" id="tre-r6">—</div>
+            <div class="tre-card-sub">Compound semi-annual</div>
+          </div>
+          <div class="tre-card">
+            <div class="tre-card-lbl">Implied Volatility</div>
+            <div class="tre-card-val" id="tre-vol">—</div>
+            <div class="tre-card-sub">Annualized · market-adjusted</div>
+          </div>
+          <div class="tre-card">
+            <div class="tre-card-lbl">Potential 6-Month Downside</div>
+            <div class="tre-card-val" id="tre-down">—</div>
+            <div class="tre-card-sub">95th percentile · Nitrogen method</div>
+          </div>
+        </div>
+
+        <!-- Risk Number card (full width) -->
+        <div class="tre-rn-card" id="tre-rn-card">
+          <div class="tre-rn-ring" id="tre-rn-ring">
+            <div class="tre-rn-ring-val" id="tre-rn-val">—</div>
+            <div class="tre-rn-ring-lbl">Risk No.</div>
+          </div>
+          <div class="tre-rn-body">
+            <div class="tre-rn-title" id="tre-rn-label">Enter a target to calculate</div>
+            <div class="tre-rn-desc" id="tre-rn-desc">Estimated Risk Number based on the Nitrogen downside-to-RN interpolation model. This is the implied risk appetite required to pursue your target.</div>
+            <div class="tre-nitrogen">RN powered by Nitrogen</div>
+          </div>
+        </div>
+
+        <!-- 6M upside card -->
+        <div class="tre-card">
+          <div class="tre-card-lbl">Potential 6-Month Upside</div>
+          <div class="tre-card-val" id="tre-up" style="color:var(--green);">—</div>
+          <div class="tre-card-sub">95th percentile range · best case</div>
+        </div>
+
+        <!-- Contextual summary -->
+        <div style="padding:12px 14px;background:rgba(212,175,69,0.04);border:1px solid rgba(212,175,69,0.12);margin-top:4px;font-size:12px;color:var(--text3);line-height:1.6;font-family:var(--mono);" id="tre-summary">
+          Set a target value above to see your full risk profile.
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 6 — PORTFOLIO ALIGNMENT ENGINE ═══ -->
+<div class="step" id="step6">
+  <div style="flex:1;display:flex;flex-direction:column;overflow:hidden;">
+
+    <!-- Header strip -->
+    <div style="flex-shrink:0;padding:12px 32px 10px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:20px;">
+      <div>
+        <div class="kicker" style="margin-bottom:2px;">Step 6 · Portfolio Alignment</div>
+        <div style="font-family:var(--syne);font-size:20px;font-weight:800;color:var(--text);line-height:1.1;">Portfolio Alignment Engine</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:2px;max-width:560px;line-height:1.4;">Compare the Family Office mandate, the client's behavioral risk, and the return target required to pursue the desired outcome.</div>
+      </div>
+      <div id="pae-header-badge" style="flex-shrink:0;"></div>
+    </div>
+
+    <!-- Main grid: LEFT 33% | RIGHT 67% -->
+    <div class="pae-layout">
+
+      <!-- ═══ LEFT PANEL ═══ -->
+      <div class="pae-left">
+        <div style="font-family:var(--mono);font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text3);">Select Alignment Reference</div>
+
+        <!-- Card: FO Mandate -->
+        <div class="pae-ref-card" id="pae-card-fo" onclick="paeSwitchRef('fo')">
+          <div class="pae-ref-lbl">Family Office Mandate</div>
+          <div class="pae-ref-rn" id="pae-rn-fo" style="color:var(--gold);">—</div>
+          <div class="pae-ref-sub">Institutional risk profile</div>
+        </div>
+
+        <!-- Card: Client -->
+        <div class="pae-ref-card active" id="pae-card-client" onclick="paeSwitchRef('client')">
+          <div class="pae-ref-lbl">Client Behavioral Risk</div>
+          <div class="pae-ref-rn" id="pae-rn-client" style="color:var(--text);">—</div>
+          <div class="pae-ref-sub">Tolerance revealed by answers</div>
+        </div>
+
+        <!-- Card: Target -->
+        <div class="pae-ref-card" id="pae-card-target" onclick="paeSwitchRef('target')">
+          <div class="pae-ref-lbl">Return Target</div>
+          <div class="pae-ref-rn" id="pae-rn-target" style="color:var(--orange);">—</div>
+          <div class="pae-ref-sub">Risk required to pursue target</div>
+        </div>
+
+        <!-- Interpretation -->
+        <div class="pae-interp-box" style="background:var(--panel);border:1px solid var(--border);padding:12px 14px;flex-shrink:0;">
+          <div style="font-family:var(--mono);font-size:7px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text4);margin-bottom:6px;">Interpretation</div>
+          <div style="font-size:11px;color:var(--text2);line-height:1.6;" id="pae-interpretation">Select a reference to begin alignment analysis.</div>
+        </div>
+
+        <!-- Alignment status badge -->
+        <div id="pae-status-block" style="display:none;padding:10px 0;">
+          <div id="pae-status-badge"></div>
+          <div style="font-size:10px;color:var(--text3);line-height:1.6;margin-top:7px;" id="pae-status-text"></div>
+        </div>
+      </div>
+
+      <!-- ═══ RIGHT PANEL ═══ -->
+      <div class="pae-right">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;flex-shrink:0;">
+          <div>
+            <div style="font-family:var(--mono);font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);">Live Risk Calculations</div>
+            <div style="font-size:10px;color:var(--text4);margin-top:1px;font-family:var(--mono);">All figures update as the alignment reference or target outcome changes.</div>
+          </div>
+        </div>
+
+        <!-- Primary: Selected RN -->
+        <div class="pae-rn-main-card" id="pae-rn-card">
+          <div style="flex-shrink:0;">
+            <div style="font-family:var(--mono);font-size:7px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text4);margin-bottom:3px;">Selected Risk Number</div>
+            <div class="pae-rn-num" id="pae-m-rn">—</div>
+            <div style="font-family:var(--mono);font-size:8px;color:var(--text4);letter-spacing:0.08em;margin-top:4px;">RN powered by Nitrogen</div>
+          </div>
+          <div style="flex:1;border-left:1px solid var(--border);padding-left:18px;">
+            <div style="font-size:12px;color:var(--text2);line-height:1.65;" id="pae-rn-interpret">Select a reference path on the left to begin.</div>
+          </div>
+        </div>
+
+        <!-- 5 metric cards: 3 columns -->
+        <div class="pae-metrics">
+          <div class="pae-metric">
+            <div class="pae-metric-lbl">Required Annual Return</div>
+            <div class="pae-metric-val" id="pae-m-ret" style="color:var(--gold);">—</div>
+          </div>
+          <div class="pae-metric">
+            <div class="pae-metric-lbl">Implied Volatility</div>
+            <div class="pae-metric-val" id="pae-m-vol">—</div>
+          </div>
+          <div class="pae-metric">
+            <div class="pae-metric-lbl">6-Month Expected Return</div>
+            <div class="pae-metric-val" id="pae-m-r6" style="color:var(--gold);">—</div>
+          </div>
+          <div class="pae-metric">
+            <div class="pae-metric-lbl">Potential 6-Month Downside</div>
+            <div class="pae-metric-val" id="pae-m-down" style="color:var(--red);">—</div>
+          </div>
+          <div class="pae-metric" style="grid-column:span 2;">
+            <div class="pae-metric-lbl">Potential 6-Month Upside</div>
+            <div class="pae-metric-val" id="pae-m-up" style="color:var(--green);">—</div>
+          </div>
+        </div>
+
+        <!-- Slider -->
+        <div style="background:var(--panel);border:1px solid var(--border);padding:15px 18px;flex-shrink:0;">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:8px;">
+            <div style="font-family:var(--mono);font-size:8px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text3);">Adjust Target Outcome</div>
+            <div style="font-family:var(--syne);font-size:16px;font-weight:800;color:var(--gold);" id="pae-target-display">$200,000</div>
+          </div>
+          <input type="range" id="paeSlider" class="tre-slider" min="100000" max="400000" step="10000" value="200000" oninput="paeSliderMove(this.value)">
+          <div class="tre-slider-ends"><span>$100k</span><span>$200k</span><span>$300k</span><span>$400k</span></div>
+          <div style="font-family:var(--mono);font-size:9px;color:var(--text4);line-height:1.6;margin-top:8px;letter-spacing:0.04em;">Target return is not risk tolerance. This engine translates the desired outcome into the volatility and downside the client may need to withstand.</div>
+        </div>
+
+        <!-- High-risk alert -->
+        <div class="pae-alert" id="pae-alert">
+          <div class="pae-alert-title">⚠ High-Risk Path Detected</div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.6;" id="pae-alert-body">This target may require withstanding a significant 6-month drawdown.</div>
+          <div class="pae-alert-btns">
+            <button class="pae-btn-confirm" onclick="paeAlertConfirm()">Yes, Continue</button>
+            <button class="pae-btn-adjust" onclick="paeAlertAdjust()">Adjust Target</button>
+          </div>
+        </div>
+
+        <!-- Disclaimer -->
+        <div style="font-family:var(--mono);font-size:8px;color:var(--text4);line-height:1.7;letter-spacing:0.03em;flex-shrink:0;">
+          All investing involves risk, including possible loss of principal. No investment strategy can guarantee a profit or protect against loss. Risk Number and benchmark comparisons are provided for analytical alignment purposes only.
+        </div>
+      </div>
+
+    </div><!-- end pae-layout -->
+  </div>
+</div>
+
+<!-- ═══ STEP 7 — PORTFOLIO SELECTION ═══ -->
+<div class="step" id="step7">
+  <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:40px 60px;overflow-y:auto;">
+    <div style="max-width:820px;width:100%;">
+      <div class="kicker">Step 7 · Portfolio</div>
+      <div class="section-title" style="font-size:32px;">Which portfolio<br>to analyse?</div>
+      <div class="section-sub" style="margin-bottom:12px;">We now analyze how the current portfolio compares to the selected alignment reference.</div>
+      <div style="font-size:12px;color:var(--text4);font-family:var(--mono);margin-bottom:20px;padding:8px 14px;border-left:2px solid rgba(212,175,69,0.3);">Reference: <strong id="port-ref-label" style="color:var(--gold);">—</strong></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;">
+        <div class="model-card" onclick="choosePortMode('real')" id="port-mode-real" style="padding:28px 24px;">
+          <div style="font-size:28px;margin-bottom:12px;">📂</div>
+          <div class="model-name">Use your real portfolio</div>
+          <div class="model-desc">Upload via CSV or connect via API. Most precise simulation — based on actual holdings.</div>
+          <div style="margin-top:14px;"><span class="badge badge-gold">More Precise</span></div>
+        </div>
+        <div class="model-card" onclick="choosePortMode('model')" id="port-mode-model" style="padding:28px 24px;">
+          <div style="font-size:28px;margin-bottom:12px;">📊</div>
+          <div class="model-name">Use a model portfolio</div>
+          <div class="model-desc">Select from 5 representative portfolios. Faster — ideal for first meetings and demos.</div>
+          <div style="margin-top:14px;"><span class="badge badge-neutral">Faster</span></div>
+        </div>
+      </div>
+      <div id="real-upload-area" style="display:none;background:var(--panel);border:2px dashed var(--border);padding:40px;text-align:center;margin-bottom:16px;">
+        <div style="font-size:28px;margin-bottom:10px;">📎</div>
+        <div style="font-family:var(--syne);font-size:16px;font-weight:600;color:var(--text);margin-bottom:8px;">Upload Portfolio CSV</div>
+        <div style="font-size:13px;color:var(--text3);margin-bottom:16px;">CSV with ticker, weight, and asset class columns</div>
+        <button class="btn btn-secondary" style="margin-right:10px;" onclick="choosePortMode('model')">← Use Model Portfolio Instead</button>
+        <button class="btn btn-primary" onclick="simulateUpload()">Select File →</button>
+      </div>
+      <div id="model-selector-area" style="display:none;">
+        <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:12px;">Select a model portfolio:</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div class="model-card" onclick="selectModel(this,'aggressive')" id="model-aggressive"><div style="display:flex;justify-content:space-between;align-items:flex-start;"><div><div class="model-name">Current Portfolio (Demo)</div><div class="model-desc" style="margin-top:4px;">RN 84 · 70% equity · Vol 18.4% · Misaligned — used to demonstrate the correction.</div></div><span class="badge badge-red" style="flex-shrink:0;margin-left:8px;">RN 84</span></div></div>
+          <div class="model-card" onclick="selectModel(this,'growth')" id="model-growth"><div style="display:flex;justify-content:space-between;align-items:flex-start;"><div><div class="model-name">Growth Portfolio</div><div class="model-desc" style="margin-top:4px;">RN 75 · 65% equity · Vol 14.8%</div></div><span class="badge badge-warn" style="flex-shrink:0;margin-left:8px;">RN 75</span></div></div>
+          <div class="model-card" onclick="selectModel(this,'balanced')" id="model-balanced"><div style="display:flex;justify-content:space-between;align-items:flex-start;"><div><div class="model-name">Balanced Portfolio</div><div class="model-desc" style="margin-top:4px;">RN 60 · 50% equity · Vol 11.2%</div></div><span class="badge badge-gold" style="flex-shrink:0;margin-left:8px;">RN 60</span></div></div>
+          <div class="model-card" onclick="selectModel(this,'conservative')" id="model-conservative"><div style="display:flex;justify-content:space-between;align-items:flex-start;"><div><div class="model-name">Conservative Portfolio</div><div class="model-desc" style="margin-top:4px;">RN 45 · 35% equity · Vol 8.1%</div></div><span class="badge badge-green" style="flex-shrink:0;margin-left:8px;">RN 45</span></div></div>
+          <div class="model-card" onclick="selectModel(this,'income')" id="model-income" style="grid-column:span 2;"><div style="display:flex;justify-content:space-between;align-items:flex-start;"><div><div class="model-name">Income / Dividend Portfolio</div><div class="model-desc" style="margin-top:4px;">RN 52 · 40% equity + 40% dividend stocks · Vol 9.8% · Focus on recurring income and low drawdown.</div></div><span class="badge badge-gold" style="flex-shrink:0;margin-left:8px;">RN 52</span></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 8 — DIAGNOSIS + CHARTS ═══ -->
+<div class="step" id="step8">
+  <div style="flex:1;padding:36px 52px;overflow-y:auto;">
+    <div class="kicker">Step 8 · Diagnosis</div>
+    <div class="section-title" style="font-size:30px;margin-bottom:6px;">Misalignment<br>identified.</div>
+    <div class="section-sub" style="margin-bottom:14px;">Here is where your current positioning diverges from your selected risk path.</div>
+    <div style="font-size:12px;color:var(--text4);font-family:var(--mono);margin-bottom:18px;padding:8px 14px;border-left:2px solid rgba(212,175,69,0.3);">Alignment reference: <strong id="diag-ref-label" style="color:var(--gold);">—</strong></div>
+
+    <div class="diag-tri">
+      <div class="diag-col warn">
+        <div class="diag-lbl">Family Office · Mandate</div>
+        <div class="diag-rn" id="diag-fo-rn" style="color:var(--gold);">—</div>
+        <div style="font-family:var(--mono);font-size:9px;color:var(--text4);letter-spacing:0.12em;">/ 99 SCALE</div>
+        <div class="diag-cat" id="diag-fo-cat" style="color:var(--gold);"></div>
+      </div>
+      <div class="diag-arr">
+        <div class="diag-gap" id="diag-gap1" style="color:var(--red);">—</div>
+        <div class="diag-gap-lbl" id="diag-gap1-lbl">GAP</div>
+      </div>
+      <div class="diag-col danger">
+        <div class="diag-lbl">Current Portfolio</div>
+        <div class="diag-rn" id="diag-port-rn" style="color:var(--red);">—</div>
+        <div style="font-family:var(--mono);font-size:9px;color:var(--text4);letter-spacing:0.12em;">/ 99 SCALE</div>
+        <div class="diag-cat" id="diag-port-cat" style="color:var(--red);"></div>
+      </div>
+      <div class="diag-arr">
+        <div class="diag-gap" id="diag-gap2" style="color:var(--red);">—</div>
+        <div class="diag-gap-lbl" id="diag-gap2-lbl">GAP</div>
+      </div>
+      <div class="diag-col ok">
+        <div class="diag-lbl">Client · Real Tolerance</div>
+        <div class="diag-rn" id="diag-client-rn" style="color:var(--green);">—</div>
+        <div style="font-family:var(--mono);font-size:9px;color:var(--text4);letter-spacing:0.12em;">/ 99 SCALE</div>
+        <div class="diag-cat" id="diag-client-cat" style="color:var(--green);"></div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:22px;">
+      <div class="kpi alert"><div class="kpi-lbl">Excess Risk vs Client</div><div class="kpi-val red" id="diag-excess-client" style="font-size:28px;">—</div><div class="kpi-desc">The portfolio is running more risk than the client explicitly accepts.</div></div>
+      <div class="kpi alert"><div class="kpi-lbl">FO Mandate Violation</div><div class="kpi-val red" id="diag-excess-fo" style="font-size:28px;">—</div><div class="kpi-desc">Exceeds the limit defined by the Family Office in the institutional mandate.</div></div>
+      <div class="kpi alert"><div class="kpi-lbl">Goal vs Current CAGR</div><div class="kpi-val red" id="diag-cagr-gap" style="font-size:28px;">—</div><div class="kpi-desc">At the current return rate, the portfolio won't reach the financial goal in 5 years.</div></div>
+    </div>
+
+    <div style="background:linear-gradient(135deg,rgba(208,70,60,0.06),var(--panel));border:1px solid rgba(208,70,60,0.25);padding:22px 28px;margin-bottom:28px;">
+      <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--red);margin-bottom:10px;">Diagnosis · Summary</div>
+      <div style="font-size:15px;color:var(--text2);line-height:1.7;">This portfolio is taking on more risk than the client declared they can tolerate — and more than the Family Office mandate allows. And yet it still delivers insufficient return to meet the financial goal. This is the incongruence that needs to be resolved.</div>
+    </div>
+
+    <!-- CHARTS -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+      <!-- Compounding Gap Chart -->
+      <div style="background:var(--panel);border:1px solid var(--border);padding:22px;">
+        <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:4px;">What You're Costing Your Clients</div>
+        <div style="font-size:13px;color:var(--text3);margin-bottom:16px;">$8.2M AUM · 7.2% current vs 9.6% CORE22 · 5-year projection</div>
+        <svg viewBox="0 0 500 160" width="100%" style="display:block;">
+          <defs>
+            <linearGradient id="gapFill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#5BBF7A" stop-opacity="0.22"/>
+              <stop offset="100%" stop-color="#5BBF7A" stop-opacity="0.03"/>
+            </linearGradient>
+          </defs>
+          <line x1="50" y1="53" x2="440" y2="53" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+          <line x1="50" y1="80" x2="440" y2="80" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+          <line x1="50" y1="109" x2="440" y2="109" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+          <line x1="50" y1="136" x2="440" y2="136" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+          <line x1="50" y1="10" x2="50" y2="145" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+          <line x1="50" y1="145" x2="440" y2="145" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+          <text x="44" y="57" font-family="monospace" font-size="9" fill="#3A4A5A" text-anchor="end">$13M</text>
+          <text x="44" y="84" font-family="monospace" font-size="9" fill="#3A4A5A" text-anchor="end">$12M</text>
+          <text x="44" y="113" font-family="monospace" font-size="9" fill="#3A4A5A" text-anchor="end">$11M</text>
+          <text x="44" y="140" font-family="monospace" font-size="9" fill="#3A4A5A" text-anchor="end">$10M</text>
+          <text x="50"  y="155" font-family="monospace" font-size="9" fill="#3A4A5A" text-anchor="middle">Y0</text>
+          <text x="128" y="155" font-family="monospace" font-size="9" fill="#3A4A5A" text-anchor="middle">Y1</text>
+          <text x="206" y="155" font-family="monospace" font-size="9" fill="#3A4A5A" text-anchor="middle">Y2</text>
+          <text x="284" y="155" font-family="monospace" font-size="9" fill="#3A4A5A" text-anchor="middle">Y3</text>
+          <text x="362" y="155" font-family="monospace" font-size="9" fill="#3A4A5A" text-anchor="middle">Y4</text>
+          <text x="440" y="155" font-family="monospace" font-size="9" fill="#3A4A5A" text-anchor="middle">Y5</text>
+          <path d="M50,136 L128,119 L206,100 L284,80 L362,58 L440,34 L440,63 L362,80 L284,96 L206,110 L128,123 L50,136 Z" fill="url(#gapFill)"/>
+          <path d="M50,136 L128,119 L206,100 L284,80 L362,58 L440,34" fill="none" stroke="#5BBF7A" stroke-width="2.5"/>
+          <path d="M50,136 L128,123 L206,110 L284,96 L362,80 L440,63" fill="none" stroke="#D0463C" stroke-width="2" stroke-dasharray="8,4"/>
+          <circle cx="50" cy="136" r="4" fill="#D4AF45"/>
+          <text x="54" y="131" font-family="monospace" font-size="9" fill="#D4AF45">$8.2M</text>
+          <text x="444" y="37" font-family="monospace" font-size="9" fill="#5BBF7A">$13.0M</text>
+          <text x="444" y="66" font-family="monospace" font-size="9" fill="#D0463C">$11.6M</text>
+          <text x="310" y="48" font-family="monospace" font-size="10" fill="#5BBF7A" font-weight="bold">+$1.4M gap</text>
+        </svg>
+        <div style="display:flex;gap:18px;font-family:var(--mono);font-size:10px;margin-top:6px;">
+          <span style="color:var(--green);">— CORE22 · 9.6% p.a.</span>
+          <span style="color:var(--red);">- - Current · 7.2% p.a.</span>
+        </div>
+      </div>
+
+      <!-- Crisis Scenarios -->
+      <div style="background:var(--panel);border:1px solid var(--border);padding:22px;">
+        <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:4px;">Crisis Scenarios</div>
+        <div style="font-size:13px;color:var(--text3);margin-bottom:20px;">How CORE22's StormGuard protected capital in real drawdowns</div>
+        <div style="margin-bottom:18px;">
+          <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.14em;color:var(--text3);margin-bottom:8px;">2022 · Bear Market</div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+            <div style="font-family:var(--mono);font-size:11px;color:var(--text3);width:80px;flex-shrink:0;">Portfolio</div>
+            <div style="flex:1;height:20px;background:rgba(255,255,255,0.04);border-radius:2px;overflow:hidden;">
+              <div style="height:100%;width:85%;background:var(--red);border-radius:2px;display:flex;align-items:center;padding-left:8px;">
+                <span style="font-family:var(--mono);font-size:10px;font-weight:600;color:#fff;">−34%</span>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="font-family:var(--mono);font-size:11px;color:var(--green);width:80px;flex-shrink:0;">CORE22</div>
+            <div style="flex:1;height:20px;background:rgba(255,255,255,0.04);border-radius:2px;overflow:hidden;">
+              <div style="height:100%;width:21%;background:var(--green);border-radius:2px;display:flex;align-items:center;padding-left:8px;">
+                <span style="font-family:var(--mono);font-size:10px;font-weight:600;color:#fff;">−8.4%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-bottom:18px;">
+          <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.14em;color:var(--text3);margin-bottom:8px;">2020 · COVID Crash</div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+            <div style="font-family:var(--mono);font-size:11px;color:var(--text3);width:80px;flex-shrink:0;">Portfolio</div>
+            <div style="flex:1;height:20px;background:rgba(255,255,255,0.04);border-radius:2px;overflow:hidden;">
+              <div style="height:100%;width:70%;background:var(--red);border-radius:2px;display:flex;align-items:center;padding-left:8px;">
+                <span style="font-family:var(--mono);font-size:10px;font-weight:600;color:#fff;">−28%</span>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="font-family:var(--mono);font-size:11px;color:var(--green);width:80px;flex-shrink:0;">CORE22</div>
+            <div style="flex:1;height:20px;background:rgba(255,255,255,0.04);border-radius:2px;overflow:hidden;">
+              <div style="height:100%;width:28%;background:var(--green);border-radius:2px;display:flex;align-items:center;padding-left:8px;">
+                <span style="font-family:var(--mono);font-size:10px;font-weight:600;color:#fff;">−11.2%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.14em;color:var(--text3);margin-bottom:8px;">2018 · Q4 Sell-off</div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+            <div style="font-family:var(--mono);font-size:11px;color:var(--text3);width:80px;flex-shrink:0;">Portfolio</div>
+            <div style="flex:1;height:20px;background:rgba(255,255,255,0.04);border-radius:2px;overflow:hidden;">
+              <div style="height:100%;width:47.5%;background:var(--red);border-radius:2px;display:flex;align-items:center;padding-left:8px;">
+                <span style="font-family:var(--mono);font-size:10px;font-weight:600;color:#fff;">−19%</span>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="font-family:var(--mono);font-size:11px;color:var(--green);width:80px;flex-shrink:0;">CORE22</div>
+            <div style="flex:1;height:20px;background:rgba(255,255,255,0.04);border-radius:2px;overflow:hidden;">
+              <div style="height:100%;width:14.5%;background:var(--green);border-radius:2px;display:flex;align-items:center;padding-left:6px;">
+                <span style="font-family:var(--mono);font-size:10px;font-weight:600;color:#fff;">−5.8%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--border);font-family:var(--mono);font-size:10px;color:var(--text4);letter-spacing:0.08em;line-height:1.6;">
+          StormGuard detects regime deterioration and rotates to T-Bills automatically — limiting drawdown without manual intervention.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 9 — COMPARISON ═══ -->
+<div class="step" id="step9">
+  <div style="flex:1;display:flex;flex-direction:column;overflow:hidden;">
+
+    <!-- Thin header strip -->
+    <div style="flex-shrink:0;padding:18px 40px 14px;border-bottom:1px solid var(--border);display:flex;align-items:baseline;gap:20px;">
+      <div>
+        <div class="kicker" style="margin-bottom:2px;">Step 9 · Comparison</div>
+        <div style="font-family:var(--syne);font-size:26px;font-weight:800;color:var(--text);line-height:1.1;">Portfolio vs CORE22</div>
+      </div>
+      <div style="font-size:12px;color:var(--text3);max-width:420px;line-height:1.5;">Relative to your selected alignment, here is how your portfolio performs against the target structure.</div>
+    </div>
+
+    <!-- Full-height 50/50 split -->
+    <div style="flex:1;display:grid;grid-template-columns:1fr 1fr;overflow:hidden;min-height:0;">
+
+      <!-- LEFT: Comparison table -->
+      <div style="overflow-y:auto;padding:28px 36px;border-right:1px solid var(--border);">
+        <div style="display:grid;grid-template-columns:1fr 140px 1fr;margin-bottom:3px;">
+          <div style="text-align:right;padding:10px 16px;background:rgba(208,70,60,0.07);border:1px solid rgba(208,70,60,0.15);border-right:none;">
+            <div style="font-family:var(--mono);font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--red);">Current Portfolio</div>
+            <div style="font-family:var(--syne);font-size:12px;font-weight:600;color:var(--text3);margin-top:2px;">Unmanaged Risk</div>
+          </div>
+          <div style="text-align:center;background:var(--bg2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;">
+            <span style="font-family:var(--mono);font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text4);">Metric</span>
+          </div>
+          <div style="padding:10px 16px;background:rgba(91,191,122,0.06);border:1px solid rgba(91,191,122,0.15);border-left:none;">
+            <div style="font-family:var(--mono);font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--green);">CORE22 (HPC22)</div>
+            <div style="font-family:var(--syne);font-size:12px;font-weight:600;color:var(--text3);margin-top:2px;">Aligned Strategy</div>
+          </div>
+        </div>
+
+        <div style="border:1px solid var(--border);overflow:hidden;">
+          <div class="comp-row">
+            <div class="comp-left-cell">
+              <div class="comp-val-big" style="color:var(--red);">18.4%</div>
+              <div style="width:100%;max-width:200px;height:4px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden;display:flex;justify-content:flex-end;">
+                <div style="height:100%;width:73.6%;background:var(--red);border-radius:2px;"></div>
+              </div>
+            </div>
+            <div class="comp-center-cell"><div class="comp-metric-name">Volatility</div><div class="comp-delta">−24% lower ↓</div></div>
+            <div class="comp-right-cell">
+              <div class="comp-val-big" style="color:var(--green);">14.0%</div>
+              <div style="width:100%;max-width:200px;height:4px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden;">
+                <div style="height:100%;width:56%;background:var(--green);border-radius:2px;"></div>
+              </div>
+            </div>
+          </div>
+          <div class="comp-row">
+            <div class="comp-left-cell">
+              <div class="comp-val-big" style="color:var(--red);">−34%</div>
+              <div style="width:100%;max-width:200px;height:4px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden;display:flex;justify-content:flex-end;">
+                <div style="height:100%;width:85%;background:var(--red);border-radius:2px;"></div>
+              </div>
+            </div>
+            <div class="comp-center-cell"><div class="comp-metric-name">Max Drawdown</div><div class="comp-delta">75% shallower ↓</div></div>
+            <div class="comp-right-cell">
+              <div class="comp-val-big" style="color:var(--green);">−8.4%</div>
+              <div style="width:100%;max-width:200px;height:4px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden;">
+                <div style="height:100%;width:21%;background:var(--green);border-radius:2px;"></div>
+              </div>
+            </div>
+          </div>
+          <div class="comp-row">
+            <div class="comp-left-cell">
+              <div class="comp-val-big" style="color:var(--red);">0.61</div>
+              <div style="width:100%;max-width:200px;height:4px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden;display:flex;justify-content:flex-end;">
+                <div style="height:100%;width:30.5%;background:var(--red);border-radius:2px;"></div>
+              </div>
+            </div>
+            <div class="comp-center-cell"><div class="comp-metric-name">Sharpe Ratio</div><div class="comp-delta">+149% higher ↑</div></div>
+            <div class="comp-right-cell">
+              <div class="comp-val-big" style="color:var(--green);">1.52</div>
+              <div style="width:100%;max-width:200px;height:4px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden;">
+                <div style="height:100%;width:76%;background:var(--green);border-radius:2px;"></div>
+              </div>
+            </div>
+          </div>
+          <div class="comp-row">
+            <div class="comp-left-cell">
+              <div class="comp-val-big" style="color:var(--gold);">7.2%</div>
+              <div style="width:100%;max-width:200px;height:4px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden;display:flex;justify-content:flex-end;">
+                <div style="height:100%;width:48%;background:var(--gold);border-radius:2px;"></div>
+              </div>
+            </div>
+            <div class="comp-center-cell"><div class="comp-metric-name">CAGR (5yr)</div><div class="comp-delta">+53% higher ↑</div></div>
+            <div class="comp-right-cell">
+              <div class="comp-val-big" style="color:var(--green);">11.0%</div>
+              <div style="width:100%;max-width:200px;height:4px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden;">
+                <div style="height:100%;width:73.3%;background:var(--green);border-radius:2px;"></div>
+              </div>
+            </div>
+          </div>
+          <div class="comp-row" style="border-bottom:none;">
+            <div class="comp-left-cell">
+              <div class="comp-val-big" style="color:var(--red);">RN 84</div>
+              <div style="width:100%;max-width:200px;height:4px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden;display:flex;justify-content:flex-end;">
+                <div style="height:100%;width:84.8%;background:var(--red);border-radius:2px;"></div>
+              </div>
+              <div style="font-family:var(--mono);font-size:9px;color:var(--text4);">Exceeds mandate</div>
+            </div>
+            <div class="comp-center-cell"><div class="comp-metric-name">Risk Number</div><div class="comp-delta">−19 pts aligned ↓</div></div>
+            <div class="comp-right-cell">
+              <div class="comp-val-big" style="color:var(--green);">RN 65</div>
+              <div style="width:100%;max-width:200px;height:4px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden;">
+                <div style="height:100%;width:65.7%;background:var(--green);border-radius:2px;"></div>
+              </div>
+              <div style="font-family:var(--mono);font-size:9px;color:var(--green);">Within mandate</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:14px;background:linear-gradient(135deg,rgba(91,191,122,0.05),var(--panel));border:1px solid rgba(91,191,122,0.2);padding:14px 18px;display:flex;align-items:center;gap:16px;">
+          <div style="font-size:24px;">🏆</div>
+          <div style="font-size:13px;color:var(--text2);line-height:1.6;">CORE22 wins on <strong style="color:var(--green)">every single metric</strong>. Lower risk. Higher return. Better protection in every crisis scenario. Aligned with both the client and the FO mandate.</div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Pentagon Radar Chart — fills full half -->
+      <div style="display:flex;flex-direction:column;overflow:hidden;background:var(--bg2);position:relative;">
+
+        <!-- Title bar inside right panel -->
+        <div style="flex-shrink:0;padding:18px 28px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+          <div>
+            <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text4);margin-bottom:3px;">Efficiency Profile</div>
+            <div style="font-family:var(--syne);font-size:16px;font-weight:700;color:var(--text);">Risk-Adjusted Coverage Area</div>
+          </div>
+          <div style="display:flex;gap:14px;align-items:center;">
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div style="width:10px;height:10px;background:rgba(91,191,122,0.35);border:1.5px solid rgba(91,191,122,0.85);border-radius:2px;"></div>
+              <span style="font-family:var(--mono);font-size:9px;letter-spacing:0.1em;color:var(--green);">CORE22</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <div style="width:10px;height:10px;background:rgba(208,70,60,0.3);border:1.5px solid rgba(208,70,60,0.9);border-radius:2px;"></div>
+              <span style="font-family:var(--mono);font-size:9px;letter-spacing:0.1em;color:var(--red);">PORTFOLIO</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- SVG fills all remaining height -->
+        <div style="flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding:10px 20px;">
+          <svg viewBox="0 0 440 400" style="width:100%;height:100%;max-height:100%;display:block;">
+
+            <!-- Grid pentagons scaled to new center (220,215), r=160 -->
+            <!-- 100%: r=160 -->
+            <polygon points="220,55 367,148 314,332 126,332 73,148"
+              fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1.2"/>
+            <!-- 75%: r=120 -->
+            <polygon points="220,95 340.2,163 297.5,287 142.5,287 99.8,163"
+              fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+            <!-- 50%: r=80 -->
+            <polygon points="220,135 313.4,178 281,242 159,242 126.6,178"
+              fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="1"/>
+            <!-- 25%: r=40 -->
+            <polygon points="220,175 266.7,193 262.5,224 177.5,224 173.3,193"
+              fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+
+            <!-- Axis lines (center 220,215 → outer vertices) -->
+            <line x1="220" y1="215" x2="220" y2="55"  stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+            <line x1="220" y1="215" x2="367" y2="148" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+            <line x1="220" y1="215" x2="314" y2="332" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+            <line x1="220" y1="215" x2="126" y2="332" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+            <line x1="220" y1="215" x2="73"  y2="148" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+
+            <!-- CORE22 area — large (green) -->
+            <!-- Normalized scores: DD=0.79, CAGR=0.733, Align=0.86, Sharpe=0.76, VolCtrl=0.55 -->
+            <!-- Points: top(0.79), TR(0.733), BR(0.86), BL(0.76), TL(0.55) -->
+            <!-- top:    220, 215-(0.79*160)=215-126.4=88.6 → 220,88.6 -->
+            <!-- TR:     220+sin72°*(0.733*160), 215-cos72°*(0.733*160) = 220+111.5, 215-36.3 → 331.5,178.7 -->
+            <!-- BR:     220+sin36°*(0.86*160), 215+cos36°*(0.86*160) = 220+80.9, 215+111.4 → 300.9,326.4 -->
+            <!-- BL:     220-sin36°*(0.76*160), 215+cos36°*(0.76*160) = 220-71.5, 215+98.4 → 148.5,313.4 -->
+            <!-- TL:     220-sin72°*(0.55*160), 215-cos72°*(0.55*160) = 220-83.8, 215-27.2 → 136.2,187.8 -->
+            <polygon points="220,88.6 331.5,178.7 300.9,326.4 148.5,313.4 136.2,187.8"
+              fill="rgba(91,191,122,0.15)" stroke="rgba(91,191,122,0.9)" stroke-width="2"/>
+
+            <!-- Portfolio area — small (red) -->
+            <!-- Normalized: DD=0.15, CAGR=0.48, Align=0.38, Sharpe=0.305, VolCtrl=0.33 -->
+            <!-- top:    220, 215-(0.15*160)=215-24=191 → 220,191 -->
+            <!-- TR:     220+sin72°*0.48*160, 215-cos72°*0.48*160 = 220+73.1, 215-23.8 → 293.1,191.2 -->
+            <!-- BR:     220+sin36°*0.38*160, 215+cos36°*0.38*160 = 220+35.7, 215+49.2 → 255.7,264.2 -->
+            <!-- BL:     220-sin36°*0.305*160, 215+cos36°*0.305*160 = 220-28.7, 215+39.5 → 191.3,254.5 -->
+            <!-- TL:     220-sin72°*0.33*160, 215-cos72°*0.33*160 = 220-50.2, 215-16.4 → 169.8,198.6 -->
+            <polygon points="220,191 293.1,191.2 255.7,264.2 191.3,254.5 169.8,198.6"
+              fill="rgba(208,70,60,0.2)" stroke="rgba(208,70,60,0.95)" stroke-width="2"/>
+
+            <!-- Center dot -->
+            <circle cx="220" cy="215" r="3" fill="rgba(255,255,255,0.2)"/>
+
+            <!-- Data point dots: CORE22 -->
+            <circle cx="220"   cy="88.6"  r="4" fill="#5BBF7A"/>
+            <circle cx="331.5" cy="178.7" r="4" fill="#5BBF7A"/>
+            <circle cx="300.9" cy="326.4" r="4" fill="#5BBF7A"/>
+            <circle cx="148.5" cy="313.4" r="4" fill="#5BBF7A"/>
+            <circle cx="136.2" cy="187.8" r="4" fill="#5BBF7A"/>
+
+            <!-- Data point dots: Portfolio -->
+            <circle cx="220"   cy="191"   r="4" fill="#D0463C"/>
+            <circle cx="293.1" cy="191.2" r="4" fill="#D0463C"/>
+            <circle cx="255.7" cy="264.2" r="4" fill="#D0463C"/>
+            <circle cx="191.3" cy="254.5" r="4" fill="#D0463C"/>
+            <circle cx="169.8" cy="198.6" r="4" fill="#D0463C"/>
+
+            <!-- Axis labels (larger font, breathing room) -->
+            <text x="220" y="38" text-anchor="middle"
+              font-family="'DM Mono',monospace" font-size="11" fill="rgba(255,255,255,0.5)" letter-spacing="0.08em">DRAWDOWN PROTECTION</text>
+
+            <text x="385" y="142" text-anchor="start"
+              font-family="'DM Mono',monospace" font-size="11" fill="rgba(255,255,255,0.5)" letter-spacing="0.08em">CAGR</text>
+
+            <text x="318" y="356" text-anchor="middle"
+              font-family="'DM Mono',monospace" font-size="11" fill="rgba(255,255,255,0.5)" letter-spacing="0.08em">ALIGNMENT</text>
+
+            <text x="122" y="356" text-anchor="middle"
+              font-family="'DM Mono',monospace" font-size="11" fill="rgba(255,255,255,0.5)" letter-spacing="0.08em">SHARPE</text>
+
+            <text x="58" y="136" text-anchor="end"
+              font-family="'DM Mono',monospace" font-size="11" fill="rgba(255,255,255,0.5)" letter-spacing="0.08em">VOL</text>
+            <text x="58" y="150" text-anchor="end"
+              font-family="'DM Mono',monospace" font-size="11" fill="rgba(255,255,255,0.5)" letter-spacing="0.08em">CONTROL</text>
+
+            <!-- Grid scale labels -->
+            <text x="225" y="97" font-family="'DM Mono',monospace" font-size="8" fill="rgba(255,255,255,0.2)">100%</text>
+            <text x="225" y="137" font-family="'DM Mono',monospace" font-size="8" fill="rgba(255,255,255,0.2)">75%</text>
+            <text x="225" y="177" font-family="'DM Mono',monospace" font-size="8" fill="rgba(255,255,255,0.2)">50%</text>
+          </svg>
+        </div>
+
+        <!-- Efficiency Gap callout at bottom -->
+        <div style="flex-shrink:0;padding:14px 28px;border-top:1px solid var(--border);background:rgba(208,70,60,0.04);display:flex;align-items:center;gap:20px;">
+          <div style="flex-shrink:0;">
+            <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--red);margin-bottom:3px;">Efficiency Gap</div>
+            <div style="font-family:var(--syne);font-size:22px;font-weight:800;color:var(--red);">~77%</div>
+            <div style="font-family:var(--mono);font-size:9px;color:var(--text4);">of CORE22 coverage<br>not being captured</div>
+          </div>
+          <div style="width:1px;height:44px;background:var(--border);flex-shrink:0;"></div>
+          <div style="font-size:13px;color:var(--text3);line-height:1.6;">The red polygon occupies <strong style="color:var(--red)">~23%</strong> of the area of CORE22's green polygon. Every unit of return the client earns costs disproportionately more risk — this is the misalignment in visual form.</div>
+        </div>
+      </div>
+
+    </div><!-- end 50/50 split -->
+  </div>
+</div>
+
+<!-- ═══ STEP 10 — SOLUTION (HPC11 + HPC22) ═══ -->
+<div class="step" id="step10">
+  <div style="flex:1;display:flex;flex-direction:column;overflow:hidden;">
+
+    <!-- Header strip compacto -->
+    <div style="flex-shrink:0;padding:11px 32px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:20px;">
+      <div>
+        <div class="kicker" style="margin-bottom:1px;">Step 10 · The Solution</div>
+        <div style="font-family:var(--syne);font-size:20px;font-weight:800;color:var(--text);line-height:1.1;">Meet HPC11 and HPC22</div>
+      </div>
+      <div style="display:flex;gap:7px;flex-shrink:0;">
+        <span class="badge badge-gold">StormGuard Active</span>
+        <span class="badge badge-green">T+2 Liquidity</span>
+        <span class="badge badge-neutral">RN Aligned</span>
+      </div>
+    </div>
+
+    <!-- Body: LEFT col (Compare btn + HPC11) | RIGHT col (HPC22 + StormGuard) -->
+    <div style="flex:1;display:grid;grid-template-columns:1fr 1fr;overflow:hidden;min-height:0;">
+
+      <!-- ── LEFT ── -->
+      <div style="display:flex;flex-direction:column;gap:10px;padding:16px 20px 16px 28px;border-right:1px solid var(--border);overflow:hidden;">
+
+        <!-- Compare Now button -->
+        <button onclick="openACE()"
+          style="flex-shrink:0;padding:12px 16px;background:rgba(212,175,69,0.08);border:1px solid rgba(212,175,69,0.45);cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;transition:all 0.18s;"
+          onmouseover="this.style.background='rgba(212,175,69,0.16)';this.style.borderColor='rgba(212,175,69,0.8)'"
+          onmouseout="this.style.background='rgba(212,175,69,0.08)';this.style.borderColor='rgba(212,175,69,0.45)'">
+          <div>
+            <div style="font-family:var(--mono);font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(212,175,69,0.55);margin-bottom:2px;">Asset Efficiency Comparison</div>
+            <div style="font-family:var(--syne);font-size:14px;font-weight:700;color:var(--gold);">Compare Now with Market Alternatives</div>
+            <div style="font-family:var(--mono);font-size:9px;color:var(--text3);margin-top:1px;">HPC11 · HPC22 vs SPY · QQQ · AGG · GLD · and more</div>
+          </div>
+          <div style="font-size:20px;color:var(--gold);opacity:0.8;">→</div>
+        </button>
+
+        <!-- HPC11 card -->
+        <div style="flex:1;min-height:0;background:rgba(212,175,69,0.04);border:1px solid rgba(212,175,69,0.2);padding:16px 18px;display:flex;flex-direction:column;overflow:hidden;">
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold);margin-bottom:4px;">Strategy One · ETF-Based</div>
+          <div style="font-family:var(--syne);font-size:32px;font-weight:800;color:var(--gold);line-height:1;margin-bottom:4px;">HPC11</div>
+          <div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:10px;">Conservative · Lower Drawdown · Defensive</div>
+          <div style="display:flex;gap:6px;margin-bottom:14px;">
+            <span class="badge badge-gold" style="font-size:9px;padding:4px 9px;">RN 45–60</span>
+            <span class="badge badge-neutral" style="font-size:9px;padding:4px 9px;">StormGuard</span>
+          </div>
+          <div style="border-top:1px solid rgba(212,175,69,0.12);">
+            <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:13px;">Target Volatility</span><span class="hpc-row-val" style="font-size:14px;">8–12%</span></div>
+            <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:13px;">Max Drawdown</span><span class="hpc-row-val" style="color:var(--green);font-size:14px;">−14%</span></div>
+            <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:13px;">Expected Return</span><span class="hpc-row-val" style="color:var(--green);font-size:14px;">7.5–9.0%</span></div>
+            <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:13px;">Sharpe (5yr)</span><span class="hpc-row-val" style="color:var(--green);font-size:14px;">1.38</span></div>
+            <div class="hpc-row" style="padding:11px 0;border-bottom:none;"><span class="hpc-row-lbl" style="font-size:13px;">Suggested Allocation</span><span class="hpc-row-val" style="color:var(--gold);font-size:14px;">10–15% AUM</span></div>
+          </div>
+        </div>
+
+        <button class="btn-video" style="flex-shrink:0;width:100%;justify-content:center;" onclick="openVideoModal('5zLGgnnXVVM','Watch Deep Dive: Strategy Logic')">
+          <span class="btn-video-icon"></span>Watch Deep Dive: Strategy Logic
+        </button>
+      </div>
+
+      <!-- ── RIGHT ── -->
+      <div style="display:flex;flex-direction:column;gap:10px;padding:16px 28px 16px 20px;overflow:hidden;">
+
+        <!-- HPC22 card -->
+        <div style="flex:1;min-height:0;background:rgba(91,191,122,0.04);border:1px solid rgba(91,191,122,0.25);padding:16px 18px;display:flex;flex-direction:column;position:relative;overflow:hidden;">
+          <div style="position:absolute;top:12px;right:14px;font-family:var(--mono);font-size:9px;letter-spacing:0.12em;color:var(--green);border:1px solid rgba(91,191,122,0.3);padding:3px 9px;">★ RECOMMENDED</div>
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--green);margin-bottom:4px;">Strategy Two · Equities</div>
+          <div style="font-family:var(--syne);font-size:32px;font-weight:800;color:var(--green);line-height:1;margin-bottom:4px;">HPC22</div>
+          <div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:10px;">Growth Alignment · Higher Return · Momentum</div>
+          <div style="display:flex;gap:6px;margin-bottom:14px;">
+            <span class="badge badge-green" style="font-size:9px;padding:4px 9px;">RN 60–80</span>
+            <span class="badge badge-neutral" style="font-size:9px;padding:4px 9px;">StormGuard + TLH</span>
+          </div>
+          <div style="border-top:1px solid rgba(91,191,122,0.12);">
+            <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:13px;">Target Volatility</span><span class="hpc-row-val" style="font-size:14px;">12–16%</span></div>
+            <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:13px;">Max Drawdown</span><span class="hpc-row-val" style="color:var(--green);font-size:14px;">−19%</span></div>
+            <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:13px;">Expected Return</span><span class="hpc-row-val" style="color:var(--green);font-size:14px;">9.5–12.0%</span></div>
+            <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:13px;">Sharpe (5yr)</span><span class="hpc-row-val" style="color:var(--green);font-size:14px;">1.52</span></div>
+            <div class="hpc-row" style="padding:11px 0;border-bottom:none;"><span class="hpc-row-lbl" style="font-size:13px;">Suggested Allocation</span><span class="hpc-row-val" style="color:var(--green);font-size:14px;">20–30% AUM</span></div>
+          </div>
+        </div>
+
+        <!-- StormGuard compacto -->
+        <div style="flex-shrink:0;background:linear-gradient(135deg,rgba(91,191,122,0.05),var(--panel));border:1px solid rgba(91,191,122,0.2);padding:10px 14px;">
+          <div style="font-family:var(--mono);font-size:8px;letter-spacing:0.16em;text-transform:uppercase;color:var(--green);margin-bottom:4px;">StormGuard · Automatic Protection</div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.55;">Detects market regime deterioration and rotates to T-Bills automatically. 2022: HPC22 <strong style="color:var(--green)">−8.4%</strong> vs S&amp;P <strong style="color:var(--red)">−19.4%</strong> · 2020: <strong style="color:var(--green)">−11.2%</strong> vs <strong style="color:var(--red)">−34%</strong>.</div>
+        </div>
+
+        <button class="btn-video" style="flex-shrink:0;width:100%;justify-content:center;" onclick="openVideoModal('Nk8kwTX8cU4','Watch Deep Dive: Portfolio Engineering')">
+          <span class="btn-video-icon"></span>Watch Deep Dive: Portfolio Engineering
+        </button>
+      </div>
+
+    </div><!-- end 50/50 -->
+  </div>
+</div>
+
+<!-- ═══ STEP 11 — POSITIONING + SIMULATION ═══ -->
+<div class="step" id="step11">
+  <div class="sim-layout">
+    <div class="sim-ctrl">
+      <div>
+        <div class="kicker" style="margin-bottom:4px;">Step 11 · Positioning</div>
+        <div style="font-family:var(--syne);font-size:16px;font-weight:700;color:var(--text);">Adjust Allocation</div>
+      </div>
+
+      <!-- Risk vs Return Scatter -->
+      <div style="background:var(--panel);border:1px solid var(--border);padding:12px 10px 8px;">
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:8px;padding:0 4px;">Risk vs Return · Market Positioning</div>
+        <svg viewBox="0 0 340 200" width="100%" style="display:block;">
+          <line x1="50" y1="15" x2="50" y2="170" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+          <line x1="50" y1="170" x2="320" y2="170" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+          <line x1="50" y1="153" x2="320" y2="153" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+          <line x1="50" y1="118" x2="320" y2="118" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+          <line x1="50" y1="84"  x2="320" y2="84"  stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+          <line x1="50" y1="49"  x2="320" y2="49"  stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+          <line x1="84"  y1="15" x2="84"  y2="170" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+          <line x1="151" y1="15" x2="151" y2="170" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+          <line x1="219" y1="15" x2="219" y2="170" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+          <line x1="286" y1="15" x2="286" y2="170" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+          <text x="44" y="157" font-family="monospace" font-size="8" fill="#3A4A5A" text-anchor="end">6%</text>
+          <text x="44" y="122" font-family="monospace" font-size="8" fill="#3A4A5A" text-anchor="end">8%</text>
+          <text x="44" y="88"  font-family="monospace" font-size="8" fill="#3A4A5A" text-anchor="end">10%</text>
+          <text x="44" y="53"  font-family="monospace" font-size="8" fill="#3A4A5A" text-anchor="end">12%</text>
+          <text x="84"  y="180" font-family="monospace" font-size="8" fill="#3A4A5A" text-anchor="middle">8%</text>
+          <text x="151" y="180" font-family="monospace" font-size="8" fill="#3A4A5A" text-anchor="middle">12%</text>
+          <text x="219" y="180" font-family="monospace" font-size="8" fill="#3A4A5A" text-anchor="middle">16%</text>
+          <text x="286" y="180" font-family="monospace" font-size="8" fill="#3A4A5A" text-anchor="middle">20%</text>
+          <text x="185" y="195" font-family="monospace" font-size="7" fill="#3A4A5A" text-anchor="middle">← Volatility (lower is better)</text>
+          <rect x="52" y="17" width="125" height="88" rx="2" fill="rgba(91,191,122,0.04)" stroke="rgba(91,191,122,0.08)" stroke-width="1"/>
+          <text x="60" y="30" font-family="monospace" font-size="7" fill="rgba(91,191,122,0.35)">EFFICIENT ZONE</text>
+          <!-- SPY (15.0, 10.5): cx=202, cy=75 -->
+          <circle cx="202" cy="75" r="7" fill="rgba(91,155,191,0.25)" stroke="#5B9BBF" stroke-width="1.5"/>
+          <text x="212" y="72" font-family="monospace" font-size="8" fill="#5B9BBF">SPY</text>
+          <text x="212" y="81" font-family="monospace" font-size="7" fill="#3A4A5A">10.5%</text>
+          <!-- CORE22 (14.0, 11.0): cx=185, cy=67 -->
+          <circle cx="185" cy="67" r="8" fill="rgba(91,191,122,0.2)" stroke="#5BBF7A" stroke-width="2"/>
+          <text x="140" y="58" font-family="monospace" font-size="8" fill="#5BBF7A" font-weight="bold">CORE22</text>
+          <text x="140" y="67" font-family="monospace" font-size="7" fill="#3A4A5A">11.0%</text>
+          <!-- Blended dot (dynamic) -->
+          <circle id="blend-dot" cx="244" cy="119" r="6" fill="rgba(212,175,69,0.2)" stroke="#D4AF45" stroke-width="1.5"/>
+          <text id="blend-dot-lbl" x="251" y="115" font-family="monospace" font-size="7" fill="#D4AF45">Blended</text>
+          <!-- Current Portfolio (18.4, 7.2): cx=259, cy=132 -->
+          <circle cx="259" cy="132" r="8" fill="rgba(208,70,60,0.2)" stroke="#D0463C" stroke-width="2"/>
+          <text x="269" y="128" font-family="monospace" font-size="8" fill="#D0463C">Portfolio</text>
+          <text x="269" y="137" font-family="monospace" font-size="7" fill="#3A4A5A">7.2%</text>
+          <!-- Arrow from Portfolio toward CORE22 -->
+          <defs>
+            <marker id="arr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+              <path d="M0,0 L0,6 L6,3 Z" fill="rgba(212,175,69,0.45)"/>
+            </marker>
+          </defs>
+          <path d="M251,126 L194,74" fill="none" stroke="rgba(212,175,69,0.3)" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arr)"/>
+        </svg>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:6px;font-family:var(--mono);font-size:9px;">
+          <span style="color:var(--red);">● Portfolio</span>
+          <span style="color:#5B9BBF;">● SPY</span>
+          <span style="color:var(--green);">● CORE22</span>
+          <span style="color:var(--gold);">● Blended</span>
+        </div>
+      </div>
+
+      <div>
+        <div class="slider-lbl">HPC11 Allocation</div>
+        <div class="slider-val hpc11-color" id="hpc11Val">0%</div>
+        <input type="range" class="hpc11" min="0" max="50" value="0" step="5" id="hpc11Slider" oninput="runSim()">
+        <div class="slider-range-lbl"><span>0%</span><span>25%</span><span>50%</span></div>
+        <div style="font-size:12px;color:var(--text3);margin-top:5px;">ETF-based · Conservative · RN 45–60</div>
+      </div>
+      <div>
+        <div class="slider-lbl">HPC22 Allocation</div>
+        <div class="slider-val hpc22-color" id="hpc22Val">20%</div>
+        <input type="range" class="hpc22" min="0" max="50" value="20" step="5" id="hpc22Slider" oninput="runSim()">
+        <div class="slider-range-lbl"><span>0%</span><span>25%</span><span>50%</span></div>
+        <div style="font-size:12px;color:var(--text3);margin-top:5px;">Equity-based · Growth · RN 60–80</div>
+      </div>
+      <div class="remain-box">
+        <div class="remain-lbl">Remaining Portfolio</div>
+        <div class="remain-val" id="remainVal" style="color:var(--text2);">80%</div>
+        <div style="font-size:12px;color:var(--text3);margin-top:4px;">Maintained in current portfolio</div>
+      </div>
+      <div>
+        <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text3);margin-bottom:10px;">Alignment Status</div>
+        <div class="status-checks">
+          <div class="status-check"><div class="status-dot" id="sd-rn"  style="background:var(--text4)"></div><span id="sc-rn">Risk Number — calculating...</span></div>
+          <div class="status-check"><div class="status-dot" id="sd-dd"  style="background:var(--text4)"></div><span id="sc-dd">Drawdown — calculating...</span></div>
+          <div class="status-check"><div class="status-dot" id="sd-vol" style="background:var(--text4)"></div><span id="sc-vol">Volatility — calculating...</span></div>
+          <div class="status-check"><div class="status-dot" id="sd-ret" style="background:var(--text4)"></div><span id="sc-ret">Return — calculating...</span></div>
+        </div>
+      </div>
+      <!-- Optional institutional deep dive before CTA -->
+      <div style="padding:14px 0 4px;border-top:1px solid var(--border);">
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text4);margin-bottom:10px;">Optional · Before You Proceed</div>
+        <button class="btn-video" style="width:100%;justify-content:center;"
+          onclick="openVideoModal('F_1lKtrAIUU','Watch Institutional Deep Dive')">
+          <span class="btn-video-icon"></span>Watch Institutional Deep Dive
+        </button>
+      </div>
+      <button class="btn btn-primary" style="justify-content:center;" onclick="goStep(12)">View Final Result →</button>
+    </div>
+
+    <div class="sim-results">
+      <div class="ba-grid">
+        <div class="ba-col">
+          <div class="ba-head" style="color:var(--red)">Before · Current Portfolio</div>
+          <div class="ba-rn" style="color:var(--red)">84</div>
+          <div class="ba-rn-lbl">Risk Number</div>
+          <div class="ba-row"><span class="ba-row-lbl">Volatility</span><span class="ba-row-val" style="color:var(--red)">18.4%</span></div>
+          <div class="ba-row"><span class="ba-row-lbl">Max Drawdown</span><span class="ba-row-val" style="color:var(--red)">−34%</span></div>
+          <div class="ba-row"><span class="ba-row-lbl">Sharpe Ratio</span><span class="ba-row-val" style="color:var(--red)">0.61</span></div>
+          <div class="ba-row"><span class="ba-row-lbl">CAGR</span><span class="ba-row-val" style="color:var(--red)">7.2%</span></div>
+          <div class="ba-row"><span class="ba-row-lbl">Alignment</span><span class="ba-row-val" style="color:var(--red)">38/100</span></div>
+        </div>
+        <div class="ba-arrow-col">
+          <div class="ba-arrow-sym">→</div>
+          <div class="ba-arrow-lbl" id="baArrowLabel">+20%<br>HPC22</div>
+        </div>
+        <div class="ba-col after">
+          <div class="ba-head" style="color:var(--green)">After · With HPC Applied</div>
+          <div class="ba-rn" style="color:var(--green)" id="afterRN">72</div>
+          <div class="ba-rn-lbl">Risk Number</div>
+          <div class="ba-row"><span class="ba-row-lbl">Volatility</span><span class="ba-row-val" style="color:var(--green)" id="afterVol">14.2%</span></div>
+          <div class="ba-row"><span class="ba-row-lbl">Max Drawdown</span><span class="ba-row-val" style="color:var(--green)" id="afterDD">−21%</span></div>
+          <div class="ba-row"><span class="ba-row-lbl">Sharpe Ratio</span><span class="ba-row-val" style="color:var(--green)" id="afterSharpe">1.30</span></div>
+          <div class="ba-row"><span class="ba-row-lbl">CAGR</span><span class="ba-row-val" style="color:var(--green)" id="afterCAGR">9.6%</span></div>
+          <div class="ba-row"><span class="ba-row-lbl">Alignment</span><span class="ba-row-val" style="color:var(--green)" id="afterAlign">86/100</span></div>
+        </div>
+      </div>
+      <div class="delta-grid">
+        <div class="delta-card"><div class="delta-lbl">Risk Number</div><div class="delta-prev">84</div><div class="delta-now" id="dn-rn">72</div><div class="delta-chg" id="dc-rn">↓ −12 pts</div></div>
+        <div class="delta-card"><div class="delta-lbl">Volatility</div><div class="delta-prev">18.4%</div><div class="delta-now" id="dn-vol">14.2%</div><div class="delta-chg" id="dc-vol">↓ −4.2 pts</div></div>
+        <div class="delta-card"><div class="delta-lbl">Sharpe Ratio</div><div class="delta-prev">0.61</div><div class="delta-now" id="dn-sh">1.30</div><div class="delta-chg" id="dc-sh">↑ +0.69</div></div>
+        <div class="delta-card"><div class="delta-lbl">Alignment</div><div class="delta-prev">38</div><div class="delta-now" id="dn-al">86</div><div class="delta-chg" id="dc-al">↑ +48 pts</div></div>
+      </div>
+      <div class="proj-bar-wrap">
+        <div class="proj-title">5-Year Projection — $8.2M AUM</div>
+        <svg width="100%" height="130" viewBox="0 0 600 130" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="gGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#5BBF7A" stop-opacity="0.22"/><stop offset="100%" stop-color="#5BBF7A" stop-opacity="0"/></linearGradient>
+            <linearGradient id="rGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#D0463C" stop-opacity="0.12"/><stop offset="100%" stop-color="#D0463C" stop-opacity="0"/></linearGradient>
+          </defs>
+          <line x1="0" y1="32" x2="600" y2="32" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+          <line x1="0" y1="65" x2="600" y2="65" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+          <line x1="0" y1="98" x2="600" y2="98" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+          <path d="M0,118 L120,98 L240,76 L360,57 L480,40 L600,24 L600,130 L0,130 Z" fill="url(#gGrad)"/>
+          <path d="M0,118 L120,110 L240,102 L360,95 L480,89 L600,83 L600,130 L0,130 Z" fill="url(#rGrad)"/>
+          <path d="M0,118 L120,98 L240,76 L360,57 L480,40 L600,24" fill="none" stroke="#5BBF7A" stroke-width="2.5"/>
+          <path d="M0,118 L120,110 L240,102 L360,95 L480,89 L600,83" fill="none" stroke="#D0463C" stroke-width="2" stroke-dasharray="8,4"/>
+          <circle cx="0" cy="118" r="4" fill="#D4AF45"/>
+          <text x="6"   y="113" font-family="monospace" font-size="10" fill="#D4AF45">$8.2M</text>
+          <text x="550" y="20"  font-family="monospace" font-size="10" fill="#5BBF7A">$14.1M</text>
+          <text x="550" y="79"  font-family="monospace" font-size="10" fill="#D0463C">$11.6M</text>
+        </svg>
+        <div style="display:flex;gap:20px;font-family:var(--mono);font-size:11px;margin-top:8px;">
+          <span style="color:var(--green);">— With HPC · ~9.6% p.a.</span>
+          <span style="color:var(--red);">- - Without HPC · ~7.2% p.a.</span>
+          <span style="color:var(--gold);margin-left:auto;">5-year difference: <strong>+$2.5M</strong></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STEP 12 — CTA ═══ -->
+<div class="step" id="step12">
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 60px;">
+    <div style="max-width:680px;width:100%;text-align:center;">
+      <div class="score-ring" style="margin:0 auto 28px;">
+        <div class="score-ring-val" id="cta-score">86</div>
+        <div class="score-ring-lbl">Alignment</div>
+      </div>
+      <div class="kicker" style="margin-bottom:8px;">Final Result</div>
+      <div class="section-title" style="font-size:32px;margin-bottom:10px;">Portfolio aligned.<br>What's next?</div>
+      <div style="font-size:15px;color:var(--text3);margin-bottom:40px;line-height:1.7;max-width:520px;margin-left:auto;margin-right:auto;">
+        You now have a complete diagnosis and a clear solution. How would you like to proceed?
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:560px;margin:0 auto;">
+        <button onclick="alert('Investment integration — in development')"
+          style="background:var(--gold);border:none;cursor:pointer;padding:28px 20px;display:flex;flex-direction:column;align-items:center;gap:8px;transition:all 0.15s;border-radius:2px;"
+          onmouseover="this.style.background='#e0bc4a'" onmouseout="this.style.background='var(--gold)'">
+          <span style="font-size:26px;">🚀</span>
+          <span style="font-family:var(--syne);font-size:17px;font-weight:700;color:#0B0F14;">Start Investing Now</span>
+          <span style="font-family:var(--mono);font-size:10px;color:rgba(11,15,20,0.65);letter-spacing:0.1em;">Connect portfolio &amp; submit order</span>
+        </button>
+        <button onclick="openScheduleModal()"
+          style="background:transparent;border:1px solid var(--border);cursor:pointer;padding:28px 20px;display:flex;flex-direction:column;align-items:center;gap:8px;transition:all 0.15s;border-radius:2px;"
+          onmouseover="this.style.borderColor='rgba(212,175,69,0.4)'" onmouseout="this.style.borderColor='var(--border)'">
+          <span style="font-size:26px;">📅</span>
+          <span style="font-family:var(--syne);font-size:17px;font-weight:700;color:var(--text);">Schedule a Meeting</span>
+          <span style="font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:0.1em;">Book a follow-up session</span>
+        </button>
+      </div>
+      <div style="margin-top:28px;display:flex;justify-content:center;gap:14px;">
+        <button class="btn btn-ghost" style="font-size:12px;" onclick="goStep(11)">← Adjust Simulation</button>
+        <a href="terminal.html" class="btn btn-ghost" style="font-size:12px;">Open Terminal →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ BOTTOM NAV ═══ -->
+<div class="nav-bar">
+  <div class="nav-counter">Step <strong id="stepNumDisplay">1</strong> of 12</div>
+  <div class="nav-hint">← → arrow keys to navigate</div>
+  <div class="nav-btns">
+    <button class="btn btn-ghost" id="btnBack" onclick="prevStep()">← Back</button>
+    <button class="btn btn-primary btn-xl" id="btnNext" onclick="nextStep()">Continue →</button>
+  </div>
+</div>
+
+<!-- ═══ SCHEDULE MODAL ═══ -->
+<div class="modal-overlay" id="scheduleModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div class="modal-title">Schedule a Follow-up Meeting</div>
+      <button class="modal-close" onclick="closeScheduleModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="field-grp">
+        <label class="field-lbl">Full Name</label>
+        <input type="text" class="field-inp" placeholder="e.g. John Silva">
+      </div>
+      <div class="field-grp">
+        <label class="field-lbl">Email</label>
+        <input type="email" class="field-inp" placeholder="john@familyoffice.com">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+        <div class="field-grp">
+          <label class="field-lbl">Preferred Date</label>
+          <input type="date" class="field-inp">
+        </div>
+        <div class="field-grp">
+          <label class="field-lbl">Time</label>
+          <select class="field-inp" style="cursor:pointer;">
+            <option>09:00</option><option>10:00</option><option>11:00</option>
+            <option>14:00</option><option>15:00</option><option>16:00</option>
+          </select>
+        </div>
+      </div>
+      <div class="field-grp" style="margin-bottom:0;">
+        <label class="field-lbl">Notes (optional)</label>
+        <textarea class="field-inp" rows="3" placeholder="Specific topics to discuss..."></textarea>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeScheduleModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="submitSchedule()">Confirm Booking →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ ASSET EFFICIENCY COMPARISON ENGINE ═══ -->
+<div class="ace-overlay" id="aceOverlay">
+  <div class="ace-header">
+    <div>
+      <div class="ace-title">Asset Efficiency Comparison</div>
+      <div class="ace-subtitle">Risk Number · Return · Volatility · Downside · Efficiency Score</div>
+    </div>
+    <button class="ace-close-btn" onclick="closeACE()">× Close Comparison</button>
+  </div>
+
+  <div class="ace-tabs-bar">
+    <div class="ace-tab active" id="ace-tab-0" onclick="aceSetTab(0)">Risk vs Return</div>
+    <div class="ace-tab"        id="ace-tab-1" onclick="aceSetTab(1)">Drawdown Range</div>
+    <div class="ace-tab"        id="ace-tab-2" onclick="aceSetTab(2)">Efficiency Ranking</div>
+    <div style="flex:1;"></div>
+    <button class="ace-close-btn" style="margin:8px 0;font-size:9px;" onclick="aceResetFilters()">Reset View</button>
+  </div>
+
+  <div class="ace-body">
+    <!-- Sidebar filters -->
+    <div class="ace-sidebar">
+      <div class="ace-sidebar-title">
+        <span>Benchmarks</span>
+      </div>
+
+      <div class="ace-group-lbl">Harpian Strategies</div>
+      <div class="ace-chip on" data-ticker="HPC11"  onclick="aceToggle(this)"><div class="ace-chip-check"></div><div class="ace-chip-dot" style="background:#D4AF45;"></div>HPC11</div>
+      <div class="ace-chip on" data-ticker="HPC22"  onclick="aceToggle(this)"><div class="ace-chip-check"></div><div class="ace-chip-dot" style="background:#D4AF45;"></div>HPC22</div>
+
+      <div class="ace-chip-sep"></div>
+      <div class="ace-group-lbl">Client Portfolio</div>
+      <div class="ace-chip on" data-ticker="CLIENT" onclick="aceToggle(this)"><div class="ace-chip-check"></div><div class="ace-chip-dot" style="background:#D0463C;"></div>Current Portfolio</div>
+
+      <div class="ace-chip-sep"></div>
+      <div class="ace-group-lbl">US Equity</div>
+      <div class="ace-chip on" data-ticker="SPY"  onclick="aceToggle(this)"><div class="ace-chip-check"></div><div class="ace-chip-dot" style="background:#5B9BBF;"></div>SPY</div>
+      <div class="ace-chip on" data-ticker="QQQ"  onclick="aceToggle(this)"><div class="ace-chip-check"></div><div class="ace-chip-dot" style="background:#5B9BBF;"></div>QQQ</div>
+      <div class="ace-chip"    data-ticker="DIA"  onclick="aceToggle(this)"><div class="ace-chip-check"></div><div class="ace-chip-dot" style="background:#5B9BBF;"></div>DIA</div>
+      <div class="ace-chip"    data-ticker="IWM"  onclick="aceToggle(this)"><div class="ace-chip-check"></div><div class="ace-chip-dot" style="background:#5B9BBF;"></div>IWM</div>
+
+      <div class="ace-chip-sep"></div>
+      <div class="ace-group-lbl">US Bonds</div>
+      <div class="ace-chip on" data-ticker="AGG"  onclick="aceToggle(this)"><div class="ace-chip-check"></div><div class="ace-chip-dot" style="background:#6B7F95;"></div>AGG</div>
+      <div class="ace-chip"    data-ticker="BND"  onclick="aceToggle(this)"><div class="ace-chip-check"></div><div class="ace-chip-dot" style="background:#6B7F95;"></div>BND</div>
+      <div class="ace-chip"    data-ticker="SHY"  onclick="aceToggle(this)"><div class="ace-chip-check"></div><div class="ace-chip-dot" style="background:#6B7F95;"></div>SHY</div>
+      <div class="ace-chip"    data-ticker="IEF"  onclick="aceToggle(this)"><div class="ace-chip-check"></div><div class="ace-chip-dot" style="background:#6B7F95;"></div>IEF</div>
+      <div class="ace-chip"    data-ticker="TLT"  onclick="aceToggle(this)"><div class="ace-chip-check"></div><div class="ace-chip-dot" style="background:#6B7F95;"></div>TLT</div>
+
+      <div class="ace-chip-sep"></div>
+      <div class="ace-group-lbl">International</div>
+      <div class="ace-chip" data-ticker="EFA"  onclick="aceToggle(this)"><div class="ace-chip-check"></div><div class="ace-chip-dot" style="background:#9B7FC4;"></div>EFA</div>
+      <div class="ace-chip" data-ticker="EEM"  onclick="aceToggle(this)"><div class="ace-chip-check"></div><div class="ace-chip-dot" style="background:#9B7FC4;"></div>EEM</div>
+
+      <div class="ace-chip-sep"></div>
+      <div class="ace-group-lbl">Alternatives</div>
+      <div class="ace-chip on" data-ticker="GLD"  onclick="aceToggle(this)"><div class="ace-chip-check"></div><div class="ace-chip-dot" style="background:#C4A73F;"></div>GLD</div>
+      <div class="ace-chip"    data-ticker="IYR"  onclick="aceToggle(this)"><div class="ace-chip-check"></div><div class="ace-chip-dot" style="background:#C4A73F;"></div>IYR</div>
+
+      <div class="ace-chip-sep"></div>
+      <div class="ace-group-lbl">High-Risk / Leveraged</div>
+      <div class="ace-chip" data-ticker="NVDA"  onclick="aceToggle(this)"><div class="ace-chip-check"></div><div class="ace-chip-dot" style="background:#D0463C;"></div>NVDA</div>
+      <div class="ace-chip" data-ticker="UPRO"  onclick="aceToggle(this)"><div class="ace-chip-check"></div><div class="ace-chip-dot" style="background:#D0463C;"></div>UPRO</div>
+      <div class="ace-chip" data-ticker="TQQQ"  onclick="aceToggle(this)"><div class="ace-chip-check"></div><div class="ace-chip-dot" style="background:#D0463C;"></div>TQQQ</div>
+    </div>
+
+    <!-- Main chart area -->
+    <div class="ace-main">
+      <div class="ace-chart-area">
+        <div class="ace-microcopy" id="ace-microcopy">Compare Harpian strategies against market alternatives using Risk Number, return, volatility, downside and efficiency metrics.</div>
+        <div class="ace-chart-wrap" id="ace-chart-wrap">
+          <svg id="ace-scatter-svg" style="width:100%;height:100%;display:block;" overflow="visible"></svg>
+        </div>
+      </div>
+      <div class="ace-insight-bar">
+        <div class="ace-insight-text" id="ace-insight">—</div>
+        <div class="ace-nitrogen-lbl">Benchmark risk metrics powered by Nitrogen methodology.</div>
+      </div>
+      <div class="ace-compliance-bar">
+        <p>All investing involves risk, including possible loss of principal. No investment strategy can guarantee a profit or protect against loss. Risk Number and benchmark comparisons are provided for analytical and educational purposes. Past performance is not indicative of future results.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Shared tooltip for ACE -->
+<div class="ace-tooltip" id="ace-tooltip">
+  <div class="ace-tooltip-ticker" id="att-ticker"></div>
+  <div class="ace-tooltip-name" id="att-name"></div>
+  <div class="ace-tooltip-row"><span class="ace-tooltip-lbl">Risk Number</span><span class="ace-tooltip-val" id="att-rn"></span></div>
+  <div class="ace-tooltip-row"><span class="ace-tooltip-lbl">Ann. Return</span><span class="ace-tooltip-val" id="att-ret"></span></div>
+  <div class="ace-tooltip-row"><span class="ace-tooltip-lbl">Ann. Volatility</span><span class="ace-tooltip-val" id="att-vol"></span></div>
+  <div class="ace-tooltip-row"><span class="ace-tooltip-lbl">6M Downside</span><span class="ace-tooltip-val" id="att-down"></span></div>
+  <div class="ace-tooltip-row"><span class="ace-tooltip-lbl">6M Upside</span><span class="ace-tooltip-val" id="att-up"></span></div>
+  <div class="ace-tooltip-row" style="border-top:1px solid var(--border);padding-top:6px;margin-top:4px;"><span class="ace-tooltip-lbl">Efficiency Score</span><span class="ace-tooltip-val" id="att-eff"></span></div>
+</div>
+
+<!-- ═══ VIDEO MODAL ═══ -->
+<div class="modal-overlay" id="videoModal">
+  <div class="video-modal-box">
+    <div class="video-modal-head">
+      <div class="video-modal-title" id="videoModalTitle">Watch Deep Dive</div>
+      <button class="modal-close" onclick="closeVideoModal()" style="font-size:22px;padding:2px 10px;">×</button>
+    </div>
+    <div class="video-modal-body">
+      <iframe id="videoModalFrame" src="" allowfullscreen
+        allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ JIM ═══ -->
+<a href="javascript:void(0)" class="jim-trigger" onclick="toggleJim()">
+  <div class="jim-av">J</div>
+  <div><div class="jim-text-main">Talk to Jim</div><div class="jim-text-sub">AI Research Assistant</div></div>
+</a>
+<div class="jim-panel" id="jimPanel">
+  <div class="jim-ph"><div class="jim-av">J</div><div><div style="font-family:var(--syne);font-size:15px;font-weight:700;color:var(--text);">Jim</div><div style="font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text3);margin-top:2px;">HARPIAN AI ASSISTANT</div></div></div>
+  <div class="jim-suggs">
+    <div class="jim-sug" onclick="goStep(6);toggleJim()">→ Review collected Risk Numbers</div>
+    <div class="jim-sug" onclick="goStep(8);toggleJim()">→ Show misalignment diagnosis</div>
+    <div class="jim-sug" onclick="goStep(9);toggleJim()">→ See Portfolio vs CORE22</div>
+    <div class="jim-sug" onclick="goStep(11);toggleJim()">→ Simulate HPC allocation now</div>
+    <div class="jim-sug" onclick="goStep(12);toggleJim()">→ Skip to final result</div>
+    <div class="jim-sug" onclick="alert('In development — real Jim with AI')">→ Calculate dollar impact of the gap</div>
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════════════
+   NAVIGATION
+══════════════════════════════════════ */
+let cur = 1;
+const total = 12;
+let presData = { fo:'', manager:'', email:'' };
+
+function goStep(n) {
+  if (n < 1 || n > total) return;
+  document.getElementById('step' + cur).classList.remove('active');
+  cur = n;
+  const el = document.getElementById('step' + cur);
+  el.classList.add('active');
+  el.scrollTop = 0;
+
+  const items = document.querySelectorAll('.si');
+  items.forEach((item, i) => {
+    item.classList.remove('active','done');
+    if (i + 1 < cur)      item.classList.add('done');
+    else if (i + 1 === cur) item.classList.add('active');
+  });
+
+  document.getElementById('stepNumDisplay').textContent = cur;
+  document.getElementById('btnBack').style.opacity = cur === 1 ? '0.3' : '1';
+  document.getElementById('btnBack').disabled = cur === 1;
+  document.getElementById('btnNext').textContent = cur === total ? '↺ Restart' : 'Continue →';
+
+  if (cur === 6)  { paeTargetVal = parseFloat(document.getElementById('goalSlider')?.value || document.getElementById('paeSlider')?.value || '200000'); requestAnimationFrame(paeInit); }
+  if (cur === 7)  { const lbl = document.getElementById('port-ref-label'); if (lbl) lbl.textContent = paeRefLabel(paeActiveRef); }
+  if (cur === 8)  { populateDiagnosis(); const lbl = document.getElementById('diag-ref-label'); if (lbl) lbl.textContent = paeRefLabel(paeActiveRef); }
+  if (cur === 11) runSim();
+
+  updateNextBtn();
+}
+
+function nextStep() {
+  if (cur === 1) { startPresentation(); return; }
+  if (cur === total) goStep(1);
+  else goStep(cur + 1);
+}
+function prevStep() { if (cur > 1) goStep(cur - 1); }
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextStep(); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); prevStep(); }
+});
+
+function updateNextBtn() {
+  const btn      = document.getElementById('btnNext');
+  const startBtn = document.getElementById('sp-start-btn');
+  let disabled = false;
+  if (cur === 1) {
+    const fo = document.getElementById('sp-fo-name')?.value.trim();
+    const mg = document.getElementById('sp-manager-name')?.value.trim();
+    disabled = !fo || !mg;
+    if (startBtn) startBtn.disabled = disabled;
+  } else if (cur === 3) {
+    disabled = Object.keys(foAnswers).length < 13;
+  } else if (cur === 4) {
+    disabled = Object.keys(indAnswers).length < 13;
+  } else if (cur === 5) {
+    const v = parseFloat(document.getElementById('goalInput').value);
+    disabled = !v || v <= 100000;
+  }
+  btn.disabled = disabled;
+}
+
+/* ══════════════════════════════════════
+   STEP 1 — START PRESENTATION
+══════════════════════════════════════ */
+function startPresentation() {
+  const fo = document.getElementById('sp-fo-name').value.trim();
+  const mg = document.getElementById('sp-manager-name').value.trim();
+  const em = document.getElementById('sp-email').value.trim();
+  if (!fo || !mg) { document.getElementById('sp-error').style.display = 'block'; return; }
+  presData = { fo, manager: mg, email: em };
+  document.getElementById('sp-error').style.display = 'none';
+  goStep(2);
+}
+
+/* ══════════════════════════════════════
+   FO QUESTIONNAIRE — score hidden
+══════════════════════════════════════ */
+const foAnswers = {};
+const FO_MIN = 13, FO_MAX = 52;
+
+function foRN(raw) {
+  return Math.max(1, Math.min(99, Math.round(1 + (raw - FO_MIN) / (FO_MAX - FO_MIN) * 98)));
+}
+
+function foSel(el, qNum, value) {
+  el.closest('.q-opts').querySelectorAll('.q-opt').forEach(o => o.classList.remove('sel'));
+  el.classList.add('sel');
+  foAnswers[qNum] = value;
+  const count = Object.keys(foAnswers).length;
+  document.getElementById('fo-count').textContent = count + ' / 13';
+  document.getElementById('fo-prog').style.width  = Math.round(count / 13 * 100) + '%';
+  if (count >= 13) {
+    document.getElementById('fo-locked').classList.add('complete');
+    document.getElementById('fo-locked-icon').textContent   = '✅';
+    document.getElementById('fo-locked-status').textContent = 'Analysis complete';
+    document.getElementById('fo-complete-msg').style.display = 'block';
+  } else {
+    document.getElementById('fo-locked-status').textContent =
+      count === 1 ? '1 answer collected' : count + ' answers collected';
+  }
+  updateNextBtn();
+}
+
+/* ══════════════════════════════════════
+   INDIVIDUAL QUESTIONNAIRE — score hidden
+══════════════════════════════════════ */
+const indAnswers = {};
+const IND_MIN = 13, IND_MAX = 47;
+const IND_QMAX = {1:4,2:4,3:4,4:3,5:3,6:4,7:4,8:4,9:3,10:3,11:4,12:3,13:4};
+
+function indRN(raw) {
+  return Math.max(1, Math.min(99, Math.round(1 + (raw - IND_MIN) / (IND_MAX - IND_MIN) * 98)));
+}
+
+function indSel(el, qNum, value) {
+  el.closest('.q-opts').querySelectorAll('.q-opt').forEach(o => o.classList.remove('sel'));
+  el.classList.add('sel');
+  indAnswers[qNum] = value;
+  const count = Object.keys(indAnswers).length;
+  document.getElementById('ind-count').textContent = count + ' / 13';
+  document.getElementById('ind-prog').style.width  = Math.round(count / 13 * 100) + '%';
+  if (count >= 13) {
+    document.getElementById('ind-locked').classList.add('complete');
+    document.getElementById('ind-locked-icon').textContent   = '✅';
+    document.getElementById('ind-locked-status').textContent = 'Analysis complete';
+    document.getElementById('ind-complete-msg').style.display = 'block';
+  } else {
+    document.getElementById('ind-locked-status').textContent =
+      count === 1 ? '1 answer collected' : count + ' answers collected';
+  }
+  updateNextBtn();
+}
+
+/* ══════════════════════════════════════
+   MODULE 1 — TARGET RISK ENGINE
+══════════════════════════════════════ */
+const TRE_ANCHORS = [
+  {d:0.02,rn:22},{d:0.05,rn:32},{d:0.07,rn:42},
+  {d:0.12,rn:62},{d:0.18,rn:82},{d:0.2742,rn:91}
+];
+
+function treApproxRN(mag) {
+  if (mag <= 0) return 1;
+  if (mag <= TRE_ANCHORS[0].d) return Math.max(1, Math.round(TRE_ANCHORS[0].rn * mag / TRE_ANCHORS[0].d));
+  for (let i=1;i<TRE_ANCHORS.length;i++) {
+    const a=TRE_ANCHORS[i-1], b=TRE_ANCHORS[i];
+    if (mag<=b.d) return Math.round(a.rn + (mag-a.d)/(b.d-a.d)*(b.rn-a.rn));
+  }
+  const l=TRE_ANCHORS[TRE_ANCHORS.length-1], p=TRE_ANCHORS[TRE_ANCHORS.length-2];
+  return Math.min(99, Math.round(l.rn + (l.rn-p.rn)/(l.d-p.d)*(mag-l.d)));
+}
+
+function treCalc(target) {
+  const init=100000, yrs=5;
+  const ratio = target/init;
+  const cagr  = Math.pow(ratio, 1/yrs) - 1;
+  const r6    = Math.pow(ratio, 0.5/yrs) - 1;
+  // Implied vol using market-efficiency ratio (higher returns need proportionally more risk)
+  const eff   = cagr > 0.15 ? 0.52 : cagr > 0.08 ? 0.60 : 0.72;
+  const vol   = Math.max(0.02, cagr / eff);
+  const vol6  = vol / Math.sqrt(2);
+  const down6 = r6 - 1.64 * vol6;
+  const up6   = r6 + 1.64 * vol6;
+  const mag   = Math.max(0, -down6);
+  const rn    = treApproxRN(mag);
+  return { cagr, r6, vol, down6, up6, rn };
+}
+
+function treColorClass(rn) {
+  if (rn < 40) return {cls:'tre-risk-low',  ring:'tre-ring-low',  hex:'#5BBF7A'};
+  if (rn < 65) return {cls:'tre-risk-mid',  ring:'tre-ring-mid',  hex:'#D4AF45'};
+  if (rn < 80) return {cls:'tre-risk-high', ring:'tre-ring-high', hex:'#C97830'};
+  return             {cls:'tre-risk-vhigh', ring:'tre-ring-vhigh',hex:'#D0463C'};
+}
+
+function treFmt(v, isPercent) {
+  return isPercent ? (v >= 0 ? '+' : '') + (v*100).toFixed(1) + '%' : v.toFixed(1) + '%';
+}
+
+let _treAlertDismissed = false;
+
+function treUpdate(target) {
+  const v = parseFloat(target);
+  if (!v || v <= 100000) {
+    document.getElementById('goal-input-wrap').style.borderColor = 'var(--border)';
+    updateNextBtn(); return;
+  }
+  document.getElementById('goal-input-wrap').style.borderColor = 'rgba(212,175,69,0.5)';
+  const r = treCalc(v);
+  const c = treColorClass(r.rn);
+
+  // Update cards
+  const set = (id, txt, cls) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = txt;
+    el.className = 'tre-card-val ' + (cls||'');
+  };
+  set('tre-cagr', (r.cagr*100).toFixed(1) + '%', c.cls);
+  set('tre-r6',   (r.r6*100).toFixed(1) + '%',   c.cls);
+  set('tre-vol',  (r.vol*100).toFixed(1) + '%',   r.vol>0.20 ? 'tre-risk-vhigh' : r.vol>0.12 ? 'tre-risk-high' : 'tre-risk-mid');
+  set('tre-down', (r.down6*100).toFixed(1) + '%', r.rn>=80 ? 'tre-risk-vhigh' : 'tre-risk-high');
+  set('tre-up',   '+' + (r.up6*100).toFixed(1) + '%', 'tre-risk-low');
+
+  // RN ring
+  const rnEl  = document.getElementById('tre-rn-val');
+  const ring  = document.getElementById('tre-rn-ring');
+  const lbl   = document.getElementById('tre-rn-label');
+  const desc  = document.getElementById('tre-rn-desc');
+  const card  = document.getElementById('tre-rn-card');
+  const atMax = r.rn >= 99;
+  if (rnEl)  { rnEl.textContent = atMax ? '99+' : r.rn; rnEl.style.color = c.hex; }
+  if (ring)  { ring.className = 'tre-rn-ring ' + c.ring; }
+  if (lbl)   {
+    lbl.textContent = atMax ? 'Maximum Calculable Risk' :
+      r.rn < 40 ? 'Conservative Path' : r.rn < 65 ? 'Moderate Risk Path' : r.rn < 80 ? 'High-Risk Path' : 'Very High-Risk Path';
+    lbl.style.color = c.hex;
+  }
+  if (desc)  {
+    desc.textContent = atMax
+      ? 'This target exceeds the maximum risk level calculable by Nitrogen — the official Risk Number platform. The strategy required to pursue it falls outside standard portfolio modeling. You may still pursue this goal, but risk metrics beyond RN 99 are not defined by the methodology.'
+      : 'To achieve your $' + Math.round(v).toLocaleString() + ' target, you must tolerate a portfolio with approximately RN ' + r.rn + '. This implies a potential 6-month downside of ' + (r.down6*100).toFixed(1) + '%.';
+  }
+  if (card)  { card.style.borderColor = c.hex; }
+
+  // Summary
+  const sumEl = document.getElementById('tre-summary');
+  if (sumEl) {
+    const gain = ((v/100000-1)*100).toFixed(0);
+    sumEl.textContent = 'A $' + Math.round(v/1000) + 'k target (' + gain + '% gain) implies RN ' + r.rn + ' — a ' + (r.cagr*100).toFixed(1) + '% annualized return with ~' + (r.vol*100).toFixed(0) + '% annualized volatility.';
+  }
+
+  // High-risk alert (RN >= 80 or downside <= -18%)
+  const alertEl = document.getElementById('tre-alert');
+  const alertDD = document.getElementById('tre-alert-dd');
+  if (alertEl) {
+    const highRisk = r.rn >= 80 || r.down6 <= -0.18;
+    if (highRisk && !_treAlertDismissed) {
+      alertEl.classList.add('visible');
+      if (alertDD) alertDD.textContent = (r.down6*100).toFixed(1) + '%';
+    } else if (!highRisk) {
+      alertEl.classList.remove('visible');
+      _treAlertDismissed = false;
+    }
+  }
+  updateNextBtn();
+}
+
+function onGoalInput(val) {
+  const v = parseFloat(val || document.getElementById('goalInput').value);
+  // Sync slider
+  const sl = document.getElementById('goalSlider');
+  if (sl && v >= 110000 && v <= 1000000) sl.value = v;
+  treUpdate(v);
+}
+
+function onGoalSlider(val) {
+  const v = parseFloat(val);
+  const inp = document.getElementById('goalInput');
+  if (inp) inp.value = Math.round(v);
+  _treAlertDismissed = false;
+  treUpdate(v);
+}
+
+function treAlertConfirm() {
+  _treAlertDismissed = true;
+  document.getElementById('tre-alert').classList.remove('visible');
+}
+function treAlertAdjust() {
+  document.getElementById('goalSlider').focus();
+  document.getElementById('tre-alert').classList.remove('visible');
+}
+
+/* ══════════════════════════════════════
+   STEP 4 — RETURN EXPECTATION ENGINE
+══════════════════════════════════════ */
+let ree4Val = 200000;
+
+function ree4Calc(target) {
+  const init = 100000, yrs = 5;
+  const totalRet = (target / init - 1) * 100;
+  const cagr     = (Math.pow(target / init, 1 / yrs) - 1) * 100;
+  return { totalRet, cagr };
+}
+
+function ree4Refresh(val) {
+  ree4Val = parseFloat(val) || 200000;
+  const r = ree4Calc(ree4Val);
+  const tEl = document.getElementById('ree4-target');
+  const rEl = document.getElementById('ree4-total');
+  const cEl = document.getElementById('ree4-cagr');
+  if (tEl) tEl.textContent = '$' + Math.round(ree4Val).toLocaleString();
+  if (rEl) rEl.textContent = (r.totalRet >= 0 ? '+' : '') + r.totalRet.toFixed(0) + '%';
+  if (cEl) cEl.textContent = r.cagr.toFixed(1) + '%';
+}
+
+function onRee4Slider(val) {
+  ree4Refresh(val);
+  // propagate to step 5 & PAE
+  const s5sl = document.getElementById('goalSlider');
+  const s5in = document.getElementById('goalInput');
+  if (s5sl) s5sl.value = val;
+  if (s5in) s5in.value = Math.round(parseFloat(val));
+  treUpdate(parseFloat(val));
+  // propagate to PAE slider
+  const ps = document.getElementById('paeSlider');
+  if (ps) { ps.value = val; paeTargetVal = parseFloat(val); }
+}
+
+/* ══════════════════════════════════════
+   STEP 6 — PORTFOLIO ALIGNMENT ENGINE
+══════════════════════════════════════ */
+let paeActiveRef    = 'client';
+let paeTargetVal    = 200000;
+let _paeAlertDismissed = false;
+
+function paeRefLabel(ref) {
+  return ref === 'fo' ? 'Family Office Mandate' : ref === 'client' ? 'Client Behavioral Risk' : 'Return Target';
+}
+
+// Read computed RN for each reference
+function paeGetRN(ref) {
+  if (ref === 'fo') {
+    const keys = Object.keys(foAnswers);
+    if (keys.length < 13) return 34;
+    return foRN(Object.values(foAnswers).reduce((a,b) => a+b, 0));
+  }
+  if (ref === 'client') {
+    const keys = Object.keys(indAnswers);
+    if (keys.length < 13) return 53;
+    return indRN(Object.values(indAnswers).reduce((a,b) => a+b, 0));
+  }
+  // 'target' → derive from treCalc
+  const r = treCalc(paeTargetVal);
+  return r.rn;
+}
+
+// Convert a Risk Number back to risk parameters using inverse of TRE anchors
+function paeRnToParams(rn) {
+  // Interpolate magnitude (downside) from RN using anchors
+  let mag = 0;
+  const A = TRE_ANCHORS;
+  if (rn <= A[0].rn) {
+    mag = A[0].d * rn / A[0].rn;
+  } else {
+    let found = false;
+    for (let i = 1; i < A.length; i++) {
+      if (rn <= A[i].rn) {
+        mag = A[i-1].d + (rn - A[i-1].rn) / (A[i].rn - A[i-1].rn) * (A[i].d - A[i-1].d);
+        found = true; break;
+      }
+    }
+    if (!found) mag = Math.min(0.35, A[A.length-1].d + (rn - A[A.length-1].rn) * 0.004);
+  }
+  mag = Math.max(0.005, mag);
+  const vol6  = mag / 1.64;
+  const vol   = vol6 * Math.SQRT2;
+  const eff   = vol > 0.20 ? 0.52 : vol > 0.12 ? 0.60 : 0.72;
+  const cagr  = vol * eff;
+  const r6    = Math.pow(1 + cagr, 0.1) - 1;  // 6-month out of 5-year CAGR
+  const down6 = r6 - 1.64 * vol6;
+  const up6   = r6 + 1.64 * vol6;
+  return { rn, vol, cagr, r6, down6, up6 };
+}
+
+// For 'target' ref use treCalc directly (more accurate)
+function paeGetParams(ref) {
+  if (ref === 'target') {
+    return treCalc(paeTargetVal);
+  }
+  return paeRnToParams(paeGetRN(ref));
+}
+
+function paeRnColor(rn) {
+  if (rn < 40) return 'var(--green)';
+  if (rn < 65) return 'var(--gold)';
+  if (rn < 80) return 'var(--orange)';
+  return 'var(--red)';
+}
+
+// Animated count helper
+function paeAnimateVal(el, newText) {
+  if (!el) return;
+  el.classList.remove('pae-counting');
+  void el.offsetWidth; // reflow
+  el.textContent = newText;
+  el.classList.add('pae-counting');
+}
+
+function paeUpdate() {
+  const activeRN = paeGetRN(paeActiveRef);
+  const p        = paeGetParams(paeActiveRef);
+  const col      = paeRnColor(activeRN);
+  const atMax    = activeRN >= 99;
+
+  // ── Left: update all 3 card RN values ──
+  const foRNval  = paeGetRN('fo');
+  const cliRNval = paeGetRN('client');
+  const tgtRNval = paeGetRN('target');
+
+  const setCard = (id, val, color) => {
+    const el = document.getElementById(id);
+    if (el) { el.textContent = 'RN ' + val; el.style.color = color; }
+  };
+  setCard('pae-rn-fo',     foRNval,  'var(--gold)');
+  setCard('pae-rn-client', cliRNval, cliRNval >= 80 ? 'var(--orange)' : 'var(--text)');
+  setCard('pae-rn-target', tgtRNval, paeRnColor(tgtRNval));
+
+  // ── Right: metrics ──
+  const rnEl = document.getElementById('pae-m-rn');
+  if (rnEl) { paeAnimateVal(rnEl, atMax ? '99+' : activeRN); rnEl.style.color = col; }
+
+  const fmtPct = (v, sign) => (sign && v >= 0 ? '+' : '') + (v * 100).toFixed(1) + '%';
+  const setM = (id, txt, color) => {
+    const el = document.getElementById(id);
+    if (el) { paeAnimateVal(el, txt); if (color) el.style.color = color; }
+  };
+  setM('pae-m-ret',  (p.cagr * 100).toFixed(1) + '%', 'var(--gold)');
+  setM('pae-m-vol',  (p.vol  * 100).toFixed(1) + '%', p.vol > 0.20 ? 'var(--red)' : p.vol > 0.12 ? 'var(--orange)' : 'var(--text2)');
+  setM('pae-m-r6',   fmtPct(p.r6,   true), 'var(--gold)');
+  setM('pae-m-down', fmtPct(p.down6, false), 'var(--red)');
+  setM('pae-m-up',   fmtPct(p.up6,   true), 'var(--green)');
+
+  // RN card border color
+  const rnCard = document.getElementById('pae-rn-card');
+  if (rnCard) rnCard.style.borderColor = col + '70';
+
+  // ── Interpretation ──
+  const interp   = document.getElementById('pae-interpretation');
+  const rnInterp = document.getElementById('pae-rn-interpret');
+  const intTexts = {
+    fo:     ['This path reflects the institutional risk posture defined by the Family Office mandate.', 'The FO Mandate sets the institutional ceiling. Client allocations must operate within this boundary to preserve mandate integrity.'],
+    client: ['This path reflects the client\'s actual behavioral tolerance revealed by the questionnaire.', 'The revealed tolerance defines the maximum risk the portfolio should carry — independent of what the client believes they can withstand.'],
+    target: ['This path reflects the risk required to pursue the selected 5-year return expectation.', atMax ? 'This target exceeds the maximum risk calculable by Nitrogen. It falls outside standard portfolio modeling.' : 'Reaching the desired outcome requires accepting RN ' + activeRN + '. This may exceed the client\'s demonstrated behavioral tolerance.']
+  };
+  if (interp)   interp.textContent   = intTexts[paeActiveRef][0];
+  if (rnInterp) rnInterp.textContent = intTexts[paeActiveRef][1];
+
+  // ── Alignment status ──
+  const statusBlock = document.getElementById('pae-status-block');
+  const statusBadge = document.getElementById('pae-status-badge');
+  const statusText  = document.getElementById('pae-status-text');
+  if (statusBlock && statusBadge && statusText) {
+    statusBlock.style.display = 'block';
+    const gap = tgtRNval - cliRNval;
+    if (gap > 10) {
+      statusBadge.innerHTML = '<span class="pae-badge-mis">⚠ MISALIGNMENT DETECTED</span>';
+      statusText.textContent = 'The desired return target requires more risk (RN ' + tgtRNval + ') than the client appears prepared to tolerate (RN ' + cliRNval + ').';
+    } else {
+      statusBadge.innerHTML = '<span class="pae-badge-ok">✓ ALIGNED RANGE</span>';
+      statusText.textContent = 'The target appears broadly consistent with the client\'s behavioral risk tolerance.';
+    }
+  }
+
+  // ── Header badge ──
+  const headerBadge = document.getElementById('pae-header-badge');
+  if (headerBadge) {
+    const gap = tgtRNval - cliRNval;
+    headerBadge.innerHTML = gap > 10
+      ? '<span class="badge badge-red">Misalignment · RN Gap ' + gap + '</span>'
+      : '<span class="badge badge-green">Aligned Range</span>';
+  }
+
+  // ── Alert (high-risk path) ──
+  const alertEl = document.getElementById('pae-alert');
+  if (alertEl) {
+    const tgtP   = treCalc(paeTargetVal);
+    const hiRisk = tgtRNval > cliRNval + 15 || tgtP.down6 <= -0.18;
+    if (hiRisk && !_paeAlertDismissed) {
+      alertEl.classList.add('visible');
+      const body = document.getElementById('pae-alert-body');
+      if (body) body.innerHTML = 'This target may require withstanding an estimated 6-month downside of approximately <strong style="color:var(--red)">' + (tgtP.down6*100).toFixed(1) + '%</strong>.<br><span style="color:var(--text3);font-size:11px;">Is the client prepared to tolerate this level of downside in pursuit of the target?</span>';
+    } else if (!hiRisk) {
+      alertEl.classList.remove('visible');
+      _paeAlertDismissed = false;
+    }
+  }
+
+  // ── Target value display ──
+  const dispEl = document.getElementById('pae-target-display');
+  if (dispEl) dispEl.textContent = '$' + Math.round(paeTargetVal).toLocaleString();
+
+  updateNextBtn();
+}
+
+function paeInit() {
+  // Sync slider to step 5 value
+  const s5 = document.getElementById('goalSlider');
+  if (s5 && parseFloat(s5.value) > 100000) paeTargetVal = parseFloat(s5.value);
+  const ps = document.getElementById('paeSlider');
+  if (ps) ps.value = paeTargetVal;
+  _paeAlertDismissed = false;
+  paeSwitchRef('client'); // default: client behavioral risk
+}
+
+function paeSwitchRef(ref) {
+  paeActiveRef = ref;
+  ['fo','client','target'].forEach(r => {
+    const card = document.getElementById('pae-card-' + r);
+    if (card) card.classList.toggle('active', r === ref);
+  });
+  paeUpdate();
+}
+
+function paeSliderMove(val) {
+  paeTargetVal = parseFloat(val);
+  _paeAlertDismissed = false;
+  // Sync REE4 and TRE sliders
+  const ree4 = document.getElementById('ree4Slider');
+  const s5sl = document.getElementById('goalSlider');
+  const s5in = document.getElementById('goalInput');
+  if (ree4 && parseFloat(val) <= 400000) { ree4.value = val; ree4Refresh(val); }
+  if (s5sl) s5sl.value = val;
+  if (s5in) s5in.value = Math.round(paeTargetVal);
+  treUpdate(paeTargetVal);
+  paeUpdate();
+}
+
+function paeAlertConfirm() {
+  _paeAlertDismissed = true;
+  const el = document.getElementById('pae-alert');
+  if (el) el.classList.remove('visible');
+}
+function paeAlertAdjust() {
+  const sl = document.getElementById('paeSlider');
+  if (sl) sl.focus();
+  const el = document.getElementById('pae-alert');
+  if (el) el.classList.remove('visible');
+}
+
+/* ══════════════════════════════════════
+   STEP 6 — REVEAL (legacy fallback, kept for compatibility)
+══════════════════════════════════════ */
+function rnCategory(rn, type) {
+  if (type === 'fo') {
+    if (rn <= 20) return ['Ultra Conservative', 'var(--text2)'];
+    if (rn <= 42) return ['Conservative',      'var(--gold)'];
+    if (rn <= 65) return ['Moderate',          'var(--gold)'];
+    if (rn <= 82) return ['Aggressive',        'var(--orange)'];
+    return              ['Ultra Aggressive',   'var(--red)'];
+  } else {
+    if (rn <= 25) return ['Conservative', 'var(--green)'];
+    if (rn <= 50) return ['Moderate',     'var(--gold)'];
+    if (rn <= 75) return ['Balanced',     'var(--gold)'];
+    return              ['Aggressive',    'var(--orange)'];
+  }
+}
+
+function populateReveal() {
+  let foFinal = null, indFinal = null;
+  if (Object.keys(foAnswers).length === 13) {
+    foFinal = foRN(Object.values(foAnswers).reduce((a,b) => a+b, 0));
+  }
+  if (Object.keys(indAnswers).length === 13) {
+    indFinal = indRN(Object.values(indAnswers).reduce((a,b) => a+b, 0));
+  }
+  if (foFinal !== null) {
+    document.getElementById('rev-fo-rn').textContent = foFinal;
+    const [cat, col] = rnCategory(foFinal, 'fo');
+    document.getElementById('rev-fo-label').textContent  = cat;
+    document.getElementById('rev-fo-label').style.color  = col;
+  }
+  if (indFinal !== null) {
+    document.getElementById('rev-client-rn').textContent = indFinal;
+    const [cat, col] = rnCategory(indFinal, 'ind');
+    document.getElementById('rev-client-label').textContent = cat;
+    document.getElementById('rev-client-label').style.color = col;
+  }
+  const goalVal = parseFloat(document.getElementById('goalInput').value) || 0;
+  if (goalVal > 100000) {
+    const cagr = (Math.pow(goalVal / 100000, 0.2) - 1) * 100;
+    document.getElementById('rev-goal').textContent     = '$' + goalVal.toLocaleString();
+    document.getElementById('rev-goal-cagr').textContent = cagr.toFixed(1) + '% p.a. implied';
+  }
+}
+
+/* ══════════════════════════════════════
+   STEP 7 — PORTFOLIO SELECTION
+══════════════════════════════════════ */
+const portfolios = {
+  aggressive:   { rn:84, vol:18.4, dd:-34, sharpe:0.61, cagr:7.2 },
+  growth:       { rn:75, vol:14.8, dd:-27, sharpe:0.91, cagr:9.1 },
+  balanced:     { rn:60, vol:11.2, dd:-19, sharpe:1.05, cagr:7.8 },
+  conservative: { rn:45, vol:8.1,  dd:-13, sharpe:1.12, cagr:6.4 },
+  income:       { rn:52, vol:9.8,  dd:-15, sharpe:1.08, cagr:7.0 }
+};
+let selectedPortKey = 'aggressive';
+
+function choosePortMode(mode) {
+  document.getElementById('port-mode-real').classList.remove('sel');
+  document.getElementById('port-mode-model').classList.remove('sel');
+  document.getElementById('port-mode-' + mode).classList.add('sel');
+  document.getElementById('real-upload-area').style.display    = mode === 'real'  ? 'block' : 'none';
+  document.getElementById('model-selector-area').style.display = mode === 'model' ? 'block' : 'none';
+  if (mode === 'model' && !document.querySelector('.model-card.sel[id^=model-]')) {
+    selectModel(document.getElementById('model-aggressive'), 'aggressive');
+  }
+}
+function selectModel(el, key) {
+  document.querySelectorAll('[id^=model-]').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel');
+  selectedPortKey = key;
+}
+function simulateUpload() {
+  alert('Portfolio upload — feature in development.\nUsing a model portfolio for this demonstration.');
+  choosePortMode('model');
+}
+
+/* ══════════════════════════════════════
+   STEP 8 — DIAGNOSIS
+══════════════════════════════════════ */
+function populateDiagnosis() {
+  let foFinal = 65, indFinal = 71;
+  if (Object.keys(foAnswers).length === 13)
+    foFinal  = foRN(Object.values(foAnswers).reduce((a,b) => a+b, 0));
+  if (Object.keys(indAnswers).length === 13)
+    indFinal = indRN(Object.values(indAnswers).reduce((a,b) => a+b, 0));
+
+  const port   = portfolios[selectedPortKey] || portfolios.aggressive;
+  const portRN = port.rn;
+
+  document.getElementById('diag-fo-rn').textContent     = foFinal;
+  document.getElementById('diag-port-rn').textContent   = portRN;
+  document.getElementById('diag-client-rn').textContent = indFinal;
+
+  const [foCat]  = rnCategory(foFinal,  'fo');
+  const [indCat] = rnCategory(indFinal, 'ind');
+  document.getElementById('diag-fo-cat').textContent     = foCat;
+  document.getElementById('diag-client-cat').textContent = indCat;
+  document.getElementById('diag-port-cat').textContent   =
+    portRN >= 80 ? 'Ultra Aggressive' : portRN >= 65 ? 'Aggressive' : 'Moderate';
+
+  const gap1 = portRN - foFinal;
+  const gap2 = portRN - indFinal;
+  document.getElementById('diag-gap1').textContent     = gap1 > 0 ? '+' + gap1 : gap1;
+  document.getElementById('diag-gap1-lbl').textContent = 'GAP\nFO';
+  document.getElementById('diag-gap2').textContent     = gap2 > 0 ? '+' + gap2 : gap2;
+  document.getElementById('diag-gap2-lbl').textContent = 'GAP\nClient';
+
+  document.getElementById('diag-excess-client').textContent = (gap2 > 0 ? '+' : '') + gap2 + ' pts';
+  document.getElementById('diag-excess-fo').textContent     = (gap1 > 0 ? '+' : '') + gap1 + ' pts';
+
+  const goalVal = parseFloat(document.getElementById('goalInput').value) || 0;
+  let cagrGapText = '—';
+  if (goalVal > 100000) {
+    const needed = (Math.pow(goalVal / 100000, 0.2) - 1) * 100;
+    const diff   = +(needed - port.cagr).toFixed(1);
+    cagrGapText  = (diff > 0 ? '+' : '') + diff + '%';
+  }
+  document.getElementById('diag-cagr-gap').textContent = cagrGapText;
+}
+
+/* ══════════════════════════════════════
+   SIMULATION ENGINE
+══════════════════════════════════════ */
+const BEFORE = { rn:84, vol:18.4, dd:-34, sharpe:0.61, cagr:7.2, align:38 };
+const HPC11  = { rn:40, vol:9.5,  dd:-14, sharpe:1.38, cagr:8.5 };
+const HPC22  = { rn:65, vol:14.0, dd:-19, sharpe:1.52, cagr:11.0 };
+
+function blend(h11p, h22p) {
+  const w0 = (100 - h11p - h22p) / 100;
+  const w1 = h11p / 100, w2 = h22p / 100;
+  return {
+    rn:     Math.round(w0*BEFORE.rn + w1*HPC11.rn + w2*HPC22.rn),
+    vol:    +(w0*BEFORE.vol + w1*HPC11.vol + w2*HPC22.vol).toFixed(1),
+    dd:     Math.round(w0*BEFORE.dd + w1*HPC11.dd + w2*HPC22.dd),
+    sharpe: +(w0*BEFORE.sharpe + w1*HPC11.sharpe + w2*HPC22.sharpe).toFixed(2),
+    cagr:   +(w0*BEFORE.cagr + w1*HPC11.cagr + w2*HPC22.cagr).toFixed(1)
+  };
+}
+
+function updateBlendDot(vol, cagr) {
+  const dot = document.getElementById('blend-dot');
+  const lbl = document.getElementById('blend-dot-lbl');
+  if (!dot) return;
+  // cx = 50 + (vol-6)*16.875, cy = 170 - (cagr-5)*17.22
+  const cx = Math.max(53, Math.min(317, 50 + (vol - 6) * 16.875));
+  const cy = Math.max(18, Math.min(168, 170 - (cagr - 5) * 17.22));
+  dot.setAttribute('cx', cx.toFixed(1));
+  dot.setAttribute('cy', cy.toFixed(1));
+  if (lbl) {
+    lbl.setAttribute('x', (cx + 8).toFixed(1));
+    lbl.setAttribute('y', (cy - 4).toFixed(1));
+  }
+}
+
+function runSim() {
+  const h11    = parseInt(document.getElementById('hpc11Slider').value);
+  const h22    = parseInt(document.getElementById('hpc22Slider').value);
+  const remain = Math.max(0, 100 - h11 - h22);
+
+  document.getElementById('hpc11Val').textContent  = h11 + '%';
+  document.getElementById('hpc22Val').textContent  = h22 + '%';
+  document.getElementById('remainVal').textContent = remain + '%';
+  document.getElementById('baArrowLabel').textContent =
+    (h11 > 0 ? '+' + h11 + '% HPC11\n' : '') + (h22 > 0 ? '+' + h22 + '% HPC22' : '');
+
+  const r     = blend(h11, h22);
+  const align = Math.min(98, Math.round(38 + (84 - r.rn) * 3.5));
+
+  document.getElementById('afterRN').textContent     = r.rn;
+  document.getElementById('afterVol').textContent    = r.vol + '%';
+  document.getElementById('afterDD').textContent     = r.dd + '%';
+  document.getElementById('afterSharpe').textContent = r.sharpe;
+  document.getElementById('afterCAGR').textContent   = r.cagr + '%';
+  document.getElementById('afterAlign').textContent  = align + '/100';
+  document.getElementById('dn-rn').textContent  = r.rn;
+  document.getElementById('dc-rn').textContent  = '↓ −' + (84 - r.rn) + ' pts';
+  document.getElementById('dn-vol').textContent = r.vol + '%';
+  document.getElementById('dc-vol').textContent = '↓ −' + (18.4 - r.vol).toFixed(1) + ' pts';
+  document.getElementById('dn-sh').textContent  = r.sharpe;
+  document.getElementById('dc-sh').textContent  = '↑ +' + (r.sharpe - 0.61).toFixed(2);
+  document.getElementById('dn-al').textContent  = align;
+  document.getElementById('dc-al').textContent  = '↑ +' + (align - 38) + ' pts';
+  document.getElementById('cta-score').textContent = align;
+
+  setCheck('sd-rn',  'sc-rn',  r.rn  <= 73, 'Risk Number: '  + r.rn   + (r.rn  <= 73 ? ' ✓ Within tolerance' : ' ⚠ Exceeds limit'));
+  setCheck('sd-dd',  'sc-dd',  r.dd  >= -22, 'Drawdown: '    + r.dd   + '%' + (r.dd >= -22 ? ' ✓ Within cap' : ' ⚠ Below limit'));
+  setCheck('sd-vol', 'sc-vol', r.vol <= 15,  'Volatility: '  + r.vol  + '%' + (r.vol <= 15 ? ' ✓ FO Mandate OK' : ' ⚠ Exceeds mandate'));
+  setCheck('sd-ret', 'sc-ret', r.cagr >= 9.5,'Return: '      + r.cagr + '%' + (r.cagr >= 9.5 ? ' ✓ Target met' : ' ⚠ Below target'));
+
+  updateBlendDot(r.vol, r.cagr);
+}
+
+function setCheck(dotId, textId, ok, text) {
+  document.getElementById(dotId).style.background = ok ? 'var(--green)' : 'var(--red)';
+  const el = document.getElementById(textId);
+  el.textContent = text;
+  el.style.color = ok ? 'var(--text2)' : 'var(--red)';
+}
+
+/* ══════════════════════════════════════
+   VIDEO MODAL
+══════════════════════════════════════ */
+function openVideoModal(videoId, title) {
+  const modal = document.getElementById('videoModal');
+  document.getElementById('videoModalTitle').textContent = title || 'Watch Deep Dive';
+  // Set embed src without autoplay — user presses play manually
+  document.getElementById('videoModalFrame').src =
+    'https://www.youtube.com/embed/' + videoId + '?rel=0&modestbranding=1&color=white';
+  modal.classList.add('open');
+}
+function closeVideoModal() {
+  document.getElementById('videoModal').classList.remove('open');
+  // Clear src to stop video playback
+  document.getElementById('videoModalFrame').src = '';
+}
+document.getElementById('videoModal').addEventListener('click', function(e) {
+  if (e.target === this) closeVideoModal();
+});
+
+/* ══════════════════════════════════════
+   SCHEDULE MODAL
+══════════════════════════════════════ */
+function openScheduleModal()  { document.getElementById('scheduleModal').classList.add('open'); }
+function closeScheduleModal() { document.getElementById('scheduleModal').classList.remove('open'); }
+function submitSchedule() {
+  closeScheduleModal();
+  alert('Meeting scheduled!\nThe HARPIAN team will reach out to confirm.');
+}
+
+/* ══════════════════════════════════════
+   JIM
+══════════════════════════════════════ */
+function toggleJim() { document.getElementById('jimPanel').classList.toggle('open'); }
+
+document.getElementById('scheduleModal').addEventListener('click', function(e) {
+  if (e.target === this) closeScheduleModal();
+});
+
+/* ══════════════════════════════════════
+   MODULE 2 — ASSET EFFICIENCY ENGINE
+══════════════════════════════════════ */
+const ACE_DATA = [
+  { ticker:'HPC11',  name:'Harpian HPC11',                 cat:'Harpian Strategy',    rn:40,  ret:8.25,  vol:9.50,  d6:-6.97,  u6:15.03 },
+  { ticker:'HPC22',  name:'Harpian HPC22',                 cat:'Harpian Strategy',    rn:65,  ret:38.00, vol:14.00, d6:+1.26,  u6:33.72 },
+  { ticker:'CLIENT', name:'Current Portfolio',             cat:'Client Portfolio',    rn:84,  ret:7.20,  vol:18.40, d6:-17.82, u6:24.86 },
+  { ticker:'SHY',    name:'iShares 1-3yr Treasury',        cat:'US Treasury',         rn:10,  ret:1.60,  vol:1.49,  d6:-0.94,  u6:2.53  },
+  { ticker:'IEF',    name:'iShares 7-10yr Treasury',       cat:'US Treasury',         rn:40,  ret:2.92,  vol:7.00,  d6:-6.67,  u6:9.56  },
+  { ticker:'TLT',    name:'iShares 20yr+ Treasury',        cat:'US Treasury',         rn:77,  ret:2.55,  vol:15.35, d6:-16.53, u6:19.07 },
+  { ticker:'AGG',    name:'iShares US Aggregate Bond',     cat:'US Bonds',            rn:29,  ret:2.86,  vol:5.45,  d6:-4.90,  u6:7.74  },
+  { ticker:'BND',    name:'Vanguard Total Bond Market',    cat:'US Bonds',            rn:29,  ret:2.86,  vol:5.25,  d6:-4.67,  u6:7.50  },
+  { ticker:'SPY',    name:'SPDR S&P 500 ETF',              cat:'US Equity',           rn:70,  ret:11.13, vol:19.87, d6:-17.62, u6:28.46 },
+  { ticker:'DIA',    name:'SPDR Dow Jones ETF',            cat:'US Equity',           rn:69,  ret:9.92,  vol:18.96, d6:-17.14, u6:26.82 },
+  { ticker:'QQQ',    name:'Invesco QQQ (Nasdaq 100)',      cat:'US Equity',           rn:74,  ret:16.07, vol:22.40, d6:-18.24, u6:33.71 },
+  { ticker:'IWM',    name:'iShares Russell 2000',          cat:'US Equity',           rn:88,  ret:8.85,  vol:24.92, d6:-24.57, u6:33.23 },
+  { ticker:'EFA',    name:'iShares MSCI EAFE',             cat:'Intl Equity',         rn:84,  ret:4.47,  vol:21.87, d6:-23.15, u6:27.57 },
+  { ticker:'EEM',    name:'iShares MSCI Emerg. Markets',   cat:'Intl Equity',         rn:88,  ret:3.55,  vol:27.68, d6:-30.34, u6:33.86 },
+  { ticker:'IYR',    name:'iShares US Real Estate',        cat:'Alternatives',        rn:91,  ret:6.13,  vol:28.87, d6:-30.46, u6:36.51 },
+  { ticker:'GLD',    name:'SPDR Gold Shares',              cat:'Alternatives',        rn:77,  ret:9.26,  vol:18.03, d6:-16.38, u6:25.44 },
+  { ticker:'NVDA',   name:'NVIDIA Corporation',            cat:'High-Risk',           rn:99,  ret:36.19, vol:49.21, d6:-40.37, u6:73.77 },
+  { ticker:'UPRO',   name:'ProShares UltraPro S&P500',     cat:'High-Risk',           rn:99,  ret:32.39, vol:51.33, d6:-44.46, u6:74.58 },
+  { ticker:'TQQQ',   name:'ProShares UltraPro QQQ',        cat:'High-Risk',           rn:99,  ret:42.30, vol:60.99, d6:-51.44, u6:90.02 },
+];
+ACE_DATA.forEach(d => { d.eff = (d.ret / d.vol).toFixed(2); });
+
+const ACE_COLORS = {
+  'Harpian Strategy':'#D4AF45', 'Client Portfolio':'#D0463C',
+  'US Treasury':'#6B7F95', 'US Bonds':'#6B8FA8', 'US Equity':'#5B9BBF',
+  'Intl Equity':'#9B7FC4', 'Alternatives':'#C4A73F', 'High-Risk':'#D06040'
+};
+
+let aceActiveTab = 0;
+let aceSortCol = 'eff', aceSortDir = -1;
+
+function aceGetSelected() {
+  const chips = document.querySelectorAll('.ace-chip.on');
+  const tickers = new Set([...chips].map(c => c.dataset.ticker));
+  return ACE_DATA.filter(d => tickers.has(d.ticker));
+}
+
+function aceToggle(chip) {
+  chip.classList.toggle('on');
+  aceRender();
+}
+
+function aceSetTab(n) {
+  aceActiveTab = n;
+  [0,1,2].forEach(i => {
+    document.getElementById('ace-tab-'+i)?.classList.toggle('active', i===n);
+  });
+  aceRender();
+}
+
+function aceRender() {
+  const data = aceGetSelected();
+  if (aceActiveTab === 0) aceRenderScatter(data);
+  else if (aceActiveTab === 1) aceRenderDrawdown(data);
+  else aceRenderTable(data);
+  aceRenderInsight(data);
+}
+
+/* — TAB 0: Scatter Plot — */
+let aceClickedTickers = new Set();
+
+function aceToggleLabel(ticker) {
+  if (aceClickedTickers.has(ticker)) aceClickedTickers.delete(ticker);
+  else aceClickedTickers.add(ticker);
+  aceRender();
+}
+
+function aceRenderScatter(data) {
+  const wrap = document.getElementById('ace-chart-wrap');
+  if (!wrap) return;
+  const W = wrap.clientWidth || 700, H = wrap.clientHeight || 360;
+  const L=78, R=30, T=28, B=52;
+  const pw=W-L-R, ph=H-T-B;
+
+  // Always include SHY (T-Bills) as permanent reference anchor at RN=10
+  const shyRef = ACE_DATA.find(d=>d.ticker==='SHY');
+  const renderData = [...data];
+  if (shyRef && !renderData.find(d=>d.ticker==='SHY')) renderData.push({...shyRef, _ref:true});
+
+  // Axis domain: RN 10→99 (89 units), Return 0→maxRet
+  const maxRet = Math.max(42, ...renderData.map(d=>d.ret)) + 2;
+  const scX = rn  => L + ((rn - 10) / 89) * pw;
+  const scY = ret => T + ph - ((ret / maxRet) * ph);
+
+  let svg = `<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">`;
+
+  // ── X-axis gridlines (denser, every 10) ──
+  [10,20,30,40,50,60,70,80,90,99].forEach(rn => {
+    const x = scX(rn);
+    const isFirst = rn === 10;
+    svg += `<line x1="${x}" y1="${T}" x2="${x}" y2="${T+ph}"
+      stroke="${isFirst ? 'rgba(107,127,149,0.25)' : 'rgba(255,255,255,0.05)'}"
+      stroke-width="${isFirst ? 1.5 : 1}"
+      ${isFirst ? 'stroke-dasharray="4,3"' : ''}/>`;
+    svg += `<text x="${x}" y="${T+ph+18}" text-anchor="middle" font-family="monospace" font-size="13" fill="#4A5A6A">${rn}</text>`;
+  });
+
+  // ── Y-axis gridlines ──
+  [0,5,10,15,20,25,30,35,40].filter(v => v <= maxRet).forEach(ret => {
+    const y = scY(ret);
+    svg += `<line x1="${L}" y1="${y}" x2="${L+pw}" y2="${y}" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>`;
+    svg += `<text x="${L-8}" y="${y+4}" text-anchor="end" font-family="monospace" font-size="13" fill="#4A5A6A">${ret}%</text>`;
+  });
+
+  // ── Axis lines ──
+  svg += `<line x1="${L}" y1="${T}" x2="${L}" y2="${T+ph}" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>`;
+  svg += `<line x1="${L}" y1="${T+ph}" x2="${L+pw}" y2="${T+ph}" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>`;
+  svg += `<text x="${L+pw/2}" y="${H-6}" text-anchor="middle" font-family="monospace" font-size="11" fill="#4A5A6A">Risk Number →</text>`;
+  svg += `<text x="13" y="${T+ph/2}" text-anchor="middle" font-family="monospace" font-size="11" fill="#4A5A6A" transform="rotate(-90,13,${T+ph/2})">Annualized Return →</text>`;
+
+  // ── T-Bills label at anchor ──
+  svg += `<text x="${scX(10)+4}" y="${T+14}" font-family="monospace" font-size="9" fill="rgba(107,127,149,0.65)">T-Bills</text>`;
+
+  // ── Efficient zone ──
+  svg += `<rect x="${L}" y="${T}" width="${scX(50)-L}" height="${ph/2}"
+    fill="rgba(91,191,122,0.025)" stroke="rgba(91,191,122,0.06)" stroke-width="1"/>`;
+  svg += `<text x="${L+6}" y="${T+12}" font-family="monospace" font-size="8" fill="rgba(91,191,122,0.3)">EFFICIENT ZONE</text>`;
+
+  // ── Data points ──
+  const renderPoint = (d) => {
+    const x = scX(d.rn), y = scY(d.ret);
+    const isHPC = d.ticker==='HPC11' || d.ticker==='HPC22';
+    const isCli = d.ticker==='CLIENT';
+    const isRef = !!d._ref; // SHY reference-only (not selected by user)
+
+    // Colors: HPC=blue, CLIENT=red, others=category color
+    const dotCol = isHPC ? '#4A8FD4' : isCli ? '#D0463C' : (ACE_COLORS[d.cat] || '#6B7F95');
+    // Sizes: HPC=double(12), CLIENT=50%larger(9), others=6
+    const r  = isHPC ? 12 : isCli ? 9 : 6;
+    const sw = isHPC ? 2.5 : isCli ? 2 : 1.5;
+    const op = isRef ? 0.45 : 1;
+
+    const hexParts = dotCol.replace('#','').match(/../g).map(h=>parseInt(h,16));
+    const fillStr  = `rgba(${hexParts[0]},${hexParts[1]},${hexParts[2]},0.22)`;
+
+    svg += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r}" fill="${fillStr}"
+      stroke="${dotCol}" stroke-width="${sw}" opacity="${op}"
+      data-ticker="${d.ticker}" class="ace-dot" style="cursor:pointer;"
+      onmouseenter="aceShowTip(event,'${d.ticker}')" onmouseleave="aceHideTip()"
+      onclick="aceToggleLabel('${d.ticker}')"/>`;
+
+    // Always show label for HPC/CLIENT; show for clicked tickers; always show SHY ref label
+    const showLbl = isHPC || isCli || isRef || aceClickedTickers.has(d.ticker);
+    if (showLbl) {
+      // Smart position: push label left if near right edge
+      const nearRight = x > L + pw * 0.80;
+      const nearLeft  = x < L + pw * 0.18;
+      const lx     = nearRight ? x - (r+5) : x + (r+5);
+      const anchor = nearRight ? 'end' : 'start';
+      const ly     = nearLeft  ? y + r + 12 : y - r - 3;
+      const fs     = isHPC ? 12 : isRef ? 9 : 10;
+      const fw     = (isHPC || isCli) ? 'bold' : 'normal';
+      svg += `<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="${anchor}"
+        font-family="monospace" font-size="${fs}" fill="${dotCol}"
+        font-weight="${fw}" opacity="${op}">${d.ticker}</text>`;
+    }
+  };
+
+  // Render: others behind, then CLIENT, then HPC on top
+  renderData.filter(d=>!['HPC11','HPC22','CLIENT'].includes(d.ticker)).forEach(renderPoint);
+  renderData.filter(d=>d.ticker==='CLIENT').forEach(renderPoint);
+  renderData.filter(d=>d.ticker==='HPC11'||d.ticker==='HPC22').forEach(renderPoint);
+
+  svg += '</svg>';
+  document.getElementById('ace-chart-wrap').innerHTML = svg;
+  document.getElementById('ace-microcopy').textContent = 'Scatter: Risk Number (X) vs Annualized Return (Y). Click any dot to pin its label. Hover for details.';
+}
+
+/* — TAB 1: Drawdown Range — */
+function aceRenderDrawdown(data) {
+  const wrap = document.getElementById('ace-chart-wrap');
+  if (!wrap) return;
+  const W = wrap.clientWidth || 700, H = wrap.clientHeight || 360;
+  const L=80, R=20, T=20, B=40;
+  const pw=W-L-R;
+  const rowH = Math.min(32, (H-T-B) / Math.max(1, data.length));
+
+  const minX=-60, maxX=100, span=maxX-minX;
+  const scX = pct => L + ((pct-minX)/span)*pw;
+  const zero = scX(0);
+
+  let svg = `<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">`;
+
+  // Grid
+  [-50,-40,-30,-20,-10,0,10,20,30,40,50,60,70,80,90].filter(v=>v>=minX&&v<=maxX).forEach(v => {
+    const x = scX(v);
+    svg += `<line x1="${x}" y1="${T}" x2="${x}" y2="${T+(data.length*rowH)}" stroke="${v===0?'rgba(255,255,255,0.15)':'rgba(255,255,255,0.04)'}" stroke-width="${v===0?1.5:1}"/>`;
+    svg += `<text x="${x}" y="${T+data.length*rowH+14}" text-anchor="middle" font-family="monospace" font-size="9" fill="#3A4A5A">${v}%</text>`;
+  });
+
+  data.forEach((d, i) => {
+    const y = T + i * rowH;
+    const col = ACE_COLORS[d.cat] || '#6B7F95';
+    const x1 = scX(d.d6), x2 = scX(d.u6);
+    const isHarp = d.ticker==='HPC11'||d.ticker==='HPC22';
+    const isCli  = d.ticker==='CLIENT';
+
+    // Row bg
+    if (isHarp) svg += `<rect x="${L}" y="${y+1}" width="${pw}" height="${rowH-2}" fill="rgba(212,175,69,0.04)"/>`;
+    if (isCli)  svg += `<rect x="${L}" y="${y+1}" width="${pw}" height="${rowH-2}" fill="rgba(208,70,60,0.04)"/>`;
+
+    // Range bar
+    svg += `<rect x="${x1}" y="${y+rowH*0.3}" width="${x2-x1}" height="${rowH*0.4}" rx="2"
+      fill="${col}22" stroke="${col}" stroke-width="${isHarp?1.5:1}" opacity="0.9"/>`;
+
+    // Downside marker (red tint)
+    svg += `<rect x="${x1}" y="${y+rowH*0.3}" width="${Math.max(0,zero-x1)}" height="${rowH*0.4}"
+      fill="rgba(208,70,60,0.2)" rx="2"/>`;
+
+    // Center zero tick
+    svg += `<line x1="${zero}" y1="${y+rowH*0.25}" x2="${zero}" y2="${y+rowH*0.75}"
+      stroke="rgba(255,255,255,0.25)" stroke-width="1"/>`;
+
+    // Downside/Upside labels
+    svg += `<text x="${x1-3}" y="${y+rowH*0.65}" text-anchor="end" font-family="monospace" font-size="9" fill="#D0463C">${d.d6.toFixed(1)}%</text>`;
+    svg += `<text x="${x2+3}" y="${y+rowH*0.65}" text-anchor="start" font-family="monospace" font-size="9" fill="#5BBF7A">+${d.u6.toFixed(1)}%</text>`;
+
+    // Ticker label
+    svg += `<text x="${L-4}" y="${y+rowH*0.65}" text-anchor="end" font-family="monospace" font-size="10" fill="${col}" font-weight="${isHarp?'bold':'normal'}">${d.ticker}</text>`;
+  });
+
+  svg += `<text x="${W/2}" y="${H-6}" text-anchor="middle" font-family="monospace" font-size="9" fill="#3A4A5A">Expected 6-Month Range (95th percentile)</text>`;
+  svg += '</svg>';
+  document.getElementById('ace-chart-wrap').innerHTML = svg;
+  document.getElementById('ace-microcopy').textContent = 'Expected 6-Month Range: each bar shows the 95th percentile downside (red) and upside (green) over a 6-month period. Nitrogen methodology.';
+}
+
+/* — TAB 2: Efficiency Table — */
+function aceRenderTable(data) {
+  const wrap = document.getElementById('ace-chart-wrap');
+  if (!wrap) return;
+  const sorted = [...data].sort((a,b)=>{
+    const av = isNaN(a[aceSortCol]) ? parseFloat(a[aceSortCol]) : a[aceSortCol];
+    const bv = isNaN(b[aceSortCol]) ? parseFloat(b[aceSortCol]) : b[aceSortCol];
+    return (av-bv)*aceSortDir;
+  });
+  const maxEff = Math.max(...data.map(d=>parseFloat(d.eff)));
+
+  const cols = [
+    {k:'ticker', lbl:'Ticker'},   {k:'name', lbl:'Asset'},
+    {k:'rn',  lbl:'Risk Number'}, {k:'ret', lbl:'Ann. Return'},
+    {k:'vol', lbl:'Volatility'},  {k:'d6',  lbl:'6M Downside'},
+    {k:'u6',  lbl:'6M Upside'},   {k:'eff', lbl:'Efficiency ▸'}
+  ];
+
+  let th = cols.map(c => {
+    const active = c.k===aceSortCol;
+    const arrow  = active ? (aceSortDir===1?'↑':'↓') : '<span style="opacity:0.3">⇅</span>';
+    return `<th onclick="aceSortBy('${c.k}')" style="${active?'color:var(--gold)':''}">${c.lbl} ${arrow}</th>`;
+  }).join('');
+
+  let rows = sorted.map(d => {
+    const isHarp = d.ticker==='HPC11'||d.ticker==='HPC22';
+    const isCli  = d.ticker==='CLIENT';
+    const effW   = Math.round((parseFloat(d.eff)/maxEff)*80);
+    const col    = ACE_COLORS[d.cat]||'#6B7F95';
+    const rowCls = isHarp?'class="harp-row"':isCli?'class="client-row"':'';
+    return `<tr ${rowCls}>
+      <td style="color:${col};font-weight:${isHarp?700:400}">${d.ticker}</td>
+      <td style="color:var(--text2);font-size:10px;">${d.name}</td>
+      <td style="color:${d.rn>=80?'var(--red)':d.rn>=60?'var(--orange)':'var(--text2)'}">${d.rn}</td>
+      <td style="color:var(--green)">${d.ret.toFixed(2)}%</td>
+      <td>${d.vol.toFixed(2)}%</td>
+      <td style="color:var(--red)">${d.d6.toFixed(2)}%</td>
+      <td style="color:var(--green)">+${d.u6.toFixed(2)}%</td>
+      <td><span style="color:${isHarp?'var(--gold)':'var(--text2)'}">${d.eff}</span><span class="ace-eff-bar" style="width:${effW}px;background:${col};opacity:0.5;"></span></td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('ace-chart-wrap').innerHTML =
+    `<div class="ace-tbl-wrap" style="height:100%;overflow-y:auto;">
+      <table class="ace-tbl"><thead><tr>${th}</tr></thead><tbody>${rows}</tbody></table>
+    </div>`;
+  document.getElementById('ace-microcopy').textContent = 'Efficiency Score = Annualized Return ÷ Annualized Volatility. Click column headers to sort. Gold rows = Harpian strategies.';
+}
+
+function aceSortBy(col) {
+  if (aceSortCol===col) aceSortDir*=-1; else { aceSortCol=col; aceSortDir=-1; }
+  aceRenderTable(aceGetSelected());
+}
+
+/* — Insight generator — */
+function aceRenderInsight(data) {
+  const el = document.getElementById('ace-insight');
+  if (!el) return;
+  const hpc22 = data.find(d=>d.ticker==='HPC22');
+  const spy   = data.find(d=>d.ticker==='SPY');
+  const hpc11 = data.find(d=>d.ticker==='HPC11');
+  const cli   = data.find(d=>d.ticker==='CLIENT');
+  const msgs  = [];
+
+  if (hpc22 && spy) {
+    if (parseFloat(hpc22.eff) > parseFloat(spy.eff))
+      msgs.push('HPC22 delivers higher return efficiency than SPY ('+hpc22.eff+' vs '+spy.eff+') at a comparable risk-adjusted profile.');
+    else
+      msgs.push('HPC22 is positioned alongside SPY with a Risk Number of '+hpc22.rn+' and '+hpc22.ret.toFixed(1)+'% annualized return.');
+  }
+  if (hpc11 && hpc11.d6 > -12)
+    msgs.push('HPC11 offers stronger downside control ('+hpc11.d6.toFixed(1)+'% 6M floor) than most equity benchmarks.');
+  if (cli && hpc22)
+    msgs.push('Replacing the current portfolio (RN '+cli.rn+') with HPC22 (RN '+hpc22.rn+') would reduce the 6M downside from '+cli.d6.toFixed(1)+'% to '+hpc22.d6.toFixed(1)+'%.');
+
+  el.textContent = msgs.slice(0,2).join(' · ') || 'Select assets to compare.';
+}
+
+/* — Tooltip — */
+function aceShowTip(e, ticker) {
+  const d = ACE_DATA.find(x=>x.ticker===ticker);
+  if (!d) return;
+  const t = document.getElementById('ace-tooltip');
+  if (!t) return;
+  document.getElementById('att-ticker').textContent = d.ticker;
+  document.getElementById('att-name').textContent   = d.name;
+  document.getElementById('att-rn').textContent     = d.rn;
+  document.getElementById('att-ret').textContent    = d.ret.toFixed(2) + '%';
+  document.getElementById('att-vol').textContent    = d.vol.toFixed(2) + '%';
+  document.getElementById('att-down').textContent   = d.d6.toFixed(2) + '%';
+  document.getElementById('att-up').textContent     = '+' + d.u6.toFixed(2) + '%';
+  document.getElementById('att-eff').textContent    = d.eff;
+  t.style.display = 'block';
+  t.style.left    = (e.clientX + 14) + 'px';
+  t.style.top     = (e.clientY - 20) + 'px';
+}
+function aceHideTip() {
+  const t = document.getElementById('ace-tooltip');
+  if (t) t.style.display='none';
+}
+
+/* — Open / Close — */
+function openACE() {
+  document.getElementById('aceOverlay').classList.add('open');
+  requestAnimationFrame(() => aceRender());
+}
+function closeACE() {
+  document.getElementById('aceOverlay').classList.remove('open');
+}
+
+function aceResetFilters() {
+  document.querySelectorAll('.ace-chip').forEach(c => {
+    const def = ['HPC11','HPC22','CLIENT','SPY','QQQ','AGG','GLD'];
+    c.classList.toggle('on', def.includes(c.dataset.ticker));
+  });
+  aceRender();
+}
+
+// Re-render on resize
+window.addEventListener('resize', () => {
+  if (document.getElementById('aceOverlay').classList.contains('open')) aceRender();
+});
+
+// Initialize TRE + REE4 on load with default value
+window.addEventListener('DOMContentLoaded', () => {
+  const inp = document.getElementById('goalInput');
+  if (inp && inp.value) treUpdate(parseFloat(inp.value));
+  ree4Refresh(200000);
+});
+
+goStep(1);
+</script>
+</body>
+</html>

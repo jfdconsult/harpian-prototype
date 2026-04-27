@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HARPIAN — Intelligence Terminal</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#0B0F14;--bg2:#0F1520;--panel:#131B26;
+  --border:rgba(255,255,255,0.07);
+  --gold:#D4AF45;--gold-bg:rgba(212,175,69,0.08);
+  --green:#5BBF7A;--red:#D0463C;--orange:#C97830;
+  --text:#EBF1F7;--text2:#B8C8D8;--text3:#6B7F95;--text4:#3A4A5A;
+  --syne:'Syne',sans-serif;--mono:'DM Mono',monospace;--sans:'DM Sans',sans-serif;
+  --sidebar:260px;
+}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--sans);font-size:16px;line-height:1.5;overflow:hidden;}
+
+/* ── TOPBAR ── */
+.topbar{
+  position:fixed;top:0;left:0;right:0;height:58px;
+  background:rgba(11,15,20,0.98);border-bottom:1px solid var(--border);
+  backdrop-filter:blur(12px);z-index:1000;
+  display:flex;align-items:center;padding:0 24px;gap:16px;
+}
+.tb-brand{font-family:var(--syne);font-size:17px;font-weight:800;color:var(--text);letter-spacing:-0.01em;flex-shrink:0;}
+.tb-brand span{color:var(--gold);}
+.tb-sep{width:1px;height:26px;background:var(--border);}
+.tb-screen{font-family:var(--mono);font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text3);}
+.tb-right{display:flex;align-items:center;gap:14px;margin-left:auto;}
+.tb-clock{font-family:var(--mono);font-size:13px;color:var(--text3);letter-spacing:0.12em;}
+.tb-live{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;color:var(--green);}
+.tb-live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.tb-pres-link{font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text3);text-decoration:none;border:1px solid var(--border);padding:7px 14px;transition:all 0.15s;}
+.tb-pres-link:hover{border-color:var(--gold);color:var(--gold);}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  position:fixed;top:58px;left:0;bottom:0;width:var(--sidebar);
+  background:var(--bg2);border-right:1px solid var(--border);
+  overflow-y:auto;display:flex;flex-direction:column;z-index:900;
+}
+.sb-section{font-family:var(--mono);font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--text4);padding:18px 18px 8px;margin-top:4px;}
+.sb-item{display:flex;align-items:center;gap:10px;padding:9px 18px;cursor:pointer;transition:background 0.12s;text-decoration:none;border-left:2px solid transparent;}
+.sb-item:hover{background:rgba(255,255,255,0.03);}
+.sb-item.active{background:rgba(212,175,69,0.06);border-left-color:var(--gold);}
+.sb-icon{font-size:14px;width:20px;text-align:center;flex-shrink:0;}
+.sb-label{font-size:14px;color:var(--text2);flex:1;}
+.sb-item.active .sb-label{color:var(--text);}
+.sb-badge{font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:2px;}
+.sb-badge.ok{background:rgba(91,191,122,0.1);color:var(--green);border:1px solid rgba(91,191,122,0.2);}
+.sb-badge.warn{background:rgba(208,70,60,0.1);color:var(--red);border:1px solid rgba(208,70,60,0.2);}
+.sb-badge.gold{background:rgba(212,175,69,0.1);color:var(--gold);border:1px solid rgba(212,175,69,0.2);}
+
+/* Clients in sidebar */
+.sb-client{display:flex;align-items:center;gap:10px;padding:8px 18px;cursor:pointer;transition:background 0.12s;border-left:2px solid transparent;}
+.sb-client:hover{background:rgba(255,255,255,0.03);}
+.sb-client.active{background:rgba(212,175,69,0.06);border-left-color:var(--gold);}
+.sb-client-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.sb-client-info{flex:1;min-width:0;}
+.sb-client-name{font-size:13px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sb-client-meta{font-family:var(--mono);font-size:10px;color:var(--text4);margin-top:1px;}
+
+.sb-footer{margin-top:auto;padding:16px 18px;border-top:1px solid var(--border);}
+.sb-footer-label{font-family:var(--mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text4);margin-bottom:4px;}
+.sb-footer-name{font-family:var(--syne);font-size:14px;font-weight:600;color:var(--text2);}
+.sb-footer-meta{font-family:var(--mono);font-size:11px;color:var(--text3);margin-top:2px;}
+
+/* ── MAIN ── */
+.main{
+  position:fixed;top:58px;left:var(--sidebar);right:0;bottom:0;
+  overflow-y:auto;
+}
+
+/* ── SECTIONS ── */
+.section{display:none;padding:28px 28px;min-height:100%;}
+.section.active{display:block;}
+
+/* ── COMMON COMPONENTS ── */
+.page-header{margin-bottom:24px;}
+.page-kicker{font-family:var(--mono);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
+.page-title{font-family:var(--syne);font-size:32px;font-weight:800;color:var(--text);letter-spacing:-0.02em;line-height:1.1;margin-bottom:8px;}
+.page-sub{font-size:15px;color:var(--text3);line-height:1.6;}
+
+/* Badges */
+.badge{display:inline-block;padding:4px 12px;font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;border-radius:2px;}
+.badge-gold{background:rgba(212,175,69,0.12);color:var(--gold);border:1px solid rgba(212,175,69,0.3);}
+.badge-green{background:rgba(91,191,122,0.1);color:var(--green);border:1px solid rgba(91,191,122,0.25);}
+.badge-red{background:rgba(208,70,60,0.1);color:var(--red);border:1px solid rgba(208,70,60,0.3);}
+.badge-warn{background:rgba(201,120,48,0.1);color:var(--orange);border:1px solid rgba(201,120,48,0.3);}
+.badge-neutral{background:rgba(255,255,255,0.05);color:var(--text3);border:1px solid var(--border);}
+
+/* Panel */
+.panel{background:var(--panel);border:1px solid var(--border);padding:20px;}
+.panel-title{font-family:var(--mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text3);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.panel-action{font-family:var(--mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);text-decoration:none;cursor:pointer;border:none;background:none;}
+
+/* KPI */
+.kpi-grid{display:grid;gap:12px;}
+.g4{grid-template-columns:repeat(4,1fr);}
+.g3{grid-template-columns:repeat(3,1fr);}
+.g2{grid-template-columns:repeat(2,1fr);}
+.kpi{background:var(--panel);border:1px solid var(--border);padding:18px 16px;}
+.kpi.alert{border-color:rgba(208,70,60,0.3);}
+.kpi.ok{border-color:rgba(91,191,122,0.3);}
+.kpi.gold{border-color:rgba(212,175,69,0.25);}
+.kpi-lbl{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:8px;}
+.kpi-val{font-family:var(--syne);font-size:34px;font-weight:800;line-height:1;margin-bottom:6px;}
+.kpi-val.red{color:var(--red);}
+.kpi-val.g{color:var(--gold);}
+.kpi-val.green{color:var(--green);}
+.kpi-desc{font-size:12px;color:var(--text3);line-height:1.4;}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 22px;font-family:var(--mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;border:none;cursor:pointer;text-decoration:none;transition:all 0.15s;border-radius:2px;}
+.btn-primary{background:var(--gold);color:#0B0F14;font-weight:600;}
+.btn-primary:hover{background:#e0bc4a;}
+.btn-secondary{background:transparent;color:var(--text3);border:1px solid var(--border);}
+.btn-secondary:hover{border-color:rgba(255,255,255,0.2);color:var(--text);}
+.btn-sm{padding:6px 14px;font-size:10px;}
+
+/* Row */
+.gap-mb{margin-bottom:20px;}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+
+/* Table */
+.t-table{width:100%;border-collapse:collapse;}
+.t-table th{font-family:var(--mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text4);text-align:left;padding:10px 14px;border-bottom:1px solid var(--border);background:var(--bg2);}
+.t-table td{padding:11px 14px;border-bottom:1px solid rgba(255,255,255,0.03);font-size:13px;vertical-align:middle;}
+.t-table tr:last-child td{border-bottom:none;}
+.t-table tr:hover td{background:rgba(255,255,255,0.015);}
+.rn-chip{display:inline-block;padding:3px 10px;border-radius:2px;font-family:var(--mono);font-size:11px;font-weight:600;}
+.bar-mini{height:4px;border-radius:2px;display:inline-block;vertical-align:middle;margin-right:6px;}
+
+/* Activity / Feed */
+.feed{display:flex;flex-direction:column;}
+.feed-item{display:flex;align-items:flex-start;gap:14px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
+.feed-item:last-child{border-bottom:none;}
+.feed-time{font-family:var(--mono);font-size:10px;color:var(--text4);white-space:nowrap;letter-spacing:0.08em;padding-top:2px;}
+.feed-icon{font-size:13px;padding-top:1px;}
+.feed-text{font-size:13px;color:var(--text2);line-height:1.5;}
+.feed-text strong{color:var(--text);}
+
+/* Alert item */
+.alert-item{display:flex;gap:14px;align-items:flex-start;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
+.alert-item:last-child{border-bottom:none;}
+.alert-sev{width:3px;flex-shrink:0;align-self:stretch;min-height:44px;border-radius:2px;}
+.alert-body{flex:1;}
+.alert-title{font-size:14px;color:var(--text);margin-bottom:3px;font-weight:600;}
+.alert-desc{font-size:12px;color:var(--text3);line-height:1.4;}
+.alert-meta{font-family:var(--mono);font-size:10px;color:var(--text4);margin-top:4px;}
+
+/* Market data rows */
+.mkt-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
+.mkt-row:last-child{border-bottom:none;}
+.mkt-icon{font-size:15px;width:22px;text-align:center;}
+.mkt-name{font-size:13px;color:var(--text2);flex:1;}
+.mkt-val{font-family:var(--mono);font-size:13px;font-weight:600;}
+.mkt-chg{font-family:var(--mono);font-size:11px;width:60px;text-align:right;}
+
+/* Intel modules */
+.intel-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.intel-mod{background:var(--bg2);border:1px solid var(--border);padding:14px 12px;cursor:pointer;transition:border-color 0.15s;}
+.intel-mod:hover{border-color:rgba(212,175,69,0.3);}
+.intel-mod-icon{font-size:18px;margin-bottom:8px;display:block;}
+.intel-mod-name{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text3);margin-bottom:4px;}
+.intel-mod-status{font-size:12px;}
+
+/* StormGuard */
+.sg-mode{text-align:center;padding:20px 0;}
+.sg-ring{width:88px;height:88px;border-radius:50%;margin:0 auto 12px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:4px solid var(--green);background:radial-gradient(circle,rgba(91,191,122,0.12),transparent);box-shadow:0 0 30px rgba(91,191,122,0.2);}
+.sg-ring-text{font-family:var(--syne);font-size:14px;font-weight:700;color:var(--green);line-height:1;}
+.sg-ring-sub{font-family:var(--mono);font-size:8px;color:var(--text4);margin-top:2px;}
+.sg-signal-row{display:flex;justify-content:space-between;font-size:12px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
+.sg-signal-row:last-child{border-bottom:none;}
+.sg-signal-lbl{color:var(--text3);}
+.sg-signal-val{font-family:var(--mono);font-size:12px;}
+
+/* AUM bar */
+.aum-strip{background:var(--panel);border:1px solid var(--border);display:flex;margin-bottom:20px;}
+.aum-block{flex:1;padding:16px 20px;border-right:1px solid var(--border);}
+.aum-block:last-child{border-right:none;}
+.aum-lbl{font-family:var(--mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text4);margin-bottom:6px;}
+.aum-val{font-family:var(--syne);font-size:26px;font-weight:700;color:var(--text);line-height:1;}
+.aum-sub{font-family:var(--mono);font-size:10px;color:var(--text4);margin-top:4px;}
+
+/* Client detail sections */
+.client-header{display:grid;grid-template-columns:auto 1fr auto;gap:32px;align-items:center;background:var(--panel);border:1px solid var(--border);padding:24px 28px;margin-bottom:20px;}
+.client-ring{width:100px;height:100px;border-radius:50%;border:5px solid var(--red);display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle,rgba(208,70,60,0.1),transparent);flex-shrink:0;}
+.client-ring-val{font-family:var(--syne);font-size:38px;font-weight:800;color:var(--red);line-height:1;}
+.client-ring-lbl{font-family:var(--mono);font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text4);}
+
+/* Simulator mini */
+.sim-mini-wrap{display:grid;grid-template-columns:280px 1fr;gap:0;border:1px solid var(--border);}
+.sim-mini-ctrl{background:var(--bg2);border-right:1px solid var(--border);padding:24px 22px;}
+.sim-mini-results{padding:24px 22px;}
+.slider-lbl{font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text3);margin-bottom:4px;}
+.slider-val-sm{font-family:var(--syne);font-size:28px;font-weight:800;line-height:1;margin-bottom:8px;}
+input[type=range]{width:100%;-webkit-appearance:none;height:4px;background:rgba(255,255,255,0.1);border-radius:2px;outline:none;margin-bottom:4px;cursor:pointer;}
+input[type=range].gold-s::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--gold);cursor:pointer;}
+input[type=range].green-s::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--green);cursor:pointer;}
+
+/* JIM */
+.jim-trigger{position:fixed;bottom:24px;right:24px;z-index:2000;display:flex;align-items:center;gap:12px;background:var(--panel);border:1px solid var(--border);padding:12px 18px;cursor:pointer;text-decoration:none;transition:all 0.15s;box-shadow:0 8px 32px rgba(0,0,0,0.5);}
+.jim-trigger:hover{border-color:var(--gold);transform:translateY(-2px);}
+.jim-av{width:36px;height:36px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-family:var(--syne);font-weight:800;font-size:16px;color:#0B0F14;flex-shrink:0;}
+.jim-ttext{font-family:var(--syne);font-size:14px;font-weight:700;color:var(--text);line-height:1;}
+.jim-tsub{font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:0.1em;margin-top:2px;}
+.jim-panel{position:fixed;bottom:24px;right:24px;width:360px;background:var(--panel);border:1px solid var(--border);z-index:1999;box-shadow:0 12px 48px rgba(0,0,0,0.6);display:none;flex-direction:column;}
+.jim-panel.open{display:flex;}
+.jim-ph{display:flex;align-items:center;gap:14px;padding:18px 20px;border-bottom:1px solid var(--border);}
+.jim-panel-title{font-family:var(--syne);font-size:16px;font-weight:700;color:var(--text);}
+.jim-panel-sub{font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text3);}
+.jim-suggs{padding:10px;display:flex;flex-direction:column;gap:4px;}
+.jim-sug{display:block;padding:10px 14px;font-size:13px;color:var(--text2);border:1px solid transparent;transition:all 0.12s;border-radius:2px;cursor:pointer;}
+.jim-sug:hover{background:var(--bg2);border-color:var(--border);color:var(--text);}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════ TOPBAR ═══════════════════ -->
+<div class="topbar">
+  <div class="tb-brand">HARPIAN <span>INTELLIGENCE TERMINAL</span></div>
+  <div class="tb-sep"></div>
+  <div class="tb-screen" id="tbScreen">Dashboard</div>
+  <div class="tb-right">
+    <div class="tb-clock" id="termClock">--:--:--</div>
+    <div class="tb-live"><div class="tb-live-dot"></div>LIVE</div>
+    <span class="badge badge-red">1 Misaligned</span>
+    <a href="presentation-mode.html" class="tb-pres-link">▶ Presentation Mode</a>
+  </div>
+</div>
+
+<!-- ═══════════════════ SIDEBAR ═══════════════════ -->
+<nav class="sidebar">
+  <div class="sb-section">Main</div>
+  <div class="sb-item active" onclick="showSection('dashboard',this)"><span class="sb-icon">▣</span><span class="sb-label">Dashboard</span></div>
+  <div class="sb-item" onclick="showSection('alerts',this)"><span class="sb-icon">⚠</span><span class="sb-label">Alertas</span><span class="sb-badge warn">3</span></div>
+
+  <div class="sb-section">Clientes</div>
+  <div class="sb-client active-client" onclick="showSection('client-demo',this)" id="sbc-demo">
+    <div class="sb-client-dot" style="background:var(--red)"></div>
+    <div class="sb-client-info">
+      <div class="sb-client-name">Demo Client</div>
+      <div class="sb-client-meta">$8.2M · RN 84 · ⚠ Misaligned</div>
+    </div>
+  </div>
+  <div class="sb-client" onclick="showSection('client-alpha',this)" id="sbc-alpha">
+    <div class="sb-client-dot" style="background:var(--green)"></div>
+    <div class="sb-client-info">
+      <div class="sb-client-name">Client Alpha</div>
+      <div class="sb-client-meta">$3.4M · RN 55 · ✓ Aligned</div>
+    </div>
+  </div>
+  <div class="sb-client" onclick="showSection('client-beta',this)" id="sbc-beta">
+    <div class="sb-client-dot" style="background:var(--green)"></div>
+    <div class="sb-client-info">
+      <div class="sb-client-name">Client Beta</div>
+      <div class="sb-client-meta">$12.1M · RN 68 · ✓ Aligned</div>
+    </div>
+  </div>
+
+  <div class="sb-section">Análises</div>
+  <div class="sb-item" onclick="showSection('strategies',this)"><span class="sb-icon">✦</span><span class="sb-label">HPC11 / HPC22</span></div>
+  <div class="sb-item" onclick="showSection('intelligence',this)"><span class="sb-icon">◈</span><span class="sb-label">Market Intelligence</span><span class="sb-badge gold">9</span></div>
+  <div class="sb-item" onclick="showSection('stormguard',this)"><span class="sb-icon">🛡</span><span class="sb-label">StormGuard</span><span class="sb-badge ok">Bull</span></div>
+
+  <div class="sb-section">Presentation</div>
+  <div class="sb-item" onclick="window.location='presentation-mode.html'"><span class="sb-icon">▶</span><span class="sb-label">Presentation Mode</span></div>
+
+  <div class="sb-footer">
+    <div class="sb-footer-label">Family Office</div>
+    <div class="sb-footer-name">Demo FO</div>
+    <div class="sb-footer-meta">AUM: $23.7M · 3 clientes</div>
+  </div>
+</nav>
+
+<!-- ═══════════════════ MAIN ═══════════════════ -->
+<main class="main">
+
+<!-- ─────── SECTION: DASHBOARD ─────── -->
+<div class="section active" id="sec-dashboard">
+  <div class="page-header">
+    <div class="page-kicker">Terminal · Family Office Edition</div>
+    <div class="page-title">Dashboard Principal</div>
+  </div>
+
+  <!-- AUM Strip -->
+  <div class="aum-strip">
+    <div class="aum-block"><div class="aum-lbl">Total AUM</div><div class="aum-val">$23.7M</div><div class="aum-sub">3 clientes ativos</div></div>
+    <div class="aum-block"><div class="aum-lbl">AUM Alinhado</div><div class="aum-val" style="color:var(--green)">$15.5M</div><div class="aum-sub">65% · 2 clientes</div></div>
+    <div class="aum-block"><div class="aum-lbl">AUM Desalinhado</div><div class="aum-val" style="color:var(--red)">$8.2M</div><div class="aum-sub">35% · 1 cliente em risco</div></div>
+    <div class="aum-block"><div class="aum-lbl">HPC sob Mandato</div><div class="aum-val" style="color:var(--gold)">$4.1M</div><div class="aum-sub">17% · Proposta: +$1.64M</div></div>
+    <div class="aum-block"><div class="aum-lbl">Receita FO (ano)</div><div class="aum-val" style="color:var(--gold)">$30,750</div><div class="aum-sub">0.75% fee · HPC AUM</div></div>
+  </div>
+
+  <!-- Client Monitor -->
+  <div class="panel gap-mb">
+    <div class="panel-title">Monitor de Portfólios — Todos os Clientes <span class="badge badge-neutral">3 clientes</span></div>
+    <table class="t-table">
+      <thead><tr>
+        <th>Cliente</th><th>AUM</th><th>RN Cliente</th><th>RN Portfólio</th><th>Gap</th><th>Volatilidade</th><th>Drawdown</th><th>Sharpe</th><th>Alignment</th><th>Ação</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td><strong style="color:var(--text)">Demo Client</strong></td>
+          <td style="font-family:var(--mono)">$8.2M</td>
+          <td><span class="rn-chip" style="background:rgba(212,175,69,0.1);color:var(--gold)">71</span></td>
+          <td><span class="rn-chip" style="background:rgba(208,70,60,0.1);color:var(--red)">84</span></td>
+          <td style="font-family:var(--mono);color:var(--red);font-weight:600">+13 ⚠</td>
+          <td style="font-family:var(--mono);color:var(--red)">18.4%</td>
+          <td style="font-family:var(--mono);color:var(--red)">−34%</td>
+          <td style="font-family:var(--mono);color:var(--red)">0.61</td>
+          <td><div style="display:flex;align-items:center"><div class="bar-mini" style="width:38px;background:var(--red)"></div><span style="font-family:var(--mono);font-size:11px;color:var(--red)">38</span></div></td>
+          <td><a href="presentation-mode.html" class="btn btn-primary btn-sm">Apresentar →</a></td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--text)">Client Alpha</strong></td>
+          <td style="font-family:var(--mono)">$3.4M</td>
+          <td><span class="rn-chip" style="background:rgba(91,191,122,0.1);color:var(--green)">55</span></td>
+          <td><span class="rn-chip" style="background:rgba(91,191,122,0.1);color:var(--green)">57</span></td>
+          <td style="font-family:var(--mono);color:var(--green)">+2 ✓</td>
+          <td style="font-family:var(--mono);color:var(--green)">10.2%</td>
+          <td style="font-family:var(--mono);color:var(--green)">−16%</td>
+          <td style="font-family:var(--mono);color:var(--green)">1.41</td>
+          <td><div style="display:flex;align-items:center"><div class="bar-mini" style="width:88px;background:var(--green)"></div><span style="font-family:var(--mono);font-size:11px;color:var(--green)">88</span></div></td>
+          <td><button class="btn btn-secondary btn-sm" onclick="showSection('client-alpha',null)">Revisar</button></td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--text)">Client Beta</strong></td>
+          <td style="font-family:var(--mono)">$12.1M</td>
+          <td><span class="rn-chip" style="background:rgba(212,175,69,0.1);color:var(--gold)">68</span></td>
+          <td><span class="rn-chip" style="background:rgba(91,191,122,0.1);color:var(--green)">70</span></td>
+          <td style="font-family:var(--mono);color:var(--green)">+2 ✓</td>
+          <td style="font-family:var(--mono);color:var(--green)">13.8%</td>
+          <td style="font-family:var(--mono);color:var(--green)">−20%</td>
+          <td style="font-family:var(--mono);color:var(--green)">1.28</td>
+          <td><div style="display:flex;align-items:center"><div class="bar-mini" style="width:82px;background:var(--green)"></div><span style="font-family:var(--mono);font-size:11px;color:var(--green)">82</span></div></td>
+          <td><button class="btn btn-secondary btn-sm" onclick="showSection('client-beta',null)">Revisar</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Bottom grid -->
+  <div class="three-col gap-mb">
+    <!-- Market intel quick -->
+    <div class="panel">
+      <div class="panel-title">Mercado Agora <span class="badge badge-neutral" style="font-size:9px">Live</span></div>
+      <div class="mkt-row"><div class="mkt-icon">📈</div><div class="mkt-name">S&P 500</div><div class="mkt-val">5,218</div><div class="mkt-chg" style="color:var(--green)">+0.42%</div></div>
+      <div class="mkt-row"><div class="mkt-icon">📉</div><div class="mkt-name">10Y Treasury</div><div class="mkt-val">4.28%</div><div class="mkt-chg" style="color:var(--red)">+0.06%</div></div>
+      <div class="mkt-row"><div class="mkt-icon">💠</div><div class="mkt-name">VIX</div><div class="mkt-val">14.2</div><div class="mkt-chg" style="color:var(--green)">−0.8</div></div>
+      <div class="mkt-row"><div class="mkt-icon">🏦</div><div class="mkt-name">Fed Funds</div><div class="mkt-val">5.25%</div><div class="mkt-chg" style="color:var(--text4)">—</div></div>
+      <div class="mkt-row"><div class="mkt-icon">📊</div><div class="mkt-name">CPI YoY</div><div class="mkt-val">3.2%</div><div class="mkt-chg" style="color:var(--gold)">▼</div></div>
+      <div class="mkt-row"><div class="mkt-icon">₿</div><div class="mkt-name">BTC/USD</div><div class="mkt-val">$67,420</div><div class="mkt-chg" style="color:var(--green)">+1.8%</div></div>
+    </div>
+
+    <!-- Alerts -->
+    <div class="panel">
+      <div class="panel-title">Alertas Ativos <span class="badge badge-red" style="font-size:9px">3</span></div>
+      <div class="alert-item">
+        <div class="alert-sev" style="background:var(--red)"></div>
+        <div class="alert-body">
+          <div class="alert-title">Demo Client — Risco Desalinhado</div>
+          <div class="alert-desc">RN 84 excede tolerância RN 71 em +13 pts. Rebalanceamento imediato recomendado.</div>
+          <div class="alert-meta">AGORA · <a href="presentation-mode.html" style="color:var(--gold)">Apresentar solução →</a></div>
+        </div>
+      </div>
+      <div class="alert-item">
+        <div class="alert-sev" style="background:var(--orange)"></div>
+        <div class="alert-body">
+          <div class="alert-title">AAPL — Concentração Alta</div>
+          <div class="alert-desc">14.2% do portfólio Demo Client. Limite FO: 12%.</div>
+          <div class="alert-meta">2h atrás</div>
+        </div>
+      </div>
+      <div class="alert-item">
+        <div class="alert-sev" style="background:var(--gold)"></div>
+        <div class="alert-body">
+          <div class="alert-title">Fed Speech — Tom Hawkish</div>
+          <div class="alert-desc">Jim detectou tom hawkish no discurso de Powell. Revisão de renda fixa recomendada.</div>
+          <div class="alert-meta">4h atrás</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Activity -->
+    <div class="panel">
+      <div class="panel-title">Atividade Recente</div>
+      <div class="feed">
+        <div class="feed-item"><div class="feed-time">09:42</div><div class="feed-icon">⚠</div><div class="feed-text">Desalinhamento confirmado para <strong>Demo Client</strong>. Presentation Mode iniciado.</div></div>
+        <div class="feed-item"><div class="feed-time">09:31</div><div class="feed-icon">📋</div><div class="feed-text">Form 4: <strong>AAPL insider buy</strong> — Tim Cook, 12.400 ações.</div></div>
+        <div class="feed-item"><div class="feed-time">08:55</div><div class="feed-icon">🏦</div><div class="feed-text">Jim analisou discurso Powell: <strong>Tom hawkish</strong> detectado.</div></div>
+        <div class="feed-item"><div class="feed-time">08:00</div><div class="feed-icon">📊</div><div class="feed-text">FRED atualizado: <strong>CPI 3.2%</strong> · UNRATE 3.9%.</div></div>
+        <div class="feed-item"><div class="feed-time">Ontem</div><div class="feed-icon">✓</div><div class="feed-text"><strong>Client Beta</strong> rebalanceado. Alignment: 79 → 82.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─────── SECTION: ALERTS ─────── -->
+<div class="section" id="sec-alerts">
+  <div class="page-header">
+    <div class="page-kicker">Terminal · Alertas</div>
+    <div class="page-title">Alertas Ativos</div>
+    <div class="page-sub">3 alertas abertos · 1 crítico requer ação imediata</div>
+  </div>
+  <div class="panel">
+    <div class="alert-item" style="padding:16px 0;">
+      <div class="alert-sev" style="background:var(--red)"></div>
+      <div class="alert-body" style="flex:1">
+        <div class="alert-title">🔴 CRÍTICO — Demo Client Risco Desalinhado</div>
+        <div class="alert-desc">Portfolio Risk Number 84 excede a tolerância real do cliente de 71 em +13 pontos. Volatilidade 18.4% está 53% acima do teto aceitável de 12%. Em um cenário de crise 2022, perda estimada: $2.8M acima do limite de tolerância do cliente.</div>
+        <div class="alert-meta">Aberto há 2 horas · Demo Client · $8.2M AUM</div>
+      </div>
+      <div style="flex-shrink:0;"><a href="presentation-mode.html" class="btn btn-primary">Apresentar Solução →</a></div>
+    </div>
+    <div class="alert-item" style="padding:16px 0;">
+      <div class="alert-sev" style="background:var(--orange)"></div>
+      <div class="alert-body" style="flex:1">
+        <div class="alert-title">🟡 ATENÇÃO — AAPL Concentração Excessiva</div>
+        <div class="alert-desc">Apple representa 14.2% do portfólio Demo Client, acima do limite de concentração de 12% definido pelo mandato do Family Office. Beta >1.2 amplifica risco de drawdown correlacionado com NVDA (11.4%).</div>
+        <div class="alert-meta">Aberto há 2 horas · Demo Client</div>
+      </div>
+      <div style="flex-shrink:0;"><button class="btn btn-secondary" onclick="showSection('client-demo',null)">Ver Portfólio</button></div>
+    </div>
+    <div class="alert-item" style="padding:16px 0;">
+      <div class="alert-sev" style="background:var(--gold)"></div>
+      <div class="alert-body" style="flex:1">
+        <div class="alert-title">🟡 INFO — Fed Speech Tom Hawkish Detectado</div>
+        <div class="alert-desc">Jim analisou o discurso de Jerome Powell e identificou linguagem hawkish predominante. Posições em renda fixa de duration longa podem sofrer impacto negativo. Revisão dos bonds sleeve de Client Beta recomendada.</div>
+        <div class="alert-meta">Aberto há 4 horas · Todos os clientes com exposição a bonds</div>
+      </div>
+      <div style="flex-shrink:0;"><button class="btn btn-secondary" onclick="showSection('intelligence',null)">Ver Intelligence</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- ─────── SECTION: DEMO CLIENT ─────── -->
+<div class="section" id="sec-client-demo">
+  <div class="page-kicker">Cliente · Visão Detalhada</div>
+
+  <div class="client-header">
+    <div class="client-ring">
+      <div class="client-ring-val">84</div>
+      <div class="client-ring-lbl">Risk Number</div>
+    </div>
+    <div>
+      <div style="font-family:var(--syne);font-size:26px;font-weight:800;color:var(--text);margin-bottom:4px;">Demo Client</div>
+      <div style="font-size:14px;color:var(--text3);margin-bottom:12px;">AUM: $8.2M · Family Office: Demo FO · Risk Number Alvo: 71</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <span class="badge badge-red">⚠ MISALIGNED +13 pts</span>
+        <span class="badge badge-neutral">RN Cliente: 71</span>
+        <span class="badge badge-neutral">Horizonte: 11 anos</span>
+        <span class="badge badge-neutral">Retorno Alvo: 9.5%</span>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <a href="presentation-mode.html" class="btn btn-primary">▶ Apresentar Solução</a>
+      <button class="btn btn-secondary" onclick="showSection('dashboard',null)">← Dashboard</button>
+    </div>
+  </div>
+
+  <div class="kpi-grid g4 gap-mb">
+    <div class="kpi alert"><div class="kpi-lbl">Portfolio RN</div><div class="kpi-val red">84</div><div class="kpi-desc">Alvo: 71. Gap de +13 pts.</div></div>
+    <div class="kpi alert"><div class="kpi-lbl">Volatilidade</div><div class="kpi-val red">18.4%</div><div class="kpi-desc">Teto cliente: 12%. +53% acima.</div></div>
+    <div class="kpi alert"><div class="kpi-lbl">Max Drawdown</div><div class="kpi-val red">−34%</div><div class="kpi-desc">Teto cliente: −22%. Gap de 12pts.</div></div>
+    <div class="kpi alert"><div class="kpi-lbl">Alignment Score</div><div class="kpi-val red">38/100</div><div class="kpi-desc">Crítico. Meta: acima de 82.</div></div>
+  </div>
+
+  <!-- Mini Simulator -->
+  <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text3);margin-bottom:12px;">Simulador de Correção — HPC22</div>
+  <div class="sim-mini-wrap gap-mb">
+    <div class="sim-mini-ctrl">
+      <div style="margin-bottom:20px;">
+        <div class="slider-lbl">Alocação HPC22</div>
+        <div class="slider-val-sm" style="color:var(--green)" id="miniH22Val">20%</div>
+        <input type="range" class="green-s" min="0" max="50" value="20" step="5" id="miniH22" oninput="miniSim()">
+        <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--text4)"><span>0%</span><span>50%</span></div>
+      </div>
+      <div>
+        <div class="slider-lbl">Alocação HPC11</div>
+        <div class="slider-val-sm" style="color:var(--gold)" id="miniH11Val">0%</div>
+        <input type="range" class="gold-s" min="0" max="30" value="0" step="5" id="miniH11" oninput="miniSim()">
+        <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--text4)"><span>0%</span><span>30%</span></div>
+      </div>
+    </div>
+    <div class="sim-mini-results">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:14px;">
+        <div><div style="font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text3);margin-bottom:4px;">Risk Number</div><div style="font-family:var(--mono);font-size:11px;color:var(--red);text-decoration:line-through;margin-bottom:2px;">84</div><div style="font-family:var(--syne);font-size:26px;font-weight:700;color:var(--green)" id="mAfRN">72</div><div style="font-family:var(--mono);font-size:11px;color:var(--green)" id="mDcRN">↓ −12 pts</div></div>
+        <div><div style="font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text3);margin-bottom:4px;">Volatilidade</div><div style="font-family:var(--mono);font-size:11px;color:var(--red);text-decoration:line-through;margin-bottom:2px;">18.4%</div><div style="font-family:var(--syne);font-size:26px;font-weight:700;color:var(--green)" id="mAfVol">14.2%</div><div style="font-family:var(--mono);font-size:11px;color:var(--green)" id="mDcVol">↓ −4.2 pts</div></div>
+        <div><div style="font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text3);margin-bottom:4px;">Sharpe</div><div style="font-family:var(--mono);font-size:11px;color:var(--red);text-decoration:line-through;margin-bottom:2px;">0.61</div><div style="font-family:var(--syne);font-size:26px;font-weight:700;color:var(--green)" id="mAfSh">1.30</div><div style="font-family:var(--mono);font-size:11px;color:var(--green)" id="mDcSh">↑ +0.69</div></div>
+        <div><div style="font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text3);margin-bottom:4px;">CAGR</div><div style="font-family:var(--mono);font-size:11px;color:var(--red);text-decoration:line-through;margin-bottom:2px;">7.2%</div><div style="font-family:var(--syne);font-size:26px;font-weight:700;color:var(--green)" id="mAfCagr">9.6%</div><div style="font-family:var(--mono);font-size:11px;color:var(--green)" id="mDcCagr">↑ +2.4%</div></div>
+      </div>
+      <div style="margin-top:16px;padding:12px 16px;background:rgba(91,191,122,0.06);border:1px solid rgba(91,191,122,0.2);">
+        <span style="font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--green);">Status: </span>
+        <span style="font-size:13px;color:var(--text2);" id="miniStatus">✓ Alinhado — todos os mandatos satisfeitos</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="two-col gap-mb">
+    <div class="panel">
+      <div class="panel-title">Top Holdings — Concentração</div>
+      <table class="t-table">
+        <thead><tr><th>#</th><th>Ativo</th><th>Tipo</th><th>Peso</th><th>Flag</th></tr></thead>
+        <tbody>
+          <tr><td style="color:var(--text4)">1</td><td><strong>AAPL</strong></td><td style="color:var(--text3)">US Equity</td><td style="font-family:var(--mono);color:var(--red)">14.2%</td><td><span class="badge badge-red" style="font-size:9px">⚠ HIGH</span></td></tr>
+          <tr><td style="color:var(--text4)">2</td><td><strong>NVDA</strong></td><td style="color:var(--text3)">US Equity</td><td style="font-family:var(--mono);color:var(--red)">11.4%</td><td><span class="badge badge-red" style="font-size:9px">⚠ HIGH</span></td></tr>
+          <tr><td style="color:var(--text4)">3</td><td><strong>MSFT</strong></td><td style="color:var(--text3)">US Equity</td><td style="font-family:var(--mono);color:var(--orange)">8.9%</td><td><span class="badge badge-warn" style="font-size:9px">MOD</span></td></tr>
+          <tr><td style="color:var(--text4)">4</td><td><strong>QQQ</strong></td><td style="color:var(--text3)">ETF</td><td style="font-family:var(--mono)">6.1%</td><td><span class="badge badge-neutral" style="font-size:9px">OK</span></td></tr>
+          <tr><td style="color:var(--text4)">5</td><td><strong>AMZN</strong></td><td style="color:var(--text3)">US Equity</td><td style="font-family:var(--mono)">3.9%</td><td><span class="badge badge-neutral" style="font-size:9px">OK</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="panel">
+      <div class="panel-title">Cenários de Crise</div>
+      <div class="kpi-grid g2">
+        <div class="kpi alert" style="padding:14px"><div class="kpi-lbl">2022 Bear Market</div><div class="kpi-val red" style="font-size:26px">−$2.8M</div><div class="kpi-desc">Portfólio atual. Teto cliente: −$1.8M.</div></div>
+        <div class="kpi ok" style="padding:14px"><div class="kpi-lbl">Com HPC22 (20%)</div><div class="kpi-val green" style="font-size:26px">−$1.6M</div><div class="kpi-desc">Dentro do teto. $1.2M protegido.</div></div>
+        <div class="kpi alert" style="padding:14px"><div class="kpi-lbl">2020 COVID Crash</div><div class="kpi-val red" style="font-size:26px">−$2.4M</div><div class="kpi-desc">Portfólio atual sem proteção.</div></div>
+        <div class="kpi ok" style="padding:14px"><div class="kpi-lbl">Com HPC22 (20%)</div><div class="kpi-val green" style="font-size:26px">−$1.3M</div><div class="kpi-desc">StormGuard ativado. Drawdown contido.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─────── SECTION: CLIENT ALPHA ─────── -->
+<div class="section" id="sec-client-alpha">
+  <div class="page-kicker">Cliente · Visão Detalhada</div>
+  <div class="client-header" style="border-color:rgba(91,191,122,0.3);">
+    <div class="client-ring" style="border-color:var(--green)">
+      <div class="client-ring-val" style="color:var(--green)">57</div>
+      <div class="client-ring-lbl">Risk Number</div>
+    </div>
+    <div>
+      <div style="font-family:var(--syne);font-size:26px;font-weight:800;color:var(--text);margin-bottom:4px;">Client Alpha</div>
+      <div style="font-size:14px;color:var(--text3);margin-bottom:12px;">AUM: $3.4M · Risk Number Alvo: 55</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <span class="badge badge-green">✓ ALIGNED</span>
+        <span class="badge badge-neutral">Alignment: 88/100</span>
+        <span class="badge badge-neutral">HPC11: 15% alocado</span>
+      </div>
+    </div>
+    <div><button class="btn btn-secondary" onclick="showSection('dashboard',null)">← Dashboard</button></div>
+  </div>
+  <div class="kpi-grid g4 gap-mb">
+    <div class="kpi ok"><div class="kpi-lbl">Portfolio RN</div><div class="kpi-val green">57</div><div class="kpi-desc">Alvo: 55. Gap aceitável: +2.</div></div>
+    <div class="kpi ok"><div class="kpi-lbl">Volatilidade</div><div class="kpi-val green">10.2%</div><div class="kpi-desc">Teto: 12%. ✓ Dentro.</div></div>
+    <div class="kpi ok"><div class="kpi-lbl">Max Drawdown</div><div class="kpi-val green">−16%</div><div class="kpi-desc">Teto cliente: −18%. ✓ OK.</div></div>
+    <div class="kpi ok"><div class="kpi-lbl">Alignment Score</div><div class="kpi-val green">88/100</div><div class="kpi-desc">Excelente. Acima da meta 82.</div></div>
+  </div>
+  <div style="background:linear-gradient(135deg,rgba(91,191,122,0.06),var(--panel));border:1px solid rgba(91,191,122,0.25);padding:20px 24px;font-size:14px;color:var(--text2);line-height:1.7;">
+    ✓ Este cliente está totalmente alinhado. HPC11 com 15% de alocação está cumprindo seu papel: mantendo o portfolio dentro do mandato de risco, com Sharpe 1.41 e drawdown histórico de −16%. Revisão semestral sugerida para manutenção do alinhamento.
+  </div>
+</div>
+
+<!-- ─────── SECTION: CLIENT BETA ─────── -->
+<div class="section" id="sec-client-beta">
+  <div class="page-kicker">Cliente · Visão Detalhada</div>
+  <div class="client-header" style="border-color:rgba(91,191,122,0.3);">
+    <div class="client-ring" style="border-color:var(--green)">
+      <div class="client-ring-val" style="color:var(--green)">70</div>
+      <div class="client-ring-lbl">Risk Number</div>
+    </div>
+    <div>
+      <div style="font-family:var(--syne);font-size:26px;font-weight:800;color:var(--text);margin-bottom:4px;">Client Beta</div>
+      <div style="font-size:14px;color:var(--text3);margin-bottom:12px;">AUM: $12.1M · Risk Number Alvo: 68</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <span class="badge badge-green">✓ ALIGNED</span>
+        <span class="badge badge-neutral">Alignment: 82/100</span>
+        <span class="badge badge-neutral">HPC22: 22% alocado</span>
+      </div>
+    </div>
+    <div><button class="btn btn-secondary" onclick="showSection('dashboard',null)">← Dashboard</button></div>
+  </div>
+  <div class="kpi-grid g4 gap-mb">
+    <div class="kpi ok"><div class="kpi-lbl">Portfolio RN</div><div class="kpi-val green">70</div><div class="kpi-desc">Alvo: 68. Gap aceitável: +2.</div></div>
+    <div class="kpi ok"><div class="kpi-lbl">Volatilidade</div><div class="kpi-val green">13.8%</div><div class="kpi-desc">Teto FO: 15%. ✓ Dentro.</div></div>
+    <div class="kpi ok"><div class="kpi-lbl">Max Drawdown</div><div class="kpi-val green">−20%</div><div class="kpi-desc">Teto: −22%. ✓ OK.</div></div>
+    <div class="kpi ok"><div class="kpi-lbl">Alignment Score</div><div class="kpi-val green">82/100</div><div class="kpi-desc">Dentro da meta. Rebalance recente.</div></div>
+  </div>
+</div>
+
+<!-- ─────── SECTION: STRATEGIES ─────── -->
+<div class="section" id="sec-strategies">
+  <div class="page-header">
+    <div class="page-kicker">Terminal · Estratégias</div>
+    <div class="page-title">HPC11 &amp; HPC22 — Status Atual</div>
+  </div>
+  <div class="two-col gap-mb">
+    <div class="panel" style="border-color:rgba(212,175,69,0.3);">
+      <div class="panel-title" style="color:var(--gold)">HPC11 — Conservative</div>
+      <div class="kpi-grid g2" style="margin-bottom:16px;">
+        <div class="kpi" style="padding:14px"><div class="kpi-lbl">Retorno YTD</div><div class="kpi-val green" style="font-size:26px">+7.2%</div></div>
+        <div class="kpi" style="padding:14px"><div class="kpi-lbl">Drawdown Atual</div><div class="kpi-val green" style="font-size:26px">−3.1%</div></div>
+        <div class="kpi" style="padding:14px"><div class="kpi-lbl">Sharpe 12m</div><div class="kpi-val green" style="font-size:26px">1.42</div></div>
+        <div class="kpi" style="padding:14px"><div class="kpi-lbl">StormGuard</div><div class="kpi-val green" style="font-size:26px">Bull</div></div>
+      </div>
+      <div style="font-size:13px;color:var(--text3);line-height:1.6;">ETF-based. Exposição equity 40–55%. Proteção de drawdown abaixo de −14% historicamente. Indicado para RN 45–60.</div>
+    </div>
+    <div class="panel" style="border-color:rgba(91,191,122,0.3);">
+      <div class="panel-title" style="color:var(--green)">HPC22 — Growth ★</div>
+      <div class="kpi-grid g2" style="margin-bottom:16px;">
+        <div class="kpi" style="padding:14px"><div class="kpi-lbl">Retorno YTD</div><div class="kpi-val green" style="font-size:26px">+10.8%</div></div>
+        <div class="kpi" style="padding:14px"><div class="kpi-lbl">Drawdown Atual</div><div class="kpi-val green" style="font-size:26px">−4.2%</div></div>
+        <div class="kpi" style="padding:14px"><div class="kpi-lbl">Sharpe 12m</div><div class="kpi-val green" style="font-size:26px">1.55</div></div>
+        <div class="kpi" style="padding:14px"><div class="kpi-lbl">StormGuard</div><div class="kpi-val green" style="font-size:26px">Bull</div></div>
+      </div>
+      <div style="font-size:13px;color:var(--text3);line-height:1.6;">Equity-based. Exposição 55–70%. Momentum. Tax-Loss Harvesting integrado. Indicado para RN 60–80. Estratégia recomendada para Demo Client.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─────── SECTION: INTELLIGENCE ─────── -->
+<div class="section" id="sec-intelligence">
+  <div class="page-header">
+    <div class="page-kicker">Terminal · Market Intelligence</div>
+    <div class="page-title">9 Módulos Ativos</div>
+  </div>
+  <div class="intel-grid gap-mb">
+    <div class="intel-mod"><span class="intel-mod-icon">📋</span><div class="intel-mod-name">Form 4 Insider Buys</div><div class="intel-mod-status" style="color:var(--green)">● Live · SEC EDGAR</div></div>
+    <div class="intel-mod"><span class="intel-mod-icon">🏛</span><div class="intel-mod-name">13F Institutional</div><div class="intel-mod-status" style="color:var(--green)">● Live · SEC EDGAR</div></div>
+    <div class="intel-mod"><span class="intel-mod-icon">📊</span><div class="intel-mod-name">Macro Data</div><div class="intel-mod-status" style="color:var(--green)">● Live · FRED API</div></div>
+    <div class="intel-mod"><span class="intel-mod-icon">🏦</span><div class="intel-mod-name">Fed Speeches</div><div class="intel-mod-status" style="color:var(--green)">● Live · RSS Fed</div></div>
+    <div class="intel-mod"><span class="intel-mod-icon">🐳</span><div class="intel-mod-name">On-Chain Whale</div><div class="intel-mod-status" style="color:var(--text4)">○ Pendente · Whale Alert API</div></div>
+    <div class="intel-mod"><span class="intel-mod-icon">📰</span><div class="intel-mod-name">News Sentiment</div><div class="intel-mod-status" style="color:var(--text4)">○ Em breve</div></div>
+    <div class="intel-mod"><span class="intel-mod-icon">⚡</span><div class="intel-mod-name">Earnings Alerts</div><div class="intel-mod-status" style="color:var(--text4)">○ Em breve</div></div>
+    <div class="intel-mod"><span class="intel-mod-icon">🌐</span><div class="intel-mod-name">Global Markets</div><div class="intel-mod-status" style="color:var(--green)">● Live</div></div>
+    <div class="intel-mod"><span class="intel-mod-icon">⟳</span><div class="intel-mod-name">StormGuard Signal</div><div class="intel-mod-status" style="color:var(--green)">● Bull Mode Ativo</div></div>
+  </div>
+  <div class="two-col">
+    <div class="panel">
+      <div class="panel-title">Últimos Sinais — Form 4 Insider</div>
+      <table class="t-table">
+        <thead><tr><th>Empresa</th><th>Insider</th><th>Ação</th><th>Valor</th><th>Data</th></tr></thead>
+        <tbody>
+          <tr><td><strong>AAPL</strong></td><td>Tim Cook</td><td style="color:var(--green)">BUY</td><td style="font-family:var(--mono)">$2.3M</td><td style="font-family:var(--mono);color:var(--text4)">Hoje</td></tr>
+          <tr><td><strong>NVDA</strong></td><td>Jensen Huang</td><td style="color:var(--green)">BUY</td><td style="font-family:var(--mono)">$4.1M</td><td style="font-family:var(--mono);color:var(--text4)">2d</td></tr>
+          <tr><td><strong>MSFT</strong></td><td>Satya Nadella</td><td style="color:var(--red)">SELL</td><td style="font-family:var(--mono)">$8.2M</td><td style="font-family:var(--mono);color:var(--text4)">5d</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="panel">
+      <div class="panel-title">Fed Speeches — Análise Jim</div>
+      <div class="feed">
+        <div class="feed-item"><div class="feed-time">4h</div><div class="feed-icon">🏦</div><div class="feed-text"><strong>Powell (Fed) — Tom: HAWKISH</strong><br>Linguagem sobre juros altos por mais tempo detectada. Impacto em renda fixa de duration longa.</div></div>
+        <div class="feed-item"><div class="feed-time">2d</div><div class="feed-icon">🏦</div><div class="feed-text"><strong>Waller (Fed) — Tom: DOVISH</strong><br>Sinalizou possibilidade de cortes se inflação continuar cedendo.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─────── SECTION: STORMGUARD ─────── -->
+<div class="section" id="sec-stormguard">
+  <div class="page-header">
+    <div class="page-kicker">Terminal · Proteção Dinâmica</div>
+    <div class="page-title">StormGuard — Status em Tempo Real</div>
+  </div>
+  <div class="two-col gap-mb">
+    <div class="panel">
+      <div class="panel-title">Modo Atual</div>
+      <div class="sg-mode">
+        <div class="sg-ring">
+          <div class="sg-ring-text">BULL</div>
+          <div class="sg-ring-sub">MODE</div>
+        </div>
+        <div style="font-family:var(--mono);font-size:12px;color:var(--green);margin-bottom:16px;">● Exposição Equity Plena Ativa</div>
+        <div style="font-size:14px;color:var(--text2);line-height:1.6;max-width:340px;margin:0 auto;">StormGuard está no modo Bull. Nenhum sinal de deterioração de mercado detectado. Todas as estratégias HPC operam com alocação equity máxima.</div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-title">Sinais de Mercado Monitorados</div>
+      <div class="sg-signal-row"><div class="sg-signal-lbl">NYSE Adv/Dec</div><div class="sg-signal-val" style="color:var(--green)">2.1 : 1 ↑ Bullish</div></div>
+      <div class="sg-signal-row"><div class="sg-signal-lbl">Spread 10Y-2Y</div><div class="sg-signal-val" style="color:var(--green)">+0.18 ↑ Steepening</div></div>
+      <div class="sg-signal-row"><div class="sg-signal-lbl">High-Yield Spreads</div><div class="sg-signal-val" style="color:var(--green)">3.2% ↓ Tightening</div></div>
+      <div class="sg-signal-row"><div class="sg-signal-lbl">S&P 200-Day</div><div class="sg-signal-val" style="color:var(--green)">+4.8% above</div></div>
+      <div class="sg-signal-row"><div class="sg-signal-lbl">VIX</div><div class="sg-signal-val" style="color:var(--green)">14.2 (baixo)</div></div>
+      <div class="sg-signal-row"><div class="sg-signal-lbl">Trigger Defensivo</div><div class="sg-signal-val" style="color:var(--text4)">Não Ativo</div></div>
+    </div>
+  </div>
+  <div class="three-col">
+    <div class="panel" style="border-color:rgba(208,70,60,0.2);">
+      <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--red);margin-bottom:10px;">2022 Bear — StormGuard Ativo</div>
+      <div style="font-family:var(--syne);font-size:32px;font-weight:800;color:var(--green);margin-bottom:4px;">−8.4%</div>
+      <div style="font-size:13px;color:var(--text3);">HPC22 drawdown vs S&P 500 −19.4%. Proteção de <strong style="color:var(--green)">11 pts</strong>.</div>
+    </div>
+    <div class="panel" style="border-color:rgba(208,70,60,0.2);">
+      <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--red);margin-bottom:10px;">2020 COVID — StormGuard Ativo</div>
+      <div style="font-family:var(--syne);font-size:32px;font-weight:800;color:var(--green);margin-bottom:4px;">−11.2%</div>
+      <div style="font-size:13px;color:var(--text3);">HPC22 vs S&P 500 −33.9%. Trigger disparado em 3 sessões.</div>
+    </div>
+    <div class="panel" style="border-color:rgba(208,70,60,0.2);">
+      <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--red);margin-bottom:10px;">2018 Q4 — StormGuard Ativo</div>
+      <div style="font-family:var(--syne);font-size:32px;font-weight:800;color:var(--green);margin-bottom:4px;">−5.8%</div>
+      <div style="font-size:13px;color:var(--text3);">HPC22 vs S&P 500 −19.8%. Re-entrada completa jan/2019.</div>
+    </div>
+  </div>
+</div>
+
+</main><!-- end .main -->
+
+<!-- ═══════════════════ JIM ═══════════════════ -->
+<a href="javascript:void(0)" class="jim-trigger" onclick="toggleJim()">
+  <div class="jim-av">J</div>
+  <div><div class="jim-ttext">Talk to Jim</div><div class="jim-tsub">AI Research Assistant</div></div>
+</a>
+<div class="jim-panel" id="jimPanel">
+  <div class="jim-ph"><div class="jim-av">J</div><div><div class="jim-panel-title">Jim</div><div class="jim-panel-sub">HARPIAN AI ASSISTANT</div></div></div>
+  <div class="jim-suggs">
+    <div class="jim-sug" onclick="showSection('client-demo',null);toggleJim()">→ Abrir Demo Client — Portfólio desalinhado</div>
+    <div class="jim-sug" onclick="window.location='presentation-mode.html#step7'">→ Simular correção HPC22 agora</div>
+    <div class="jim-sug" onclick="showSection('intelligence',null);toggleJim()">→ Resumo do discurso Fed de hoje</div>
+    <div class="jim-sug" onclick="showSection('stormguard',null);toggleJim()">→ O que StormGuard está monitorando?</div>
+    <div class="jim-sug" onclick="showSection('alerts',null);toggleJim()">→ Ver todos os alertas ativos</div>
+    <div class="jim-sug" onclick="alert('Jim IA — versão real em desenvolvimento')">→ Qual cliente tem maior risco hoje?</div>
+  </div>
+</div>
+
+<script>
+/* ── SECTION NAVIGATION ── */
+const sectionMap = {
+  'dashboard':'sec-dashboard',
+  'alerts':'sec-alerts',
+  'client-demo':'sec-client-demo',
+  'client-alpha':'sec-client-alpha',
+  'client-beta':'sec-client-beta',
+  'strategies':'sec-strategies',
+  'intelligence':'sec-intelligence',
+  'stormguard':'sec-stormguard'
+};
+const screenNames = {
+  'dashboard':'Dashboard Principal',
+  'alerts':'Alertas Ativos',
+  'client-demo':'Demo Client',
+  'client-alpha':'Client Alpha',
+  'client-beta':'Client Beta',
+  'strategies':'Estratégias HPC',
+  'intelligence':'Market Intelligence',
+  'stormguard':'StormGuard'
+};
+
+function showSection(key, triggerEl) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  const secId = sectionMap[key];
+  if (secId) {
+    document.getElementById(secId).classList.add('active');
+    document.getElementById(secId).parentElement.scrollTop = 0;
+  }
+  document.getElementById('tbScreen').textContent = screenNames[key] || key;
+
+  // Update sidebar active
+  document.querySelectorAll('.sb-item, .sb-client').forEach(i => i.classList.remove('active'));
+  if (triggerEl) triggerEl.classList.add('active');
+}
+
+/* ── MINI SIMULATOR ── */
+function miniSim() {
+  const h22 = parseInt(document.getElementById('miniH22').value);
+  const h11 = parseInt(document.getElementById('miniH11').value);
+  const w0 = (100-h11-h22)/100, w1=h11/100, w2=h22/100;
+  document.getElementById('miniH22Val').textContent = h22+'%';
+  document.getElementById('miniH11Val').textContent = h11+'%';
+  const rn = Math.round(w0*84+w1*40+w2*65);
+  const vol = +(w0*18.4+w1*9.5+w2*14.0).toFixed(1);
+  const sh = +(w0*0.61+w1*1.38+w2*1.52).toFixed(2);
+  const cagr = +(w0*7.2+w1*8.5+w2*11.0).toFixed(1);
+  document.getElementById('mAfRN').textContent = rn;
+  document.getElementById('mDcRN').textContent = '↓ −'+(84-rn)+' pts';
+  document.getElementById('mAfVol').textContent = vol+'%';
+  document.getElementById('mDcVol').textContent = '↓ −'+(18.4-vol).toFixed(1)+' pts';
+  document.getElementById('mAfSh').textContent = sh;
+  document.getElementById('mDcSh').textContent = '↑ +'+(sh-0.61).toFixed(2);
+  document.getElementById('mAfCagr').textContent = cagr+'%';
+  document.getElementById('mDcCagr').textContent = '↑ +'+(cagr-7.2).toFixed(1)+'%';
+  const ok = rn<=73 && vol<=15 && cagr>=9.5;
+  document.getElementById('miniStatus').textContent = ok
+    ? '✓ Alinhado — todos os mandatos satisfeitos'
+    : '⚠ Ajuste necessário — RN '+rn+' / vol '+vol+'%';
+  document.getElementById('miniStatus').style.color = ok ? 'var(--text2)' : 'var(--red)';
+}
+
+/* ── JIM ── */
+function toggleJim() { document.getElementById('jimPanel').classList.toggle('open'); }
+
+/* ── LIVE CLOCK ── */
+function updateClock() {
+  const now = new Date();
+  const t = [now.getHours(),now.getMinutes(),now.getSeconds()].map(n=>String(n).padStart(2,'0')).join(':');
+  const el = document.getElementById('termClock');
+  if (el) el.textContent = t;
+}
+updateClock(); setInterval(updateClock,1000);
+
+// Init mini sim
+miniSim();
+</script>
+</body>
+</html>

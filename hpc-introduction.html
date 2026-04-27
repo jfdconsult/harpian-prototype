@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>HPC11 / HPC22 — HARPIAN Terminal</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+.hpc-compare {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 28px;
+}
+.hpc-card {
+  background: var(--panel); border: 1px solid var(--border); padding: 28px 24px;
+  position: relative; overflow: hidden;
+}
+.hpc-card.primary { border-color: rgba(212,175,69,0.4); }
+.hpc-card.featured { border-color: rgba(91,191,122,0.4); }
+.hpc-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+}
+.hpc-card.primary::before { background: var(--gold); }
+.hpc-card.featured::before { background: var(--green); }
+
+.hpc-tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase; margin-bottom: 8px; }
+.hpc-name { font-family: var(--syne); font-size: 32px; font-weight: 800; letter-spacing: -0.02em; line-height: 1; margin-bottom: 4px; }
+.hpc-sub  { font-family: var(--mono); font-size: 12px; letter-spacing: 0.12em; color: var(--text3); margin-bottom: 20px; }
+
+.hpc-specs { display: flex; flex-direction: column; gap: 0; border-top: 1px solid var(--border); }
+.hpc-spec-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 0; border-bottom: 1px solid rgba(235,241,247,0.06);
+  font-size: 13px;
+}
+.hpc-spec-row:last-child { border-bottom: none; }
+.hpc-spec-label { color: var(--text3); font-size: 12px; }
+.hpc-spec-val   { font-family: var(--mono); font-weight: 600; }
+
+.hpc-badge-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+
+.feature-matrix {
+  background: var(--panel); border: 1px solid var(--border);
+  margin-bottom: 28px; overflow: hidden;
+}
+.feature-matrix table { width: 100%; border-collapse: collapse; }
+.feature-matrix th {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+  padding: 12px 18px; text-align: left; border-bottom: 1px solid var(--border);
+  background: var(--bg2); color: var(--text3);
+}
+.feature-matrix td { padding: 11px 18px; border-bottom: 1px solid rgba(235,241,247,0.05); font-size: 13px; }
+.feature-matrix tr:last-child td { border-bottom: none; }
+.feature-matrix tr:hover td { background: rgba(235,241,247,0.02); }
+.check { color: var(--green); font-size: 14px; }
+.cross { color: rgba(235,241,247,0.2); font-size: 14px; }
+.partial { color: var(--gold); font-size: 14px; }
+
+.allocation-viz {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 28px;
+}
+.alloc-panel { background: var(--panel); border: 1px solid var(--border); padding: 22px 20px; }
+.alloc-panel-title { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text3); margin-bottom: 16px; }
+.alloc-seg-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.alloc-seg-swatch { width: 8px; height: 8px; border-radius: 1px; flex-shrink: 0; }
+.alloc-seg-label { font-size: 12px; color: var(--text3); flex: 1; }
+.alloc-seg-bar-wrap { width: 100px; }
+.alloc-seg-bar-track { height: 5px; background: rgba(235,241,247,0.07); border-radius: 2px; }
+.alloc-seg-bar-fill { height: 100%; border-radius: 2px; }
+.alloc-seg-pct { font-family: var(--mono); font-size: 12px; font-weight: 600; color: var(--text); width: 36px; text-align: right; }
+
+.stormguard-box {
+  background: linear-gradient(135deg, rgba(91,191,122,0.05), var(--panel));
+  border: 1px solid rgba(91,191,122,0.25); padding: 24px 28px;
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px;
+  margin-bottom: 28px;
+}
+.sg-item {}
+.sg-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text3); margin-bottom: 6px; }
+.sg-val   { font-family: var(--syne); font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+.sg-desc  { font-size: 12px; color: var(--text3); line-height: 1.4; }
+
+.use-case-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.use-case-card { background: var(--panel); border: 1px solid var(--border); padding: 18px 16px; }
+.use-case-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 8px; }
+.use-case-title { font-family: var(--syne); font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+.use-case-desc  { font-size: 12px; color: var(--text3); line-height: 1.5; }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <div class="topbar">
+    <a href="index.html" class="topbar-brand">HARPIAN <span>INTELLIGENCE TERMINAL</span></a>
+    <div class="topbar-sep"></div>
+    <div class="topbar-screen">HPC Solutions</div>
+    <div class="topbar-right">
+      <div class="progress-steps">
+        <span class="step done"><span class="step-dot"></span>1 · Risk Gap</span>
+        <span class="step-arrow">›</span>
+        <span class="step done"><span class="step-dot"></span>2 · FO Profile</span>
+        <span class="step-arrow">›</span>
+        <span class="step done"><span class="step-dot"></span>3 · Client</span>
+        <span class="step-arrow">›</span>
+        <span class="step done"><span class="step-dot"></span>4 · Portfolio</span>
+        <span class="step-arrow">›</span>
+        <span class="step active"><span class="step-dot"></span>5 · Simulation</span>
+        <span class="step-arrow">›</span>
+        <span class="step">6 · Alignment</span>
+      </div>
+      <span class="badge badge-gold">✦ HPC SOLUTION</span>
+    </div>
+  </div>
+
+  <nav class="sidebar">
+    <div class="sidebar-section">Presentation</div>
+    <a href="index.html" class="nav-item"><span class="nav-icon">⌂</span> Opening</a>
+    <a href="presentation-risk-gap.html" class="nav-item"><span class="nav-icon">⚠</span> Risk Gap <span class="nav-badge ok">✓</span></a>
+    <a href="family-office-profile.html" class="nav-item"><span class="nav-icon">◈</span> FO Profile <span class="nav-badge ok">✓</span></a>
+    <a href="client-profile.html" class="nav-item"><span class="nav-icon">◎</span> Client Risk <span class="nav-badge ok">✓</span></a>
+    <a href="portfolio-analysis.html" class="nav-item"><span class="nav-icon">≡</span> Portfolio <span class="nav-badge ok">✓</span></a>
+    <a href="hpc-introduction.html" class="nav-item active"><span class="nav-icon">✦</span> HPC11 / HPC22</a>
+    <a href="alignment-simulator.html" class="nav-item"><span class="nav-icon">⟳</span> Simulator</a>
+    <a href="client-dashboard.html" class="nav-item"><span class="nav-icon">✓</span> Alignment</a>
+    <div class="sidebar-section" style="margin-top:16px;">Terminal</div>
+    <a href="terminal-dashboard.html" class="nav-item"><span class="nav-icon">▣</span> Main Terminal</a>
+    <div class="sidebar-footer">
+      <div style="font-family:var(--mono);font-size:10px;color:var(--text4);letter-spacing:0.12em;text-transform:uppercase;">Recommendation</div>
+      <div style="font-family:var(--syne);font-size:14px;font-weight:600;color:var(--green);margin-top:4px;">HPC22 · 20% Alloc</div>
+      <div style="font-family:var(--mono);font-size:11px;color:var(--text3);margin-top:2px;">Projected RN: 72 ✓</div>
+    </div>
+  </nav>
+
+  <main class="main">
+    <div class="page-header">
+      <div class="page-kicker">Step 5 of 6 · The Solution</div>
+      <h1 class="page-title">HPC11 &amp; HPC22 — The Alignment Engine</h1>
+      <p class="page-subtitle">Two institutional-grade managed strategies engineered to reduce risk, improve efficiency, and align every portfolio to its verified risk number — without sacrificing long-term growth potential.</p>
+    </div>
+
+    <!-- Side-by-side card comparison -->
+    <div class="hpc-compare">
+      <div class="hpc-card primary">
+        <div class="hpc-tag" style="color:var(--gold)">Strategy One</div>
+        <div class="hpc-name" style="color:var(--gold)">HPC11</div>
+        <div class="hpc-sub">Conservative Alignment · Lower Drawdown</div>
+        <div class="hpc-badge-row">
+          <span class="badge badge-gold">RN: 45–60 Target</span>
+          <span class="badge badge-neutral">StormGuard Active</span>
+        </div>
+        <div class="hpc-specs">
+          <div class="hpc-spec-row">
+            <span class="hpc-spec-label">Strategy Type</span>
+            <span class="hpc-spec-val" style="color:var(--gold)">Defensive Growth</span>
+          </div>
+          <div class="hpc-spec-row">
+            <span class="hpc-spec-label">Target Volatility</span>
+            <span class="hpc-spec-val">8 – 12%</span>
+          </div>
+          <div class="hpc-spec-row">
+            <span class="hpc-spec-label">Max Drawdown (hist.)</span>
+            <span class="hpc-spec-val" style="color:var(--green)">−14%</span>
+          </div>
+          <div class="hpc-spec-row">
+            <span class="hpc-spec-label">Expected Return</span>
+            <span class="hpc-spec-val" style="color:var(--green)">7.5 – 9.0%</span>
+          </div>
+          <div class="hpc-spec-row">
+            <span class="hpc-spec-label">Sharpe Ratio (5yr)</span>
+            <span class="hpc-spec-val" style="color:var(--green)">1.38</span>
+          </div>
+          <div class="hpc-spec-row">
+            <span class="hpc-spec-label">Equity Allocation</span>
+            <span class="hpc-spec-val">40 – 55%</span>
+          </div>
+          <div class="hpc-spec-row">
+            <span class="hpc-spec-label">Suggested Allocation</span>
+            <span class="hpc-spec-val" style="color:var(--gold)">10 – 15% of AUM</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hpc-card featured">
+        <div style="position:absolute;top:14px;right:14px;font-family:var(--mono);font-size:9px;letter-spacing:0.18em;background:rgba(91,191,122,0.15);color:var(--green);padding:4px 10px;border:1px solid rgba(91,191,122,0.3);">★ RECOMMENDED</div>
+        <div class="hpc-tag" style="color:var(--green)">Strategy Two</div>
+        <div class="hpc-name" style="color:var(--green)">HPC22</div>
+        <div class="hpc-sub">Growth Alignment · Risk-Efficient</div>
+        <div class="hpc-badge-row">
+          <span class="badge" style="background:rgba(91,191,122,0.1);color:var(--green);border-color:rgba(91,191,122,0.3);">RN: 60–80 Target</span>
+          <span class="badge badge-neutral">StormGuard Active</span>
+        </div>
+        <div class="hpc-specs">
+          <div class="hpc-spec-row">
+            <span class="hpc-spec-label">Strategy Type</span>
+            <span class="hpc-spec-val" style="color:var(--green)">Efficient Growth</span>
+          </div>
+          <div class="hpc-spec-row">
+            <span class="hpc-spec-label">Target Volatility</span>
+            <span class="hpc-spec-val">12 – 16%</span>
+          </div>
+          <div class="hpc-spec-row">
+            <span class="hpc-spec-label">Max Drawdown (hist.)</span>
+            <span class="hpc-spec-val" style="color:var(--green)">−19%</span>
+          </div>
+          <div class="hpc-spec-row">
+            <span class="hpc-spec-label">Expected Return</span>
+            <span class="hpc-spec-val" style="color:var(--green)">9.5 – 12.0%</span>
+          </div>
+          <div class="hpc-spec-row">
+            <span class="hpc-spec-label">Sharpe Ratio (5yr)</span>
+            <span class="hpc-spec-val" style="color:var(--green)">1.52</span>
+          </div>
+          <div class="hpc-spec-row">
+            <span class="hpc-spec-label">Equity Allocation</span>
+            <span class="hpc-spec-val">55 – 70%</span>
+          </div>
+          <div class="hpc-spec-row">
+            <span class="hpc-spec-label">Suggested Allocation</span>
+            <span class="hpc-spec-val" style="color:var(--green)">20 – 30% of AUM</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feature Matrix -->
+    <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text3);margin-bottom:12px;">Feature Comparison Matrix</div>
+    <div class="feature-matrix section-gap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:38%;">Feature</th>
+            <th style="width:18%;text-align:center;color:var(--gold);">HPC11</th>
+            <th style="width:18%;text-align:center;color:var(--green);">HPC22</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Risk Number Alignment</td><td style="text-align:center;" class="check">✓</td><td style="text-align:center;" class="check">✓</td><td style="color:var(--text3);font-size:12px;">Both map directly to client RN</td></tr>
+          <tr><td>StormGuard Defensive Trigger</td><td style="text-align:center;" class="check">✓</td><td style="text-align:center;" class="check">✓</td><td style="color:var(--text3);font-size:12px;">Auto-shifts to T-Bills in bear signals</td></tr>
+          <tr><td>Drawdown &lt; Client Tolerance</td><td style="text-align:center;" class="check">✓</td><td style="text-align:center;" class="check">✓</td><td style="color:var(--text3);font-size:12px;">Backtested to stay within −22% limit</td></tr>
+          <tr><td>Sharpe &gt; 1.20 Target</td><td style="text-align:center;" class="check">✓</td><td style="text-align:center;" class="check">✓</td><td style="color:var(--text3);font-size:12px;">Both exceed institutional Sharpe target</td></tr>
+          <tr><td>Growth above 9.5% Target</td><td style="text-align:center;" class="partial">~</td><td style="text-align:center;" class="check">✓</td><td style="color:var(--text3);font-size:12px;">HPC22 better positioned for return goal</td></tr>
+          <tr><td>FO Mandate Compliance</td><td style="text-align:center;" class="check">✓</td><td style="text-align:center;" class="check">✓</td><td style="color:var(--text3);font-size:12px;">Both within FO volatility ceiling</td></tr>
+          <tr><td>Suitable for RN 71 Client</td><td style="text-align:center;" class="partial">~</td><td style="text-align:center;" class="check">✓</td><td style="color:var(--text3);font-size:12px;">HPC22 closer to client's 71 profile</td></tr>
+          <tr><td>Tax-Loss Harvesting</td><td style="text-align:center;" class="cross">○</td><td style="text-align:center;" class="check">✓</td><td style="color:var(--text3);font-size:12px;">HPC22 includes TLH overlay</td></tr>
+          <tr><td>Liquidity (T+2)</td><td style="text-align:center;" class="check">✓</td><td style="text-align:center;" class="check">✓</td><td style="color:var(--text3);font-size:12px;">Daily liquidity on both strategies</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- HPC22 Allocation breakdown -->
+    <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text3);margin-bottom:12px;">HPC22 — Typical Allocation Model</div>
+    <div class="allocation-viz section-gap">
+      <div class="alloc-panel">
+        <div class="alloc-panel-title">Asset Class Exposure</div>
+        <div class="alloc-seg-row">
+          <div class="alloc-seg-swatch" style="background:var(--green)"></div>
+          <div class="alloc-seg-label">US Large Cap Growth</div>
+          <div class="alloc-seg-bar-wrap"><div class="alloc-seg-bar-track"><div class="alloc-seg-bar-fill" style="width:62%;background:var(--green)"></div></div></div>
+          <div class="alloc-seg-pct">28%</div>
+        </div>
+        <div class="alloc-seg-row">
+          <div class="alloc-seg-swatch" style="background:#5B9BBF"></div>
+          <div class="alloc-seg-label">Intl Developed Markets</div>
+          <div class="alloc-seg-bar-wrap"><div class="alloc-seg-bar-track"><div class="alloc-seg-bar-fill" style="width:35%;background:#5B9BBF"></div></div></div>
+          <div class="alloc-seg-pct">16%</div>
+        </div>
+        <div class="alloc-seg-row">
+          <div class="alloc-seg-swatch" style="background:var(--gold)"></div>
+          <div class="alloc-seg-label">Core Fixed Income</div>
+          <div class="alloc-seg-bar-wrap"><div class="alloc-seg-bar-track"><div class="alloc-seg-bar-fill" style="width:48%;background:var(--gold)"></div></div></div>
+          <div class="alloc-seg-pct">22%</div>
+        </div>
+        <div class="alloc-seg-row">
+          <div class="alloc-seg-swatch" style="background:var(--orange)"></div>
+          <div class="alloc-seg-label">Alternatives / Managed Futures</div>
+          <div class="alloc-seg-bar-wrap"><div class="alloc-seg-bar-track"><div class="alloc-seg-bar-fill" style="width:28%;background:var(--orange)"></div></div></div>
+          <div class="alloc-seg-pct">13%</div>
+        </div>
+        <div class="alloc-seg-row">
+          <div class="alloc-seg-swatch" style="background:#7B6FCC"></div>
+          <div class="alloc-seg-label">Real Assets / REITS</div>
+          <div class="alloc-seg-bar-wrap"><div class="alloc-seg-bar-track"><div class="alloc-seg-bar-fill" style="width:22%;background:#7B6FCC"></div></div></div>
+          <div class="alloc-seg-pct">10%</div>
+        </div>
+        <div class="alloc-seg-row">
+          <div class="alloc-seg-swatch" style="background:var(--text4)"></div>
+          <div class="alloc-seg-label">Cash &amp; Equivalents</div>
+          <div class="alloc-seg-bar-wrap"><div class="alloc-seg-bar-track"><div class="alloc-seg-bar-fill" style="width:24%;background:var(--text4)"></div></div></div>
+          <div class="alloc-seg-pct">11%</div>
+        </div>
+      </div>
+
+      <div class="alloc-panel">
+        <div class="alloc-panel-title">StormGuard — Defensive Mode Trigger</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:16px;">
+          When StormGuard detects deteriorating market breadth, it systematically shifts equity exposure to short-term T-Bills — protecting drawdown floor while preserving re-entry speed.
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="display:flex;gap:12px;align-items:flex-start;padding:10px 12px;background:rgba(91,191,122,0.06);border:1px solid rgba(91,191,122,0.2);">
+            <div style="font-size:16px;">📈</div>
+            <div><div style="font-family:var(--mono);font-size:10px;color:var(--green);letter-spacing:0.14em;margin-bottom:3px;">BULL MODE</div><div style="font-size:12px;color:var(--text3);">Full equity exposure. Standard allocation model active.</div></div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start;padding:10px 12px;background:rgba(212,175,69,0.06);border:1px solid rgba(212,175,69,0.2);">
+            <div style="font-size:16px;">⚡</div>
+            <div><div style="font-family:var(--mono);font-size:10px;color:var(--gold);letter-spacing:0.14em;margin-bottom:3px;">SIGNAL TRIGGERED</div><div style="font-size:12px;color:var(--text3);">Breadth deterioration detected. Equity reduction begins.</div></div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start;padding:10px 12px;background:rgba(208,70,60,0.06);border:1px solid rgba(208,70,60,0.2);">
+            <div style="font-size:16px;">🛡</div>
+            <div><div style="font-family:var(--mono);font-size:10px;color:var(--red);letter-spacing:0.14em;margin-bottom:3px;">DEFENSIVE MODE</div><div style="font-size:12px;color:var(--text3);">Up to 80% in T-Bills. Drawdown ceiling enforced.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- StormGuard Stats -->
+    <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text3);margin-bottom:12px;">StormGuard — Historical Performance During Crisis Events</div>
+    <div class="stormguard-box section-gap">
+      <div class="sg-item">
+        <div class="sg-label">2022 Bear Market</div>
+        <div class="sg-val" style="color:var(--green)">−8.4%</div>
+        <div class="sg-desc">HPC22 drawdown vs S&P 500 at −19.4%. Protected <strong style="color:var(--green)">11 pts</strong> of downside.</div>
+      </div>
+      <div class="sg-item">
+        <div class="sg-label">2020 COVID Crash</div>
+        <div class="sg-val" style="color:var(--green)">−11.2%</div>
+        <div class="sg-desc">HPC22 drawdown vs S&P 500 at −33.9%. Defensive trigger fired within 3 sessions.</div>
+      </div>
+      <div class="sg-item">
+        <div class="sg-label">2018 Q4 Selloff</div>
+        <div class="sg-val" style="color:var(--green)">−5.8%</div>
+        <div class="sg-desc">HPC22 drawdown vs S&P 500 at −19.8%. Full re-entry completed Jan 2019.</div>
+      </div>
+    </div>
+
+    <!-- Use cases -->
+    <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text3);margin-bottom:12px;">Which Strategy Fits This Client?</div>
+    <div class="use-case-grid section-gap">
+      <div class="use-case-card" style="border-color:rgba(91,191,122,0.3);">
+        <div class="use-case-label" style="color:var(--green)">✦ Recommended · HPC22</div>
+        <div class="use-case-title">20% Allocation — $1.64M</div>
+        <div class="use-case-desc">Brings portfolio RN from 84 → ~72. Stays inside client's −22% drawdown tolerance. Sharpe improves from 0.61 → ~1.30. Expected return rises to ~9.6% — hitting the 9.5% target.</div>
+      </div>
+      <div class="use-case-card">
+        <div class="use-case-label" style="color:var(--gold)">Alternative · HPC11</div>
+        <div class="use-case-title">15% Allocation — $1.23M</div>
+        <div class="use-case-desc">More conservative. Brings portfolio RN to ~74. Drawdown floor at −18%. Better for clients who want maximum downside protection over return maximisation.</div>
+      </div>
+    </div>
+
+    <div class="nav-buttons">
+      <a href="portfolio-analysis.html" class="btn btn-secondary">← Portfolio Analysis</a>
+      <a href="alignment-simulator.html" class="btn btn-primary">Next: Run Simulation →</a>
+    </div>
+  </main>
+</div>
+
+<a href="javascript:void(0)" class="jim-btn" onclick="toggleJim()">
+  <div class="jim-avatar">J</div>
+  <div><div class="jim-text">Talk to Jim</div><div class="jim-sub">AI Research Assistant</div></div>
+</a>
+<div class="jim-panel" id="jimPanel">
+  <div class="jim-panel-header"><div class="jim-avatar">J</div><div><div class="jim-panel-title">Jim</div><div class="jim-panel-sub">HARPIAN AI ASSISTANT</div></div></div>
+  <div class="jim-suggestions">
+    <a href="#" class="jim-suggestion">→ How does StormGuard know when to go defensive?</a>
+    <a href="#" class="jim-suggestion">→ Explain HPC22 drawdown protection in 2022</a>
+    <a href="alignment-simulator.html" class="jim-suggestion">→ Simulate 20% HPC22 on this portfolio</a>
+    <a href="client-dashboard.html" class="jim-suggestion">→ Show final aligned portfolio</a>
+  </div>
+</div>
+<script>function toggleJim(){document.getElementById('jimPanel').classList.toggle('open');}</script>
+</body>
+</html>
