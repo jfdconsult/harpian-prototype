@@ -1,0 +1,19 @@
+{
+  "firm_name": "HARPIAN Capital",
+  "aum_total": 25400000,
+  "clients_count": 12,
+  "currency": "BRL",
+  "regulatory": "CVM · ANBIMA",
+  "rn_max_global": 70,
+  "dd_max_global": -20.0,
+  "return_target": "CDI+8%",
+  "demo_mode": true,
+  "_integration_points": {
+    "lynx_api_url": "https://api.lynx.harpian.io/v1",
+    "bloomberg_api_url": "https://api.bloomberg.com/eap/v1",
+    "alphadroid_api_url": "https://api.alphadroid.com/v4",
+    "btg_api_url": "https://api.btgpactual.com/v1",
+    "xp_api_url": "https://api.xpi.com.br/v1",
+    "_note": "0JP: fill in real API keys in .env — never commit keys to git"
+  }
+}

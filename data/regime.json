@@ -1,0 +1,108 @@
+{
+  "snapshot_date": "2026-04-29",
+  "updated_at": "2026-04-29 14:30 UTC",
+  "final_regime_score": 22,
+  "macro_trend_score": 25,
+  "market_structure_score": 18,
+  "risk_shield_score": 32,
+  "risk_state": "WATCH",
+  "regime_label": "Cautious Bull",
+  "stormguard_state": "watch",
+  "score_decomposition": {
+    "macro_contribution": 15.0,
+    "structure_contribution": 7.2,
+    "risk_adjustment": -0.2,
+    "final": 22
+  },
+  "top_positive": [
+    { "name": "Credit Normalization",  "score": 8.4, "category": "credit" },
+    { "name": "Earnings Beat Rate 68%","score": 6.2, "category": "equities" },
+    { "name": "Gold Safe Haven Bid",   "score": 4.8, "category": "commodities" }
+  ],
+  "top_negative": [
+    { "name": "Fed Hawkish Bias",       "score": -7.1, "category": "monetary" },
+    { "name": "Yield Curve Inversion",  "score": -5.8, "category": "rates" },
+    { "name": "VIX Elevation (22.4)",   "score": -4.6, "category": "volatility" }
+  ],
+  "anomalies": [
+    { "severity": "medium", "label": "Correlation Spike",        "type": "CORR",    "desc": "Equity-Bond correlation turned positive (+0.42). Diversification reduced.", "ts": "09:14" },
+    { "severity": "low",    "label": "Volatility Regime Shift",  "type": "VOL",     "desc": "VIX term structure flattening. Short-term vol rising faster than long.", "ts": "11:02" },
+    { "severity": "low",    "label": "Drawdown Acceleration",    "type": "DRAWDOWN","desc": "IBOVESPA -3.1% from recent high. Momentum losing steam.", "ts": "13:20" }
+  ],
+  "correlations": {
+    "equity_bonds": 0.42,
+    "equity_gold": -0.18,
+    "equity_usd": -0.31,
+    "diversification_idx": 0.61
+  },
+  "market_internals": {
+    "pct_above_ma50": 54,
+    "pct_above_ma200": 61,
+    "momentum_dispersion": 0.38,
+    "overextension_zscore": 1.2,
+    "volume_confirmation": "Neutral"
+  },
+  "risk_shield": {
+    "volatility_spike": 42,
+    "correlation_spike": 58,
+    "credit_stress": 24,
+    "liquidity_stress": 18,
+    "tail_risk": 31,
+    "composite": 32
+  },
+  "drivers": [
+    { "label": "Fed Hawkish Pivot", "score": -7.1, "category": "monetary",    "arrow": "down",  "desc": "FOMC dot plot signals no cuts in 2026. Real rates remain restrictive." },
+    { "label": "Earnings Beat 68%", "score": 6.2,  "category": "equities",    "arrow": "up",    "desc": "S&P 500 companies beating Q1 estimates at 68%, above the historical 63% avg." },
+    { "label": "Yield Inversion",   "score": -5.8, "category": "rates",       "arrow": "down",  "desc": "2Y-10Y spread: -34bps. Recession probability elevated at 42%." },
+    { "label": "Gold Inflows",      "score": 4.8,  "category": "commodities", "arrow": "up",    "desc": "Central bank gold demand +28% YoY. Safe haven bid accelerating." },
+    { "label": "VIX Elevation",     "score": -4.6, "category": "volatility",  "arrow": "flat",  "desc": "VIX 22.4 — above 20 threshold indicating elevated uncertainty premium." },
+    { "label": "Credit Normalization","score": 8.4,"category": "credit",      "arrow": "up",    "desc": "IG spreads tightening. HY spreads stable. Credit markets less stressed." }
+  ],
+  "interpretation": [
+    "Regime Score +22 sits in Cautious Bull territory — positive momentum but below the threshold for high-conviction positioning.",
+    "The macro environment remains constructive but fragile. Fed's hawkish bias is the primary headwind, limiting upside.",
+    "Credit normalization and earnings quality are providing structural support. Gold's safe-haven bid adds defensive anchor.",
+    "StormGuard in WATCH mode: monitoring for volatility spike or correlation breakdown that would trigger ACTIVATE.",
+    "Recommended posture: maintain HPC11/HPC22 core allocation. Avoid high-beta additions until regime score > 35."
+  ],
+  "structure": [
+    {
+      "group": "Equities",
+      "items": [
+        { "name": "S&P 500",   "ticker": "SPX",  "score": 60, "trend": "sideways", "regime": "Cautious" },
+        { "name": "NASDAQ",    "ticker": "NDX",  "score": 72, "trend": "up",       "regime": "Bull" },
+        { "name": "IBOVESPA",  "ticker": "IBOV", "score": 41, "trend": "down",     "regime": "Watch" }
+      ]
+    },
+    {
+      "group": "Rates & Credit",
+      "items": [
+        { "name": "10Y Treasury", "ticker": "US10Y", "score": 24, "trend": "down", "regime": "Risk-Off" },
+        { "name": "IG Credit",    "ticker": "AGG",   "score": 48, "trend": "sideways", "regime": "Neutral" },
+        { "name": "HY Credit",    "ticker": "HYG",   "score": 55, "trend": "up",   "regime": "Watch" }
+      ]
+    },
+    {
+      "group": "Commodities & FX",
+      "items": [
+        { "name": "Gold",   "ticker": "XAU", "score": 78, "trend": "up",       "regime": "Bull" },
+        { "name": "Oil",    "ticker": "WTI", "score": 62, "trend": "sideways", "regime": "Cautious" },
+        { "name": "Dollar", "ticker": "DXY", "score": 67, "trend": "up",       "regime": "Bull" }
+      ]
+    }
+  ],
+  "narrative": [
+    { "tag": "MACRO",       "text": "The global macro backdrop remains in transition. The Fed's prolonged restrictive stance is compressing multiples while simultaneously maintaining dollar strength — a headwind for EM and commodities priced in USD." },
+    { "tag": "EQUITIES",    "text": "Equity momentum is bifurcated: large-cap tech driven by AI capex continues to outperform, while rate-sensitive sectors and small caps face multiple compression. Breadth remains healthy — 61% of S&P names above 200-DMA." },
+    { "tag": "CREDIT",      "text": "Credit markets are the bullish outlier. IG spreads at 85bps signal institutional confidence. High yield stable at 325bps. No systemic credit stress detected." },
+    { "tag": "RATES",       "text": "The yield curve inversion (-34bps on 2s10s) persists but has stopped widening — a potential early signal that the rate cycle is approaching its terminal phase. Duration risk remains elevated." },
+    { "tag": "COMMODITIES", "text": "Gold's breakout above $2,300 driven by central bank buying and geopolitical premium. Oil balanced by demand uncertainty vs. OPEC+ supply discipline. Commodity regime: selective — metals over energy." }
+  ],
+  "timelines": {
+    "_note": "This is mock data. In production, populated from regime_snapshots DB table via /api/regime/timeline",
+    "5Y":  [ 1.2, 1.5, -0.8, -2.1, -3.4, -1.2, 0.8, 2.1, 3.4, 1.8, -0.5, -2.8, -3.2, -1.5, 0.4, 1.8, 2.6, 1.2, 0.8, -0.4, -1.8, -2.4, -0.8, 0.6, 1.4, 2.2, 1.8, 0.4, -0.8, -1.4, 0.2, 1.2, 2.0, 2.4, 1.6, 0.8, -0.4, -1.2, 0.4, 1.8, 2.8, 2.4, 1.2, 0.4, -0.8, 0.2, 0.8, 1.4, 1.8, 2.2, 0.04 ],
+    "10Y": [ -0.3, 0.5, 1.8, 2.4, 1.2, -0.5, -2.1, -3.2, -2.4, -0.8, 0.4, 1.8, 2.8, 3.2, 2.4, 1.2, -0.4, -2.0, -3.8, -2.8, -1.2, 0.2, 1.4, 2.4, 3.0, 2.2, 1.0, -0.4, -1.8, -2.8, -1.8, -0.4, 0.8, 1.6, 2.4, 1.8, 0.8, -0.6, -1.4, -0.8, 0.4, 1.2, 2.0, 2.4, 1.8, 1.2, 0.4, -0.8, -1.2, -0.4, 0.4, 0.8, 1.2, 1.6, 2.0, 1.8, 1.4, 1.0, 0.6, 0.04 ],
+    "20Y": [ 1.5, 2.0, 3.2, 2.8, 1.8, 0.8, -0.4, -2.0, -4.2, -3.8, -2.4, -0.8, 0.8, 2.0, 3.2, 3.8, 3.2, 2.4, 1.4, 0.4, -1.2, -3.2, -4.0, -3.2, -1.8, -0.4, 0.8, 2.0, 3.0, 3.6, 3.0, 2.2, 1.4, 0.6, -0.4, -1.4, -2.4, -1.6, -0.4, 0.6, 1.4, 2.2, 2.8, 2.4, 1.8, 1.2, 0.8, 0.4, 0.8, 1.2, 1.6, 2.0, 2.4, 2.2, 1.8, 1.4, 1.0, 0.6, 0.4, 0.2, 0.4, 0.8, 1.2, 1.4, 1.8, 2.0, 1.8, 1.6, 1.4, 1.2, 0.8, 0.6, 0.4, 0.2, 0.04 ],
+    "30Y": [ 0.5, 0.8, 1.4, 2.2, 3.0, 3.6, 3.2, 2.4, 1.6, 0.8, -0.2, -1.4, -2.8, -3.8, -4.0, -3.2, -2.0, -0.8, 0.4, 1.6, 2.6, 3.4, 3.8, 3.2, 2.4, 1.4, 0.4, -0.8, -2.2, -3.4, -4.2, -3.8, -2.8, -1.6, -0.4, 0.6, 1.6, 2.4, 3.0, 3.4, 2.8, 2.0, 1.2, 0.4, -0.6, -1.4, -2.2, -1.8, -0.8, 0.2, 1.0, 1.8, 2.4, 2.8, 2.4, 1.8, 1.2, 0.8, 0.4, 0.2, 0.04 ]
+  }
+}

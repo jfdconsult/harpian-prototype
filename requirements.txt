@@ -1,0 +1,32 @@
+# HARPIAN Portfolio Engineering Terminal — Python Dependencies
+# Install: pip install -r requirements.txt
+
+# ── API Server ──────────────────────────────────────────────────────────────
+flask>=3.0.0
+flask-cors>=4.0.0
+gunicorn>=21.0.0          # production WSGI server
+
+# ── AI / LLM ────────────────────────────────────────────────────────────────
+anthropic>=0.25.0          # Claude API (social_processor, harpian_curator)
+
+# ── Scraping ────────────────────────────────────────────────────────────────
+playwright>=1.40.0         # browser automation (Bloomberg, Valor, Twitter/X)
+feedparser>=6.0.0          # RSS feed parsing (Reuters, WSJ, FT, Nitter)
+httpx>=0.26.0              # async HTTP client
+beautifulsoup4>=4.12.0     # HTML parsing
+lxml>=5.0.0                # fast XML/HTML parser (bs4 backend)
+
+# ── YouTube ─────────────────────────────────────────────────────────────────
+youtube-transcript-api>=0.6.0   # YouTube transcript extraction
+
+# ── Data / Finance ──────────────────────────────────────────────────────────
+yfinance>=0.2.40           # market data (optional: replace with Bloomberg)
+pandas>=2.2.0              # data manipulation
+numpy>=1.26.0              # numerical operations
+
+# ── Document Generation ─────────────────────────────────────────────────────
+python-docx>=1.1.0         # Word document generation (curadoria output)
+
+# ── Utilities ───────────────────────────────────────────────────────────────
+python-dotenv>=1.0.0       # .env file loading
+requests>=2.31.0           # HTTP requests (sync)

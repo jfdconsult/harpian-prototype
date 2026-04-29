@@ -1,1 +1,46 @@
+# Vercel
 .vercel
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+venv/
+.venv/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+
+# Environment / Secrets — NEVER commit these
+.env
+*.env.local
+*.env.production
+
+# Database files — generated locally, not committed
+data/harpian.db
+data/harpian_social.db
+data/*.db
+data/*.db-shm
+data/*.db-wal
+
+# JD NEWS — generated output (not needed in repo)
+logs/
+curadoria_output/
+sessions/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# Node (for npx serve)
+node_modules/
+package-lock.json
+
+# Zip exports (not needed in repo)
+*.zip
