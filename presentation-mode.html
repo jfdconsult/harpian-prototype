@@ -15,44 +15,44 @@
   --text:#EBF1F7;--text2:#B8C8D8;--text3:#6B7F95;--text4:#3A4A5A;
   --syne:'Syne',sans-serif;--mono:'DM Mono',monospace;--sans:'DM Sans',sans-serif;
 }
-html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--sans);font-size:16px;line-height:1.5;overflow:hidden;}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--sans);font-size:18px;line-height:1.5;overflow:hidden;}
 
 /* HEADER */
 .ph{position:fixed;top:0;left:0;right:0;height:62px;background:rgba(11,15,20,0.97);border-bottom:1px solid var(--border);backdrop-filter:blur(12px);z-index:1000;display:flex;align-items:center;padding:0 24px;gap:16px;}
-.ph-brand{font-family:var(--syne);font-size:16px;font-weight:800;color:var(--text);flex-shrink:0;}
+.ph-brand{font-family:var(--syne);font-size:18px;font-weight:800;color:var(--text);flex-shrink:0;}
 .ph-brand span{color:var(--gold);}
 .ph-sep{width:1px;height:26px;background:var(--border);flex-shrink:0;}
 .steps-bar{display:flex;align-items:center;flex:1;overflow:hidden;}
-.si{display:flex;align-items:center;gap:5px;padding:4px 8px;font-family:var(--mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text4);cursor:pointer;transition:color 0.2s;white-space:nowrap;}
+.si{display:flex;align-items:center;gap:5px;padding:4px 8px;font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text4);cursor:pointer;transition:color 0.2s;white-space:nowrap;}
 .si.done{color:var(--text3);}
 .si.active{color:var(--gold);}
 .si-dot{width:5px;height:5px;border-radius:50%;background:var(--text4);flex-shrink:0;transition:background 0.2s;}
 .si.done .si-dot{background:var(--green);}
 .si.active .si-dot{background:var(--gold);box-shadow:0 0 6px var(--gold);}
-.sa{color:var(--text4);font-size:10px;padding:0 1px;}
+.sa{color:var(--text4);font-size:11px;padding:0 1px;}
 .ph-right{display:flex;align-items:center;gap:10px;flex-shrink:0;}
-.ph-mode-lbl{font-family:var(--mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text3);}
-.btn-terminal{font-family:var(--mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text3);text-decoration:none;border:1px solid var(--border);padding:6px 12px;transition:all 0.15s;}
+.ph-mode-lbl{font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text3);}
+.btn-terminal{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text3);text-decoration:none;border:1px solid var(--border);padding:6px 12px;transition:all 0.15s;}
 .btn-terminal:hover{border-color:var(--gold);color:var(--gold);}
 
 /* BOTTOM NAV */
 .nav-bar{position:fixed;bottom:0;left:0;right:0;height:72px;background:rgba(11,15,20,0.97);border-top:1px solid var(--border);backdrop-filter:blur(12px);z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:0 36px;}
-.nav-counter{font-family:var(--mono);font-size:12px;color:var(--text3);letter-spacing:0.1em;}
-.nav-counter strong{color:var(--gold);font-size:15px;}
+.nav-counter{font-family:var(--mono);font-size:13px;color:var(--text3);letter-spacing:0.1em;}
+.nav-counter strong{color:var(--gold);font-size:16px;}
 .nav-btns{display:flex;gap:12px;align-items:center;}
-.nav-hint{font-family:var(--mono);font-size:10px;color:var(--text4);letter-spacing:0.1em;}
+.nav-hint{font-family:var(--mono);font-size:11px;color:var(--text4);letter-spacing:0.1em;}
 
 /* BUTTONS */
-.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 28px;font-family:var(--mono);font-size:12px;letter-spacing:0.12em;text-transform:uppercase;border:none;cursor:pointer;text-decoration:none;transition:all 0.15s;border-radius:2px;}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 28px;font-family:var(--mono);font-size:13px;letter-spacing:0.12em;text-transform:uppercase;border:none;cursor:pointer;text-decoration:none;transition:all 0.15s;border-radius:2px;}
 .btn-primary{background:var(--gold);color:#0B0F14;font-weight:600;}
 .btn-primary:hover:not(:disabled){background:#e0bc4a;transform:translateY(-1px);}
 .btn-primary:disabled{opacity:0.35;cursor:not-allowed;transform:none !important;}
 .btn-secondary{background:transparent;color:var(--text3);border:1px solid var(--border);}
 .btn-secondary:hover{border-color:rgba(255,255,255,0.2);color:var(--text);}
-.btn-xl{padding:18px 40px;font-size:14px;letter-spacing:0.16em;}
+.btn-xl{padding:18px 40px;font-size:15px;letter-spacing:0.16em;}
 .btn-ghost{background:transparent;color:var(--text4);border:none;padding:8px 16px;}
 .btn-ghost:hover{color:var(--text3);}
-.btn-video{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;background:transparent;border:1px solid rgba(212,175,69,0.22);color:rgba(212,175,69,0.7);cursor:pointer;border-radius:2px;transition:all 0.18s;}
+.btn-video{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;font-family:var(--mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;background:transparent;border:1px solid rgba(212,175,69,0.22);color:rgba(212,175,69,0.7);cursor:pointer;border-radius:2px;transition:all 0.18s;}
 .btn-video:hover{border-color:rgba(212,175,69,0.55);color:var(--gold);background:rgba(212,175,69,0.05);}
 .btn-video-icon{width:16px;height:16px;border-radius:50%;border:1px solid currentColor;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .btn-video-icon::after{content:'';display:block;width:0;height:0;border-top:4px solid transparent;border-bottom:4px solid transparent;border-left:6px solid currentColor;margin-left:1px;}
@@ -62,7 +62,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
 .step.active{display:flex;flex-direction:column;opacity:1;}
 
 /* BADGES */
-.badge{display:inline-block;padding:4px 10px;font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;border-radius:2px;}
+.badge{display:inline-block;padding:4px 10px;font-family:var(--mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;border-radius:2px;}
 .badge-gold{background:rgba(212,175,69,0.12);color:var(--gold);border:1px solid rgba(212,175,69,0.3);}
 .badge-green{background:rgba(91,191,122,0.1);color:var(--green);border:1px solid rgba(91,191,122,0.25);}
 .badge-red{background:rgba(208,70,60,0.1);color:var(--red);border:1px solid rgba(208,70,60,0.3);}
@@ -70,33 +70,33 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
 .badge-neutral{background:rgba(255,255,255,0.05);color:var(--text3);border:1px solid var(--border);}
 
 /* HEADINGS */
-.kicker{font-family:var(--mono);font-size:11px;letter-spacing:0.26em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;}
-.section-title{font-family:var(--syne);font-size:38px;font-weight:800;color:var(--text);letter-spacing:-0.02em;line-height:1.1;margin-bottom:12px;}
-.section-sub{font-size:16px;color:var(--text3);line-height:1.6;}
+.kicker{font-family:var(--mono);font-size:12px;letter-spacing:0.26em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;}
+.section-title{font-family:var(--syne);font-size:42px;font-weight:800;color:var(--text);letter-spacing:-0.02em;line-height:1.1;margin-bottom:12px;}
+.section-sub{font-size:18px;color:var(--text3);line-height:1.6;}
 
 /* KPI */
 .kpi{background:var(--panel);border:1px solid var(--border);padding:20px 18px;}
 .kpi.alert{border-color:rgba(208,70,60,0.3);}
 .kpi.ok{border-color:rgba(91,191,122,0.3);}
-.kpi-lbl{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:8px;}
-.kpi-val{font-family:var(--syne);font-size:34px;font-weight:800;line-height:1;margin-bottom:4px;}
+.kpi-lbl{font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:8px;}
+.kpi-val{font-family:var(--syne);font-size:37px;font-weight:800;line-height:1;margin-bottom:4px;}
 .kpi-val.red{color:var(--red);}
 .kpi-val.gold{color:var(--gold);}
 .kpi-val.green{color:var(--green);}
-.kpi-desc{font-size:13px;color:var(--text3);line-height:1.4;}
+.kpi-desc{font-size:14px;color:var(--text3);line-height:1.4;}
 
 /* START SCREEN */
 .start-bg{flex:1;display:flex;align-items:center;justify-content:center;padding:40px;background:radial-gradient(ellipse at 60% 40%,rgba(212,175,69,0.04) 0%,transparent 65%);}
 .start-card{width:100%;max-width:480px;background:var(--panel);border:1px solid var(--border);padding:52px 48px;box-shadow:0 32px 80px rgba(0,0,0,0.5);}
-.start-logo{font-family:var(--syne);font-size:13px;font-weight:800;letter-spacing:0.14em;color:var(--text3);text-transform:uppercase;margin-bottom:36px;}
+.start-logo{font-family:var(--syne);font-size:14px;font-weight:800;letter-spacing:0.14em;color:var(--text3);text-transform:uppercase;margin-bottom:36px;}
 .start-logo span{color:var(--gold);}
-.start-title{font-family:var(--syne);font-size:28px;font-weight:800;color:var(--text);letter-spacing:-0.02em;line-height:1.15;margin-bottom:8px;}
-.start-sub{font-size:14px;color:var(--text3);line-height:1.6;margin-bottom:36px;}
+.start-title{font-family:var(--syne);font-size:31px;font-weight:800;color:var(--text);letter-spacing:-0.02em;line-height:1.15;margin-bottom:8px;}
+.start-sub{font-size:15px;color:var(--text3);line-height:1.6;margin-bottom:36px;}
 .start-field{margin-bottom:18px;}
-.start-lbl{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:7px;display:block;}
-.start-inp{width:100%;background:var(--bg2);border:1px solid var(--border);padding:12px 14px;font-family:var(--sans);font-size:14px;color:var(--text);outline:none;transition:border-color 0.15s;border-radius:1px;}
+.start-lbl{font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:7px;display:block;}
+.start-inp{width:100%;background:var(--bg2);border:1px solid var(--border);padding:12px 14px;font-family:var(--sans);font-size:15px;color:var(--text);outline:none;transition:border-color 0.15s;border-radius:1px;}
 .start-inp:focus{border-color:rgba(212,175,69,0.45);}
-.start-btn{width:100%;margin-top:28px;padding:18px;font-family:var(--mono);font-size:13px;letter-spacing:0.16em;text-transform:uppercase;background:var(--gold);color:#0B0F14;font-weight:700;border:none;cursor:pointer;transition:all 0.15s;border-radius:2px;}
+.start-btn{width:100%;margin-top:28px;padding:18px;font-family:var(--mono);font-size:14px;letter-spacing:0.16em;text-transform:uppercase;background:var(--gold);color:#0B0F14;font-weight:700;border:none;cursor:pointer;transition:all 0.15s;border-radius:2px;}
 .start-btn:hover:not(:disabled){background:#e0bc4a;transform:translateY(-1px);}
 .start-btn:disabled{opacity:0.35;cursor:not-allowed;}
 
@@ -104,38 +104,38 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
 .s1-container{flex:1;position:relative;background:#000;overflow:hidden;min-height:0;}
 .s1-iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;}
 .s1-overlay{position:absolute;bottom:0;left:0;right:0;padding:48px 72px;background:linear-gradient(0deg,rgba(11,15,20,0.98) 0%,rgba(11,15,20,0.75) 50%,transparent 100%);pointer-events:none;}
-.s1-tag{font-family:var(--mono);font-size:11px;letter-spacing:0.28em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;}
-.s1-headline{font-family:var(--syne);font-size:52px;font-weight:800;color:var(--text);line-height:1.08;letter-spacing:-0.025em;max-width:780px;}
+.s1-tag{font-family:var(--mono);font-size:12px;letter-spacing:0.28em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;}
+.s1-headline{font-family:var(--syne);font-size:57px;font-weight:800;color:var(--text);line-height:1.08;letter-spacing:-0.025em;max-width:780px;}
 .s1-headline em{color:var(--gold);font-style:normal;}
-.s1-sub{font-size:18px;color:var(--text2);max-width:560px;margin-top:16px;line-height:1.6;}
+.s1-sub{font-size:20px;color:var(--text2);max-width:560px;margin-top:16px;line-height:1.6;}
 
 /* QUESTIONNAIRE */
 .q-layout{flex:1;display:grid;grid-template-columns:320px 1fr;min-height:0;}
 .q-left{padding:44px 36px 44px 44px;display:flex;flex-direction:column;justify-content:center;border-right:1px solid var(--border);background:var(--bg2);}
 .q-right{padding:28px 36px 80px;overflow-y:auto;}
 .q-block{background:var(--panel);border:1px solid var(--border);padding:20px 22px;margin-bottom:10px;}
-.q-num{font-family:var(--mono);font-size:9px;color:var(--text4);letter-spacing:0.18em;margin-bottom:6px;}
-.q-text{font-family:var(--syne);font-size:15px;font-weight:600;color:var(--text);margin-bottom:12px;}
+.q-num{font-family:var(--mono);font-size:10px;color:var(--text4);letter-spacing:0.18em;margin-bottom:6px;}
+.q-text{font-family:var(--syne);font-size:16px;font-weight:600;color:var(--text);margin-bottom:12px;}
 .q-opts{display:flex;flex-wrap:wrap;gap:8px;}
-.q-opt{padding:8px 14px;border:1px solid var(--border);font-family:var(--mono);font-size:11px;letter-spacing:0.08em;color:var(--text3);cursor:pointer;transition:all 0.15s;border-radius:2px;}
+.q-opt{padding:8px 14px;border:1px solid var(--border);font-family:var(--mono);font-size:12px;letter-spacing:0.08em;color:var(--text3);cursor:pointer;transition:all 0.15s;border-radius:2px;}
 .q-opt:hover{border-color:rgba(212,175,69,0.4);color:var(--text2);}
 .q-opt.sel{border-color:var(--gold);color:var(--gold);background:var(--gold-bg);}
 
 /* LOCKED CARD */
 .locked-card{background:var(--panel);border:1px solid var(--border);padding:28px 20px;text-align:center;transition:all 0.4s;}
 .locked-card.complete{border-color:rgba(91,191,122,0.4);background:linear-gradient(135deg,rgba(91,191,122,0.04),var(--panel));}
-.locked-icon{font-size:28px;margin-bottom:10px;}
-.locked-lbl{font-family:var(--syne);font-size:17px;font-weight:700;color:var(--text);margin-bottom:6px;}
-.locked-status{font-family:var(--mono);font-size:11px;color:var(--text3);letter-spacing:0.1em;}
+.locked-icon{font-size:31px;margin-bottom:10px;}
+.locked-lbl{font-family:var(--syne);font-size:19px;font-weight:700;color:var(--text);margin-bottom:6px;}
+.locked-status{font-family:var(--mono);font-size:12px;color:var(--text3);letter-spacing:0.1em;}
 
 /* REVEAL */
 .reveal-grid{display:grid;grid-template-columns:1fr 1px 1fr 1px 1fr;background:var(--panel);border:1px solid var(--border);overflow:hidden;}
 .reveal-col{padding:44px 32px;text-align:center;}
 .reveal-divider{background:var(--border);}
-.reveal-lbl{font-family:var(--mono);font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text3);margin-bottom:20px;}
-.reveal-rn{font-family:var(--syne);font-size:80px;font-weight:800;line-height:1;}
-.reveal-scale{font-family:var(--mono);font-size:10px;color:var(--text4);letter-spacing:0.12em;margin-top:4px;}
-.reveal-cat{font-family:var(--syne);font-size:14px;font-weight:700;margin-top:14px;}
+.reveal-lbl{font-family:var(--mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text3);margin-bottom:20px;}
+.reveal-rn{font-family:var(--syne);font-size:88px;font-weight:800;line-height:1;}
+.reveal-scale{font-family:var(--mono);font-size:11px;color:var(--text4);letter-spacing:0.12em;margin-top:4px;}
+.reveal-cat{font-family:var(--syne);font-size:15px;font-weight:700;margin-top:14px;}
 
 /* DIAGNOSIS */
 .diag-tri{display:grid;grid-template-columns:1fr 56px 1fr 56px 1fr;margin-bottom:20px;}
@@ -144,11 +144,11 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
 .diag-col.warn{border-color:rgba(212,175,69,0.35);}
 .diag-col.ok{border-color:rgba(91,191,122,0.35);}
 .diag-arr{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;}
-.diag-rn{font-family:var(--syne);font-size:64px;font-weight:800;line-height:1;}
-.diag-lbl{font-family:var(--mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:12px;}
-.diag-cat{font-family:var(--mono);font-size:10px;letter-spacing:0.1em;margin-top:8px;}
-.diag-gap{font-family:var(--syne);font-size:18px;font-weight:800;}
-.diag-gap-lbl{font-family:var(--mono);font-size:9px;color:var(--text4);letter-spacing:0.08em;text-align:center;line-height:1.4;}
+.diag-rn{font-family:var(--syne);font-size:70px;font-weight:800;line-height:1;}
+.diag-lbl{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:12px;}
+.diag-cat{font-family:var(--mono);font-size:11px;letter-spacing:0.1em;margin-top:8px;}
+.diag-gap{font-family:var(--syne);font-size:20px;font-weight:800;}
+.diag-gap-lbl{font-family:var(--mono);font-size:10px;color:var(--text4);letter-spacing:0.08em;text-align:center;line-height:1.4;}
 
 /* COMPARISON */
 .comp-row{display:grid;grid-template-columns:1fr 160px 1fr;border-bottom:1px solid var(--border);}
@@ -156,9 +156,9 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
 .comp-left-cell{padding:18px 20px;text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:8px;background:rgba(208,70,60,0.04);}
 .comp-center-cell{padding:18px 14px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;background:var(--bg2);border-left:1px solid var(--border);border-right:1px solid var(--border);}
 .comp-right-cell{padding:18px 20px;text-align:left;display:flex;flex-direction:column;align-items:flex-start;gap:8px;background:rgba(91,191,122,0.04);}
-.comp-val-big{font-family:var(--syne);font-size:30px;font-weight:800;line-height:1;}
-.comp-metric-name{font-family:var(--syne);font-size:13px;font-weight:700;color:var(--text);}
-.comp-delta{font-family:var(--mono);font-size:10px;color:var(--green);letter-spacing:0.1em;}
+.comp-val-big{font-family:var(--syne);font-size:33px;font-weight:800;line-height:1;}
+.comp-metric-name{font-family:var(--syne);font-size:14px;font-weight:700;color:var(--text);}
+.comp-delta{font-family:var(--mono);font-size:11px;color:var(--green);letter-spacing:0.1em;}
 
 /* HPC SOLUTION */
 .hpc-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
@@ -169,99 +169,99 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
 .hpc-green::before{background:var(--green);}
 .hpc-gold{border-color:rgba(212,175,69,0.35);}
 .hpc-green{border-color:rgba(91,191,122,0.35);}
-.hpc-tag{font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:6px;}
-.hpc-name{font-family:var(--syne);font-size:42px;font-weight:800;letter-spacing:-0.03em;line-height:1;margin-bottom:4px;}
-.hpc-tagline{font-family:var(--mono);font-size:11px;letter-spacing:0.08em;color:var(--text3);margin-bottom:20px;}
-.hpc-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:14px;}
+.hpc-tag{font-family:var(--mono);font-size:11px;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:6px;}
+.hpc-name{font-family:var(--syne);font-size:46px;font-weight:800;letter-spacing:-0.03em;line-height:1;margin-bottom:4px;}
+.hpc-tagline{font-family:var(--mono);font-size:12px;letter-spacing:0.08em;color:var(--text3);margin-bottom:20px;}
+.hpc-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:15px;}
 .hpc-row:last-child{border-bottom:none;}
 .hpc-row-lbl{color:var(--text3);}
 .hpc-row-val{font-family:var(--mono);font-weight:600;}
 .hpc-badge-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;}
-.rec-tag{position:absolute;top:14px;right:14px;font-family:var(--mono);font-size:9px;letter-spacing:0.16em;background:rgba(91,191,122,0.15);color:var(--green);padding:3px 8px;border:1px solid rgba(91,191,122,0.3);}
+.rec-tag{position:absolute;top:14px;right:14px;font-family:var(--mono);font-size:10px;letter-spacing:0.16em;background:rgba(91,191,122,0.15);color:var(--green);padding:3px 8px;border:1px solid rgba(91,191,122,0.3);}
 
 /* SIMULATION */
 .sim-layout{flex:1;display:grid;grid-template-columns:320px 1fr;min-height:0;}
 .sim-ctrl{background:var(--bg2);border-right:1px solid var(--border);padding:20px 22px;overflow-y:auto;display:flex;flex-direction:column;gap:18px;}
-.slider-lbl{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:6px;}
-.slider-val{font-family:var(--syne);font-size:38px;font-weight:800;line-height:1;margin-bottom:8px;}
+.slider-lbl{font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:6px;}
+.slider-val{font-family:var(--syne);font-size:42px;font-weight:800;line-height:1;margin-bottom:8px;}
 .slider-val.hpc11-color{color:var(--gold);}
 .slider-val.hpc22-color{color:var(--green);}
 input[type=range]{width:100%;-webkit-appearance:none;height:4px;background:rgba(255,255,255,0.1);border-radius:2px;outline:none;margin-bottom:4px;cursor:pointer;}
 input[type=range].hpc11::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--gold);cursor:pointer;box-shadow:0 0 8px rgba(212,175,69,0.5);}
 input[type=range].hpc22::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--green);cursor:pointer;box-shadow:0 0 8px rgba(91,191,122,0.5);}
-.slider-range-lbl{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--text4);}
+.slider-range-lbl{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--text4);}
 .remain-box{background:var(--panel);border:1px solid var(--border);padding:12px 14px;}
-.remain-lbl{font-family:var(--mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text3);margin-bottom:4px;}
-.remain-val{font-family:var(--syne);font-size:24px;font-weight:700;}
+.remain-lbl{font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text3);margin-bottom:4px;}
+.remain-val{font-family:var(--syne);font-size:26px;font-weight:700;}
 .status-checks{display:flex;flex-direction:column;gap:8px;}
-.status-check{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text2);}
+.status-check{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--text2);}
 .status-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;transition:background 0.3s;}
 .sim-results{padding:24px 28px;overflow-y:auto;display:flex;flex-direction:column;gap:18px;}
 .ba-grid{display:grid;grid-template-columns:1fr auto 1fr;}
 .ba-col{background:var(--panel);border:1px solid var(--border);padding:22px 20px;}
 .ba-col.after{border-color:rgba(91,191,122,0.3);background:linear-gradient(135deg,var(--panel),rgba(91,191,122,0.03));}
-.ba-head{font-family:var(--mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:10px;}
-.ba-rn{font-family:var(--syne);font-size:64px;font-weight:800;line-height:1;letter-spacing:-0.03em;margin-bottom:2px;}
-.ba-rn-lbl{font-family:var(--mono);font-size:9px;color:var(--text4);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:16px;}
-.ba-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:14px;}
+.ba-head{font-family:var(--mono);font-size:11px;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:10px;}
+.ba-rn{font-family:var(--syne);font-size:70px;font-weight:800;line-height:1;letter-spacing:-0.03em;margin-bottom:2px;}
+.ba-rn-lbl{font-family:var(--mono);font-size:10px;color:var(--text4);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:16px;}
+.ba-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:15px;}
 .ba-row:last-child{border-bottom:none;}
 .ba-row-lbl{color:var(--text3);}
 .ba-row-val{font-family:var(--mono);font-weight:600;}
 .ba-arrow-col{width:52px;background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;}
-.ba-arrow-sym{font-size:20px;color:var(--green);}
-.ba-arrow-lbl{font-family:var(--mono);font-size:9px;color:var(--text4);text-align:center;letter-spacing:0.08em;}
+.ba-arrow-sym{font-size:22px;color:var(--green);}
+.ba-arrow-lbl{font-family:var(--mono);font-size:10px;color:var(--text4);text-align:center;letter-spacing:0.08em;}
 .delta-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
 .delta-card{background:var(--panel);border:1px solid rgba(91,191,122,0.18);padding:12px;}
-.delta-lbl{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text3);margin-bottom:4px;}
-.delta-prev{font-family:var(--mono);font-size:11px;color:var(--red);text-decoration:line-through;margin-bottom:2px;}
-.delta-now{font-family:var(--syne);font-size:22px;font-weight:700;color:var(--green);line-height:1;}
-.delta-chg{font-family:var(--mono);font-size:10px;color:var(--green);margin-top:3px;}
+.delta-lbl{font-family:var(--mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text3);margin-bottom:4px;}
+.delta-prev{font-family:var(--mono);font-size:12px;color:var(--red);text-decoration:line-through;margin-bottom:2px;}
+.delta-now{font-family:var(--syne);font-size:24px;font-weight:700;color:var(--green);line-height:1;}
+.delta-chg{font-family:var(--mono);font-size:11px;color:var(--green);margin-top:3px;}
 .proj-bar-wrap{background:var(--panel);border:1px solid var(--border);padding:18px 22px;}
-.proj-title{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:14px;}
+.proj-title{font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:14px;}
 
 /* MODEL CARD */
 .model-card{background:var(--panel);border:1px solid var(--border);padding:22px 20px;cursor:pointer;transition:all 0.15s;}
 .model-card:hover{transform:translateY(-2px);border-color:rgba(212,175,69,0.3);}
 .model-card.sel{border-color:var(--gold);background:var(--gold-bg);}
-.model-name{font-family:var(--syne);font-size:17px;font-weight:700;color:var(--text);margin-bottom:4px;}
-.model-desc{font-size:13px;color:var(--text3);line-height:1.5;}
+.model-name{font-family:var(--syne);font-size:19px;font-weight:700;color:var(--text);margin-bottom:4px;}
+.model-desc{font-size:14px;color:var(--text3);line-height:1.5;}
 
 /* SCORE RING */
 .score-ring{width:140px;height:140px;border-radius:50%;border:5px solid var(--green);display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle,rgba(91,191,122,0.12),transparent 70%);box-shadow:0 0 50px rgba(91,191,122,0.18);}
-.score-ring-val{font-family:var(--syne);font-size:52px;font-weight:800;color:var(--green);line-height:1;}
-.score-ring-lbl{font-family:var(--mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text4);margin-top:2px;}
+.score-ring-val{font-family:var(--syne);font-size:57px;font-weight:800;color:var(--green);line-height:1;}
+.score-ring-lbl{font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text4);margin-top:2px;}
 
 /* MODAL */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:3000;display:none;align-items:center;justify-content:center;backdrop-filter:blur(6px);}
 .modal-overlay.open{display:flex;}
 .modal-box{background:var(--panel);border:1px solid var(--border);width:480px;max-width:90vw;box-shadow:0 24px 80px rgba(0,0,0,0.6);}
 .modal-head{padding:20px 26px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
-.modal-title{font-family:var(--syne);font-size:18px;font-weight:700;color:var(--text);}
-.modal-close{background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer;padding:2px 8px;line-height:1;}
+.modal-title{font-family:var(--syne);font-size:20px;font-weight:700;color:var(--text);}
+.modal-close{background:none;border:none;color:var(--text3);font-size:22px;cursor:pointer;padding:2px 8px;line-height:1;}
 .modal-close:hover{color:var(--text);}
 .modal-body{padding:26px;}
 .field-grp{margin-bottom:18px;}
-.field-lbl{font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text3);margin-bottom:7px;display:block;}
-.field-inp{width:100%;background:var(--bg2);border:1px solid var(--border);padding:11px 14px;font-family:var(--sans);font-size:14px;color:var(--text);outline:none;transition:border-color 0.15s;}
+.field-lbl{font-family:var(--mono);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text3);margin-bottom:7px;display:block;}
+.field-inp{width:100%;background:var(--bg2);border:1px solid var(--border);padding:11px 14px;font-family:var(--sans);font-size:15px;color:var(--text);outline:none;transition:border-color 0.15s;}
 .field-inp:focus{border-color:rgba(212,175,69,0.45);}
 .modal-foot{padding:14px 26px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px;}
 .video-modal-box{background:var(--panel);border:1px solid var(--border);width:800px;max-width:92vw;box-shadow:0 32px 100px rgba(0,0,0,0.7);}
 .video-modal-head{padding:16px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
-.video-modal-title{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);}
+.video-modal-title{font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);}
 .video-modal-body{padding:0;line-height:0;position:relative;background:#000;}
 .video-modal-body iframe{width:100%;aspect-ratio:16/9;border:none;display:block;}
 
 /* JIM */
 .jim-trigger{position:fixed;bottom:88px;right:24px;z-index:2000;display:flex;align-items:center;gap:12px;background:var(--panel);border:1px solid var(--border);padding:10px 16px;cursor:pointer;text-decoration:none;transition:all 0.15s;box-shadow:0 8px 32px rgba(0,0,0,0.5);}
 .jim-trigger:hover{border-color:var(--gold);transform:translateY(-2px);}
-.jim-av{width:32px;height:32px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-family:var(--syne);font-weight:800;font-size:14px;color:#0B0F14;flex-shrink:0;}
-.jim-text-main{font-family:var(--syne);font-size:13px;font-weight:700;color:var(--text);line-height:1;}
-.jim-text-sub{font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:0.1em;margin-top:2px;}
+.jim-av{width:32px;height:32px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-family:var(--syne);font-weight:800;font-size:15px;color:#0B0F14;flex-shrink:0;}
+.jim-text-main{font-family:var(--syne);font-size:14px;font-weight:700;color:var(--text);line-height:1;}
+.jim-text-sub{font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:0.1em;margin-top:2px;}
 .jim-panel{position:fixed;bottom:88px;right:24px;width:340px;background:var(--panel);border:1px solid var(--border);z-index:1999;box-shadow:0 12px 48px rgba(0,0,0,0.6);display:none;flex-direction:column;}
 .jim-panel.open{display:flex;}
 .jim-ph{display:flex;align-items:center;gap:12px;padding:16px 18px;border-bottom:1px solid var(--border);}
 .jim-suggs{padding:8px;display:flex;flex-direction:column;gap:3px;}
-.jim-sug{display:block;padding:9px 12px;font-size:13px;color:var(--text2);border:1px solid transparent;transition:all 0.12s;border-radius:2px;cursor:pointer;}
+.jim-sug{display:block;padding:9px 12px;font-size:14px;color:var(--text2);border:1px solid transparent;transition:all 0.12s;border-radius:2px;cursor:pointer;}
 .jim-sug:hover{background:var(--bg2);border-color:var(--border);color:var(--text);}
 
 /* ══════════════════════════════════════
@@ -272,34 +272,34 @@ input[type=range].hpc22::-webkit-slider-thumb{-webkit-appearance:none;width:18px
 .tre-right{padding:28px 36px;overflow-y:auto;display:flex;flex-direction:column;gap:12px;background:var(--bg2);}
 .tre-goal-wrap{display:flex;align-items:baseline;gap:8px;border-bottom:2px solid var(--border);padding-bottom:8px;transition:border-color 0.25s;}
 .tre-goal-wrap:focus-within{border-color:rgba(212,175,69,0.55);}
-.tre-goal-symbol{font-family:var(--syne);font-size:32px;font-weight:700;color:var(--text3);}
-.tre-goal-input{flex:1;background:transparent;border:none;font-family:var(--syne);font-size:44px;font-weight:800;color:var(--gold);outline:none;width:100%;min-width:0;}
+.tre-goal-symbol{font-family:var(--syne);font-size:35px;font-weight:700;color:var(--text3);}
+.tre-goal-input{flex:1;background:transparent;border:none;font-family:var(--syne);font-size:48px;font-weight:800;color:var(--gold);outline:none;width:100%;min-width:0;}
 input[type=range].tre-slider{-webkit-appearance:none;appearance:none;width:100%;height:3px;background:rgba(255,255,255,0.1);border-radius:2px;outline:none;cursor:pointer;margin:8px 0 4px;}
 input[type=range].tre-slider::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--gold);border:2px solid var(--bg);cursor:pointer;box-shadow:0 0 8px rgba(212,175,69,0.45);}
 input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--gold);border:2px solid var(--bg);cursor:pointer;}
-.tre-slider-ends{display:flex;justify-content:space-between;font-family:var(--mono);font-size:9px;color:var(--text4);margin-top:2px;}
+.tre-slider-ends{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--text4);margin-top:2px;}
 .tre-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .tre-card{background:var(--panel);border:1px solid var(--border);padding:14px 16px;transition:border-color 0.3s;}
-.tre-card-lbl{font-family:var(--mono);font-size:8px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text4);margin-bottom:6px;}
-.tre-card-val{font-family:var(--syne);font-size:22px;font-weight:800;color:var(--text);transition:color 0.35s;line-height:1.1;}
-.tre-card-sub{font-family:var(--mono);font-size:9px;color:var(--text4);margin-top:4px;line-height:1.4;}
+.tre-card-lbl{font-family:var(--mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text4);margin-bottom:6px;}
+.tre-card-val{font-family:var(--syne);font-size:24px;font-weight:800;color:var(--text);transition:color 0.35s;line-height:1.1;}
+.tre-card-sub{font-family:var(--mono);font-size:10px;color:var(--text4);margin-top:4px;line-height:1.4;}
 .tre-rn-card{background:var(--panel);border:1px solid var(--border);padding:18px 20px;display:flex;align-items:center;gap:18px;transition:border-color 0.35s;}
 .tre-rn-ring{width:70px;height:70px;border-radius:50%;border:3px solid var(--text4);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;transition:border-color 0.35s,background 0.35s;}
-.tre-rn-ring-val{font-family:var(--syne);font-size:22px;font-weight:800;line-height:1;transition:color 0.35s;}
-.tre-rn-ring-lbl{font-family:var(--mono);font-size:7px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text4);margin-top:1px;}
+.tre-rn-ring-val{font-family:var(--syne);font-size:24px;font-weight:800;line-height:1;transition:color 0.35s;}
+.tre-rn-ring-lbl{font-family:var(--mono);font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text4);margin-top:1px;}
 .tre-rn-body{flex:1;}
-.tre-rn-title{font-family:var(--syne);font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px;}
-.tre-rn-desc{font-size:12px;color:var(--text3);line-height:1.5;}
-.tre-nitrogen{font-family:var(--mono);font-size:8px;color:var(--text4);letter-spacing:0.1em;margin-top:4px;}
+.tre-rn-title{font-family:var(--syne);font-size:14px;font-weight:700;color:var(--text);margin-bottom:3px;}
+.tre-rn-desc{font-size:13px;color:var(--text3);line-height:1.5;}
+.tre-nitrogen{font-family:var(--mono);font-size:9px;color:var(--text4);letter-spacing:0.1em;margin-top:4px;}
 .tre-alert{background:rgba(208,70,60,0.05);border:1px solid rgba(208,70,60,0.25);padding:16px 20px;margin-top:20px;display:none;animation:fadeInSlide 0.25s ease;}
 .tre-alert.visible{display:block;}
 @keyframes fadeInSlide{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
-.tre-alert-title{font-family:var(--mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--red);margin-bottom:8px;}
-.tre-alert-body{font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:12px;}
+.tre-alert-title{font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--red);margin-bottom:8px;}
+.tre-alert-body{font-size:14px;color:var(--text2);line-height:1.6;margin-bottom:12px;}
 .tre-alert-btns{display:flex;gap:8px;}
-.tre-alert-confirm{font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;padding:8px 16px;background:rgba(208,70,60,0.12);border:1px solid rgba(208,70,60,0.4);color:var(--red);cursor:pointer;transition:all 0.15s;}
+.tre-alert-confirm{font-family:var(--mono);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;padding:8px 16px;background:rgba(208,70,60,0.12);border:1px solid rgba(208,70,60,0.4);color:var(--red);cursor:pointer;transition:all 0.15s;}
 .tre-alert-confirm:hover{background:rgba(208,70,60,0.2);}
-.tre-alert-adjust{font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;padding:8px 16px;background:transparent;border:1px solid var(--border);color:var(--text3);cursor:pointer;transition:all 0.15s;}
+.tre-alert-adjust{font-family:var(--mono);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;padding:8px 16px;background:transparent;border:1px solid var(--border);color:var(--text3);cursor:pointer;transition:all 0.15s;}
 .tre-alert-adjust:hover{border-color:rgba(255,255,255,0.2);color:var(--text);}
 .tre-risk-low{color:var(--green);}
 .tre-risk-mid{color:var(--gold);}
@@ -309,7 +309,7 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
 .tre-ring-mid{border-color:var(--gold);background:rgba(212,175,69,0.08);}
 .tre-ring-high{border-color:var(--orange);background:rgba(201,120,48,0.08);}
 .tre-ring-vhigh{border-color:var(--red);background:rgba(208,70,60,0.08);}
-.tre-microcopy{font-family:var(--mono);font-size:10px;color:var(--text4);line-height:1.7;padding:14px 0;border-top:1px solid var(--border);letter-spacing:0.05em;}
+.tre-microcopy{font-family:var(--mono);font-size:11px;color:var(--text4);line-height:1.7;padding:14px 0;border-top:1px solid var(--border);letter-spacing:0.05em;}
 .tre-confirm-area{margin-top:20px;}
 
 /* ══════════════════════════════════════
@@ -318,46 +318,46 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
 .ace-overlay{position:fixed;inset:0;z-index:4000;display:none;flex-direction:column;background:var(--bg);overflow:hidden;}
 .ace-overlay.open{display:flex;}
 .ace-header{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:13px 28px;border-bottom:1px solid var(--border);background:rgba(11,15,20,0.98);}
-.ace-title{font-family:var(--syne);font-size:16px;font-weight:700;color:var(--text);}
-.ace-subtitle{font-family:var(--mono);font-size:8px;letter-spacing:0.15em;text-transform:uppercase;color:var(--text4);margin-top:2px;}
-.ace-close-btn{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;background:transparent;border:1px solid var(--border);color:var(--text3);padding:7px 14px;cursor:pointer;transition:all 0.15s;}
+.ace-title{font-family:var(--syne);font-size:18px;font-weight:700;color:var(--text);}
+.ace-subtitle{font-family:var(--mono);font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--text4);margin-top:2px;}
+.ace-close-btn{font-family:var(--mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;background:transparent;border:1px solid var(--border);color:var(--text3);padding:7px 14px;cursor:pointer;transition:all 0.15s;}
 .ace-close-btn:hover{border-color:rgba(255,255,255,0.25);color:var(--text);}
 .ace-tabs-bar{flex-shrink:0;display:flex;padding:0 28px;border-bottom:1px solid var(--border);background:var(--bg2);}
-.ace-tab{font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;padding:11px 16px;color:var(--text4);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.15s;}
+.ace-tab{font-family:var(--mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;padding:11px 16px;color:var(--text4);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.15s;}
 .ace-tab:hover{color:var(--text3);}
 .ace-tab.active{color:var(--gold);border-bottom-color:var(--gold);}
 .ace-body{flex:1;display:flex;overflow:hidden;min-height:0;}
 .ace-sidebar{flex-shrink:0;width:210px;padding:18px 16px;border-right:1px solid var(--border);overflow-y:auto;background:var(--panel);}
-.ace-sidebar-title{font-family:var(--mono);font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;}
-.ace-chip{display:flex;align-items:center;gap:7px;padding:4px 0;cursor:pointer;font-size:12px;color:var(--text3);transition:color 0.15s;user-select:none;}
+.ace-sidebar-title{font-family:var(--mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;}
+.ace-chip{display:flex;align-items:center;gap:7px;padding:4px 0;cursor:pointer;font-size:13px;color:var(--text3);transition:color 0.15s;user-select:none;}
 .ace-chip:hover{color:var(--text);}
 .ace-chip-check{width:12px;height:12px;border:1.5px solid var(--text4);border-radius:1px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.15s;}
 .ace-chip.on .ace-chip-check{background:var(--gold);border-color:var(--gold);}
-.ace-chip.on .ace-chip-check::after{content:'✓';font-size:8px;color:#0B0F14;font-weight:700;line-height:1;}
+.ace-chip.on .ace-chip-check::after{content:'✓';font-size:9px;color:#0B0F14;font-weight:700;line-height:1;}
 .ace-chip-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
 .ace-chip-sep{height:1px;background:var(--border);margin:8px 0;}
-.ace-group-lbl{font-family:var(--mono);font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text4);margin-top:10px;margin-bottom:4px;}
+.ace-group-lbl{font-family:var(--mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text4);margin-top:10px;margin-bottom:4px;}
 .ace-main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
 .ace-chart-area{flex:1;display:flex;flex-direction:column;padding:20px 24px;overflow:hidden;}
-.ace-microcopy{font-family:var(--mono);font-size:9px;color:var(--text4);margin-bottom:10px;letter-spacing:0.06em;}
+.ace-microcopy{font-family:var(--mono);font-size:10px;color:var(--text4);margin-bottom:10px;letter-spacing:0.06em;}
 .ace-chart-wrap{flex:1;min-height:0;position:relative;overflow:hidden;}
 .ace-insight-bar{flex-shrink:0;display:flex;align-items:flex-start;justify-content:space-between;gap:20px;padding:10px 24px;border-top:1px solid var(--border);background:var(--bg2);}
-.ace-insight-text{font-family:var(--mono);font-size:10px;color:var(--text3);line-height:1.6;max-width:580px;letter-spacing:0.04em;}
-.ace-nitrogen-lbl{font-family:var(--mono);font-size:8px;color:var(--text4);letter-spacing:0.1em;white-space:nowrap;margin-top:2px;flex-shrink:0;}
+.ace-insight-text{font-family:var(--mono);font-size:11px;color:var(--text3);line-height:1.6;max-width:580px;letter-spacing:0.04em;}
+.ace-nitrogen-lbl{font-family:var(--mono);font-size:9px;color:var(--text4);letter-spacing:0.1em;white-space:nowrap;margin-top:2px;flex-shrink:0;}
 .ace-compliance-bar{flex-shrink:0;padding:8px 24px;border-top:1px solid var(--border);background:var(--bg2);}
-.ace-compliance-bar p{font-family:var(--mono);font-size:8px;color:var(--text4);letter-spacing:0.05em;line-height:1.7;}
+.ace-compliance-bar p{font-family:var(--mono);font-size:9px;color:var(--text4);letter-spacing:0.05em;line-height:1.7;}
 .ace-tooltip{position:fixed;pointer-events:none;background:var(--panel);border:1px solid var(--border);padding:12px 16px;min-width:190px;box-shadow:0 8px 40px rgba(0,0,0,0.6);z-index:5000;display:none;border-radius:2px;}
-.ace-tooltip-ticker{font-family:var(--syne);font-size:16px;font-weight:800;color:var(--text);}
-.ace-tooltip-name{font-family:var(--mono);font-size:9px;color:var(--text4);margin-bottom:8px;letter-spacing:0.05em;}
-.ace-tooltip-row{display:flex;justify-content:space-between;gap:24px;font-family:var(--mono);font-size:10px;padding:2px 0;}
+.ace-tooltip-ticker{font-family:var(--syne);font-size:18px;font-weight:800;color:var(--text);}
+.ace-tooltip-name{font-family:var(--mono);font-size:10px;color:var(--text4);margin-bottom:8px;letter-spacing:0.05em;}
+.ace-tooltip-row{display:flex;justify-content:space-between;gap:24px;font-family:var(--mono);font-size:11px;padding:2px 0;}
 .ace-tooltip-lbl{color:var(--text4);}
 .ace-tooltip-val{color:var(--text2);font-weight:500;}
 .ace-tbl-wrap{flex:1;overflow:auto;}
 .ace-tbl{width:100%;border-collapse:collapse;}
-.ace-tbl th{font-family:var(--mono);font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text4);padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);cursor:pointer;white-space:nowrap;background:var(--panel);position:sticky;top:0;}
+.ace-tbl th{font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text4);padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);cursor:pointer;white-space:nowrap;background:var(--panel);position:sticky;top:0;}
 .ace-tbl th:hover{color:var(--text3);}
 .ace-tbl th span{opacity:0.5;margin-left:3px;}
-.ace-tbl td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.035);font-family:var(--mono);font-size:11px;color:var(--text2);}
+.ace-tbl td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.035);font-family:var(--mono);font-size:12px;color:var(--text2);}
 .ace-tbl tr:hover td{background:rgba(255,255,255,0.02);}
 .ace-tbl .harp-row td{background:rgba(212,175,69,0.04);}
 .ace-tbl .harp-row td:first-child{border-left:2px solid rgba(212,175,69,0.6);}
@@ -370,18 +370,18 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
 ══════════════════════════════════════ */
 .ree-bar{flex-shrink:0;background:rgba(212,175,69,0.025);border-bottom:1px solid var(--border);padding:12px 28px;display:flex;align-items:center;gap:24px;flex-wrap:wrap;}
 .ree-title-col{flex-shrink:0;min-width:160px;}
-.ree-lbl{font-family:var(--mono);font-size:8px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:3px;}
-.ree-title{font-family:var(--syne);font-size:13px;font-weight:700;color:var(--text);line-height:1.2;}
+.ree-lbl{font-family:var(--mono);font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:3px;}
+.ree-title{font-family:var(--syne);font-size:14px;font-weight:700;color:var(--text);line-height:1.2;}
 .ree-slider-col{flex:1;min-width:180px;max-width:320px;}
 .ree-slider-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px;}
-.ree-slider-lbl{font-family:var(--mono);font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text3);}
-.ree-slider-val{font-family:var(--syne);font-size:15px;font-weight:800;color:var(--gold);}
-.ree-slider-marks{display:flex;justify-content:space-between;font-family:var(--mono);font-size:8px;color:var(--text4);margin-top:2px;}
+.ree-slider-lbl{font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text3);}
+.ree-slider-val{font-family:var(--syne);font-size:16px;font-weight:800;color:var(--gold);}
+.ree-slider-marks{display:flex;justify-content:space-between;font-family:var(--mono);font-size:9px;color:var(--text4);margin-top:2px;}
 .ree-outs{display:flex;gap:8px;flex-shrink:0;}
 .ree-out{background:var(--panel);border:1px solid var(--border);padding:8px 13px;min-width:90px;}
-.ree-out-lbl{font-family:var(--mono);font-size:7px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text4);margin-bottom:3px;}
-.ree-out-val{font-family:var(--syne);font-size:17px;font-weight:800;color:var(--gold);line-height:1;}
-.ree-micro{font-family:var(--mono);font-size:9px;color:var(--text4);line-height:1.55;flex-shrink:0;max-width:190px;display:none;}
+.ree-out-lbl{font-family:var(--mono);font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text4);margin-bottom:3px;}
+.ree-out-val{font-family:var(--syne);font-size:19px;font-weight:800;color:var(--gold);line-height:1;}
+.ree-micro{font-family:var(--mono);font-size:10px;color:var(--text4);line-height:1.55;flex-shrink:0;max-width:190px;display:none;}
 @media(min-width:1200px){.ree-micro{display:block;}}
 
 /* ══════════════════════════════════════
@@ -393,24 +393,24 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
 .pae-ref-card{background:var(--panel);border:1px solid var(--border);padding:12px 14px;cursor:pointer;transition:border-color 0.18s,background 0.18s;flex-shrink:0;}
 .pae-ref-card:hover{border-color:rgba(212,175,69,0.35);}
 .pae-ref-card.active{border-color:var(--gold);background:rgba(212,175,69,0.06);}
-.pae-ref-lbl{font-family:var(--mono);font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text4);margin-bottom:3px;}
-.pae-ref-rn{font-family:var(--syne);font-size:38px;font-weight:800;line-height:1;margin-bottom:1px;transition:color 0.25s;}
-.pae-ref-sub{font-family:var(--mono);font-size:9px;color:var(--text3);}
+.pae-ref-lbl{font-family:var(--mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text4);margin-bottom:3px;}
+.pae-ref-rn{font-family:var(--syne);font-size:42px;font-weight:800;line-height:1;margin-bottom:1px;transition:color 0.25s;}
+.pae-ref-sub{font-family:var(--mono);font-size:10px;color:var(--text3);}
 .pae-rn-main-card{background:var(--panel);border:1px solid var(--border);padding:16px 20px;display:flex;align-items:center;gap:20px;transition:border-color 0.3s;flex-shrink:0;}
-.pae-rn-num{font-family:var(--syne);font-size:58px;font-weight:800;line-height:1;transition:color 0.3s;}
+.pae-rn-num{font-family:var(--syne);font-size:64px;font-weight:800;line-height:1;transition:color 0.3s;}
 .pae-metrics{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;flex-shrink:0;}
 .pae-metric{background:var(--panel);border:1px solid var(--border);padding:11px 13px;transition:border-color 0.3s;}
-.pae-metric-lbl{font-family:var(--mono);font-size:7px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text4);margin-bottom:4px;}
-.pae-metric-val{font-family:var(--syne);font-size:20px;font-weight:800;line-height:1;transition:color 0.3s;}
-.pae-badge-mis{display:inline-flex;align-items:center;gap:4px;padding:4px 9px;background:rgba(208,70,60,0.08);border:1px solid rgba(208,70,60,0.28);font-family:var(--mono);font-size:8px;letter-spacing:0.13em;text-transform:uppercase;color:var(--red);}
-.pae-badge-ok{display:inline-flex;align-items:center;gap:4px;padding:4px 9px;background:rgba(91,191,122,0.06);border:1px solid rgba(91,191,122,0.25);font-family:var(--mono);font-size:8px;letter-spacing:0.13em;text-transform:uppercase;color:var(--green);}
+.pae-metric-lbl{font-family:var(--mono);font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text4);margin-bottom:4px;}
+.pae-metric-val{font-family:var(--syne);font-size:22px;font-weight:800;line-height:1;transition:color 0.3s;}
+.pae-badge-mis{display:inline-flex;align-items:center;gap:4px;padding:4px 9px;background:rgba(208,70,60,0.08);border:1px solid rgba(208,70,60,0.28);font-family:var(--mono);font-size:9px;letter-spacing:0.13em;text-transform:uppercase;color:var(--red);}
+.pae-badge-ok{display:inline-flex;align-items:center;gap:4px;padding:4px 9px;background:rgba(91,191,122,0.06);border:1px solid rgba(91,191,122,0.25);font-family:var(--mono);font-size:9px;letter-spacing:0.13em;text-transform:uppercase;color:var(--green);}
 .pae-alert{background:rgba(208,70,60,0.05);border:1px solid rgba(208,70,60,0.22);padding:12px 16px;display:none;animation:fadeInSlide 0.25s ease;}
 .pae-alert.visible{display:block;}
-.pae-alert-title{font-family:var(--mono);font-size:8px;letter-spacing:0.16em;text-transform:uppercase;color:var(--red);margin-bottom:7px;}
+.pae-alert-title{font-family:var(--mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--red);margin-bottom:7px;}
 .pae-alert-btns{display:flex;gap:7px;margin-top:10px;}
-.pae-btn-confirm{font-family:var(--mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;padding:7px 13px;background:rgba(208,70,60,0.1);border:1px solid rgba(208,70,60,0.35);color:var(--red);cursor:pointer;transition:all 0.15s;}
+.pae-btn-confirm{font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;padding:7px 13px;background:rgba(208,70,60,0.1);border:1px solid rgba(208,70,60,0.35);color:var(--red);cursor:pointer;transition:all 0.15s;}
 .pae-btn-confirm:hover{background:rgba(208,70,60,0.2);}
-.pae-btn-adjust{font-family:var(--mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;padding:7px 13px;background:transparent;border:1px solid var(--border);color:var(--text3);cursor:pointer;transition:all 0.15s;}
+.pae-btn-adjust{font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;padding:7px 13px;background:transparent;border:1px solid var(--border);color:var(--text3);cursor:pointer;transition:all 0.15s;}
 .pae-btn-adjust:hover{border-color:rgba(255,255,255,0.18);color:var(--text);}
 @keyframes paeCountUp{from{opacity:0.4;transform:scale(0.97);}to{opacity:1;transform:scale(1);}}
 .pae-counting{animation:paeCountUp 0.35s ease;}
@@ -447,7 +447,7 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
   <div class="start-bg">
     <div class="start-card">
       <div class="start-logo">HARPIAN <span>·</span> Intelligence Terminal</div>
-      <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;">Before We Begin</div>
+      <div style="font-family:var(--mono);font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;">Before We Begin</div>
       <div class="start-title">Set up your<br>session.</div>
       <div class="start-sub">Enter the details below to personalise this guided presentation for your client.</div>
       <div class="start-field">
@@ -459,10 +459,10 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
         <input type="text" id="sp-manager-name" class="start-inp" placeholder="e.g. John Hartwell" oninput="updateNextBtn()">
       </div>
       <div class="start-field" style="margin-bottom:0;">
-        <label class="start-lbl">Contact Email <span style="color:var(--text4);font-size:9px;">(optional)</span></label>
+        <label class="start-lbl">Contact Email <span style="color:var(--text4);font-size:10px;">(optional)</span></label>
         <input type="email" id="sp-email" class="start-inp" placeholder="manager@familyoffice.com">
       </div>
-      <div id="sp-error" style="display:none;margin-top:14px;font-family:var(--mono);font-size:11px;color:var(--red);letter-spacing:0.08em;">Please fill in Family Office Name and Manager Name.</div>
+      <div id="sp-error" style="display:none;margin-top:14px;font-family:var(--mono);font-size:12px;color:var(--red);letter-spacing:0.08em;">Please fill in Family Office Name and Manager Name.</div>
       <button class="start-btn" id="sp-start-btn" onclick="startPresentation()" disabled>Start Guided Presentation →</button>
     </div>
   </div>
@@ -487,21 +487,21 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
   <div class="q-layout">
     <div class="q-left">
       <div class="kicker">Step 3 · Family Office</div>
-      <div class="section-title" style="font-size:24px;margin-bottom:10px;">Family Office<br>Mandate</div>
-      <div class="section-sub" style="font-size:13px;margin-bottom:22px;">13 institutional questions. The FO Risk Score will be revealed at the end of collection.</div>
+      <div class="section-title" style="font-size:26px;margin-bottom:10px;">Family Office<br>Mandate</div>
+      <div class="section-sub" style="font-size:14px;margin-bottom:22px;">13 institutional questions. The FO Risk Score will be revealed at the end of collection.</div>
       <div class="locked-card" id="fo-locked">
         <div class="locked-icon" id="fo-locked-icon">🔒</div>
         <div class="locked-lbl">FO Risk Score</div>
         <div class="locked-status" id="fo-locked-status">Waiting for answers</div>
       </div>
       <div style="margin-top:18px;">
-        <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:5px;letter-spacing:0.1em;">
+        <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--text3);margin-bottom:5px;letter-spacing:0.1em;">
           <span>PROGRESS</span><span id="fo-count">0 / 13</span>
         </div>
         <div style="background:rgba(255,255,255,0.06);height:5px;border-radius:2px;overflow:hidden;">
           <div id="fo-prog" style="height:100%;background:var(--gold);border-radius:2px;width:0%;transition:width 0.3s;"></div>
         </div>
-        <div id="fo-complete-msg" style="display:none;margin-top:10px;font-family:var(--mono);font-size:10px;color:var(--green);letter-spacing:0.12em;text-align:center;">✓ ALL QUESTIONS ANSWERED</div>
+        <div id="fo-complete-msg" style="display:none;margin-top:10px;font-family:var(--mono);font-size:11px;color:var(--green);letter-spacing:0.12em;text-align:center;">✓ ALL QUESTIONS ANSWERED</div>
       </div>
     </div>
     <div class="q-right">
@@ -555,21 +555,21 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
   <div class="q-layout" style="flex:1;min-height:0;">
     <div class="q-left">
       <div class="kicker">Step 4 · Individual Client</div>
-      <div class="section-title" style="font-size:24px;margin-bottom:10px;">Client's True<br>Risk Tolerance</div>
-      <div class="section-sub" style="font-size:13px;margin-bottom:22px;">13 behavioural questions. The real Risk Number is revealed at the end — not what the client thinks they can tolerate.</div>
+      <div class="section-title" style="font-size:26px;margin-bottom:10px;">Client's True<br>Risk Tolerance</div>
+      <div class="section-sub" style="font-size:14px;margin-bottom:22px;">13 behavioural questions. The real Risk Number is revealed at the end — not what the client thinks they can tolerate.</div>
       <div class="locked-card" id="ind-locked">
         <div class="locked-icon" id="ind-locked-icon">🔒</div>
         <div class="locked-lbl">Client Risk Score</div>
         <div class="locked-status" id="ind-locked-status">Waiting for answers</div>
       </div>
       <div style="margin-top:18px;">
-        <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:5px;letter-spacing:0.1em;">
+        <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--text3);margin-bottom:5px;letter-spacing:0.1em;">
           <span>PROGRESS</span><span id="ind-count">0 / 13</span>
         </div>
         <div style="background:rgba(255,255,255,0.06);height:5px;border-radius:2px;overflow:hidden;">
           <div id="ind-prog" style="height:100%;background:var(--gold);border-radius:2px;width:0%;transition:width 0.3s;"></div>
         </div>
-        <div id="ind-complete-msg" style="display:none;margin-top:10px;font-family:var(--mono);font-size:10px;color:var(--green);letter-spacing:0.12em;text-align:center;">✓ ALL QUESTIONS ANSWERED</div>
+        <div id="ind-complete-msg" style="display:none;margin-top:10px;font-family:var(--mono);font-size:11px;color:var(--green);letter-spacing:0.12em;text-align:center;">✓ ALL QUESTIONS ANSWERED</div>
       </div>
     </div>
     <div class="q-right">
@@ -598,9 +598,9 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
     <div style="flex-shrink:0;padding:16px 40px 12px;border-bottom:1px solid var(--border);display:flex;align-items:baseline;gap:24px;">
       <div>
         <div class="kicker" style="margin-bottom:2px;">Step 5 · Financial Objective</div>
-        <div style="font-family:var(--syne);font-size:24px;font-weight:800;color:var(--text);line-height:1.1;">Target Risk Engine</div>
+        <div style="font-family:var(--syne);font-size:26px;font-weight:800;color:var(--text);line-height:1.1;">Target Risk Engine</div>
       </div>
-      <div style="font-size:13px;color:var(--text3);line-height:1.5;max-width:440px;">Over a <strong style="color:var(--gold)">5-year horizon</strong> from <strong style="color:var(--gold)">$100,000</strong> — every target implies a level of risk you must be prepared to take.</div>
+      <div style="font-size:14px;color:var(--text3);line-height:1.5;max-width:440px;">Over a <strong style="color:var(--gold)">5-year horizon</strong> from <strong style="color:var(--gold)">$100,000</strong> — every target implies a level of risk you must be prepared to take.</div>
     </div>
 
     <!-- Two-column body -->
@@ -608,7 +608,7 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
 
       <!-- LEFT — input + slider + context -->
       <div class="tre-left">
-        <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:12px;">Target Portfolio Value in 5 Years (USD)</div>
+        <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:12px;">Target Portfolio Value in 5 Years (USD)</div>
 
         <div class="tre-goal-wrap" id="goal-input-wrap">
           <span class="tre-goal-symbol">$</span>
@@ -618,7 +618,7 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
 
         <!-- Slider -->
         <div style="margin-top:20px;">
-          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text3);margin-bottom:8px;">Adjust your target outcome</div>
+          <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text3);margin-bottom:8px;">Adjust your target outcome</div>
           <input type="range" id="goalSlider" class="tre-slider" min="110000" max="500000" step="5000" value="200000" oninput="onGoalSlider(this.value)">
           <div class="tre-slider-ends"><span>$100k</span><span>$200k</span><span>$300k</span><span>$400k</span><span>$500k</span></div>
         </div>
@@ -642,15 +642,15 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
         </div>
 
         <!-- Bottom note -->
-        <div style="margin-top:24px;font-family:var(--mono);font-size:10px;color:var(--text4);letter-spacing:0.08em;">
+        <div style="margin-top:24px;font-family:var(--mono);font-size:11px;color:var(--text4);letter-spacing:0.08em;">
           * Required to proceed · Initial investment: $100,000
         </div>
       </div>
 
       <!-- RIGHT — live calculation cards -->
       <div class="tre-right">
-        <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:4px;">Live Calculations</div>
-        <div style="font-size:12px;color:var(--text4);margin-bottom:14px;font-family:var(--mono);">All figures update in real time as you adjust your target.</div>
+        <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:4px;">Live Calculations</div>
+        <div style="font-size:13px;color:var(--text4);margin-bottom:14px;font-family:var(--mono);">All figures update in real time as you adjust your target.</div>
 
         <div class="tre-cards">
           <div class="tre-card">
@@ -696,7 +696,7 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
         </div>
 
         <!-- Contextual summary -->
-        <div style="padding:12px 14px;background:rgba(212,175,69,0.04);border:1px solid rgba(212,175,69,0.12);margin-top:4px;font-size:12px;color:var(--text3);line-height:1.6;font-family:var(--mono);" id="tre-summary">
+        <div style="padding:12px 14px;background:rgba(212,175,69,0.04);border:1px solid rgba(212,175,69,0.12);margin-top:4px;font-size:13px;color:var(--text3);line-height:1.6;font-family:var(--mono);" id="tre-summary">
           Set a target value above to see your full risk profile.
         </div>
       </div>
@@ -713,8 +713,8 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
     <div style="flex-shrink:0;padding:12px 32px 10px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:20px;">
       <div>
         <div class="kicker" style="margin-bottom:2px;">Step 6 · Portfolio Alignment</div>
-        <div style="font-family:var(--syne);font-size:20px;font-weight:800;color:var(--text);line-height:1.1;">Portfolio Alignment Engine</div>
-        <div style="font-size:11px;color:var(--text3);margin-top:2px;max-width:560px;line-height:1.4;">Compare the Family Office mandate, the client's behavioral risk, and the return target required to pursue the desired outcome.</div>
+        <div style="font-family:var(--syne);font-size:22px;font-weight:800;color:var(--text);line-height:1.1;">Portfolio Alignment Engine</div>
+        <div style="font-size:12px;color:var(--text3);margin-top:2px;max-width:560px;line-height:1.4;">Compare the Family Office mandate, the client's behavioral risk, and the return target required to pursue the desired outcome.</div>
       </div>
       <div id="pae-header-badge" style="flex-shrink:0;"></div>
     </div>
@@ -724,7 +724,7 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
 
       <!-- ═══ LEFT PANEL ═══ -->
       <div class="pae-left">
-        <div style="font-family:var(--mono);font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text3);">Select Alignment Reference</div>
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text3);">Select Alignment Reference</div>
 
         <!-- Card: FO Mandate -->
         <div class="pae-ref-card" id="pae-card-fo" onclick="paeSwitchRef('fo')">
@@ -749,14 +749,14 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
 
         <!-- Interpretation -->
         <div class="pae-interp-box" style="background:var(--panel);border:1px solid var(--border);padding:12px 14px;flex-shrink:0;">
-          <div style="font-family:var(--mono);font-size:7px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text4);margin-bottom:6px;">Interpretation</div>
-          <div style="font-size:11px;color:var(--text2);line-height:1.6;" id="pae-interpretation">Select a reference to begin alignment analysis.</div>
+          <div style="font-family:var(--mono);font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text4);margin-bottom:6px;">Interpretation</div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.6;" id="pae-interpretation">Select a reference to begin alignment analysis.</div>
         </div>
 
         <!-- Alignment status badge -->
         <div id="pae-status-block" style="display:none;padding:10px 0;">
           <div id="pae-status-badge"></div>
-          <div style="font-size:10px;color:var(--text3);line-height:1.6;margin-top:7px;" id="pae-status-text"></div>
+          <div style="font-size:11px;color:var(--text3);line-height:1.6;margin-top:7px;" id="pae-status-text"></div>
         </div>
       </div>
 
@@ -764,20 +764,20 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
       <div class="pae-right">
         <div style="display:flex;align-items:baseline;justify-content:space-between;flex-shrink:0;">
           <div>
-            <div style="font-family:var(--mono);font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);">Live Risk Calculations</div>
-            <div style="font-size:10px;color:var(--text4);margin-top:1px;font-family:var(--mono);">All figures update as the alignment reference or target outcome changes.</div>
+            <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);">Live Risk Calculations</div>
+            <div style="font-size:11px;color:var(--text4);margin-top:1px;font-family:var(--mono);">All figures update as the alignment reference or target outcome changes.</div>
           </div>
         </div>
 
         <!-- Primary: Selected RN -->
         <div class="pae-rn-main-card" id="pae-rn-card">
           <div style="flex-shrink:0;">
-            <div style="font-family:var(--mono);font-size:7px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text4);margin-bottom:3px;">Selected Risk Number</div>
+            <div style="font-family:var(--mono);font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text4);margin-bottom:3px;">Selected Risk Number</div>
             <div class="pae-rn-num" id="pae-m-rn">—</div>
-            <div style="font-family:var(--mono);font-size:8px;color:var(--text4);letter-spacing:0.08em;margin-top:4px;">RN powered by Nitrogen</div>
+            <div style="font-family:var(--mono);font-size:9px;color:var(--text4);letter-spacing:0.08em;margin-top:4px;">RN powered by Nitrogen</div>
           </div>
           <div style="flex:1;border-left:1px solid var(--border);padding-left:18px;">
-            <div style="font-size:12px;color:var(--text2);line-height:1.65;" id="pae-rn-interpret">Select a reference path on the left to begin.</div>
+            <div style="font-size:13px;color:var(--text2);line-height:1.65;" id="pae-rn-interpret">Select a reference path on the left to begin.</div>
           </div>
         </div>
 
@@ -808,18 +808,18 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
         <!-- Slider -->
         <div style="background:var(--panel);border:1px solid var(--border);padding:15px 18px;flex-shrink:0;">
           <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:8px;">
-            <div style="font-family:var(--mono);font-size:8px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text3);">Adjust Target Outcome</div>
-            <div style="font-family:var(--syne);font-size:16px;font-weight:800;color:var(--gold);" id="pae-target-display">$200,000</div>
+            <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text3);">Adjust Target Outcome</div>
+            <div style="font-family:var(--syne);font-size:18px;font-weight:800;color:var(--gold);" id="pae-target-display">$200,000</div>
           </div>
           <input type="range" id="paeSlider" class="tre-slider" min="100000" max="400000" step="10000" value="200000" oninput="paeSliderMove(this.value)">
           <div class="tre-slider-ends"><span>$100k</span><span>$200k</span><span>$300k</span><span>$400k</span></div>
-          <div style="font-family:var(--mono);font-size:9px;color:var(--text4);line-height:1.6;margin-top:8px;letter-spacing:0.04em;">Target return is not risk tolerance. This engine translates the desired outcome into the volatility and downside the client may need to withstand.</div>
+          <div style="font-family:var(--mono);font-size:10px;color:var(--text4);line-height:1.6;margin-top:8px;letter-spacing:0.04em;">Target return is not risk tolerance. This engine translates the desired outcome into the volatility and downside the client may need to withstand.</div>
         </div>
 
         <!-- High-risk alert -->
         <div class="pae-alert" id="pae-alert">
           <div class="pae-alert-title">⚠ High-Risk Path Detected</div>
-          <div style="font-size:12px;color:var(--text2);line-height:1.6;" id="pae-alert-body">This target may require withstanding a significant 6-month drawdown.</div>
+          <div style="font-size:13px;color:var(--text2);line-height:1.6;" id="pae-alert-body">This target may require withstanding a significant 6-month drawdown.</div>
           <div class="pae-alert-btns">
             <button class="pae-btn-confirm" onclick="paeAlertConfirm()">Yes, Continue</button>
             <button class="pae-btn-adjust" onclick="paeAlertAdjust()">Adjust Target</button>
@@ -827,7 +827,7 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
         </div>
 
         <!-- Disclaimer -->
-        <div style="font-family:var(--mono);font-size:8px;color:var(--text4);line-height:1.7;letter-spacing:0.03em;flex-shrink:0;">
+        <div style="font-family:var(--mono);font-size:9px;color:var(--text4);line-height:1.7;letter-spacing:0.03em;flex-shrink:0;">
           All investing involves risk, including possible loss of principal. No investment strategy can guarantee a profit or protect against loss. Risk Number and benchmark comparisons are provided for analytical alignment purposes only.
         </div>
       </div>
@@ -841,32 +841,32 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
   <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:40px 60px;overflow-y:auto;">
     <div style="max-width:820px;width:100%;">
       <div class="kicker">Step 7 · Portfolio</div>
-      <div class="section-title" style="font-size:32px;">Which portfolio<br>to analyse?</div>
+      <div class="section-title" style="font-size:35px;">Which portfolio<br>to analyse?</div>
       <div class="section-sub" style="margin-bottom:12px;">We now analyze how the current portfolio compares to the selected alignment reference.</div>
-      <div style="font-size:12px;color:var(--text4);font-family:var(--mono);margin-bottom:20px;padding:8px 14px;border-left:2px solid rgba(212,175,69,0.3);">Reference: <strong id="port-ref-label" style="color:var(--gold);">—</strong></div>
+      <div style="font-size:13px;color:var(--text4);font-family:var(--mono);margin-bottom:20px;padding:8px 14px;border-left:2px solid rgba(212,175,69,0.3);">Reference: <strong id="port-ref-label" style="color:var(--gold);">—</strong></div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;">
         <div class="model-card" onclick="choosePortMode('real')" id="port-mode-real" style="padding:28px 24px;">
-          <div style="font-size:28px;margin-bottom:12px;">📂</div>
+          <div style="font-size:31px;margin-bottom:12px;">📂</div>
           <div class="model-name">Use your real portfolio</div>
           <div class="model-desc">Upload via CSV or connect via API. Most precise simulation — based on actual holdings.</div>
           <div style="margin-top:14px;"><span class="badge badge-gold">More Precise</span></div>
         </div>
         <div class="model-card" onclick="choosePortMode('model')" id="port-mode-model" style="padding:28px 24px;">
-          <div style="font-size:28px;margin-bottom:12px;">📊</div>
+          <div style="font-size:31px;margin-bottom:12px;">📊</div>
           <div class="model-name">Use a model portfolio</div>
           <div class="model-desc">Select from 5 representative portfolios. Faster — ideal for first meetings and demos.</div>
           <div style="margin-top:14px;"><span class="badge badge-neutral">Faster</span></div>
         </div>
       </div>
       <div id="real-upload-area" style="display:none;background:var(--panel);border:2px dashed var(--border);padding:40px;text-align:center;margin-bottom:16px;">
-        <div style="font-size:28px;margin-bottom:10px;">📎</div>
-        <div style="font-family:var(--syne);font-size:16px;font-weight:600;color:var(--text);margin-bottom:8px;">Upload Portfolio CSV</div>
-        <div style="font-size:13px;color:var(--text3);margin-bottom:16px;">CSV with ticker, weight, and asset class columns</div>
+        <div style="font-size:31px;margin-bottom:10px;">📎</div>
+        <div style="font-family:var(--syne);font-size:18px;font-weight:600;color:var(--text);margin-bottom:8px;">Upload Portfolio CSV</div>
+        <div style="font-size:14px;color:var(--text3);margin-bottom:16px;">CSV with ticker, weight, and asset class columns</div>
         <button class="btn btn-secondary" style="margin-right:10px;" onclick="choosePortMode('model')">← Use Model Portfolio Instead</button>
         <button class="btn btn-primary" onclick="simulateUpload()">Select File →</button>
       </div>
       <div id="model-selector-area" style="display:none;">
-        <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:12px;">Select a model portfolio:</div>
+        <div style="font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:12px;">Select a model portfolio:</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
           <div class="model-card" onclick="selectModel(this,'aggressive')" id="model-aggressive"><div style="display:flex;justify-content:space-between;align-items:flex-start;"><div><div class="model-name">Current Portfolio (Demo)</div><div class="model-desc" style="margin-top:4px;">RN 84 · 70% equity · Vol 18.4% · Misaligned — used to demonstrate the correction.</div></div><span class="badge badge-red" style="flex-shrink:0;margin-left:8px;">RN 84</span></div></div>
           <div class="model-card" onclick="selectModel(this,'growth')" id="model-growth"><div style="display:flex;justify-content:space-between;align-items:flex-start;"><div><div class="model-name">Growth Portfolio</div><div class="model-desc" style="margin-top:4px;">RN 75 · 65% equity · Vol 14.8%</div></div><span class="badge badge-warn" style="flex-shrink:0;margin-left:8px;">RN 75</span></div></div>
@@ -883,15 +883,15 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
 <div class="step" id="step8">
   <div style="flex:1;padding:36px 52px;overflow-y:auto;">
     <div class="kicker">Step 8 · Diagnosis</div>
-    <div class="section-title" style="font-size:30px;margin-bottom:6px;">Misalignment<br>identified.</div>
+    <div class="section-title" style="font-size:33px;margin-bottom:6px;">Misalignment<br>identified.</div>
     <div class="section-sub" style="margin-bottom:14px;">Here is where your current positioning diverges from your selected risk path.</div>
-    <div style="font-size:12px;color:var(--text4);font-family:var(--mono);margin-bottom:18px;padding:8px 14px;border-left:2px solid rgba(212,175,69,0.3);">Alignment reference: <strong id="diag-ref-label" style="color:var(--gold);">—</strong></div>
+    <div style="font-size:13px;color:var(--text4);font-family:var(--mono);margin-bottom:18px;padding:8px 14px;border-left:2px solid rgba(212,175,69,0.3);">Alignment reference: <strong id="diag-ref-label" style="color:var(--gold);">—</strong></div>
 
     <div class="diag-tri">
       <div class="diag-col warn">
         <div class="diag-lbl">Family Office · Mandate</div>
         <div class="diag-rn" id="diag-fo-rn" style="color:var(--gold);">—</div>
-        <div style="font-family:var(--mono);font-size:9px;color:var(--text4);letter-spacing:0.12em;">/ 99 SCALE</div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--text4);letter-spacing:0.12em;">/ 99 SCALE</div>
         <div class="diag-cat" id="diag-fo-cat" style="color:var(--gold);"></div>
       </div>
       <div class="diag-arr">
@@ -901,7 +901,7 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
       <div class="diag-col danger">
         <div class="diag-lbl">Current Portfolio</div>
         <div class="diag-rn" id="diag-port-rn" style="color:var(--red);">—</div>
-        <div style="font-family:var(--mono);font-size:9px;color:var(--text4);letter-spacing:0.12em;">/ 99 SCALE</div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--text4);letter-spacing:0.12em;">/ 99 SCALE</div>
         <div class="diag-cat" id="diag-port-cat" style="color:var(--red);"></div>
       </div>
       <div class="diag-arr">
@@ -911,28 +911,28 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
       <div class="diag-col ok">
         <div class="diag-lbl">Client · Real Tolerance</div>
         <div class="diag-rn" id="diag-client-rn" style="color:var(--green);">—</div>
-        <div style="font-family:var(--mono);font-size:9px;color:var(--text4);letter-spacing:0.12em;">/ 99 SCALE</div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--text4);letter-spacing:0.12em;">/ 99 SCALE</div>
         <div class="diag-cat" id="diag-client-cat" style="color:var(--green);"></div>
       </div>
     </div>
 
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:22px;">
-      <div class="kpi alert"><div class="kpi-lbl">Excess Risk vs Client</div><div class="kpi-val red" id="diag-excess-client" style="font-size:28px;">—</div><div class="kpi-desc">The portfolio is running more risk than the client explicitly accepts.</div></div>
-      <div class="kpi alert"><div class="kpi-lbl">FO Mandate Violation</div><div class="kpi-val red" id="diag-excess-fo" style="font-size:28px;">—</div><div class="kpi-desc">Exceeds the limit defined by the Family Office in the institutional mandate.</div></div>
-      <div class="kpi alert"><div class="kpi-lbl">Goal vs Current CAGR</div><div class="kpi-val red" id="diag-cagr-gap" style="font-size:28px;">—</div><div class="kpi-desc">At the current return rate, the portfolio won't reach the financial goal in 5 years.</div></div>
+      <div class="kpi alert"><div class="kpi-lbl">Excess Risk vs Client</div><div class="kpi-val red" id="diag-excess-client" style="font-size:31px;">—</div><div class="kpi-desc">The portfolio is running more risk than the client explicitly accepts.</div></div>
+      <div class="kpi alert"><div class="kpi-lbl">FO Mandate Violation</div><div class="kpi-val red" id="diag-excess-fo" style="font-size:31px;">—</div><div class="kpi-desc">Exceeds the limit defined by the Family Office in the institutional mandate.</div></div>
+      <div class="kpi alert"><div class="kpi-lbl">Goal vs Current CAGR</div><div class="kpi-val red" id="diag-cagr-gap" style="font-size:31px;">—</div><div class="kpi-desc">At the current return rate, the portfolio won't reach the financial goal in 5 years.</div></div>
     </div>
 
     <div style="background:linear-gradient(135deg,rgba(208,70,60,0.06),var(--panel));border:1px solid rgba(208,70,60,0.25);padding:22px 28px;margin-bottom:28px;">
-      <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--red);margin-bottom:10px;">Diagnosis · Summary</div>
-      <div style="font-size:15px;color:var(--text2);line-height:1.7;">This portfolio is taking on more risk than the client declared they can tolerate — and more than the Family Office mandate allows. And yet it still delivers insufficient return to meet the financial goal. This is the incongruence that needs to be resolved.</div>
+      <div style="font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--red);margin-bottom:10px;">Diagnosis · Summary</div>
+      <div style="font-size:16px;color:var(--text2);line-height:1.7;">This portfolio is taking on more risk than the client declared they can tolerate — and more than the Family Office mandate allows. And yet it still delivers insufficient return to meet the financial goal. This is the incongruence that needs to be resolved.</div>
     </div>
 
     <!-- CHARTS -->
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
       <!-- Compounding Gap Chart -->
       <div style="background:var(--panel);border:1px solid var(--border);padding:22px;">
-        <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:4px;">What You're Costing Your Clients</div>
-        <div style="font-size:13px;color:var(--text3);margin-bottom:16px;">$8.2M AUM · 7.2% current vs 9.6% CORE22 · 5-year projection</div>
+        <div style="font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:4px;">What You're Costing Your Clients</div>
+        <div style="font-size:14px;color:var(--text3);margin-bottom:16px;">$8.2M AUM · 7.2% current vs 9.6% CORE22 · 5-year projection</div>
         <svg viewBox="0 0 500 160" width="100%" style="display:block;">
           <defs>
             <linearGradient id="gapFill" x1="0" y1="0" x2="0" y2="1">
@@ -965,7 +965,7 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
           <text x="444" y="66" font-family="monospace" font-size="9" fill="#D0463C">$11.6M</text>
           <text x="310" y="48" font-family="monospace" font-size="10" fill="#5BBF7A" font-weight="bold">+$1.4M gap</text>
         </svg>
-        <div style="display:flex;gap:18px;font-family:var(--mono);font-size:10px;margin-top:6px;">
+        <div style="display:flex;gap:18px;font-family:var(--mono);font-size:11px;margin-top:6px;">
           <span style="color:var(--green);">— CORE22 · 9.6% p.a.</span>
           <span style="color:var(--red);">- - Current · 7.2% p.a.</span>
         </div>
@@ -973,66 +973,66 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
 
       <!-- Crisis Scenarios -->
       <div style="background:var(--panel);border:1px solid var(--border);padding:22px;">
-        <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:4px;">Crisis Scenarios</div>
-        <div style="font-size:13px;color:var(--text3);margin-bottom:20px;">How CORE22's StormGuard protected capital in real drawdowns</div>
+        <div style="font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:4px;">Crisis Scenarios</div>
+        <div style="font-size:14px;color:var(--text3);margin-bottom:20px;">How CORE22's StormGuard protected capital in real drawdowns</div>
         <div style="margin-bottom:18px;">
-          <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.14em;color:var(--text3);margin-bottom:8px;">2022 · Bear Market</div>
+          <div style="font-family:var(--mono);font-size:11px;letter-spacing:0.14em;color:var(--text3);margin-bottom:8px;">2022 · Bear Market</div>
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-            <div style="font-family:var(--mono);font-size:11px;color:var(--text3);width:80px;flex-shrink:0;">Portfolio</div>
+            <div style="font-family:var(--mono);font-size:12px;color:var(--text3);width:80px;flex-shrink:0;">Portfolio</div>
             <div style="flex:1;height:20px;background:rgba(255,255,255,0.04);border-radius:2px;overflow:hidden;">
               <div style="height:100%;width:85%;background:var(--red);border-radius:2px;display:flex;align-items:center;padding-left:8px;">
-                <span style="font-family:var(--mono);font-size:10px;font-weight:600;color:#fff;">−34%</span>
+                <span style="font-family:var(--mono);font-size:11px;font-weight:600;color:#fff;">−34%</span>
               </div>
             </div>
           </div>
           <div style="display:flex;align-items:center;gap:8px;">
-            <div style="font-family:var(--mono);font-size:11px;color:var(--green);width:80px;flex-shrink:0;">CORE22</div>
+            <div style="font-family:var(--mono);font-size:12px;color:var(--green);width:80px;flex-shrink:0;">CORE22</div>
             <div style="flex:1;height:20px;background:rgba(255,255,255,0.04);border-radius:2px;overflow:hidden;">
               <div style="height:100%;width:21%;background:var(--green);border-radius:2px;display:flex;align-items:center;padding-left:8px;">
-                <span style="font-family:var(--mono);font-size:10px;font-weight:600;color:#fff;">−8.4%</span>
+                <span style="font-family:var(--mono);font-size:11px;font-weight:600;color:#fff;">−8.4%</span>
               </div>
             </div>
           </div>
         </div>
         <div style="margin-bottom:18px;">
-          <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.14em;color:var(--text3);margin-bottom:8px;">2020 · COVID Crash</div>
+          <div style="font-family:var(--mono);font-size:11px;letter-spacing:0.14em;color:var(--text3);margin-bottom:8px;">2020 · COVID Crash</div>
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-            <div style="font-family:var(--mono);font-size:11px;color:var(--text3);width:80px;flex-shrink:0;">Portfolio</div>
+            <div style="font-family:var(--mono);font-size:12px;color:var(--text3);width:80px;flex-shrink:0;">Portfolio</div>
             <div style="flex:1;height:20px;background:rgba(255,255,255,0.04);border-radius:2px;overflow:hidden;">
               <div style="height:100%;width:70%;background:var(--red);border-radius:2px;display:flex;align-items:center;padding-left:8px;">
-                <span style="font-family:var(--mono);font-size:10px;font-weight:600;color:#fff;">−28%</span>
+                <span style="font-family:var(--mono);font-size:11px;font-weight:600;color:#fff;">−28%</span>
               </div>
             </div>
           </div>
           <div style="display:flex;align-items:center;gap:8px;">
-            <div style="font-family:var(--mono);font-size:11px;color:var(--green);width:80px;flex-shrink:0;">CORE22</div>
+            <div style="font-family:var(--mono);font-size:12px;color:var(--green);width:80px;flex-shrink:0;">CORE22</div>
             <div style="flex:1;height:20px;background:rgba(255,255,255,0.04);border-radius:2px;overflow:hidden;">
               <div style="height:100%;width:28%;background:var(--green);border-radius:2px;display:flex;align-items:center;padding-left:8px;">
-                <span style="font-family:var(--mono);font-size:10px;font-weight:600;color:#fff;">−11.2%</span>
+                <span style="font-family:var(--mono);font-size:11px;font-weight:600;color:#fff;">−11.2%</span>
               </div>
             </div>
           </div>
         </div>
         <div>
-          <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.14em;color:var(--text3);margin-bottom:8px;">2018 · Q4 Sell-off</div>
+          <div style="font-family:var(--mono);font-size:11px;letter-spacing:0.14em;color:var(--text3);margin-bottom:8px;">2018 · Q4 Sell-off</div>
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-            <div style="font-family:var(--mono);font-size:11px;color:var(--text3);width:80px;flex-shrink:0;">Portfolio</div>
+            <div style="font-family:var(--mono);font-size:12px;color:var(--text3);width:80px;flex-shrink:0;">Portfolio</div>
             <div style="flex:1;height:20px;background:rgba(255,255,255,0.04);border-radius:2px;overflow:hidden;">
               <div style="height:100%;width:47.5%;background:var(--red);border-radius:2px;display:flex;align-items:center;padding-left:8px;">
-                <span style="font-family:var(--mono);font-size:10px;font-weight:600;color:#fff;">−19%</span>
+                <span style="font-family:var(--mono);font-size:11px;font-weight:600;color:#fff;">−19%</span>
               </div>
             </div>
           </div>
           <div style="display:flex;align-items:center;gap:8px;">
-            <div style="font-family:var(--mono);font-size:11px;color:var(--green);width:80px;flex-shrink:0;">CORE22</div>
+            <div style="font-family:var(--mono);font-size:12px;color:var(--green);width:80px;flex-shrink:0;">CORE22</div>
             <div style="flex:1;height:20px;background:rgba(255,255,255,0.04);border-radius:2px;overflow:hidden;">
               <div style="height:100%;width:14.5%;background:var(--green);border-radius:2px;display:flex;align-items:center;padding-left:6px;">
-                <span style="font-family:var(--mono);font-size:10px;font-weight:600;color:#fff;">−5.8%</span>
+                <span style="font-family:var(--mono);font-size:11px;font-weight:600;color:#fff;">−5.8%</span>
               </div>
             </div>
           </div>
         </div>
-        <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--border);font-family:var(--mono);font-size:10px;color:var(--text4);letter-spacing:0.08em;line-height:1.6;">
+        <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--border);font-family:var(--mono);font-size:11px;color:var(--text4);letter-spacing:0.08em;line-height:1.6;">
           StormGuard detects regime deterioration and rotates to T-Bills automatically — limiting drawdown without manual intervention.
         </div>
       </div>
@@ -1048,9 +1048,9 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
     <div style="flex-shrink:0;padding:18px 40px 14px;border-bottom:1px solid var(--border);display:flex;align-items:baseline;gap:20px;">
       <div>
         <div class="kicker" style="margin-bottom:2px;">Step 9 · Comparison</div>
-        <div style="font-family:var(--syne);font-size:26px;font-weight:800;color:var(--text);line-height:1.1;">Portfolio vs CORE22</div>
+        <div style="font-family:var(--syne);font-size:29px;font-weight:800;color:var(--text);line-height:1.1;">Portfolio vs CORE22</div>
       </div>
-      <div style="font-size:12px;color:var(--text3);max-width:420px;line-height:1.5;">Relative to your selected alignment, here is how your portfolio performs against the target structure.</div>
+      <div style="font-size:13px;color:var(--text3);max-width:420px;line-height:1.5;">Relative to your selected alignment, here is how your portfolio performs against the target structure.</div>
     </div>
 
     <!-- Full-height 50/50 split -->
@@ -1060,15 +1060,15 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
       <div style="overflow-y:auto;padding:28px 36px;border-right:1px solid var(--border);">
         <div style="display:grid;grid-template-columns:1fr 140px 1fr;margin-bottom:3px;">
           <div style="text-align:right;padding:10px 16px;background:rgba(208,70,60,0.07);border:1px solid rgba(208,70,60,0.15);border-right:none;">
-            <div style="font-family:var(--mono);font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--red);">Current Portfolio</div>
-            <div style="font-family:var(--syne);font-size:12px;font-weight:600;color:var(--text3);margin-top:2px;">Unmanaged Risk</div>
+            <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--red);">Current Portfolio</div>
+            <div style="font-family:var(--syne);font-size:13px;font-weight:600;color:var(--text3);margin-top:2px;">Unmanaged Risk</div>
           </div>
           <div style="text-align:center;background:var(--bg2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;">
-            <span style="font-family:var(--mono);font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text4);">Metric</span>
+            <span style="font-family:var(--mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text4);">Metric</span>
           </div>
           <div style="padding:10px 16px;background:rgba(91,191,122,0.06);border:1px solid rgba(91,191,122,0.15);border-left:none;">
-            <div style="font-family:var(--mono);font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--green);">CORE22 (HPC22)</div>
-            <div style="font-family:var(--syne);font-size:12px;font-weight:600;color:var(--text3);margin-top:2px;">Aligned Strategy</div>
+            <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--green);">CORE22 (HPC22)</div>
+            <div style="font-family:var(--syne);font-size:13px;font-weight:600;color:var(--text3);margin-top:2px;">Aligned Strategy</div>
           </div>
         </div>
 
@@ -1139,7 +1139,7 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
               <div style="width:100%;max-width:200px;height:4px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden;display:flex;justify-content:flex-end;">
                 <div style="height:100%;width:84.8%;background:var(--red);border-radius:2px;"></div>
               </div>
-              <div style="font-family:var(--mono);font-size:9px;color:var(--text4);">Exceeds mandate</div>
+              <div style="font-family:var(--mono);font-size:10px;color:var(--text4);">Exceeds mandate</div>
             </div>
             <div class="comp-center-cell"><div class="comp-metric-name">Risk Number</div><div class="comp-delta">−19 pts aligned ↓</div></div>
             <div class="comp-right-cell">
@@ -1147,14 +1147,14 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
               <div style="width:100%;max-width:200px;height:4px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden;">
                 <div style="height:100%;width:65.7%;background:var(--green);border-radius:2px;"></div>
               </div>
-              <div style="font-family:var(--mono);font-size:9px;color:var(--green);">Within mandate</div>
+              <div style="font-family:var(--mono);font-size:10px;color:var(--green);">Within mandate</div>
             </div>
           </div>
         </div>
 
         <div style="margin-top:14px;background:linear-gradient(135deg,rgba(91,191,122,0.05),var(--panel));border:1px solid rgba(91,191,122,0.2);padding:14px 18px;display:flex;align-items:center;gap:16px;">
-          <div style="font-size:24px;">🏆</div>
-          <div style="font-size:13px;color:var(--text2);line-height:1.6;">CORE22 wins on <strong style="color:var(--green)">every single metric</strong>. Lower risk. Higher return. Better protection in every crisis scenario. Aligned with both the client and the FO mandate.</div>
+          <div style="font-size:26px;">🏆</div>
+          <div style="font-size:14px;color:var(--text2);line-height:1.6;">CORE22 wins on <strong style="color:var(--green)">every single metric</strong>. Lower risk. Higher return. Better protection in every crisis scenario. Aligned with both the client and the FO mandate.</div>
         </div>
       </div>
 
@@ -1164,17 +1164,17 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
         <!-- Title bar inside right panel -->
         <div style="flex-shrink:0;padding:18px 28px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
           <div>
-            <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text4);margin-bottom:3px;">Efficiency Profile</div>
-            <div style="font-family:var(--syne);font-size:16px;font-weight:700;color:var(--text);">Risk-Adjusted Coverage Area</div>
+            <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text4);margin-bottom:3px;">Efficiency Profile</div>
+            <div style="font-family:var(--syne);font-size:18px;font-weight:700;color:var(--text);">Risk-Adjusted Coverage Area</div>
           </div>
           <div style="display:flex;gap:14px;align-items:center;">
             <div style="display:flex;align-items:center;gap:6px;">
               <div style="width:10px;height:10px;background:rgba(91,191,122,0.35);border:1.5px solid rgba(91,191,122,0.85);border-radius:2px;"></div>
-              <span style="font-family:var(--mono);font-size:9px;letter-spacing:0.1em;color:var(--green);">CORE22</span>
+              <span style="font-family:var(--mono);font-size:10px;letter-spacing:0.1em;color:var(--green);">CORE22</span>
             </div>
             <div style="display:flex;align-items:center;gap:6px;">
               <div style="width:10px;height:10px;background:rgba(208,70,60,0.3);border:1.5px solid rgba(208,70,60,0.9);border-radius:2px;"></div>
-              <span style="font-family:var(--mono);font-size:9px;letter-spacing:0.1em;color:var(--red);">PORTFOLIO</span>
+              <span style="font-family:var(--mono);font-size:10px;letter-spacing:0.1em;color:var(--red);">PORTFOLIO</span>
             </div>
           </div>
         </div>
@@ -1270,12 +1270,12 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
         <!-- Efficiency Gap callout at bottom -->
         <div style="flex-shrink:0;padding:14px 28px;border-top:1px solid var(--border);background:rgba(208,70,60,0.04);display:flex;align-items:center;gap:20px;">
           <div style="flex-shrink:0;">
-            <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--red);margin-bottom:3px;">Efficiency Gap</div>
-            <div style="font-family:var(--syne);font-size:22px;font-weight:800;color:var(--red);">~77%</div>
-            <div style="font-family:var(--mono);font-size:9px;color:var(--text4);">of CORE22 coverage<br>not being captured</div>
+            <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--red);margin-bottom:3px;">Efficiency Gap</div>
+            <div style="font-family:var(--syne);font-size:24px;font-weight:800;color:var(--red);">~77%</div>
+            <div style="font-family:var(--mono);font-size:10px;color:var(--text4);">of CORE22 coverage<br>not being captured</div>
           </div>
           <div style="width:1px;height:44px;background:var(--border);flex-shrink:0;"></div>
-          <div style="font-size:13px;color:var(--text3);line-height:1.6;">The red polygon occupies <strong style="color:var(--red)">~23%</strong> of the area of CORE22's green polygon. Every unit of return the client earns costs disproportionately more risk — this is the misalignment in visual form.</div>
+          <div style="font-size:14px;color:var(--text3);line-height:1.6;">The red polygon occupies <strong style="color:var(--red)">~23%</strong> of the area of CORE22's green polygon. Every unit of return the client earns costs disproportionately more risk — this is the misalignment in visual form.</div>
         </div>
       </div>
 
@@ -1291,7 +1291,7 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
     <div style="flex-shrink:0;padding:11px 32px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:20px;">
       <div>
         <div class="kicker" style="margin-bottom:1px;">Step 10 · The Solution</div>
-        <div style="font-family:var(--syne);font-size:20px;font-weight:800;color:var(--text);line-height:1.1;">Meet HPC11 and HPC22</div>
+        <div style="font-family:var(--syne);font-size:22px;font-weight:800;color:var(--text);line-height:1.1;">Meet HPC11 and HPC22</div>
       </div>
       <div style="display:flex;gap:7px;flex-shrink:0;">
         <span class="badge badge-gold">StormGuard Active</span>
@@ -1312,28 +1312,28 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
           onmouseover="this.style.background='rgba(212,175,69,0.16)';this.style.borderColor='rgba(212,175,69,0.8)'"
           onmouseout="this.style.background='rgba(212,175,69,0.08)';this.style.borderColor='rgba(212,175,69,0.45)'">
           <div>
-            <div style="font-family:var(--mono);font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(212,175,69,0.55);margin-bottom:2px;">Asset Efficiency Comparison</div>
-            <div style="font-family:var(--syne);font-size:14px;font-weight:700;color:var(--gold);">Compare Now with Market Alternatives</div>
-            <div style="font-family:var(--mono);font-size:9px;color:var(--text3);margin-top:1px;">HPC11 · HPC22 vs SPY · QQQ · AGG · GLD · and more</div>
+            <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(212,175,69,0.55);margin-bottom:2px;">Asset Efficiency Comparison</div>
+            <div style="font-family:var(--syne);font-size:15px;font-weight:700;color:var(--gold);">Compare Now with Market Alternatives</div>
+            <div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:1px;">HPC11 · HPC22 vs SPY · QQQ · AGG · GLD · and more</div>
           </div>
-          <div style="font-size:20px;color:var(--gold);opacity:0.8;">→</div>
+          <div style="font-size:22px;color:var(--gold);opacity:0.8;">→</div>
         </button>
 
         <!-- HPC11 card -->
         <div style="flex:1;min-height:0;background:rgba(212,175,69,0.04);border:1px solid rgba(212,175,69,0.2);padding:16px 18px;display:flex;flex-direction:column;overflow:hidden;">
-          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold);margin-bottom:4px;">Strategy One · ETF-Based</div>
-          <div style="font-family:var(--syne);font-size:32px;font-weight:800;color:var(--gold);line-height:1;margin-bottom:4px;">HPC11</div>
-          <div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:10px;">Conservative · Lower Drawdown · Defensive</div>
+          <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold);margin-bottom:4px;">Strategy One · ETF-Based</div>
+          <div style="font-family:var(--syne);font-size:35px;font-weight:800;color:var(--gold);line-height:1;margin-bottom:4px;">HPC11</div>
+          <div style="font-family:var(--mono);font-size:11px;color:var(--text3);margin-bottom:10px;">Conservative · Lower Drawdown · Defensive</div>
           <div style="display:flex;gap:6px;margin-bottom:14px;">
-            <span class="badge badge-gold" style="font-size:9px;padding:4px 9px;">RN 45–60</span>
-            <span class="badge badge-neutral" style="font-size:9px;padding:4px 9px;">StormGuard</span>
+            <span class="badge badge-gold" style="font-size:10px;padding:4px 9px;">RN 45–60</span>
+            <span class="badge badge-neutral" style="font-size:10px;padding:4px 9px;">StormGuard</span>
           </div>
           <div style="border-top:1px solid rgba(212,175,69,0.12);">
-            <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:13px;">Target Volatility</span><span class="hpc-row-val" style="font-size:14px;">8–12%</span></div>
-            <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:13px;">Max Drawdown</span><span class="hpc-row-val" style="color:var(--green);font-size:14px;">−14%</span></div>
-            <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:13px;">Expected Return</span><span class="hpc-row-val" style="color:var(--green);font-size:14px;">7.5–9.0%</span></div>
-            <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:13px;">Sharpe (5yr)</span><span class="hpc-row-val" style="color:var(--green);font-size:14px;">1.38</span></div>
-            <div class="hpc-row" style="padding:11px 0;border-bottom:none;"><span class="hpc-row-lbl" style="font-size:13px;">Suggested Allocation</span><span class="hpc-row-val" style="color:var(--gold);font-size:14px;">10–15% AUM</span></div>
+            <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:14px;">Target Volatility</span><span class="hpc-row-val" style="font-size:15px;">8–12%</span></div>
+            <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:14px;">Max Drawdown</span><span class="hpc-row-val" style="color:var(--green);font-size:15px;">−14%</span></div>
+            <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:14px;">Expected Return</span><span class="hpc-row-val" style="color:var(--green);font-size:15px;">7.5–9.0%</span></div>
+            <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:14px;">Sharpe (5yr)</span><span class="hpc-row-val" style="color:var(--green);font-size:15px;">1.38</span></div>
+            <div class="hpc-row" style="padding:11px 0;border-bottom:none;"><span class="hpc-row-lbl" style="font-size:14px;">Suggested Allocation</span><span class="hpc-row-val" style="color:var(--gold);font-size:15px;">10–15% AUM</span></div>
           </div>
         </div>
 
@@ -1347,27 +1347,27 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
 
         <!-- HPC22 card -->
         <div style="flex:1;min-height:0;background:rgba(91,191,122,0.04);border:1px solid rgba(91,191,122,0.25);padding:16px 18px;display:flex;flex-direction:column;position:relative;overflow:hidden;">
-          <div style="position:absolute;top:12px;right:14px;font-family:var(--mono);font-size:9px;letter-spacing:0.12em;color:var(--green);border:1px solid rgba(91,191,122,0.3);padding:3px 9px;">★ RECOMMENDED</div>
-          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--green);margin-bottom:4px;">Strategy Two · Equities</div>
-          <div style="font-family:var(--syne);font-size:32px;font-weight:800;color:var(--green);line-height:1;margin-bottom:4px;">HPC22</div>
-          <div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:10px;">Growth Alignment · Higher Return · Momentum</div>
+          <div style="position:absolute;top:12px;right:14px;font-family:var(--mono);font-size:10px;letter-spacing:0.12em;color:var(--green);border:1px solid rgba(91,191,122,0.3);padding:3px 9px;">★ RECOMMENDED</div>
+          <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--green);margin-bottom:4px;">Strategy Two · Equities</div>
+          <div style="font-family:var(--syne);font-size:35px;font-weight:800;color:var(--green);line-height:1;margin-bottom:4px;">HPC22</div>
+          <div style="font-family:var(--mono);font-size:11px;color:var(--text3);margin-bottom:10px;">Growth Alignment · Higher Return · Momentum</div>
           <div style="display:flex;gap:6px;margin-bottom:14px;">
-            <span class="badge badge-green" style="font-size:9px;padding:4px 9px;">RN 60–80</span>
-            <span class="badge badge-neutral" style="font-size:9px;padding:4px 9px;">StormGuard + TLH</span>
+            <span class="badge badge-green" style="font-size:10px;padding:4px 9px;">RN 60–80</span>
+            <span class="badge badge-neutral" style="font-size:10px;padding:4px 9px;">StormGuard + TLH</span>
           </div>
           <div style="border-top:1px solid rgba(91,191,122,0.12);">
-            <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:13px;">Target Volatility</span><span class="hpc-row-val" style="font-size:14px;">12–16%</span></div>
-            <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:13px;">Max Drawdown</span><span class="hpc-row-val" style="color:var(--green);font-size:14px;">−19%</span></div>
-            <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:13px;">Expected Return</span><span class="hpc-row-val" style="color:var(--green);font-size:14px;">9.5–12.0%</span></div>
-            <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:13px;">Sharpe (5yr)</span><span class="hpc-row-val" style="color:var(--green);font-size:14px;">1.52</span></div>
-            <div class="hpc-row" style="padding:11px 0;border-bottom:none;"><span class="hpc-row-lbl" style="font-size:13px;">Suggested Allocation</span><span class="hpc-row-val" style="color:var(--green);font-size:14px;">20–30% AUM</span></div>
+            <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:14px;">Target Volatility</span><span class="hpc-row-val" style="font-size:15px;">12–16%</span></div>
+            <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:14px;">Max Drawdown</span><span class="hpc-row-val" style="color:var(--green);font-size:15px;">−19%</span></div>
+            <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:14px;">Expected Return</span><span class="hpc-row-val" style="color:var(--green);font-size:15px;">9.5–12.0%</span></div>
+            <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:14px;">Sharpe (5yr)</span><span class="hpc-row-val" style="color:var(--green);font-size:15px;">1.52</span></div>
+            <div class="hpc-row" style="padding:11px 0;border-bottom:none;"><span class="hpc-row-lbl" style="font-size:14px;">Suggested Allocation</span><span class="hpc-row-val" style="color:var(--green);font-size:15px;">20–30% AUM</span></div>
           </div>
         </div>
 
         <!-- StormGuard compacto -->
         <div style="flex-shrink:0;background:linear-gradient(135deg,rgba(91,191,122,0.05),var(--panel));border:1px solid rgba(91,191,122,0.2);padding:10px 14px;">
-          <div style="font-family:var(--mono);font-size:8px;letter-spacing:0.16em;text-transform:uppercase;color:var(--green);margin-bottom:4px;">StormGuard · Automatic Protection</div>
-          <div style="font-size:12px;color:var(--text2);line-height:1.55;">Detects market regime deterioration and rotates to T-Bills automatically. 2022: HPC22 <strong style="color:var(--green)">−8.4%</strong> vs S&amp;P <strong style="color:var(--red)">−19.4%</strong> · 2020: <strong style="color:var(--green)">−11.2%</strong> vs <strong style="color:var(--red)">−34%</strong>.</div>
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--green);margin-bottom:4px;">StormGuard · Automatic Protection</div>
+          <div style="font-size:13px;color:var(--text2);line-height:1.55;">Detects market regime deterioration and rotates to T-Bills automatically. 2022: HPC22 <strong style="color:var(--green)">−8.4%</strong> vs S&amp;P <strong style="color:var(--red)">−19.4%</strong> · 2020: <strong style="color:var(--green)">−11.2%</strong> vs <strong style="color:var(--red)">−34%</strong>.</div>
         </div>
 
         <button class="btn-video" style="flex-shrink:0;width:100%;justify-content:center;" onclick="openVideoModal('Nk8kwTX8cU4','Watch Deep Dive: Portfolio Engineering')">
@@ -1385,12 +1385,12 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
     <div class="sim-ctrl">
       <div>
         <div class="kicker" style="margin-bottom:4px;">Step 11 · Positioning</div>
-        <div style="font-family:var(--syne);font-size:16px;font-weight:700;color:var(--text);">Adjust Allocation</div>
+        <div style="font-family:var(--syne);font-size:18px;font-weight:700;color:var(--text);">Adjust Allocation</div>
       </div>
 
       <!-- Risk vs Return Scatter -->
       <div style="background:var(--panel);border:1px solid var(--border);padding:12px 10px 8px;">
-        <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:8px;padding:0 4px;">Risk vs Return · Market Positioning</div>
+        <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:8px;padding:0 4px;">Risk vs Return · Market Positioning</div>
         <svg viewBox="0 0 340 200" width="100%" style="display:block;">
           <line x1="50" y1="15" x2="50" y2="170" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
           <line x1="50" y1="170" x2="320" y2="170" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
@@ -1436,7 +1436,7 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
           </defs>
           <path d="M251,126 L194,74" fill="none" stroke="rgba(212,175,69,0.3)" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arr)"/>
         </svg>
-        <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:6px;font-family:var(--mono);font-size:9px;">
+        <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:6px;font-family:var(--mono);font-size:10px;">
           <span style="color:var(--red);">● Portfolio</span>
           <span style="color:#5B9BBF;">● SPY</span>
           <span style="color:var(--green);">● CORE22</span>
@@ -1449,22 +1449,22 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
         <div class="slider-val hpc11-color" id="hpc11Val">0%</div>
         <input type="range" class="hpc11" min="0" max="50" value="0" step="5" id="hpc11Slider" oninput="runSim()">
         <div class="slider-range-lbl"><span>0%</span><span>25%</span><span>50%</span></div>
-        <div style="font-size:12px;color:var(--text3);margin-top:5px;">ETF-based · Conservative · RN 45–60</div>
+        <div style="font-size:13px;color:var(--text3);margin-top:5px;">ETF-based · Conservative · RN 45–60</div>
       </div>
       <div>
         <div class="slider-lbl">HPC22 Allocation</div>
         <div class="slider-val hpc22-color" id="hpc22Val">20%</div>
         <input type="range" class="hpc22" min="0" max="50" value="20" step="5" id="hpc22Slider" oninput="runSim()">
         <div class="slider-range-lbl"><span>0%</span><span>25%</span><span>50%</span></div>
-        <div style="font-size:12px;color:var(--text3);margin-top:5px;">Equity-based · Growth · RN 60–80</div>
+        <div style="font-size:13px;color:var(--text3);margin-top:5px;">Equity-based · Growth · RN 60–80</div>
       </div>
       <div class="remain-box">
         <div class="remain-lbl">Remaining Portfolio</div>
         <div class="remain-val" id="remainVal" style="color:var(--text2);">80%</div>
-        <div style="font-size:12px;color:var(--text3);margin-top:4px;">Maintained in current portfolio</div>
+        <div style="font-size:13px;color:var(--text3);margin-top:4px;">Maintained in current portfolio</div>
       </div>
       <div>
-        <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text3);margin-bottom:10px;">Alignment Status</div>
+        <div style="font-family:var(--mono);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text3);margin-bottom:10px;">Alignment Status</div>
         <div class="status-checks">
           <div class="status-check"><div class="status-dot" id="sd-rn"  style="background:var(--text4)"></div><span id="sc-rn">Risk Number — calculating...</span></div>
           <div class="status-check"><div class="status-dot" id="sd-dd"  style="background:var(--text4)"></div><span id="sc-dd">Drawdown — calculating...</span></div>
@@ -1474,7 +1474,7 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
       </div>
       <!-- Optional institutional deep dive before CTA -->
       <div style="padding:14px 0 4px;border-top:1px solid var(--border);">
-        <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text4);margin-bottom:10px;">Optional · Before You Proceed</div>
+        <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text4);margin-bottom:10px;">Optional · Before You Proceed</div>
         <button class="btn-video" style="width:100%;justify-content:center;"
           onclick="openVideoModal('F_1lKtrAIUU','Watch Institutional Deep Dive')">
           <span class="btn-video-icon"></span>Watch Institutional Deep Dive
@@ -1535,7 +1535,7 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
           <text x="550" y="20"  font-family="monospace" font-size="10" fill="#5BBF7A">$14.1M</text>
           <text x="550" y="79"  font-family="monospace" font-size="10" fill="#D0463C">$11.6M</text>
         </svg>
-        <div style="display:flex;gap:20px;font-family:var(--mono);font-size:11px;margin-top:8px;">
+        <div style="display:flex;gap:20px;font-family:var(--mono);font-size:12px;margin-top:8px;">
           <span style="color:var(--green);">— With HPC · ~9.6% p.a.</span>
           <span style="color:var(--red);">- - Without HPC · ~7.2% p.a.</span>
           <span style="color:var(--gold);margin-left:auto;">5-year difference: <strong>+$2.5M</strong></span>
@@ -1554,29 +1554,29 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
         <div class="score-ring-lbl">Alignment</div>
       </div>
       <div class="kicker" style="margin-bottom:8px;">Final Result</div>
-      <div class="section-title" style="font-size:32px;margin-bottom:10px;">Portfolio aligned.<br>What's next?</div>
-      <div style="font-size:15px;color:var(--text3);margin-bottom:40px;line-height:1.7;max-width:520px;margin-left:auto;margin-right:auto;">
+      <div class="section-title" style="font-size:35px;margin-bottom:10px;">Portfolio aligned.<br>What's next?</div>
+      <div style="font-size:16px;color:var(--text3);margin-bottom:40px;line-height:1.7;max-width:520px;margin-left:auto;margin-right:auto;">
         You now have a complete diagnosis and a clear solution. How would you like to proceed?
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:560px;margin:0 auto;">
         <button onclick="alert('Investment integration — in development')"
           style="background:var(--gold);border:none;cursor:pointer;padding:28px 20px;display:flex;flex-direction:column;align-items:center;gap:8px;transition:all 0.15s;border-radius:2px;"
           onmouseover="this.style.background='#e0bc4a'" onmouseout="this.style.background='var(--gold)'">
-          <span style="font-size:26px;">🚀</span>
-          <span style="font-family:var(--syne);font-size:17px;font-weight:700;color:#0B0F14;">Start Investing Now</span>
-          <span style="font-family:var(--mono);font-size:10px;color:rgba(11,15,20,0.65);letter-spacing:0.1em;">Connect portfolio &amp; submit order</span>
+          <span style="font-size:29px;">🚀</span>
+          <span style="font-family:var(--syne);font-size:19px;font-weight:700;color:#0B0F14;">Start Investing Now</span>
+          <span style="font-family:var(--mono);font-size:11px;color:rgba(11,15,20,0.65);letter-spacing:0.1em;">Connect portfolio &amp; submit order</span>
         </button>
         <button onclick="openScheduleModal()"
           style="background:transparent;border:1px solid var(--border);cursor:pointer;padding:28px 20px;display:flex;flex-direction:column;align-items:center;gap:8px;transition:all 0.15s;border-radius:2px;"
           onmouseover="this.style.borderColor='rgba(212,175,69,0.4)'" onmouseout="this.style.borderColor='var(--border)'">
-          <span style="font-size:26px;">📅</span>
-          <span style="font-family:var(--syne);font-size:17px;font-weight:700;color:var(--text);">Schedule a Meeting</span>
-          <span style="font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:0.1em;">Book a follow-up session</span>
+          <span style="font-size:29px;">📅</span>
+          <span style="font-family:var(--syne);font-size:19px;font-weight:700;color:var(--text);">Schedule a Meeting</span>
+          <span style="font-family:var(--mono);font-size:11px;color:var(--text3);letter-spacing:0.1em;">Book a follow-up session</span>
         </button>
       </div>
       <div style="margin-top:28px;display:flex;justify-content:center;gap:14px;">
-        <button class="btn btn-ghost" style="font-size:12px;" onclick="goStep(11)">← Adjust Simulation</button>
-        <a href="terminal.html" class="btn btn-ghost" style="font-size:12px;">Open Terminal →</a>
+        <button class="btn btn-ghost" style="font-size:13px;" onclick="goStep(11)">← Adjust Simulation</button>
+        <a href="terminal.html" class="btn btn-ghost" style="font-size:13px;">Open Terminal →</a>
       </div>
     </div>
   </div>
@@ -1648,7 +1648,7 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
     <div class="ace-tab"        id="ace-tab-1" onclick="aceSetTab(1)">Drawdown Range</div>
     <div class="ace-tab"        id="ace-tab-2" onclick="aceSetTab(2)">Efficiency Ranking</div>
     <div style="flex:1;"></div>
-    <button class="ace-close-btn" style="margin:8px 0;font-size:9px;" onclick="aceResetFilters()">Reset View</button>
+    <button class="ace-close-btn" style="margin:8px 0;font-size:10px;" onclick="aceResetFilters()">Reset View</button>
   </div>
 
   <div class="ace-body">
@@ -1734,7 +1734,7 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
   <div class="video-modal-box">
     <div class="video-modal-head">
       <div class="video-modal-title" id="videoModalTitle">Watch Deep Dive</div>
-      <button class="modal-close" onclick="closeVideoModal()" style="font-size:22px;padding:2px 10px;">×</button>
+      <button class="modal-close" onclick="closeVideoModal()" style="font-size:24px;padding:2px 10px;">×</button>
     </div>
     <div class="video-modal-body">
       <iframe id="videoModalFrame" src="" allowfullscreen
@@ -1749,7 +1749,7 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
   <div><div class="jim-text-main">Talk to Jim</div><div class="jim-text-sub">AI Research Assistant</div></div>
 </a>
 <div class="jim-panel" id="jimPanel">
-  <div class="jim-ph"><div class="jim-av">J</div><div><div style="font-family:var(--syne);font-size:15px;font-weight:700;color:var(--text);">Jim</div><div style="font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text3);margin-top:2px;">HARPIAN AI ASSISTANT</div></div></div>
+  <div class="jim-ph"><div class="jim-av">J</div><div><div style="font-family:var(--syne);font-size:16px;font-weight:700;color:var(--text);">Jim</div><div style="font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text3);margin-top:2px;">HARPIAN AI ASSISTANT</div></div></div>
   <div class="jim-suggs">
     <div class="jim-sug" onclick="goStep(6);toggleJim()">→ Review collected Risk Numbers</div>
     <div class="jim-sug" onclick="goStep(8);toggleJim()">→ Show misalignment diagnosis</div>
@@ -2238,7 +2238,7 @@ function paeUpdate() {
     if (hiRisk && !_paeAlertDismissed) {
       alertEl.classList.add('visible');
       const body = document.getElementById('pae-alert-body');
-      if (body) body.innerHTML = 'This target may require withstanding an estimated 6-month downside of approximately <strong style="color:var(--red)">' + (tgtP.down6*100).toFixed(1) + '%</strong>.<br><span style="color:var(--text3);font-size:11px;">Is the client prepared to tolerate this level of downside in pursuit of the target?</span>';
+      if (body) body.innerHTML = 'This target may require withstanding an estimated 6-month downside of approximately <strong style="color:var(--red)">' + (tgtP.down6*100).toFixed(1) + '%</strong>.<br><span style="color:var(--text3);font-size:12px;">Is the client prepared to tolerate this level of downside in pursuit of the target?</span>';
     } else if (!hiRisk) {
       alertEl.classList.remove('visible');
       _paeAlertDismissed = false;
@@ -2800,7 +2800,7 @@ function aceRenderTable(data) {
     const rowCls = isHarp?'class="harp-row"':isCli?'class="client-row"':'';
     return `<tr ${rowCls}>
       <td style="color:${col};font-weight:${isHarp?700:400}">${d.ticker}</td>
-      <td style="color:var(--text2);font-size:10px;">${d.name}</td>
+      <td style="color:var(--text2);font-size:11px;">${d.name}</td>
       <td style="color:${d.rn>=80?'var(--red)':d.rn>=60?'var(--orange)':'var(--text2)'}">${d.rn}</td>
       <td style="color:var(--green)">${d.ret.toFixed(2)}%</td>
       <td>${d.vol.toFixed(2)}%</td>

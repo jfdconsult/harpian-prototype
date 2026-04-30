@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>HARPIAN — Admin Module</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Mono:wght@300;400;500&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#060B12;--bg2:#080E17;--panel:#0C1420;--panel2:#0F1825;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);
+  --text:#E8EDF2;--text2:#B8C4CF;--text3:#7A8A96;--text4:#4A5A66;
+  --gold:#D4AF45;--gold-bg:rgba(212,175,69,0.08);
+  --green:#3EE68B;--green-bg:rgba(62,230,139,0.08);
+  --red:#FF4D4D;--red-bg:rgba(255,77,77,0.08);
+  --orange:#F59E0B;--orange-bg:rgba(245,158,11,0.08);
+  --blue:#60A5FA;--blue-bg:rgba(96,165,250,0.08);
+  --purple:#A78BFA;--purple-bg:rgba(167,139,250,0.08);
+  --mono:'DM Mono',monospace;--g:'Space Grotesk',sans-serif;--r:4px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--g);font-size:15px;line-height:1.5;overflow:hidden;}
+
+/* TOP BAR */
+.tb{position:fixed;top:0;left:0;right:0;height:52px;background:var(--bg2);border-bottom:1px solid var(--border2);display:flex;align-items:center;z-index:100;padding:0 20px;gap:0;}
+.tb-logo{display:flex;align-items:center;gap:10px;margin-right:16px;text-decoration:none;flex-shrink:0;}
+.tb-logo-icon{width:30px;height:30px;background:var(--gold);border-radius:5px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:14px;color:#060B12;}
+.tb-logo-name{font-size:14px;font-weight:700;color:var(--text);}
+.tb-logo-name b{color:var(--gold);}
+.tb-logo-sub{font-family:var(--mono);font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text4);}
+.tb-sep{width:1px;height:28px;background:var(--border);margin:0 14px;flex-shrink:0;}
+.tb-tag{font-family:var(--mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);background:var(--gold-bg);border:1px solid rgba(212,175,69,0.25);padding:4px 10px;border-radius:3px;flex-shrink:0;}
+.tb-modes{display:flex;gap:4px;margin-left:12px;}
+.tb-mode{font-family:var(--mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);border:1px solid var(--border);padding:5px 12px;border-radius:var(--r);cursor:pointer;background:none;transition:all .15s;text-decoration:none;display:inline-block;}
+.tb-mode.on{color:var(--gold);border-color:rgba(212,175,69,.35);background:var(--gold-bg);}
+.tb-mode:hover:not(.on){color:var(--text);border-color:var(--border2);}
+.tb-right{margin-left:auto;display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.tb-clock{font-family:var(--mono);font-size:12px;color:var(--text3);letter-spacing:.1em;}
+.tb-live{display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:9px;color:var(--green);}
+.tb-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+.chip{font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border-radius:3px;border:1px solid;white-space:nowrap;}
+.chip.ok{color:var(--green);border-color:rgba(62,230,139,.3);background:var(--green-bg);}
+.chip.warn{color:var(--orange);border-color:rgba(245,158,11,.3);background:var(--orange-bg);}
+.chip.crit{color:var(--red);border-color:rgba(255,77,77,.3);background:var(--red-bg);}
+.tb-client-btn{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#060B12;background:var(--gold);border:none;padding:7px 14px;border-radius:var(--r);cursor:pointer;font-weight:700;text-decoration:none;transition:all .15s;}
+.tb-client-btn:hover{background:#c9a43a;}
+
+/* SIDEBAR */
+.sb{position:fixed;top:52px;left:0;bottom:0;width:214px;background:var(--bg2);border-right:1px solid var(--border);overflow-y:auto;z-index:90;padding-bottom:30px;}
+.sb-section{font-family:var(--mono);font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--text4);padding:18px 14px 6px;}
+.sb-link{display:flex;align-items:center;gap:9px;padding:8px 14px;cursor:pointer;transition:all .13s;border-left:2px solid transparent;user-select:none;}
+.sb-link:hover{background:rgba(255,255,255,.03);}
+.sb-link.active{background:rgba(212,175,69,.06);border-left-color:var(--gold);}
+.sb-link.active .sb-label{color:var(--gold);}
+.sb-icon{font-size:13px;width:18px;text-align:center;flex-shrink:0;color:var(--text4);}
+.sb-link.active .sb-icon{color:var(--gold);}
+.sb-label{font-size:13px;font-weight:500;color:var(--text2);flex:1;}
+.sb-badge{font-family:var(--mono);font-size:9px;padding:1px 6px;border-radius:3px;background:var(--red-bg);color:var(--red);border:1px solid rgba(255,77,77,.2);}
+.sb-badge.w{background:var(--orange-bg);color:var(--orange);border-color:rgba(245,158,11,.2);}
+.sb-foot{font-family:var(--mono);font-size:9px;color:var(--text4);padding:20px 14px 0;line-height:1.7;}
+
+/* MAIN */
+.main{margin-left:214px;padding-top:52px;height:100vh;overflow-y:auto;}
+.screen{display:none;padding:24px;}
+.screen.active{display:block;}
+
+/* PAGE HEADER */
+.ph{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:22px;padding-bottom:16px;border-bottom:1px solid var(--border);}
+.ph-title{font-size:20px;font-weight:700;}
+.ph-sub{font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--text4);margin-top:3px;}
+.ph-actions{display:flex;gap:8px;align-items:center;flex-shrink:0;}
+
+/* GRIDS */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+.g6{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+
+/* PANELS */
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:6px;overflow:hidden;}
+.panel-head{display:flex;align-items:center;justify-content:space-between;padding:11px 15px;border-bottom:1px solid var(--border);}
+.panel-title{font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--text3);display:flex;align-items:center;gap:7px;}
+.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.dot.r{background:var(--red);}
+.dot.g{background:var(--gold);}
+.dot.b{background:var(--blue);}
+.dot.gr{background:var(--green);}
+.dot.p{background:var(--purple);}
+.dot.x{background:var(--text4);}
+.dot.o{background:var(--orange);}
+.panel-actions{display:flex;gap:5px;}
+.panel-body{padding:15px;}
+
+/* KICKERS */
+.kicker{font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--text4);margin-bottom:4px;}
+.kicker.g{color:var(--gold);}
+.kicker.r{color:var(--red);}
+.kicker.gr{color:var(--green);}
+.kicker.b{color:var(--blue);}
+.kicker.o{color:var(--orange);}
+
+/* BUTTONS */
+.btn{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--border);color:var(--text3);background:none;padding:5px 10px;border-radius:var(--r);cursor:pointer;transition:all .13s;white-space:nowrap;}
+.btn:hover{color:var(--text);border-color:var(--border2);}
+.btn.prim{color:var(--gold);border-color:rgba(212,175,69,.3);background:var(--gold-bg);}
+.btn.prim:hover{background:rgba(212,175,69,.15);}
+.btn.suc{color:var(--green);border-color:rgba(62,230,139,.3);background:var(--green-bg);}
+.btn.suc:hover{background:rgba(62,230,139,.15);}
+.btn.err{color:var(--red);border-color:rgba(255,77,77,.3);background:var(--red-bg);}
+.btn.warn{color:var(--orange);border-color:rgba(245,158,11,.3);background:var(--orange-bg);}
+.btn.info{color:var(--blue);border-color:rgba(96,165,250,.3);background:var(--blue-bg);}
+.btn.purp{color:var(--purple);border-color:rgba(167,139,250,.3);background:var(--purple-bg);}
+.btn-row{display:flex;gap:5px;flex-wrap:wrap;}
+
+/* BADGES */
+.badge{font-family:var(--mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:3px;border:1px solid;white-space:nowrap;display:inline-block;}
+.badge.pending{color:var(--orange);border-color:rgba(245,158,11,.25);background:var(--orange-bg);}
+.badge.approved{color:var(--green);border-color:rgba(62,230,139,.25);background:var(--green-bg);}
+.badge.published{color:var(--blue);border-color:rgba(96,165,250,.25);background:var(--blue-bg);}
+.badge.rejected{color:var(--red);border-color:rgba(255,77,77,.25);background:var(--red-bg);}
+.badge.scheduled{color:var(--purple);border-color:rgba(167,139,250,.25);background:var(--purple-bg);}
+.badge.neutral{color:var(--text3);border-color:var(--border);background:var(--panel2);}
+.badge.critical{color:var(--red);border-color:rgba(255,77,77,.35);background:var(--red-bg);}
+.badge.watch{color:var(--orange);border-color:rgba(245,158,11,.35);background:var(--orange-bg);}
+.badge.ok{color:var(--green);border-color:rgba(62,230,139,.25);background:var(--green-bg);}
+.badge.high{color:var(--red);border-color:rgba(255,77,77,.25);background:var(--red-bg);}
+.badge.med{color:var(--orange);border-color:rgba(245,158,11,.25);background:var(--orange-bg);}
+.badge.low{color:var(--text3);border-color:var(--border);background:var(--panel2);}
+
+/* TABLES */
+.tbl{width:100%;border-collapse:collapse;}
+.tbl th{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--text4);padding:6px 10px;border-bottom:1px solid var(--border);text-align:left;font-weight:500;}
+.tbl td{padding:9px 10px;border-bottom:1px solid var(--border);font-size:13px;color:var(--text2);vertical-align:middle;}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl tr:hover td{background:rgba(255,255,255,.02);}
+.td-name{font-weight:600;color:var(--text);}
+.td-mono{font-family:var(--mono);font-size:11px;}
+.td-act{display:flex;gap:5px;justify-content:flex-end;}
+
+/* STATS */
+.stats{display:flex;gap:14px;margin-bottom:18px;flex-wrap:wrap;}
+.stat{flex:1;min-width:90px;background:var(--panel);border:1px solid var(--border);border-radius:5px;padding:12px 14px;}
+.stat-lbl{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--text4);margin-bottom:4px;}
+.stat-val{font-size:22px;font-weight:700;}
+.stat-val.g{color:var(--gold);}
+.stat-val.gr{color:var(--green);}
+.stat-val.r{color:var(--red);}
+.stat-val.o{color:var(--orange);}
+.stat-val.b{color:var(--blue);}
+.stat-sub{font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:2px;}
+
+/* TICKER */
+.ticker{display:flex;gap:22px;padding:10px 15px;background:var(--bg);border-bottom:1px solid var(--border);flex-wrap:wrap;}
+.tick{display:flex;align-items:center;gap:7px;}
+.tick-sym{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--text3);}
+.tick-val{font-family:var(--mono);font-size:11px;font-weight:500;}
+.tick-up{font-family:var(--mono);font-size:10px;color:var(--green);}
+.tick-dn{font-family:var(--mono);font-size:10px;color:var(--red);}
+
+/* INSIGHT CARDS */
+.insight{background:var(--panel2);border:1px solid var(--border);border-radius:5px;padding:13px 14px;margin-bottom:10px;}
+.insight:last-child{margin-bottom:0;}
+.insight.flagged{border-color:rgba(255,77,77,.2);}
+.insight-hd{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:7px;gap:10px;}
+.insight-title{font-size:13px;font-weight:600;color:var(--text);flex:1;line-height:1.4;}
+.insight-meta{display:flex;gap:12px;margin-bottom:8px;flex-wrap:wrap;}
+.insight-meta span{font-family:var(--mono);font-size:9px;color:var(--text4);}
+.insight-meta strong{color:var(--text2);}
+.insight-body{font-size:12px;color:var(--text3);line-height:1.6;margin-bottom:10px;}
+.conf-track{display:flex;align-items:center;gap:7px;margin-bottom:10px;}
+.conf-bg{width:64px;height:4px;background:var(--border);border-radius:2px;overflow:hidden;}
+.conf-fill{height:100%;border-radius:2px;}
+
+/* API ROWS */
+.api-row{display:flex;align-items:center;gap:12px;padding:11px 15px;border-bottom:1px solid var(--border);}
+.api-row:last-child{border-bottom:none;}
+.api-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.api-dot.ok{background:var(--green);}
+.api-dot.warn{background:var(--orange);}
+.api-dot.err{background:var(--red);}
+.api-name{font-size:13px;font-weight:500;flex:1;}
+.api-ep{font-family:var(--mono);font-size:10px;color:var(--text4);flex:1;}
+.api-lat{font-family:var(--mono);font-size:10px;color:var(--text3);width:52px;}
+.api-st{font-family:var(--mono);font-size:9px;letter-spacing:.06em;width:72px;}
+.api-st.ok{color:var(--green);}
+.api-st.warn{color:var(--orange);}
+.api-st.err{color:var(--red);}
+
+/* PIPELINE */
+.pipe-row{display:flex;align-items:center;gap:10px;padding:10px 15px;border-bottom:1px solid var(--border);}
+.pipe-row:last-child{border-bottom:none;}
+.pipe-title{flex:1;font-size:13px;font-weight:500;color:var(--text2);}
+.pipe-time{font-family:var(--mono);font-size:10px;color:var(--text4);white-space:nowrap;}
+
+/* CLIENT ROWS */
+.cr{display:flex;align-items:center;gap:12px;padding:10px 15px;border-bottom:1px solid var(--border);}
+.cr:last-child{border-bottom:none;}
+.cr-name{font-size:13px;font-weight:600;color:var(--text);width:148px;flex-shrink:0;}
+.cr-aum{font-family:var(--mono);font-size:10px;color:var(--text3);width:60px;}
+.cr-bar-wrap{flex:1;}
+.cr-bar{height:4px;background:var(--border);border-radius:2px;overflow:hidden;}
+.cr-fill{height:100%;border-radius:2px;}
+.cr-fill.ok{background:var(--green);}
+.cr-fill.warn{background:var(--orange);}
+.cr-fill.crit{background:var(--red);}
+.cr-score{font-family:var(--mono);font-size:12px;font-weight:600;width:28px;text-align:right;}
+.cr-score.ok{color:var(--green);}
+.cr-score.warn{color:var(--orange);}
+.cr-score.crit{color:var(--red);}
+
+/* REGIME */
+.regime{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:4px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;border:1px solid;}
+.regime.elevated{color:var(--orange);border-color:rgba(245,158,11,.3);background:var(--orange-bg);}
+.regime.defensive{color:var(--red);border-color:rgba(255,77,77,.3);background:var(--red-bg);}
+.regime.neutral{color:var(--blue);border-color:rgba(96,165,250,.3);background:var(--blue-bg);}
+.regime.bullish{color:var(--green);border-color:rgba(62,230,139,.3);background:var(--green-bg);}
+
+/* AUDIT LOG */
+.log-row{display:flex;gap:12px;padding:9px 15px;border-bottom:1px solid var(--border);align-items:flex-start;}
+.log-row:last-child{border-bottom:none;}
+.log-time{font-family:var(--mono);font-size:10px;color:var(--text4);white-space:nowrap;width:50px;flex-shrink:0;}
+.log-ico{font-size:12px;flex-shrink:0;}
+.log-text{font-size:12px;color:var(--text2);flex:1;line-height:1.5;}
+.log-text strong{color:var(--text);}
+.log-user{font-family:var(--mono);font-size:10px;color:var(--gold);white-space:nowrap;flex-shrink:0;}
+
+/* NEWS */
+.news-row{display:flex;gap:12px;padding:12px 15px;border-bottom:1px solid var(--border);align-items:flex-start;}
+.news-row:last-child{border-bottom:none;}
+.news-hl{font-size:13px;font-weight:500;color:var(--text);margin-bottom:4px;line-height:1.4;}
+.news-meta{font-family:var(--mono);font-size:9px;color:var(--text4);display:flex;gap:10px;margin-bottom:8px;}
+
+/* FED */
+.fed-row{display:flex;gap:16px;padding:13px 15px;border-bottom:1px solid var(--border);align-items:flex-start;}
+.fed-row:last-child{border-bottom:none;}
+.fed-dt{width:90px;flex-shrink:0;}
+.fed-dt-main{font-family:var(--mono);font-size:13px;font-weight:500;color:var(--gold);}
+.fed-dt-sub{font-family:var(--mono);font-size:9px;color:var(--text4);}
+.fed-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px;}
+.fed-desc{font-size:12px;color:var(--text3);margin-bottom:8px;line-height:1.5;}
+
+/* RULES */
+.rule-row{display:flex;align-items:flex-start;gap:12px;padding:11px 15px;border-bottom:1px solid var(--border);}
+.rule-row:last-child{border-bottom:none;}
+.rule-text{flex:1;font-size:13px;color:var(--text2);line-height:1.5;margin-bottom:3px;}
+.rule-cat{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--text4);}
+
+/* ALERT BANNER */
+.alert-banner{display:flex;align-items:center;gap:12px;padding:11px 16px;border-radius:5px;margin-bottom:16px;}
+.alert-banner.warn{background:var(--orange-bg);border:1px solid rgba(245,158,11,.2);}
+.alert-banner.crit{background:var(--red-bg);border:1px solid rgba(255,77,77,.2);}
+.alert-icon{font-size:16px;flex-shrink:0;}
+.alert-text{flex:1;font-size:13px;color:var(--text2);}
+.alert-text strong{color:var(--text);}
+
+/* SEC DIVIDER */
+.sec-div{font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--text4);margin:20px 0 12px;display:flex;align-items:center;gap:10px;}
+.sec-div::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
+</style>
+</head>
+<body>
+
+<!-- ═══ TOP BAR ═══ -->
+<nav class="tb">
+  <a class="tb-logo" href="admin.html">
+    <div class="tb-logo-icon">H</div>
+    <div>
+      <div class="tb-logo-name">HARPIAN <b>Capital</b></div>
+      <div class="tb-logo-sub">Portfolio Engineering Terminal</div>
+    </div>
+  </a>
+  <div class="tb-sep"></div>
+  <div class="tb-tag">Admin Module</div>
+  <div class="tb-modes">
+    <button class="tb-mode on">Admin Module</button>
+    <a class="tb-mode" href="terminal.html">Client Terminal</a>
+    <a class="tb-mode" href="presentation-mode.html">Presentation Mode</a>
+  </div>
+  <div class="tb-right">
+    <div class="tb-live"><div class="tb-dot"></div>LIVE</div>
+    <div class="tb-clock" id="adm-clock">--:--:--</div>
+    <div class="chip ok">DIM ACTIVE</div>
+    <div class="chip warn">REGIME: ELEVATED</div>
+    <div class="chip warn">3 PENDING</div>
+    <a class="tb-client-btn" href="terminal.html" target="_blank">View as Client</a>
+  </div>
+</nav>
+
+<!-- ═══ SIDEBAR ═══ -->
+<aside class="sb">
+  <div class="sb-section">Overview</div>
+  <div class="sb-link active" data-screen="home">
+    <span class="sb-icon">&#9632;</span><span class="sb-label">Admin Dashboard</span>
+  </div>
+
+  <div class="sb-section">Intelligence</div>
+  <div class="sb-link" data-screen="intelligence">
+    <span class="sb-icon">&#9670;</span><span class="sb-label">DIM Feed</span><span class="sb-badge">4</span>
+  </div>
+  <div class="sb-link" data-screen="news">
+    <span class="sb-icon">&#9675;</span><span class="sb-label">News &amp; Feeds</span><span class="sb-badge w">12</span>
+  </div>
+  <div class="sb-link" data-screen="fed">
+    <span class="sb-icon">&#9671;</span><span class="sb-label">Fed Monitor</span>
+  </div>
+
+  <div class="sb-section">Risk &amp; Portfolio</div>
+  <div class="sb-link" data-screen="risk">
+    <span class="sb-icon">&#9651;</span><span class="sb-label">Risk Engine</span><span class="sb-badge">2</span>
+  </div>
+  <div class="sb-link" data-screen="portfolio">
+    <span class="sb-icon">&#9641;</span><span class="sb-label">Portfolio</span>
+  </div>
+
+  <div class="sb-section">Clients</div>
+  <div class="sb-link" data-screen="clients">
+    <span class="sb-icon">&#9711;</span><span class="sb-label">Clients</span><span class="sb-badge">1</span>
+  </div>
+  <div class="sb-link" data-screen="publish">
+    <span class="sb-icon">&#9650;</span><span class="sb-label">Publish Control</span><span class="sb-badge w">3</span>
+  </div>
+
+  <div class="sb-section">System</div>
+  <div class="sb-link" data-screen="apis">
+    <span class="sb-icon">&#8853;</span><span class="sb-label">APIs &amp; Sources</span><span class="sb-badge w">1</span>
+  </div>
+  <div class="sb-link" data-screen="knowledge">
+    <span class="sb-icon">&#8801;</span><span class="sb-label">Knowledge Base</span>
+  </div>
+  <div class="sb-link" data-screen="audit">
+    <span class="sb-icon">&#9776;</span><span class="sb-label">Audit Log</span>
+  </div>
+
+  <div class="sb-foot">Admin Module v1.0<br>Jim FO &mdash; SUPER ADMIN<br>Terminal v3.1 Demo</div>
+</aside>
+
+<!-- ═══ MAIN ═══ -->
+<main class="main">
+
+<!-- ════ HOME DASHBOARD ════ -->
+<div class="screen active" id="screen-home">
+  <div class="ph">
+    <div>
+      <div class="ph-title">Admin Dashboard</div>
+      <div class="ph-sub">HARPIAN Portfolio Engineering Terminal &mdash; Admin Module &middot; <span id="adm-date"></span></div>
+    </div>
+    <div class="ph-actions">
+      <button class="btn warn" onclick="goTo('intelligence')">&#9888; 4 DIM Insights Pendentes</button>
+      <button class="btn prim" onclick="goTo('clients')">&#9888; Vera Hollanda Critico</button>
+    </div>
+  </div>
+
+  <div class="alert-banner warn">
+    <span class="alert-icon">&#9888;</span>
+    <div class="alert-text"><strong>Vera Hollanda &mdash; Risco Critico:</strong> RN Portfolio 78 vs Mandato FO 62. Acao imediata recomendada.</div>
+    <button class="btn warn" onclick="goTo('clients')">Ver Cliente</button>
+    <button class="btn">Dispensar</button>
+  </div>
+
+  <div class="panel" style="margin-bottom:16px;">
+    <div class="ticker" id="home-ticker"></div>
+  </div>
+
+  <div class="g6">
+
+    <!-- 1. GLOBAL MARKET CONTROL -->
+    <div class="panel">
+      <div class="panel-head">
+        <div class="panel-title"><span class="dot r"></span>Global Market Control</div>
+        <div class="panel-actions"><button class="btn" onclick="goTo('risk')">Detalhe</button></div>
+      </div>
+      <div style="padding:14px 15px;border-bottom:1px solid var(--border);">
+        <div class="kicker g">Market Regime</div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+          <div class="regime elevated">&#9679; Elevated Risk</div>
+          <span style="font-family:var(--mono);font-size:9px;color:var(--text4);">desde 22 Abr</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div><div class="kicker" style="margin-bottom:2px;">SPX</div><div style="font-family:var(--mono);font-size:14px;font-weight:600;">5,234 <span style="color:var(--green);font-size:11px;">+0.4%</span></div></div>
+          <div><div class="kicker" style="margin-bottom:2px;">VIX</div><div style="font-family:var(--mono);font-size:14px;font-weight:600;color:var(--orange);">18.2 <span style="font-size:11px;">+1.3</span></div></div>
+          <div><div class="kicker" style="margin-bottom:2px;">DXY</div><div style="font-family:var(--mono);font-size:14px;font-weight:600;">104.3 <span style="color:var(--red);font-size:11px;">-0.2%</span></div></div>
+          <div><div class="kicker" style="margin-bottom:2px;">Gold</div><div style="font-family:var(--mono);font-size:14px;font-weight:600;color:var(--gold);">3,316 <span style="color:var(--green);font-size:11px;">+0.8%</span></div></div>
+        </div>
+      </div>
+      <div style="padding:12px 15px;">
+        <div class="kicker" style="margin-bottom:8px;">Proximos Eventos</div>
+        <div style="font-size:12px;color:var(--text2);margin-bottom:5px;display:flex;justify-content:space-between;"><span>&#127970; Fed Meeting</span><span style="font-family:var(--mono);color:var(--gold);">7 Mai</span></div>
+        <div style="font-size:12px;color:var(--text2);margin-bottom:5px;display:flex;justify-content:space-between;"><span>&#128202; CPI USA</span><span style="font-family:var(--mono);color:var(--text3);">14 Mai</span></div>
+        <div style="font-size:12px;color:var(--text2);display:flex;justify-content:space-between;"><span>&#128181; FOMC Minutes</span><span style="font-family:var(--mono);color:var(--text3);">21 Mai</span></div>
+        <div class="btn-row" style="margin-top:12px;">
+          <button class="btn prim">Editar Macro</button>
+          <button class="btn suc">Aprovar</button>
+          <button class="btn warn">Hold</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. DIM INTELLIGENCE FEED -->
+    <div class="panel">
+      <div class="panel-head">
+        <div class="panel-title"><span class="dot g"></span>DIM Intelligence Feed</div>
+        <div class="panel-actions"><button class="btn" onclick="goTo('intelligence')">Ver Todos</button></div>
+      </div>
+      <div id="home-dim"></div>
+    </div>
+
+    <!-- 3. CLIENT IMPACT MONITOR -->
+    <div class="panel">
+      <div class="panel-head">
+        <div class="panel-title"><span class="dot b"></span>Client Impact Monitor</div>
+        <div class="panel-actions"><button class="btn" onclick="goTo('clients')">Ver Clientes</button></div>
+      </div>
+      <div id="home-clients"></div>
+    </div>
+
+    <!-- 4. PUBLISH CONTROL -->
+    <div class="panel">
+      <div class="panel-head">
+        <div class="panel-title"><span class="dot gr"></span>Publish Control</div>
+        <div class="panel-actions"><button class="btn" onclick="goTo('publish')">Pipeline</button></div>
+      </div>
+      <div id="home-publish"></div>
+    </div>
+
+    <!-- 5. SYSTEM HEALTH -->
+    <div class="panel">
+      <div class="panel-head">
+        <div class="panel-title"><span class="dot p"></span>System Health &amp; APIs</div>
+        <div class="panel-actions"><button class="btn" onclick="goTo('apis')">Manage</button></div>
+      </div>
+      <div id="home-apis"></div>
+      <div style="padding:12px 15px;border-top:1px solid var(--border);">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+          <div style="text-align:center;background:var(--panel2);border:1px solid var(--border);border-radius:4px;padding:8px;"><div class="kicker" style="margin-bottom:3px;">Uptime</div><div style="font-family:var(--mono);font-size:15px;font-weight:600;color:var(--green);">99.7%</div></div>
+          <div style="text-align:center;background:var(--panel2);border:1px solid var(--border);border-radius:4px;padding:8px;"><div class="kicker" style="margin-bottom:3px;">Latencia</div><div style="font-family:var(--mono);font-size:15px;font-weight:600;">18ms</div></div>
+          <div style="text-align:center;background:var(--panel2);border:1px solid var(--border);border-radius:4px;padding:8px;"><div class="kicker" style="margin-bottom:3px;">Erros/h</div><div style="font-family:var(--mono);font-size:15px;font-weight:600;color:var(--orange);">3</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. RISK ENGINE CONTROL -->
+    <div class="panel">
+      <div class="panel-head">
+        <div class="panel-title"><span class="dot x"></span>Risk Engine Control</div>
+        <div class="panel-actions"><button class="btn" onclick="goTo('risk')">Configure</button></div>
+      </div>
+      <div style="padding:14px 15px;border-bottom:1px solid var(--border);">
+        <div class="kicker" style="margin-bottom:8px;">Regime Atual</div>
+        <div class="regime elevated" style="margin-bottom:12px;">&#9679; Elevated Risk</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div><div class="kicker" style="margin-bottom:2px;">Stress Score</div><div style="font-family:var(--mono);font-size:18px;font-weight:600;color:var(--orange);">67/100</div></div>
+          <div><div class="kicker" style="margin-bottom:2px;">Def. Trigger</div><div style="font-family:var(--mono);font-size:18px;font-weight:600;">87%</div></div>
+          <div><div class="kicker" style="margin-bottom:2px;">Corr SPX/GLD</div><div style="font-family:var(--mono);font-size:14px;font-weight:600;color:var(--green);">-0.34</div></div>
+          <div><div class="kicker" style="margin-bottom:2px;">Vol Implicita</div><div style="font-family:var(--mono);font-size:14px;font-weight:600;color:var(--orange);">24.1%</div></div>
+        </div>
+      </div>
+      <div style="padding:12px 15px;">
+        <div class="btn-row">
+          <button class="btn err">Override Regime</button>
+          <button class="btn warn">Ajustar Sens.</button>
+          <button class="btn" onclick="goTo('risk')">Ver Engine</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /g6 -->
+</div><!-- /home -->
+
+
+<!-- ════ DIM INTELLIGENCE ════ -->
+<div class="screen" id="screen-intelligence">
+  <div class="ph">
+    <div><div class="ph-title">DIM Intelligence Feed</div><div class="ph-sub">Decision Intelligence Module &mdash; Controle de outputs</div></div>
+    <div class="ph-actions">
+      <button class="btn suc">Aprovar Todos</button>
+      <button class="btn prim">+ Novo Insight</button>
+    </div>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="stat-lbl">Pendentes</div><div class="stat-val o">4</div><div class="stat-sub">aguardando revisao</div></div>
+    <div class="stat"><div class="stat-lbl">Aprovados Hoje</div><div class="stat-val gr">7</div><div class="stat-sub">publicados ao cliente</div></div>
+    <div class="stat"><div class="stat-lbl">Rejeitados</div><div class="stat-val">2</div><div class="stat-sub">ultimas 24h</div></div>
+    <div class="stat"><div class="stat-lbl">Base Conhec.</div><div class="stat-val b">142</div><div class="stat-sub">regras ativas</div></div>
+    <div class="stat"><div class="stat-lbl">Conf. Media</div><div class="stat-val g">84%</div><div class="stat-sub">DIM accuracy</div></div>
+  </div>
+  <div class="g2">
+    <div>
+      <div class="sec-div">Pendentes de Aprovacao</div>
+      <div id="intel-pending"></div>
+    </div>
+    <div>
+      <div class="sec-div">Aprovados Recentemente</div>
+      <div id="intel-approved"></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════ RISK ENGINE ════ -->
+<div class="screen" id="screen-risk">
+  <div class="ph">
+    <div><div class="ph-title">Risk Engine Control</div><div class="ph-sub">Memoria de calculo &middot; Inputs &middot; Correlacoes &middot; Override</div></div>
+    <div class="ph-actions"><button class="btn warn">Recalcular Tudo</button><button class="btn">Audit Trail</button></div>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="stat-lbl">Regime</div><div class="stat-val o" style="font-size:16px;">ELEVATED</div></div>
+    <div class="stat"><div class="stat-lbl">Stress Score</div><div class="stat-val o">67</div></div>
+    <div class="stat"><div class="stat-lbl">VIX</div><div class="stat-val">18.2</div></div>
+    <div class="stat"><div class="stat-lbl">Vol Implicita</div><div class="stat-val">24.1%</div></div>
+    <div class="stat"><div class="stat-lbl">Def. Trigger</div><div class="stat-val gr">87%</div></div>
+  </div>
+  <div class="g2">
+    <div>
+      <div class="panel">
+        <div class="panel-head"><div class="panel-title"><span class="dot o"></span>Inputs do Regime</div><div class="panel-actions"><button class="btn prim">Edit Inputs</button></div></div>
+        <table class="tbl">
+          <thead><tr><th>Indicador</th><th>Valor</th><th>Peso</th><th>Status</th><th></th></tr></thead>
+          <tbody>
+            <tr><td class="td-name">VIX (CBOE)</td><td class="td-mono">18.2</td><td class="td-mono">25%</td><td><span class="badge watch">ELEVADO</span></td><td class="td-act"><button class="btn">Edit</button></td></tr>
+            <tr><td class="td-name">HY Spread</td><td class="td-mono">385bp</td><td class="td-mono">20%</td><td><span class="badge watch">ATENCAO</span></td><td class="td-act"><button class="btn">Edit</button></td></tr>
+            <tr><td class="td-name">SPX 200D MA</td><td class="td-mono">+2.1%</td><td class="td-mono">20%</td><td><span class="badge ok">OK</span></td><td class="td-act"><button class="btn">Edit</button></td></tr>
+            <tr><td class="td-name">DXY Trend</td><td class="td-mono">-0.8% 5d</td><td class="td-mono">15%</td><td><span class="badge ok">NEUTRO</span></td><td class="td-act"><button class="btn">Edit</button></td></tr>
+            <tr><td class="td-name">Yield Curve</td><td class="td-mono">+18bp</td><td class="td-mono">10%</td><td><span class="badge ok">NORMAL</span></td><td class="td-act"><button class="btn">Edit</button></td></tr>
+            <tr><td class="td-name">Fed Funds Rate</td><td class="td-mono">5.25-5.50%</td><td class="td-mono">10%</td><td><span class="badge watch">RESTRITIVO</span></td><td class="td-act"><button class="btn">Edit</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div>
+      <div class="panel" style="margin-bottom:16px;">
+        <div class="panel-head"><div class="panel-title"><span class="dot r"></span>Override de Regime</div></div>
+        <div class="panel-body">
+          <div class="kicker" style="margin-bottom:6px;">Regime calculado</div>
+          <div class="regime elevated" style="margin-bottom:14px;">&#9679; Elevated Risk</div>
+          <div class="kicker" style="margin-bottom:8px;">Override manual</div>
+          <div class="btn-row" style="margin-bottom:14px;">
+            <button class="btn info">Neutro</button>
+            <button class="btn warn" style="border-width:2px;">Elevated (ativo)</button>
+            <button class="btn err">Defensivo</button>
+            <button class="btn suc">Bullish</button>
+          </div>
+          <div class="btn-row">
+            <button class="btn prim">Aplicar Override</button>
+            <button class="btn">Resetar Auto</button>
+          </div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><div class="panel-title"><span class="dot b"></span>Matriz de Correlacao</div></div>
+        <div class="panel-body">
+          <table class="tbl" style="font-size:11px;">
+            <thead><tr><th></th><th>SPX</th><th>GLD</th><th>BTC</th><th>TLT</th></tr></thead>
+            <tbody>
+              <tr><td class="td-name" style="font-size:11px;">SPX</td><td class="td-mono" style="color:var(--text4);">1.00</td><td class="td-mono" style="color:var(--green);">-0.34</td><td class="td-mono" style="color:var(--orange);">+0.52</td><td class="td-mono" style="color:var(--green);">-0.61</td></tr>
+              <tr><td class="td-name" style="font-size:11px;">GLD</td><td class="td-mono" style="color:var(--green);">-0.34</td><td class="td-mono" style="color:var(--text4);">1.00</td><td class="td-mono">+0.12</td><td class="td-mono" style="color:var(--green);">-0.08</td></tr>
+              <tr><td class="td-name" style="font-size:11px;">BTC</td><td class="td-mono" style="color:var(--orange);">+0.52</td><td class="td-mono">+0.12</td><td class="td-mono" style="color:var(--text4);">1.00</td><td class="td-mono">-0.44</td></tr>
+              <tr><td class="td-name" style="font-size:11px;">TLT</td><td class="td-mono" style="color:var(--green);">-0.61</td><td class="td-mono" style="color:var(--green);">-0.08</td><td class="td-mono">-0.44</td><td class="td-mono" style="color:var(--text4);">1.00</td></tr>
+            </tbody>
+          </table>
+          <div class="btn-row" style="margin-top:12px;">
+            <button class="btn">Ajustar Sensibilidade</button>
+            <button class="btn err">Trigger Defensivo</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════ PORTFOLIO ════ -->
+<div class="screen" id="screen-portfolio">
+  <div class="ph">
+    <div><div class="ph-title">Portfolio Control</div><div class="ph-sub">Ativos &middot; Pesos &middot; Divergencia vs HPC11 / HPC22</div></div>
+    <div class="ph-actions"><button class="btn suc">+ Adicionar Ativo</button><button class="btn prim">Force Sync</button></div>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="stat-lbl">AUM Total</div><div class="stat-val g">R$25.4M</div></div>
+    <div class="stat"><div class="stat-lbl">Ativos</div><div class="stat-val">14</div></div>
+    <div class="stat"><div class="stat-lbl">Div. HPC11</div><div class="stat-val o">+8.2%</div></div>
+    <div class="stat"><div class="stat-lbl">Div. HPC22</div><div class="stat-val r">+24.7%</div></div>
+    <div class="stat"><div class="stat-lbl">Ult. Sync</div><div class="stat-val" style="font-size:16px;">14:22</div></div>
+  </div>
+  <div class="panel">
+    <div class="panel-head">
+      <div class="panel-title"><span class="dot b"></span>Composicao da Carteira Agregada</div>
+      <div class="panel-actions"><button class="btn">Exportar</button><button class="btn prim">Edit Allocation</button></div>
+    </div>
+    <table class="tbl">
+      <thead><tr><th>Ativo</th><th>Classe</th><th>Peso Atual</th><th>vs HPC11</th><th>vs HPC22</th><th>Acoes</th></tr></thead>
+      <tbody id="port-table"></tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- ════ NEWS ════ -->
+<div class="screen" id="screen-news">
+  <div class="ph">
+    <div><div class="ph-title">News &amp; Feeds</div><div class="ph-sub">RSS &middot; Classificacao automatica &middot; Curadoria editorial</div></div>
+    <div class="ph-actions"><button class="btn suc">Aprovar Selecao</button><button class="btn warn">Atualizar Feeds</button></div>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="stat-lbl">Novas 24h</div><div class="stat-val">47</div></div>
+    <div class="stat"><div class="stat-lbl">Pendentes</div><div class="stat-val o">12</div></div>
+    <div class="stat"><div class="stat-lbl">Aprovadas</div><div class="stat-val gr">28</div></div>
+    <div class="stat"><div class="stat-lbl">Descartadas</div><div class="stat-val">7</div></div>
+    <div class="stat"><div class="stat-lbl">Alta Relev.</div><div class="stat-val r">4</div></div>
+  </div>
+  <div class="panel">
+    <div class="panel-head"><div class="panel-title"><span class="dot g"></span>Feed &mdash; Pendentes de Revisao</div></div>
+    <div id="news-list"></div>
+  </div>
+</div>
+
+
+<!-- ════ FED MONITOR ════ -->
+<div class="screen" id="screen-fed">
+  <div class="ph">
+    <div><div class="ph-title">Fed Monitor</div><div class="ph-sub">FOMC &middot; Discursos &middot; Decisoes &middot; Alertas</div></div>
+    <div class="ph-actions"><button class="btn prim">+ Criar Alerta</button></div>
+  </div>
+  <div class="g2">
+    <div>
+      <div class="panel" style="margin-bottom:16px;">
+        <div class="panel-head"><div class="panel-title"><span class="dot g"></span>Proximas Reunioes FOMC</div></div>
+        <div id="fed-meetings"></div>
+      </div>
+    </div>
+    <div>
+      <div class="panel" style="margin-bottom:16px;">
+        <div class="panel-head"><div class="panel-title"><span class="dot b"></span>Discursos Recentes</div></div>
+        <div id="fed-speeches"></div>
+      </div>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="panel-head"><div class="panel-title"><span class="dot r"></span>Historico de Decisoes 2024/25</div></div>
+    <table class="tbl">
+      <thead><tr><th>Data</th><th>Decisao</th><th>Target Rate</th><th>Comunicado</th><th>Insight DIM</th><th>Acoes</th></tr></thead>
+      <tbody>
+        <tr><td class="td-mono">Mar 2025</td><td><span class="badge watch">Hold</span></td><td class="td-mono">5.25-5.50%</td><td style="font-size:12px;color:var(--text3);">Hawkish pause, data-dependent</td><td><span class="badge approved">Gerado</span></td><td class="td-act"><button class="btn">Ver</button><button class="btn prim">Attach</button></td></tr>
+        <tr><td class="td-mono">Jan 2025</td><td><span class="badge watch">Hold</span></td><td class="td-mono">5.25-5.50%</td><td style="font-size:12px;color:var(--text3);">Inflacao persistente acima da meta</td><td><span class="badge approved">Gerado</span></td><td class="td-act"><button class="btn">Ver</button></td></tr>
+        <tr><td class="td-mono">Dez 2024</td><td><span class="badge ok">-25bps</span></td><td class="td-mono">5.25-5.50%</td><td style="font-size:12px;color:var(--text3);">Corte precautorio, mercado de trabalho</td><td><span class="badge approved">Gerado</span></td><td class="td-act"><button class="btn">Ver</button></td></tr>
+        <tr><td class="td-mono">Nov 2024</td><td><span class="badge ok">-25bps</span></td><td class="td-mono">5.50-5.75%</td><td style="font-size:12px;color:var(--text3);">Inflacao em trajetoria de queda</td><td><span class="badge approved">Gerado</span></td><td class="td-act"><button class="btn">Ver</button></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- ════ CLIENTS ════ -->
+<div class="screen" id="screen-clients">
+  <div class="ph">
+    <div><div class="ph-title">Client Management</div><div class="ph-sub">Portfolios &middot; Risco &middot; Mandato FO &middot; Atividade</div></div>
+    <div class="ph-actions"><button class="btn prim">+ Novo Cliente</button><button class="btn">Exportar</button></div>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="stat-lbl">Clientes Ativos</div><div class="stat-val">12</div></div>
+    <div class="stat"><div class="stat-lbl">AUM Total</div><div class="stat-val g">R$25.4M</div></div>
+    <div class="stat"><div class="stat-lbl">Criticos</div><div class="stat-val r">1</div></div>
+    <div class="stat"><div class="stat-lbl">Atencao</div><div class="stat-val o">2</div></div>
+    <div class="stat"><div class="stat-lbl">Alinhados</div><div class="stat-val gr">9</div></div>
+  </div>
+  <div class="panel">
+    <div class="panel-head"><div class="panel-title"><span class="dot b"></span>Carteiras &mdash; Monitoramento em Tempo Real</div></div>
+    <table class="tbl">
+      <thead><tr><th>Cliente</th><th>AUM</th><th>RN Cliente</th><th>RN Portfolio</th><th>Gap</th><th>Estrategia</th><th>Ret. 12M</th><th>Vol.</th><th>Status</th><th>Acao</th></tr></thead>
+      <tbody id="clients-table"></tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- ════ PUBLISH CONTROL ════ -->
+<div class="screen" id="screen-publish">
+  <div class="ph">
+    <div><div class="ph-title">Publish Control</div><div class="ph-sub">Pipeline de conteudo &middot; Aprovacao &middot; Agendamento &middot; Publicacao</div></div>
+    <div class="ph-actions"><button class="btn prim">+ Novo Conteudo</button></div>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="stat-lbl">Pendentes</div><div class="stat-val o">3</div></div>
+    <div class="stat"><div class="stat-lbl">Aprovados</div><div class="stat-val gr">5</div></div>
+    <div class="stat"><div class="stat-lbl">Agendados</div><div class="stat-val b">2</div></div>
+    <div class="stat"><div class="stat-lbl">Publicados Hoje</div><div class="stat-val">7</div></div>
+  </div>
+  <div class="g2">
+    <div>
+      <div class="sec-div">Pendentes</div>
+      <div class="panel" id="pub-pending"></div>
+      <div class="sec-div" style="margin-top:20px;">Agendados</div>
+      <div class="panel" id="pub-scheduled"></div>
+    </div>
+    <div>
+      <div class="sec-div">Aprovados</div>
+      <div class="panel" id="pub-approved"></div>
+      <div class="sec-div" style="margin-top:20px;">Publicados Recentemente</div>
+      <div class="panel" id="pub-published"></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════ APIS ════ -->
+<div class="screen" id="screen-apis">
+  <div class="ph">
+    <div><div class="ph-title">APIs &amp; Data Sources</div><div class="ph-sub">Integracoes externas &middot; Status &middot; Latencia &middot; Fallback</div></div>
+    <div class="ph-actions"><button class="btn prim">+ Add API</button><button class="btn">View Logs</button></div>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="stat-lbl">APIs Ativas</div><div class="stat-val gr">7</div></div>
+    <div class="stat"><div class="stat-lbl">Degradadas</div><div class="stat-val o">1</div></div>
+    <div class="stat"><div class="stat-lbl">Erros/hora</div><div class="stat-val o">3</div></div>
+    <div class="stat"><div class="stat-lbl">Lat. Media</div><div class="stat-val">18ms</div></div>
+    <div class="stat"><div class="stat-lbl">Uptime 30d</div><div class="stat-val gr">99.7%</div></div>
+  </div>
+  <div class="panel">
+    <div class="panel-head"><div class="panel-title"><span class="dot p"></span>Todas as Integracoes</div></div>
+    <div id="apis-list"></div>
+  </div>
+</div>
+
+
+<!-- ════ KNOWLEDGE BASE ════ -->
+<div class="screen" id="screen-knowledge">
+  <div class="ph">
+    <div><div class="ph-title">Knowledge Base</div><div class="ph-sub">DIM &middot; Regras de linguagem &middot; Limites de comunicacao &middot; Compliance</div></div>
+    <div class="ph-actions"><button class="btn prim">+ Add Rule</button><button class="btn">Exportar</button></div>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="stat-lbl">Regras Ativas</div><div class="stat-val gr">142</div></div>
+    <div class="stat"><div class="stat-lbl">Desativadas</div><div class="stat-val">8</div></div>
+    <div class="stat"><div class="stat-lbl">Linguagem</div><div class="stat-val b">47</div></div>
+    <div class="stat"><div class="stat-lbl">Risco</div><div class="stat-val">38</div></div>
+    <div class="stat"><div class="stat-lbl">Compliance</div><div class="stat-val">57</div></div>
+  </div>
+  <div class="g2">
+    <div>
+      <div class="sec-div">Linguagem &amp; Comunicacao</div>
+      <div class="panel" id="kb-lang"></div>
+    </div>
+    <div>
+      <div class="sec-div">Risco &amp; Compliance</div>
+      <div class="panel" id="kb-risk"></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════ AUDIT LOG ════ -->
+<div class="screen" id="screen-audit">
+  <div class="ph">
+    <div><div class="ph-title">Audit Log</div><div class="ph-sub">Log completo &middot; Versoes &middot; Aprovacoes &middot; Publicacoes</div></div>
+    <div class="ph-actions">
+      <button class="btn">Exportar CSV</button>
+      <button class="btn">Hoje</button>
+      <button class="btn">7d</button>
+      <button class="btn prim">30d</button>
+    </div>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="stat-lbl">Acoes Hoje</div><div class="stat-val">34</div></div>
+    <div class="stat"><div class="stat-lbl">Edicoes</div><div class="stat-val b">12</div></div>
+    <div class="stat"><div class="stat-lbl">Aprovacoes</div><div class="stat-val gr">9</div></div>
+    <div class="stat"><div class="stat-lbl">Publicacoes</div><div class="stat-val">7</div></div>
+    <div class="stat"><div class="stat-lbl">Overrides</div><div class="stat-val o">2</div></div>
+  </div>
+  <div class="panel">
+    <div class="panel-head"><div class="panel-title"><span class="dot x"></span>Registro de Atividade</div></div>
+    <div id="audit-log"></div>
+  </div>
+</div>
+
+</main>
+
+<script>
+// ════════════════════════════════════
+// NAVIGATION — usa data-screen attr
+// ════════════════════════════════════
+function goTo(id) {
+  // hide all screens
+  var screens = document.querySelectorAll('.screen');
+  for (var i = 0; i < screens.length; i++) {
+    screens[i].classList.remove('active');
+  }
+  // deactivate all sidebar links
+  var links = document.querySelectorAll('.sb-link');
+  for (var j = 0; j < links.length; j++) {
+    links[j].classList.remove('active');
+  }
+  // show target screen
+  var target = document.getElementById('screen-' + id);
+  if (target) target.classList.add('active');
+  // activate sidebar link
+  for (var k = 0; k < links.length; k++) {
+    if (links[k].getAttribute('data-screen') === id) {
+      links[k].classList.add('active');
+      break;
+    }
+  }
+  // scroll to top
+  var main = document.querySelector('.main');
+  if (main) main.scrollTop = 0;
+}
+
+// Wire sidebar clicks via event delegation
+document.querySelector('.sb').addEventListener('click', function(e) {
+  var link = e.target.closest('.sb-link');
+  if (link) {
+    var screen = link.getAttribute('data-screen');
+    if (screen) goTo(screen);
+  }
+});
+
+// ════════════════════════════════════
+// CLOCK
+// ════════════════════════════════════
+function tick() {
+  var now = new Date();
+  var h = String(now.getHours()).padStart(2,'0');
+  var m = String(now.getMinutes()).padStart(2,'0');
+  var s = String(now.getSeconds()).padStart(2,'0');
+  var el = document.getElementById('adm-clock');
+  if (el) el.textContent = h + ':' + m + ':' + s;
+  var de = document.getElementById('adm-date');
+  if (de) {
+    var days = ['Dom','Seg','Ter','Qua','Qui','Sex','Sab'];
+    var months = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+    de.textContent = days[now.getDay()] + ' ' + now.getDate() + ' ' + months[now.getMonth()] + ' ' + now.getFullYear();
+  }
+}
+setInterval(tick, 1000);
+tick();
+
+// ════════════════════════════════════
+// DATA
+// ════════════════════════════════════
+var INSIGHTS_PENDING = [
+  {title:'Vera Hollanda: Exposicao Critica a Cripto vs Mandato FO', conf:94, impact:'ALTO', assets:'BTC, ETH', time:'Hoje 08:31', body:'Portfolio atual com 22% em Cripto, acima do limite FO de 15%. Em cenario de estresse (2022), drawdown potencial de -38% vs limite de -22%. Rebalanceamento imediato recomendado.'},
+  {title:'StormGuard: Regime transitioning to DEFENSIVE - Janela de 5 dias', conf:78, impact:'ALTO', assets:'ALL', time:'Hoje 07:15', body:'VIX acima de 18, DXY em alta e dados de emprego abaixo do consenso indicam transicao para regime defensivo. Probabilidade 78%. Clientes HPC11 devem ser notificados preventivamente.'},
+  {title:'HPC22 Outperformance: Gap vs SPX expandindo para +22.4pp 12M', conf:87, impact:'MEDIO', assets:'HPC22, SPY', time:'Ontem 16:44', body:'Diferenca de performance entre HPC22 e S&P 500 nos ultimos 12 meses atingiu +22.4pp, maior spread desde Q2 2023. Oportunidade para reforcar narrativa de alocacao com clientes em decisao.'},
+  {title:'BRL Volatility: Hedge cambial recomendado para exposicao acima de 30%', conf:71, impact:'MEDIO', assets:'USDBRL', time:'Ontem 14:02', body:'Volatilidade implicita do BRL subiu para 18.7%, nivel associado a movimentos de +/-8% em 90 dias. Clientes com exposicao cambial acima de 30% devem revisar hedge.'},
+];
+
+var INSIGHTS_APPROVED = [
+  {title:'HPC11 Analise Mensal: +11.2% vs benchmark CDI +0.2%', conf:92, impact:'ALTO', assets:'HPC11', time:'Hoje 11:00', body:'Relatorio mensal de performance aprovado e enviado aos clientes HPC11. Destaque para superacao do CDI em 11 pontos percentuais.'},
+  {title:'StormGuard WATCH: Modo de vigilancia ativado - comunicado enviado', conf:95, impact:'ALTO', assets:'ALL', time:'Ontem 16:30', body:'Alerta StormGuard publicado ao terminal cliente. Regime em observacao. Proxima revisao em 48h.'},
+  {title:'Macro Semanal: Fed Hawkish, posicionamento conservador recomendado', conf:88, impact:'MEDIO', assets:'SPX, TLT', time:'Seg 09:00', body:'Analise macro semanal publicada com recomendacao de posicionamento defensivo.'},
+];
+
+var CLIENTS = [
+  {name:'Familia Monteiro', aum:'R$4.2M', rnC:67, rnP:67, gap:0, strat:'HPC22', ret:'+22.4%', vol:'11.8%', st:'ok'},
+  {name:'Dr. Carlos Viana', aum:'R$1.8M', rnC:52, rnP:52, gap:0, strat:'HPC11', ret:'+14.1%', vol:'8.3%', st:'ok'},
+  {name:'Grupo Silveira FO', aum:'R$12.1M', rnC:44, rnP:50, gap:6, strat:'MULTIATIVO', ret:'+9.8%', vol:'7.1%', st:'warn'},
+  {name:'Vera Hollanda', aum:'R$890K', rnC:62, rnP:78, gap:16, strat:'ALTO RISCO', ret:'-4.2%', vol:'19.4%', st:'crit'},
+  {name:'Instituto Cavalcante', aum:'R$6.4M', rnC:38, rnP:38, gap:0, strat:'HPC11', ret:'+11.2%', vol:'6.9%', st:'ok'},
+];
+
+var APIS = [
+  {name:'Market Data Real-time', ep:'api.marketdata.io/v3', lat:'12ms', st:'ok'},
+  {name:'Bloomberg Terminal Feed', ep:'feeds.bloomberg.com/harpian', lat:'8ms', st:'ok'},
+  {name:'AlphaDroid Engine', ep:'alphadroid.internal/api', lat:'24ms', st:'ok'},
+  {name:'CRM Integration', ep:'crm.harpian.io/sync', lat:'480ms', st:'warn'},
+  {name:'News RSS Aggregator', ep:'feeds.rss.internal', lat:'31ms', st:'ok'},
+  {name:'FRED Economic Data', ep:'api.stlouisfed.org/fred', lat:'95ms', st:'ok'},
+  {name:'Coinbase Market Data', ep:'api.coinbase.com/v2', lat:'41ms', st:'ok'},
+  {name:'Tradeweb Bond Pricing', ep:'api.tradeweb.com/bonds', lat:'67ms', st:'ok'},
+];
+
+var PORTFOLIO = [
+  {name:'Acoes Alta Beta Brasil', cls:'RENDA VAR.', w:28, d11:3, d22:8},
+  {name:'S&P 500 ETF', cls:'RENDA VAR.', w:15, d11:-2, d22:-5},
+  {name:'Bitcoin', cls:'CRIPTO', w:12, d11:7, d22:2},
+  {name:'Ethereum', cls:'CRIPTO', w:6, d11:1, d22:-3},
+  {name:'Ouro Fisico', cls:'COMMODITIES', w:10, d11:-1, d22:4},
+  {name:'Renda Fixa Curta', cls:'RENDA FIXA', w:14, d11:-4, d22:-8},
+  {name:'Caixa / Liquidez', cls:'CAIXA', w:8, d11:3, d22:5},
+  {name:'FIIs', cls:'IMOVEIS', w:7, d11:-7, d22:-3},
+];
+
+var NEWS = [
+  {hl:'Fed Chair Powell reforca tom hawkish: sem pressa para cortar juros', src:'Reuters', time:'Hoje 10:22', impact:'ALTO'},
+  {hl:'Bitcoin supera US$95.000 impulsionado por fluxo institucional', src:'Bloomberg', time:'Hoje 09:45', impact:'ALTO'},
+  {hl:'CPI USA de Marco revisado para cima: 3.5% vs 3.2% esperado', src:'WSJ', time:'Hoje 08:30', impact:'ALTO'},
+  {hl:'Selic: Copom mantem em 14.75% com comunicado neutro', src:'Valor', time:'Ontem 18:00', impact:'MEDIO'},
+  {hl:'Goldman Sachs eleva target para ouro: US$3.700 ate 2026', src:'GS Research', time:'Ontem 14:15', impact:'MEDIO'},
+  {hl:'VIX acima de 18: historico indica periodo de cautela em 70% dos casos', src:'CBOE', time:'Ontem 12:00', impact:'MEDIO'},
+  {hl:'Mercado de trabalho USA: Payrolls +177k vs 200k esperado', src:'BLS', time:'Ontem 09:30', impact:'MEDIO'},
+  {hl:'NVIDIA reporta receita recorde: $26.1B no Q1 2025', src:'CNBC', time:'Sex 20:00', impact:'BAIXO'},
+];
+
+var FED_MTG = [
+  {dt:'7 Mai', yr:'2025', title:'FOMC Meeting - Decisao de Taxa', desc:'Mercado precifica 80% de probabilidade de manutencao em 5.25-5.50%. Foco no comunicado pos-reuniao.', imp:'CRITICO'},
+  {dt:'18 Jun', yr:'2025', title:'FOMC Meeting + SEP + Coletiva', desc:'Reuniao com projecoes economicas (SEP) e coletiva. Primeira oportunidade para corte em 2025.', imp:'ALTO'},
+  {dt:'30 Jul', yr:'2025', title:'FOMC Meeting', desc:'Decisao de taxa. Sem SEP. Foco em dados de inflacao do segundo trimestre.', imp:'MEDIO'},
+];
+
+var FED_SPE = [
+  {dt:'24 Abr', speaker:'Powell (Chair)', event:'Chicago Economic Club', desc:'Tom hawkish: sem pressa para cortar juros. Inflacao ainda acima da meta. Mercado reagiu negativamente.', imp:'ALTO'},
+  {dt:'17 Abr', speaker:'Williams (NY Fed)', event:'NYU Stern', desc:'Discurso moderado. Abertura para corte no segundo semestre se dados melhorarem.', imp:'MEDIO'},
+  {dt:'10 Abr', speaker:'Waller (Gov.)', event:'Hoover Institution', desc:'Hawkish: preocupacao com inflacao de servicos persistente. Contrario a cortes precipitados.', imp:'MEDIO'},
+];
+
+var PUB = {
+  pending:[
+    {title:'Analise Semanal - Semana do Fed (7 Mai)', type:'Macro', time:'Hoje 15:00'},
+    {title:'Client Alert: Vera Hollanda - Risk Gap Critical', type:'Alerta', time:'Hoje 09:45'},
+    {title:'HPC Strategies - Q2 2025 Outlook', type:'Relatorio', time:'Ontem'},
+  ],
+  approved:[
+    {title:'StormGuard: WATCH Mode Activated', type:'Alerta', time:'Hoje 11:30'},
+    {title:'HPC11 Performance - Abril 2025', type:'Mensal', time:'Hoje 08:00'},
+    {title:'Macro Semanal - 28 Abr', type:'Macro', time:'Seg 09:00'},
+    {title:'Calendario FOMC - Maio 2025', type:'Eventos', time:'Sex 17:00'},
+    {title:'Gold Breakout: Narrativa para FOs', type:'Insight', time:'Qui 14:00'},
+  ],
+  scheduled:[
+    {title:'Monthly HPC Report - Mai 2025', type:'Relatorio', time:'1 Mai 08:00'},
+    {title:'StormGuard Revisao Semanal', type:'Sistema', time:'2 Mai 10:00'},
+  ],
+  published:[
+    {title:'Dashboard Update: Abril Encerrado', type:'Sistema', time:'Hoje 12:00'},
+    {title:'Fed Summary - Mar 2025', type:'Macro', time:'28 Mar'},
+  ]
+};
+
+var KB_LANG = [
+  {text:'Nunca utilizar linguagem alarmista para descrever quedas de mercado inferiores a 5%.', cat:'LINGUAGEM'},
+  {text:'Sempre apresentar retornos com contexto temporal. Ex: "+22% em 12 meses", nunca apenas "+22%".', cat:'LINGUAGEM'},
+  {text:'Benchmark obrigatorio: comparar HPC sempre contra CDI, Ibovespa e S&P 500 em BRL.', cat:'COMPARACAO'},
+  {text:'Termos proibidos: "garantia de retorno", "investimento seguro", "sem risco", "retorno fixo".', cat:'COMPLIANCE'},
+  {text:'Insercoes sobre risco devem aparecer antes de qualquer projecao positiva.', cat:'ESTRUTURA'},
+  {text:'Todos os insights DIM devem ter revisao humana antes de publicacao ao cliente.', cat:'GOVERNANCA'},
+];
+
+var KB_RISK = [
+  {text:'RN Portfolio acima de RN Cliente em 10 pontos: gerar alerta automatico nivel ATENCAO.', cat:'RISCO'},
+  {text:'RN Portfolio acima de RN Cliente em 15 pontos: gerar alerta critico e bloquear novos aportes.', cat:'RISCO'},
+  {text:'Exposicao a cripto acima de 20% em portfolio FO: notificacao obrigatoria ao compliance.', cat:'COMPLIANCE'},
+  {text:'Drawdown superior a 15% em 30 dias: ativar revisao de carteira automatica.', cat:'RISCO'},
+  {text:'Concentracao em unico ativo acima de 25%: flag para revisao de mandato.', cat:'COMPLIANCE'},
+  {text:'Correlacao entre dois ativos acima de 0.85: revisao de diversificacao obrigatoria.', cat:'RISCO'},
+];
+
+var AUDIT = [
+  {time:'14:42', ico:'checkmark', text:'<strong>Jim FO</strong> aprovou insight DIM: "HPC22 Outperformance +22.4pp"', user:'Jim FO'},
+  {time:'14:31', ico:'DIM', text:'<strong>DIM</strong> gerou novo insight: "Vera Hollanda - Risco Critico" (conf. 94%)', user:'DIM AUTO'},
+  {time:'13:55', ico:'edit', text:'<strong>Jim FO</strong> editou analise macro semanal - secao Perspectiva Fed', user:'Jim FO'},
+  {time:'13:12', ico:'pub', text:'<strong>Jim FO</strong> publicou: "HPC11 Performance - Abril 2025" ao terminal cliente', user:'Jim FO'},
+  {time:'12:44', ico:'rej', text:'<strong>Jim FO</strong> rejeitou insight DIM: "Ethereum breakout tecnico" - baixa relevancia FO', user:'Jim FO'},
+  {time:'12:00', ico:'sys', text:'<strong>Sistema</strong> publicou automaticamente: "Dashboard Update: Abril Encerrado"', user:'SISTEMA'},
+  {time:'11:30', ico:'pub', text:'<strong>Jim FO</strong> publicou alerta StormGuard: "WATCH Mode Activated"', user:'Jim FO'},
+  {time:'11:22', ico:'risk', text:'<strong>Risk Engine</strong> recalculou RN Portfolio de Vera Hollanda: 74 -> 78', user:'RISCO AUTO'},
+  {time:'10:45', ico:'check', text:'<strong>Jim FO</strong> aprovou e agendou: "Analise Semanal - Semana do Fed"', user:'Jim FO'},
+  {time:'10:12', ico:'warn', text:'<strong>Sistema</strong> detectou degradacao na API CRM Integration: latencia 480ms', user:'SISTEMA'},
+  {time:'09:45', ico:'alert', text:'<strong>DIM</strong> gerou alerta critico: Vera Hollanda RN 78 vs Mandato 62 (+16 pontos)', user:'DIM AUTO'},
+  {time:'09:00', ico:'pub', text:'<strong>Jim FO</strong> publicou macro semanal: "28 Abr - Semana do Fed"', user:'Jim FO'},
+  {time:'08:31', ico:'DIM', text:'<strong>DIM</strong> gerou 4 novos insights. Pendentes de revisao.', user:'DIM AUTO'},
+  {time:'08:00', ico:'sys', text:'<strong>Sistema</strong> publicou: "HPC11 Performance - Abril 2025"', user:'SISTEMA'},
+];
+
+// ════════════════════════════════════
+// RENDERERS
+// ════════════════════════════════════
+
+function renderTicker() {
+  var data = [
+    {sym:'SPX',val:'5,234',chg:'+0.4%',up:true},
+    {sym:'NDX',val:'18,412',chg:'+0.6%',up:true},
+    {sym:'GLD',val:'3,316',chg:'+0.8%',up:true},
+    {sym:'BTC',val:'94,820',chg:'+1.2%',up:true},
+    {sym:'DXY',val:'104.3',chg:'-0.2%',up:false},
+    {sym:'VIX',val:'18.2',chg:'+1.3',up:false},
+    {sym:'USDBRL',val:'5.142',chg:'-0.3%',up:true},
+    {sym:'TLT',val:'91.4',chg:'+0.4%',up:true},
+  ];
+  var el = document.getElementById('home-ticker');
+  if (!el) return;
+  var html = '';
+  for (var i = 0; i < data.length; i++) {
+    var d = data[i];
+    html += '<div class="tick"><span class="tick-sym">'+d.sym+'</span><span class="tick-val">'+d.val+'</span><span class="'+(d.up?'tick-up':'tick-dn')+'">'+d.chg+'</span></div>';
+  }
+  el.innerHTML = html;
+}
+
+function confColor(c) {
+  return c >= 90 ? 'var(--green)' : c >= 75 ? 'var(--orange)' : 'var(--text3)';
+}
+function impBadge(s) {
+  return s === 'ALTO' ? 'high' : s === 'MEDIO' ? 'med' : 'low';
+}
+
+function insightHTML(ins, pending) {
+  var cc = confColor(ins.conf);
+  return '<div class="insight' + (pending ? ' flagged' : '') + '">'
+    + '<div class="insight-hd"><div class="insight-title">'+ins.title+'</div><span class="badge '+impBadge(ins.impact)+'">'+ins.impact+'</span></div>'
+    + '<div class="insight-meta"><span>Conf: <strong style="color:'+cc+'">'+ins.conf+'%</strong></span><span>Ativos: <strong>'+ins.assets+'</strong></span><span>'+ins.time+'</span></div>'
+    + '<div class="conf-track"><div class="conf-bg"><div class="conf-fill" style="width:'+ins.conf+'%;background:'+cc+';height:4px;"></div></div><span style="font-family:var(--mono);font-size:9px;color:'+cc+'">'+ins.conf+'%</span></div>'
+    + '<div class="insight-body">'+ins.body+'</div>'
+    + '<div class="btn-row">'
+    + (pending
+        ? '<button class="btn suc">Aprovar</button><button class="btn prim">Editar</button><button class="btn err">Rejeitar</button><button class="btn info">Enviar KB</button>'
+        : '<button class="btn">Ver</button><button class="btn prim">Revisar</button>')
+    + '</div></div>';
+}
+
+function renderHomeDim() {
+  var el = document.getElementById('home-dim');
+  if (!el) return;
+  var html = '';
+  for (var i = 0; i < Math.min(3, INSIGHTS_PENDING.length); i++) {
+    var ins = INSIGHTS_PENDING[i];
+    var cc = confColor(ins.conf);
+    html += '<div style="padding:11px 15px;border-bottom:1px solid var(--border);">'
+      + '<div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;">'
+      + '<div style="flex:1;font-size:12px;font-weight:600;color:var(--text);line-height:1.4;">'+ins.title+'</div>'
+      + '<span class="badge '+impBadge(ins.impact)+'">'+ins.impact+'</span></div>'
+      + '<div style="display:flex;gap:10px;margin-bottom:7px;align-items:center;">'
+      + '<div style="width:50px;height:3px;background:var(--border);border-radius:2px;overflow:hidden;"><div style="width:'+ins.conf+'%;height:100%;background:'+cc+'"></div></div>'
+      + '<span style="font-family:var(--mono);font-size:9px;color:'+cc+'">'+ins.conf+'%</span>'
+      + '<span style="font-family:var(--mono);font-size:9px;color:var(--text4)">'+ins.time+'</span></div>'
+      + '<div class="btn-row"><button class="btn suc" style="font-size:8px;padding:3px 7px;">Aprovar</button>'
+      + '<button class="btn prim" style="font-size:8px;padding:3px 7px;">Editar</button>'
+      + '<button class="btn err" style="font-size:8px;padding:3px 7px;">Rejeitar</button></div></div>';
+  }
+  html += '<div style="padding:10px 15px;text-align:center;"><button class="btn prim" onclick="goTo(\'intelligence\')">Ver todos os 4 insights</button></div>';
+  el.innerHTML = html;
+}
+
+function renderHomeClients() {
+  var el = document.getElementById('home-clients');
+  if (!el) return;
+  var html = '';
+  for (var i = 0; i < CLIENTS.length; i++) {
+    var c = CLIENTS[i];
+    var cls = c.st === 'crit' ? 'crit' : c.st === 'warn' ? 'warn' : 'ok';
+    var stLabel = c.st === 'crit' ? 'CRITICO' : c.st === 'warn' ? 'ATENCAO' : 'OK';
+    var stBadge = c.st === 'crit' ? 'critical' : c.st === 'warn' ? 'watch' : 'ok';
+    html += '<div class="cr">'
+      + '<div class="cr-name">'+c.name+'</div>'
+      + '<div class="cr-aum">'+c.aum+'</div>'
+      + '<div class="cr-bar-wrap"><div class="cr-bar"><div class="cr-fill '+cls+'" style="width:'+Math.min(c.rnP,100)+'%"></div></div></div>'
+      + '<div class="cr-score '+cls+'">'+c.rnP+'</div>'
+      + '<span class="badge '+stBadge+'" style="font-size:8px;">'+stLabel+'</span>'
+      + '</div>';
+  }
+  el.innerHTML = html;
+}
+
+function renderHomePublish() {
+  var el = document.getElementById('home-publish');
+  if (!el) return;
+  var all = [];
+  for (var i = 0; i < PUB.pending.length; i++) all.push({d:PUB.pending[i], st:'pending'});
+  for (var i = 0; i < Math.min(2, PUB.approved.length); i++) all.push({d:PUB.approved[i], st:'approved'});
+  for (var i = 0; i < PUB.scheduled.length; i++) all.push({d:PUB.scheduled[i], st:'scheduled'});
+  var stLabels = {pending:'PENDENTE', approved:'APROVADO', scheduled:'AGENDADO'};
+  var html = '';
+  for (var i = 0; i < all.length; i++) {
+    var item = all[i];
+    html += '<div class="pipe-row">'
+      + '<span class="badge '+item.st+'">'+stLabels[item.st]+'</span>'
+      + '<div class="pipe-title">'+item.d.title+'</div>'
+      + '<div class="pipe-time">'+item.d.time+'</div>'
+      + (item.st === 'pending' ? '<button class="btn suc" style="font-size:8px;padding:3px 7px;">OK</button>' : '')
+      + (item.st === 'approved' ? '<button class="btn info" style="font-size:8px;padding:3px 7px;">Push</button>' : '')
+      + '</div>';
+  }
+  el.innerHTML = html;
+}
+
+function renderHomeApis() {
+  var el = document.getElementById('home-apis');
+  if (!el) return;
+  var html = '';
+  for (var i = 0; i < Math.min(5, APIS.length); i++) {
+    var a = APIS[i];
+    html += '<div class="api-row">'
+      + '<div class="api-dot '+a.st+'"></div>'
+      + '<div class="api-name">'+a.name+'</div>'
+      + '<div class="api-lat">'+a.lat+'</div>'
+      + '<div class="api-st '+a.st+'">'+(a.st==='ok'?'ONLINE':a.st==='warn'?'DEGRADED':'ERROR')+'</div>'
+      + (a.st==='warn' ? '<button class="btn warn" style="font-size:8px;padding:3px 7px;">Reconectar</button>' : '<button class="btn" style="font-size:8px;padding:3px 7px;">Logs</button>')
+      + '</div>';
+  }
+  el.innerHTML = html;
+}
+
+function renderIntelligence() {
+  var pEl = document.getElementById('intel-pending');
+  var aEl = document.getElementById('intel-approved');
+  if (pEl) {
+    var html = '';
+    for (var i = 0; i < INSIGHTS_PENDING.length; i++) html += insightHTML(INSIGHTS_PENDING[i], true);
+    pEl.innerHTML = html;
+  }
+  if (aEl) {
+    var html = '';
+    for (var i = 0; i < INSIGHTS_APPROVED.length; i++) html += insightHTML(INSIGHTS_APPROVED[i], false);
+    aEl.innerHTML = html;
+  }
+}
+
+function renderClients() {
+  var el = document.getElementById('clients-table');
+  if (!el) return;
+  var html = '';
+  for (var i = 0; i < CLIENTS.length; i++) {
+    var c = CLIENTS[i];
+    var gcol = c.gap > 10 ? 'var(--red)' : c.gap > 0 ? 'var(--orange)' : 'var(--green)';
+    var sb = c.st === 'crit' ? 'critical' : c.st === 'warn' ? 'watch' : 'ok';
+    var sl = c.st === 'crit' ? 'CRITICO' : c.st === 'warn' ? 'ATENCAO' : 'ALINHADO';
+    var rc = c.ret.charAt(0) === '+' ? 'var(--green)' : c.ret.charAt(0) === '-' ? 'var(--red)' : 'var(--text)';
+    html += '<tr>'
+      + '<td class="td-name">'+c.name+(c.st==='crit'?'<br><span style="font-family:var(--mono);font-size:9px;color:var(--red);">Fora de Mandato</span>':'')+'</td>'
+      + '<td class="td-mono">'+c.aum+'</td>'
+      + '<td class="td-mono">'+c.rnC+'</td>'
+      + '<td class="td-mono" style="color:'+(c.rnP>c.rnC?'var(--orange)':'var(--green)')+'">'+c.rnP+'</td>'
+      + '<td class="td-mono" style="color:'+gcol+';font-weight:600;">'+(c.gap>0?'+':'')+c.gap+'</td>'
+      + '<td><span class="badge neutral">'+c.strat+'</span></td>'
+      + '<td class="td-mono" style="color:'+rc+'">'+c.ret+'</td>'
+      + '<td class="td-mono">'+c.vol+'</td>'
+      + '<td><span class="badge '+sb+'">'+sl+'</span></td>'
+      + '<td class="td-act"><button class="btn">Ver</button>'+(c.st!=='ok'?'<button class="btn warn">Simular</button>':'')+'</td>'
+      + '</tr>';
+  }
+  el.innerHTML = html;
+}
+
+function renderPortfolio() {
+  var el = document.getElementById('port-table');
+  if (!el) return;
+  var html = '';
+  for (var i = 0; i < PORTFOLIO.length; i++) {
+    var a = PORTFOLIO[i];
+    var c11 = a.d11 > 0 ? 'var(--green)' : a.d11 < 0 ? 'var(--red)' : 'var(--text4)';
+    var c22 = a.d22 > 0 ? 'var(--green)' : a.d22 < 0 ? 'var(--red)' : 'var(--text4)';
+    html += '<tr>'
+      + '<td class="td-name">'+a.name+'</td>'
+      + '<td><span class="badge neutral">'+a.cls+'</span></td>'
+      + '<td><div style="display:flex;align-items:center;gap:8px;"><div style="width:80px;height:4px;background:var(--border);border-radius:2px;overflow:hidden;"><div style="width:'+(a.w*2.5)+'%;height:100%;background:var(--blue);border-radius:2px;"></div></div><span class="td-mono">'+a.w+'%</span></div></td>'
+      + '<td class="td-mono" style="color:'+c11+'">'+(a.d11>0?'+':'')+a.d11+'%</td>'
+      + '<td class="td-mono" style="color:'+c22+'">'+(a.d22>0?'+':'')+a.d22+'%</td>'
+      + '<td class="td-act"><button class="btn prim">Editar</button><button class="btn err">Remover</button></td>'
+      + '</tr>';
+  }
+  el.innerHTML = html;
+}
+
+function renderNews() {
+  var el = document.getElementById('news-list');
+  if (!el) return;
+  var html = '';
+  for (var i = 0; i < NEWS.length; i++) {
+    var n = NEWS[i];
+    var ib = n.impact === 'ALTO' ? 'high' : n.impact === 'MEDIO' ? 'med' : 'low';
+    html += '<div class="news-row">'
+      + '<div style="flex:1"><div class="news-hl">'+n.hl+'</div>'
+      + '<div class="news-meta"><span>'+n.src+'</span><span>'+n.time+'</span><span class="badge '+ib+'">'+n.impact+'</span></div>'
+      + '<div class="btn-row"><button class="btn suc">Aprovar</button><button class="btn prim">Editar</button><button class="btn info">Tag</button><button class="btn err">Descartar</button></div></div>'
+      + '</div>';
+  }
+  el.innerHTML = html;
+}
+
+function renderFed() {
+  var mEl = document.getElementById('fed-meetings');
+  var sEl = document.getElementById('fed-speeches');
+  if (mEl) {
+    var html = '';
+    for (var i = 0; i < FED_MTG.length; i++) {
+      var m = FED_MTG[i];
+      var ib = m.imp === 'CRITICO' ? 'critical' : m.imp === 'ALTO' ? 'high' : 'med';
+      html += '<div class="fed-row">'
+        + '<div class="fed-dt"><div class="fed-dt-main">'+m.dt+'</div><div class="fed-dt-sub">'+m.yr+'</div></div>'
+        + '<div style="flex:1"><div class="fed-title">'+m.title+' <span class="badge '+ib+'" style="vertical-align:middle;">'+m.imp+'</span></div>'
+        + '<div class="fed-desc">'+m.desc+'</div>'
+        + '<div class="btn-row"><button class="btn prim">Highlight</button><button class="btn info">Attach Insight</button><button class="btn err">Push Alert</button></div></div>'
+        + '</div>';
+    }
+    mEl.innerHTML = html;
+  }
+  if (sEl) {
+    var html = '';
+    for (var i = 0; i < FED_SPE.length; i++) {
+      var s = FED_SPE[i];
+      var ib = s.imp === 'ALTO' ? 'high' : 'med';
+      html += '<div class="fed-row">'
+        + '<div class="fed-dt"><div class="fed-dt-main">'+s.dt+'</div><div class="fed-dt-sub">'+s.speaker+'</div></div>'
+        + '<div style="flex:1"><div class="fed-title">'+s.event+' <span class="badge '+ib+'" style="vertical-align:middle;">'+s.imp+'</span></div>'
+        + '<div class="fed-desc">'+s.desc+'</div>'
+        + '<div class="btn-row"><button class="btn prim">Attach Insight</button><button class="btn info">Ver Transcricao</button></div></div>'
+        + '</div>';
+    }
+    sEl.innerHTML = html;
+  }
+}
+
+function renderApis() {
+  var el = document.getElementById('apis-list');
+  if (!el) return;
+  var html = '';
+  for (var i = 0; i < APIS.length; i++) {
+    var a = APIS[i];
+    var stLabel = a.st === 'ok' ? 'ONLINE' : a.st === 'warn' ? 'DEGRADED' : 'ERROR';
+    html += '<div class="api-row">'
+      + '<div class="api-dot '+a.st+'"></div>'
+      + '<div class="api-name" style="width:200px;flex-shrink:0;">'+a.name+'</div>'
+      + '<div class="api-ep">'+a.ep+'</div>'
+      + '<div class="api-lat">'+a.lat+'</div>'
+      + '<div class="api-st '+a.st+'">'+stLabel+'</div>'
+      + '<div class="td-act">'
+      + (a.st==='warn' ? '<button class="btn warn">Reconectar</button><button class="btn err">Disable</button>' : '<button class="btn">Logs</button><button class="btn prim">Edit</button>')
+      + '<button class="btn">Monitor</button></div>'
+      + '</div>';
+  }
+  el.innerHTML = html;
+}
+
+function renderPublish() {
+  var sections = {
+    'pub-pending': {data:PUB.pending, st:'pending', lbl:'PENDENTE'},
+    'pub-approved': {data:PUB.approved, st:'approved', lbl:'APROVADO'},
+    'pub-scheduled': {data:PUB.scheduled, st:'scheduled', lbl:'AGENDADO'},
+    'pub-published': {data:PUB.published, st:'published', lbl:'PUBLICADO'},
+  };
+  var keys = Object.keys(sections);
+  for (var s = 0; s < keys.length; s++) {
+    var id = keys[s];
+    var sec = sections[id];
+    var el = document.getElementById(id);
+    if (!el) continue;
+    var html = '';
+    for (var i = 0; i < sec.data.length; i++) {
+      var item = sec.data[i];
+      html += '<div class="pipe-row">'
+        + '<span class="badge '+sec.st+'">'+sec.lbl+'</span>'
+        + '<div class="pipe-title">'+item.title+'</div>'
+        + '<span class="badge neutral" style="font-size:8px;">'+item.type+'</span>'
+        + '<div class="pipe-time">'+item.time+'</div>'
+        + '<div class="td-act">';
+      if (sec.st==='pending') html += '<button class="btn suc">Aprovar</button><button class="btn prim">Edit</button><button class="btn warn">Delay</button><button class="btn err">Cancel</button>';
+      if (sec.st==='approved') html += '<button class="btn info">Push Now</button><button class="btn prim">Edit</button>';
+      if (sec.st==='scheduled') html += '<button class="btn">Edit</button><button class="btn err">Cancel</button>';
+      if (sec.st==='published') html += '<button class="btn">Ver</button>';
+      html += '</div></div>';
+    }
+    el.innerHTML = html;
+  }
+}
+
+function renderKnowledge() {
+  function buildRules(arr) {
+    var html = '';
+    for (var i = 0; i < arr.length; i++) {
+      var r = arr[i];
+      html += '<div class="rule-row">'
+        + '<div style="flex:1"><div class="rule-text">'+r.text+'</div><div class="rule-cat"><span class="badge neutral">'+r.cat+'</span></div></div>'
+        + '<div class="btn-row" style="flex-shrink:0;"><button class="btn prim">Edit</button><button class="btn err">Disable</button></div>'
+        + '</div>';
+    }
+    return html;
+  }
+  var lEl = document.getElementById('kb-lang');
+  var rEl = document.getElementById('kb-risk');
+  if (lEl) lEl.innerHTML = buildRules(KB_LANG);
+  if (rEl) rEl.innerHTML = buildRules(KB_RISK);
+}
+
+function renderAudit() {
+  var el = document.getElementById('audit-log');
+  if (!el) return;
+  var icons = {checkmark:'&#10003;', DIM:'&#9830;', edit:'&#9998;', pub:'&#8679;', rej:'&#8856;', sys:'&#9737;', risk:'&#9651;', check:'&#10003;', warn:'&#9888;', alert:'&#9888;'};
+  var html = '';
+  for (var i = 0; i < AUDIT.length; i++) {
+    var e = AUDIT[i];
+    html += '<div class="log-row">'
+      + '<div class="log-time">'+e.time+'</div>'
+      + '<div class="log-ico">'+(icons[e.ico]||'&#9679;')+'</div>'
+      + '<div class="log-text">'+e.text+'</div>'
+      + '<div class="log-user">'+e.user+'</div>'
+      + '</div>';
+  }
+  el.innerHTML = html;
+}
+
+// ════════════════════════════════════
+// INIT
+// ════════════════════════════════════
+renderTicker();
+renderHomeDim();
+renderHomeClients();
+renderHomePublish();
+renderHomeApis();
+renderIntelligence();
+renderClients();
+renderPortfolio();
+renderNews();
+renderFed();
+renderApis();
+renderPublish();
+renderKnowledge();
+renderAudit();
+</script>
+</body>
+</html>
