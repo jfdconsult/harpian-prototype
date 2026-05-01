@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>HARPIAN — Behavioral Questionnaire</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#060B12;--bg2:#0C1420;--panel:#101A28;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);
+  --gold:#D4AF45;--gold-bg:rgba(212,175,69,0.10);
+  --green:#3EE68B;--green-bg:rgba(62,230,139,0.09);
+  --red:#FF4D4F;--red-bg:rgba(255,77,79,0.09);
+  --blue:#4A8FD4;
+  --text:#EBF4FF;--text2:#A8BDD4;--text3:#5A7494;--text4:#2A3A4E;
+  --mono:'DM Mono',monospace;--g:'Space Grotesk',sans-serif;
+  --r:10px;
+  --bar-h:96px;
+}
+html{scroll-behavior:smooth;}
+body{
+  min-height:100vh;
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--g);
+  font-size:16px;
+  line-height:1.5;
+  padding-bottom:calc(var(--bar-h) + 32px);
+}
+
+/* ── HEADER ── */
+.bq-header{
+  background:rgba(6,11,18,0.96);
+  border-bottom:1px solid var(--border);
+  padding:14px 24px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  position:sticky;
+  top:0;
+  z-index:200;
+  backdrop-filter:blur(16px);
+}
+.bq-mark{width:26px;height:26px;background:var(--gold);border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.bq-mark svg{width:13px;height:13px;}
+.bq-brand{font-size:15px;font-weight:700;letter-spacing:.03em;}
+.bq-brand span{color:var(--gold);}
+.bq-div{width:1px;height:18px;background:var(--border);}
+.bq-label{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--text3);}
+
+/* ── CONTENT ── */
+.bq-content{max-width:680px;margin:0 auto;padding:40px 24px 0;}
+
+.bq-kicker{font-family:var(--mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;}
+.bq-title{font-size:30px;font-weight:700;color:var(--text);letter-spacing:-.02em;line-height:1.2;margin-bottom:12px;}
+.bq-intro{font-size:16px;color:var(--text2);line-height:1.7;margin-bottom:36px;}
+
+/* ── QUESTION CARDS ── */
+.bq-questions{display:flex;flex-direction:column;gap:14px;margin-bottom:40px;}
+.bq-q{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  padding:20px 22px;
+  display:flex;
+  gap:18px;
+  align-items:flex-start;
+}
+.bq-q-num{
+  font-family:var(--mono);
+  font-size:12px;
+  font-weight:700;
+  color:var(--gold);
+  background:var(--gold-bg);
+  border:1px solid rgba(212,175,69,0.2);
+  border-radius:6px;
+  width:32px;
+  height:32px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+  margin-top:2px;
+}
+.bq-q-body{}
+.bq-q-text{font-size:16px;font-weight:600;color:var(--text);line-height:1.45;margin-bottom:5px;}
+.bq-q-hint{font-family:var(--mono);font-size:12px;color:var(--text3);line-height:1.5;}
+
+/* ── NOTE ── */
+.bq-note{
+  background:rgba(212,175,69,0.04);
+  border:1px solid rgba(212,175,69,0.15);
+  border-left:3px solid var(--gold);
+  border-radius:var(--r);
+  padding:14px 18px;
+  font-size:14px;
+  color:var(--text2);
+  line-height:1.65;
+  margin-bottom:40px;
+}
+
+/* ── TEXT FALLBACK ── */
+.bq-text-section{display:none;margin-bottom:32px;}
+.bq-text-section.visible{display:block;}
+.bq-textarea{
+  width:100%;
+  background:rgba(255,255,255,0.04);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  padding:16px;
+  font-family:var(--g);
+  font-size:15px;
+  color:var(--text);
+  resize:vertical;
+  min-height:200px;
+  outline:none;
+  line-height:1.65;
+  margin-top:10px;
+}
+.bq-textarea:focus{border-color:rgba(212,175,69,0.4);}
+.bq-textarea::placeholder{color:var(--text4);}
+.bq-text-label{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);}
+.bq-text-submit{
+  margin-top:12px;
+  padding:14px 28px;
+  background:var(--gold-bg);
+  border:1px solid rgba(212,175,69,0.3);
+  border-radius:var(--r);
+  font-family:var(--g);
+  font-size:15px;
+  font-weight:600;
+  color:var(--gold);
+  cursor:pointer;
+  transition:opacity .15s;
+}
+.bq-text-submit:hover{opacity:.85;}
+
+/* ── CONFIRMATION OVERLAY ── */
+.bq-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(6,11,18,0.96);
+  z-index:500;
+  overflow-y:auto;
+  display:none;
+  padding:32px 20px 120px;
+}
+.bq-overlay.visible{display:block;}
+.bq-overlay-inner{max-width:600px;margin:0 auto;}
+
+.bq-confirm-kicker{font-family:var(--mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;}
+.bq-confirm-title{font-size:26px;font-weight:700;color:var(--text);letter-spacing:-.02em;margin-bottom:8px;}
+.bq-confirm-sub{font-size:15px;color:var(--text2);line-height:1.6;margin-bottom:28px;}
+
+.bq-bucket-list{background:var(--panel);border:1px solid var(--border);border-radius:var(--r);margin-bottom:16px;overflow:hidden;}
+.bq-bucket-item{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.04);}
+.bq-bucket-item:last-child{border-bottom:none;}
+.bq-bucket-name{flex:1;font-size:15px;font-weight:600;color:var(--text);}
+.bq-bucket-pct{font-family:var(--mono);font-size:13px;color:var(--text2);width:40px;text-align:right;}
+.bq-bucket-horizon{font-family:var(--mono);font-size:11px;color:var(--text3);width:90px;text-align:right;}
+.bq-risk-badge{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:3px;}
+.bq-risk-badge.Low{background:var(--green-bg);color:var(--green);border:1px solid rgba(62,230,139,0.2);}
+.bq-risk-badge.Moderate{background:var(--gold-bg);color:var(--gold);border:1px solid rgba(212,175,69,0.25);}
+.bq-risk-badge.High{background:rgba(245,158,11,0.09);color:#F59E0B;border:1px solid rgba(245,158,11,0.2);}
+.bq-risk-badge.Severe{background:var(--red-bg);color:var(--red);border:1px solid rgba(255,77,79,0.2);}
+
+.bq-notes-card{background:var(--panel);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;margin-bottom:28px;}
+.bq-notes-k{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;}
+.bq-note-line{font-size:14px;color:var(--text2);line-height:1.65;margin-bottom:5px;}
+.bq-note-line:last-child{margin-bottom:0;}
+
+.bq-confirm-btn{
+  display:block;width:100%;padding:16px;
+  background:var(--gold);border:none;border-radius:var(--r);
+  font-family:var(--g);font-size:16px;font-weight:700;color:#000;
+  cursor:pointer;margin-bottom:10px;transition:opacity .15s;
+}
+.bq-confirm-btn:hover{opacity:.9;}
+.bq-rerecord-btn{
+  display:block;width:100%;padding:13px;
+  background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:var(--r);
+  font-family:var(--g);font-size:14px;font-weight:500;color:var(--text2);
+  cursor:pointer;transition:all .15s;
+}
+.bq-rerecord-btn:hover{border-color:var(--gold);color:var(--gold);}
+
+/* ── SUCCESS OVERLAY ── */
+.bq-success{
+  position:fixed;inset:0;background:var(--bg);
+  z-index:600;display:none;
+  flex-direction:column;align-items:center;justify-content:center;
+  padding:32px;text-align:center;
+}
+.bq-success.visible{display:flex;}
+.bq-success-icon{
+  width:72px;height:72px;
+  background:var(--green-bg);
+  border:2px solid rgba(62,230,139,0.35);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 24px;
+  font-size:32px;
+  color:var(--green);
+}
+.bq-success-title{font-size:28px;font-weight:700;color:var(--text);margin-bottom:10px;}
+.bq-success-text{font-size:16px;color:var(--text2);line-height:1.7;max-width:480px;margin:0 auto 24px;}
+.bq-success-note{font-size:13px;color:var(--text3);max-width:440px;margin:0 auto;line-height:1.6;}
+
+/* ── EXPIRED ── */
+.bq-expired{
+  position:fixed;inset:0;background:var(--bg);
+  z-index:700;display:none;
+  flex-direction:column;align-items:center;justify-content:center;
+  padding:32px;text-align:center;
+}
+.bq-expired.visible{display:flex;}
+
+/* ── PROCESSING OVERLAY ── */
+.bq-processing{
+  position:fixed;inset:0;background:rgba(6,11,18,0.9);
+  z-index:550;display:none;
+  flex-direction:column;align-items:center;justify-content:center;gap:16px;
+  backdrop-filter:blur(8px);
+}
+.bq-processing.visible{display:flex;}
+.bq-spinner{width:40px;height:40px;border:3px solid rgba(212,175,69,0.2);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.bq-processing-text{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--text3);}
+
+/* ══════════════════════════════════════
+   BOTTOM RECORDING BAR — sempre visível
+══════════════════════════════════════ */
+.rec-bar{
+  position:fixed;
+  bottom:0;left:0;right:0;
+  height:var(--bar-h);
+  background:rgba(6,11,18,0.97);
+  border-top:1px solid var(--border);
+  backdrop-filter:blur(20px);
+  z-index:300;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 28px;
+  gap:20px;
+}
+
+/* Estado: idle */
+.rec-bar-idle{display:flex;align-items:center;gap:16px;flex:1;}
+.rec-start-btn{
+  display:flex;align-items:center;gap:10px;
+  padding:14px 28px;
+  background:var(--red);
+  border:none;border-radius:50px;
+  font-family:var(--g);font-size:15px;font-weight:700;color:#fff;
+  cursor:pointer;
+  transition:all .2s;
+  flex-shrink:0;
+}
+.rec-start-btn:hover{background:#e03e40;transform:scale(1.02);}
+.rec-mic-dot{width:10px;height:10px;border-radius:50%;background:#fff;}
+.rec-idle-hint{font-family:var(--mono);font-size:12px;color:var(--text3);line-height:1.5;}
+.rec-idle-or{font-family:var(--mono);font-size:11px;color:var(--text4);margin:0 4px;}
+.rec-type-btn{
+  font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--text3);border:1px solid var(--border);border-radius:6px;
+  padding:7px 12px;background:none;cursor:pointer;transition:all .15s;white-space:nowrap;
+}
+.rec-type-btn:hover{border-color:var(--gold);color:var(--gold);}
+
+/* Estado: gravando */
+.rec-bar-recording{display:none;align-items:center;gap:20px;flex:1;}
+.rec-pulse-wrap{display:flex;align-items:center;gap:12px;}
+.rec-pulse-btn{
+  width:56px;height:56px;border-radius:50%;
+  background:var(--red);border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  animation:barPulse 1.2s ease-in-out infinite;
+  flex-shrink:0;
+}
+@keyframes barPulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(255,77,79,.5),0 0 0 0 rgba(255,77,79,.2);}
+  50%{box-shadow:0 0 0 10px rgba(255,77,79,.15),0 0 0 20px rgba(255,77,79,.05);}
+}
+.rec-stop-icon{width:18px;height:18px;background:#fff;border-radius:3px;}
+.rec-live-label{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--red);}
+.rec-timer{font-family:var(--mono);font-size:30px;font-weight:700;color:var(--text);letter-spacing:.05em;line-height:1;}
+.rec-waveform{display:flex;align-items:center;gap:3px;flex:1;height:36px;}
+.rec-wave-bar{width:3px;border-radius:2px;background:rgba(255,77,79,0.35);transition:height .1s ease;}
+
+/* Estado: done */
+.rec-bar-done{display:none;align-items:center;gap:14px;flex:1;}
+.rec-done-time{font-family:var(--mono);font-size:14px;color:var(--green);flex-shrink:0;}
+.rec-done-audio{flex:1;min-width:0;}
+.rec-done-audio audio{width:100%;height:36px;}
+.rec-submit-btn{
+  padding:12px 22px;
+  background:var(--gold);border:none;border-radius:50px;
+  font-family:var(--g);font-size:14px;font-weight:700;color:#000;
+  cursor:pointer;transition:opacity .15s;white-space:nowrap;flex-shrink:0;
+}
+.rec-submit-btn:hover{opacity:.88;}
+.rec-rerecord-btn{
+  font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--text3);border:1px solid var(--border);border-radius:6px;
+  padding:8px 12px;background:none;cursor:pointer;white-space:nowrap;flex-shrink:0;
+}
+.rec-rerecord-btn:hover{border-color:var(--gold);color:var(--gold);}
+
+/* ── TEXT SUBMIT BAR ── */
+.rec-bar-text{display:none;align-items:center;gap:14px;flex:1;}
+.rec-text-submit-btn{
+  padding:12px 22px;
+  background:var(--gold);border:none;border-radius:50px;
+  font-family:var(--g);font-size:14px;font-weight:700;color:#000;
+  cursor:pointer;transition:opacity .15s;flex-shrink:0;
+}
+.rec-text-submit-btn:hover{opacity:.88;}
+.rec-back-btn{
+  font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--text3);border:1px solid var(--border);border-radius:6px;
+  padding:8px 12px;background:none;cursor:pointer;
+}
+.rec-back-btn:hover{border-color:rgba(255,255,255,0.2);color:var(--text2);}
+.rec-text-hint{font-size:13px;color:var(--text3);flex:1;}
+
+@media(max-width:520px){
+  .rec-bar{padding:0 16px;gap:12px;}
+  .rec-timer{font-size:22px;}
+  .rec-start-btn{padding:12px 20px;font-size:14px;}
+  .bq-title{font-size:24px;}
+  .bq-content{padding:28px 16px 0;}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="bq-header">
+  <div class="bq-mark">
+    <svg viewBox="0 0 15 15" fill="none">
+      <path d="M7.5 1L13 4.5v6L7.5 14 2 10.5v-6L7.5 1z" stroke="#000" stroke-width="1.5" fill="#000"/>
+    </svg>
+  </div>
+  <div class="bq-brand">HARP<span>IAN</span></div>
+  <div class="bq-div"></div>
+  <div class="bq-label">Behavioral Context Layer</div>
+</div>
+
+<!-- MAIN CONTENT (sempre visível, scroll livre) -->
+<div class="bq-content">
+
+  <div class="bq-kicker">Voice Questionnaire</div>
+  <div class="bq-title">Help us understand how your capital is organized</div>
+  <p class="bq-intro">
+    This short questionnaire helps your advisory team understand the purpose, time horizon and emotional importance of each part of your capital.
+    You can answer in a single voice recording of 2 to 3 minutes.
+    Scroll through the questions below and record your answer using the button at the bottom of the screen.
+  </p>
+
+  <div class="bq-questions">
+    <div class="bq-q">
+      <div class="bq-q-num">1</div>
+      <div class="bq-q-body">
+        <div class="bq-q-text">What are the main purposes of your capital?</div>
+        <div class="bq-q-hint">Retirement &nbsp;·&nbsp; Growth &nbsp;·&nbsp; Liquidity &nbsp;·&nbsp; Lifestyle &nbsp;·&nbsp; Legacy &nbsp;·&nbsp; Opportunistic</div>
+      </div>
+    </div>
+    <div class="bq-q">
+      <div class="bq-q-num">2</div>
+      <div class="bq-q-body">
+        <div class="bq-q-text">Roughly what percentage of your portfolio belongs to each purpose?</div>
+        <div class="bq-q-hint">Approximate is fine — no need for exact numbers.</div>
+      </div>
+    </div>
+    <div class="bq-q">
+      <div class="bq-q-num">3</div>
+      <div class="bq-q-body">
+        <div class="bq-q-text">When do you expect to use each part?</div>
+        <div class="bq-q-hint">Daily liquidity &nbsp;·&nbsp; 1–3 years &nbsp;·&nbsp; 3–5 years &nbsp;·&nbsp; 5–10 years &nbsp;·&nbsp; 10+ years</div>
+      </div>
+    </div>
+    <div class="bq-q">
+      <div class="bq-q-num">4</div>
+      <div class="bq-q-body">
+        <div class="bq-q-text">Which part would worry you the most if markets fell sharply?</div>
+        <div class="bq-q-hint">Which bucket makes you anxious during volatility?</div>
+      </div>
+    </div>
+    <div class="bq-q">
+      <div class="bq-q-num">5</div>
+      <div class="bq-q-body">
+        <div class="bq-q-text">Which part are you comfortable leaving invested through volatility?</div>
+        <div class="bq-q-hint">Long-term capital you don't need to access soon.</div>
+      </div>
+    </div>
+    <div class="bq-q">
+      <div class="bq-q-num">6</div>
+      <div class="bq-q-body">
+        <div class="bq-q-text">Are there any assets or exposures that make you uncomfortable?</div>
+        <div class="bq-q-hint">Optional — any specific asset class, currency or sector you prefer to avoid.</div>
+      </div>
+    </div>
+    <div class="bq-q">
+      <div class="bq-q-num">7</div>
+      <div class="bq-q-body">
+        <div class="bq-q-text">Is there anything your advisor should know before making portfolio recommendations?</div>
+        <div class="bq-q-hint">Any personal context, upcoming events, or goals not yet discussed.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bq-note">
+    You do not need to have all the numbers ready. Speak naturally and freely — your advisory team will refine the details from your answer.
+    Most clients complete this in under 3 minutes.
+  </div>
+
+  <!-- TEXT FALLBACK (shown when user chooses to type) -->
+  <div class="bq-text-section" id="text-section">
+    <div class="bq-text-label">Written Answer</div>
+    <textarea class="bq-textarea" id="text-answer"
+      placeholder="Write your answer here. Address the questions above in your own words — approximate percentages, horizons and any concerns you have about specific parts of your portfolio."></textarea>
+  </div>
+
+</div><!-- /bq-content -->
+
+
+<!-- ══════════════════════════════════
+     FIXED BOTTOM RECORDING BAR
+══════════════════════════════════ -->
+<div class="rec-bar" id="rec-bar">
+
+  <!-- IDLE state -->
+  <div class="rec-bar-idle" id="bar-idle">
+    <button class="rec-start-btn" onclick="beginRecording()">
+      <div class="rec-mic-dot"></div>
+      Start Recording
+    </button>
+    <div class="rec-idle-hint">Tap to record your voice answer<br>Ideal length: 2–3 minutes</div>
+    <span class="rec-idle-or">·</span>
+    <button class="rec-type-btn" onclick="showTextMode()">Type instead</button>
+  </div>
+
+  <!-- RECORDING state -->
+  <div class="rec-bar-recording" id="bar-recording">
+    <div class="rec-pulse-wrap">
+      <button class="rec-pulse-btn" onclick="stopRecording()" title="Stop Recording">
+        <div class="rec-stop-icon"></div>
+      </button>
+      <div>
+        <div class="rec-live-label">● REC</div>
+        <div class="rec-timer" id="rec-timer">0:00</div>
+      </div>
+    </div>
+    <div class="rec-waveform" id="rec-waveform">
+      <div class="rec-wave-bar" style="height:8px"></div>
+      <div class="rec-wave-bar" style="height:18px"></div>
+      <div class="rec-wave-bar" style="height:10px"></div>
+      <div class="rec-wave-bar" style="height:24px"></div>
+      <div class="rec-wave-bar" style="height:8px"></div>
+      <div class="rec-wave-bar" style="height:20px"></div>
+      <div class="rec-wave-bar" style="height:12px"></div>
+      <div class="rec-wave-bar" style="height:26px"></div>
+      <div class="rec-wave-bar" style="height:10px"></div>
+      <div class="rec-wave-bar" style="height:18px"></div>
+      <div class="rec-wave-bar" style="height:8px"></div>
+      <div class="rec-wave-bar" style="height:22px"></div>
+      <div class="rec-wave-bar" style="height:10px"></div>
+      <div class="rec-wave-bar" style="height:16px"></div>
+      <div class="rec-wave-bar" style="height:8px"></div>
+    </div>
+    <div style="font-family:var(--mono);font-size:11px;color:var(--text3);text-align:right;flex-shrink:0;line-height:1.5;">Tap the button<br>to stop</div>
+  </div>
+
+  <!-- DONE state -->
+  <div class="rec-bar-done" id="bar-done">
+    <div class="rec-done-time" id="rec-done-time">0:00</div>
+    <div class="rec-done-audio">
+      <audio id="audio-playback" controls style="width:100%;height:36px;filter:invert(1) hue-rotate(180deg) brightness(.75);"></audio>
+    </div>
+    <button class="rec-rerecord-btn" onclick="resetRecording()">&#8635; Re-record</button>
+    <button class="rec-submit-btn" onclick="submitVoice()">Submit Answer</button>
+  </div>
+
+  <!-- TEXT SUBMIT state -->
+  <div class="rec-bar-text" id="bar-text">
+    <button class="rec-back-btn" onclick="hideTextMode()">&#8592; Voice</button>
+    <div class="rec-text-hint">Type your answer above, then submit when ready.</div>
+    <button class="rec-text-submit-btn" onclick="submitText()">Submit Written Answer</button>
+  </div>
+
+</div><!-- /rec-bar -->
+
+
+<!-- CONFIRMATION OVERLAY -->
+<div class="bq-overlay" id="overlay-confirm">
+  <div class="bq-overlay-inner">
+    <div class="bq-confirm-kicker">Please Confirm</div>
+    <div class="bq-confirm-title">Is this interpretation correct?</div>
+    <div class="bq-confirm-sub">Based on your answer, this is how we understood the organization of your capital. Please confirm or record again if something is off.</div>
+
+    <div style="font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;">Mental Buckets Identified</div>
+    <div class="bq-bucket-list" id="confirm-buckets"></div>
+
+    <div class="bq-notes-card" style="margin-top:14px;">
+      <div class="bq-notes-k">Behavioral Notes</div>
+      <div id="confirm-notes"></div>
+    </div>
+
+    <button class="bq-confirm-btn" onclick="finalSubmit()">Yes, this is correct — Submit</button>
+    <button class="bq-rerecord-btn" onclick="reRecordFromConfirm()">No, I want to record again</button>
+  </div>
+</div>
+
+<!-- PROCESSING OVERLAY -->
+<div class="bq-processing" id="overlay-processing">
+  <div class="bq-spinner"></div>
+  <div class="bq-processing-text" id="processing-label">Analyzing your answer...</div>
+</div>
+
+<!-- SUCCESS -->
+<div class="bq-success" id="overlay-success">
+  <div class="bq-success-icon">&#10003;</div>
+  <div style="font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--green);margin-bottom:10px;">Submitted</div>
+  <div class="bq-success-title">Thank you</div>
+  <p class="bq-success-text">Your response has been submitted successfully. Your advisory team will use this information to improve portfolio alignment and communication.</p>
+  <p class="bq-success-note">This information is used only to improve portfolio alignment and client communication. No portfolio changes are made based on this questionnaire.</p>
+</div>
+
+<!-- EXPIRED -->
+<div class="bq-expired" id="overlay-expired">
+  <div style="font-size:40px;margin-bottom:20px;">&#8987;</div>
+  <div style="font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--text3);margin-bottom:10px;">Link Status</div>
+  <div style="font-size:24px;font-weight:700;color:var(--text);margin-bottom:10px;">This link has expired</div>
+  <p style="font-size:15px;color:var(--text2);line-height:1.65;max-width:420px;text-align:center;">This questionnaire link is no longer valid. Please contact your advisory team to request a new link.</p>
+</div>
+
+
+<script>
+// ── URL params ──
+const params     = new URLSearchParams(window.location.search);
+const TOKEN      = params.get('token') || '';
+const CLIENT     = params.get('client') || '';
+
+// ── Recording state ──
+let mediaRecorder = null;
+let audioChunks   = [];
+let audioBlob     = null;
+let timerInterval = null;
+let waveInterval  = null;
+let elapsedSecs   = 0;
+let sessionData   = null;
+let pendingBuckets = [];
+let isTextMode    = false;
+
+// ── Bar state helpers ──
+function setBarState(state){
+  document.getElementById('bar-idle').style.display      = state==='idle'      ? 'flex':'none';
+  document.getElementById('bar-recording').style.display = state==='recording' ? 'flex':'none';
+  document.getElementById('bar-done').style.display      = state==='done'      ? 'flex':'none';
+  document.getElementById('bar-text').style.display      = state==='text'      ? 'flex':'none';
+}
+function showOverlay(id){
+  ['overlay-confirm','overlay-processing','overlay-success','overlay-expired'].forEach(i=>{
+    const el=document.getElementById(i);
+    if(el){ el.classList.remove('visible'); el.style.display=''; }
+  });
+  const target=document.getElementById(id);
+  if(!target) return;
+  if(id==='overlay-success'||id==='overlay-expired'){
+    target.style.display='flex'; target.classList.add('visible');
+  } else {
+    target.classList.add('visible');
+  }
+}
+function hideOverlay(id){ const el=document.getElementById(id); if(el) el.classList.remove('visible'); }
+
+// ── Init ──
+function init(){
+  setBarState('idle');
+  if(!TOKEN){ showOverlay('overlay-expired'); return; }
+  const raw = localStorage.getItem('bq_session_'+TOKEN);
+  if(!raw){ showOverlay('overlay-expired'); return; }
+  try{ sessionData=JSON.parse(raw); } catch(e){ showOverlay('overlay-expired'); return; }
+  if(sessionData.expiresAt && new Date(sessionData.expiresAt)<new Date()){ showOverlay('overlay-expired'); return; }
+  if(sessionData.status==='completed'){ showOverlay('overlay-success'); return; }
+  sessionData.status='opened';
+  sessionData.openedAt=new Date().toISOString();
+  save();
+}
+
+function save(){ localStorage.setItem('bq_session_'+TOKEN,JSON.stringify(sessionData)); }
+
+// ── Text mode ──
+function showTextMode(){
+  isTextMode=true;
+  document.getElementById('text-section').classList.add('visible');
+  document.getElementById('text-answer').focus();
+  document.getElementById('text-answer').scrollIntoView({behavior:'smooth',block:'start'});
+  setBarState('text');
+}
+function hideTextMode(){
+  isTextMode=false;
+  document.getElementById('text-section').classList.remove('visible');
+  setBarState('idle');
+}
+function submitText(){
+  const txt=(document.getElementById('text-answer').value||'').trim();
+  if(!txt){ document.getElementById('text-answer').focus(); return; }
+  sessionData.responseType='text';
+  sessionData.textAnswer=txt;
+  processSubmission();
+}
+
+// ── Recording ──
+async function beginRecording(){
+  try{
+    const stream=await navigator.mediaDevices.getUserMedia({audio:true,video:false});
+    mediaRecorder=new MediaRecorder(stream);
+    audioChunks=[];
+    mediaRecorder.ondataavailable=e=>{ if(e.data.size>0) audioChunks.push(e.data); };
+    mediaRecorder.onstop=onStop;
+    mediaRecorder.start(200);
+
+    sessionData.status='recording_started';
+    sessionData.recordingStartedAt=new Date().toISOString();
+    save();
+
+    elapsedSecs=0;
+    document.getElementById('rec-timer').textContent='0:00';
+    setBarState('recording');
+
+    timerInterval=setInterval(()=>{
+      elapsedSecs++;
+      document.getElementById('rec-timer').textContent=fmt(elapsedSecs);
+      if(elapsedSecs>=360) stopRecording();
+    },1000);
+
+    const bars=document.querySelectorAll('.rec-wave-bar');
+    waveInterval=setInterval(()=>{
+      bars.forEach(b=>{ b.style.height=(Math.random()*28+4)+'px'; });
+    },100);
+
+  }catch(err){
+    alert('Microphone access is required to record your answer.\n\nPlease allow microphone access and try again, or use "Type instead" to write your answer.\n\n('+err.message+')');
+  }
+}
+
+function stopRecording(){
+  clearInterval(timerInterval);
+  clearInterval(waveInterval);
+  if(mediaRecorder&&mediaRecorder.state!=='inactive'){
+    mediaRecorder.stop();
+    mediaRecorder.stream.getTracks().forEach(t=>t.stop());
+  }
+  // Reset waveform bars
+  const heights=[8,18,10,24,8,20,12,26,10,18,8,22,10,16,8];
+  document.querySelectorAll('.rec-wave-bar').forEach((b,i)=>{ b.style.height=(heights[i]||8)+'px'; });
+}
+
+function onStop(){
+  audioBlob=new Blob(audioChunks,{type:'audio/webm'});
+  const url=URL.createObjectURL(audioBlob);
+  document.getElementById('audio-playback').src=url;
+  document.getElementById('rec-done-time').textContent=fmt(elapsedSecs);
+  sessionData.responseType='audio';
+  sessionData.audioDuration=elapsedSecs;
+  setBarState('done');
+}
+
+function resetRecording(){
+  audioBlob=null; audioChunks=[];
+  document.getElementById('audio-playback').src='';
+  elapsedSecs=0;
+  setBarState('idle');
+}
+
+function submitVoice(){
+  if(!audioBlob) return;
+  processSubmission();
+}
+
+// ── Processing ──
+function processSubmission(){
+  showOverlay('overlay-processing');
+  const msgs=['Analyzing your answer...','Identifying mental buckets...','Calculating behavioral context...','Preparing interpretation...'];
+  let i=0;
+  const el=document.getElementById('processing-label');
+  const iv=setInterval(()=>{ el.textContent=msgs[++i%msgs.length]; },1100);
+  sessionData.status='submitted_pending_confirmation'; save();
+  setTimeout(()=>{ clearInterval(iv); hideOverlay('overlay-processing'); buildConfirmation(); },3000);
+}
+
+function buildConfirmation(){
+  pendingBuckets=mockBuckets();
+  // Buckets list
+  document.getElementById('confirm-buckets').innerHTML=pendingBuckets.map(b=>`
+    <div class="bq-bucket-item">
+      <div class="bq-bucket-name">${b.bucket_name}</div>
+      <div class="bq-bucket-pct">${b.estimated_percentage}%</div>
+      <div class="bq-bucket-horizon">${b.time_horizon}</div>
+      <span class="bq-risk-badge ${b.risk_label}">${b.risk_label}</span>
+    </div>`).join('');
+  // Notes
+  const high=pendingBuckets.filter(b=>b.risk_label==='High'||b.risk_label==='Severe');
+  const low =pendingBuckets.filter(b=>b.risk_label==='Low');
+  let notes='';
+  if(high.length) notes+=`<div class="bq-note-line">&#8227; ${high.map(b=>b.bucket_name).join(' and ')} require careful protection from market drawdowns and short-term volatility.</div>`;
+  if(low.length)  notes+=`<div class="bq-note-line">&#8227; ${low.map(b=>b.bucket_name).join(' and ')} can remain invested through volatility — long time horizon confirmed.</div>`;
+  notes+='<div class="bq-note-line" style="color:var(--text3);margin-top:6px;">&#8227; Portfolio communication should address each purpose separately rather than as a single risk block.</div>';
+  document.getElementById('confirm-notes').innerHTML=notes;
+  showOverlay('overlay-confirm');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function mockBuckets(){
+  const seed=sessionData.buckets||[];
+  if(seed.length) return seed;
+  return [
+    {bucket_name:'Retirement',    estimated_percentage:40,time_horizon:'10+ years', risk_label:'Low'},
+    {bucket_name:'Growth',        estimated_percentage:25,time_horizon:'5–10 years',risk_label:'Moderate'},
+    {bucket_name:'Liquidity',     estimated_percentage:10,time_horizon:'Daily',      risk_label:'High'},
+    {bucket_name:'Lifestyle',     estimated_percentage:15,time_horizon:'1–3 years', risk_label:'High'},
+    {bucket_name:'Legacy',        estimated_percentage:10,time_horizon:'10+ years', risk_label:'Low'}
+  ];
+}
+
+function finalSubmit(){
+  sessionData.status='completed';
+  sessionData.completedAt=new Date().toISOString();
+  sessionData.buckets=pendingBuckets.map(b=>({
+    bucket_name:b.bucket_name,
+    bucket_type:b.bucket_name.toLowerCase().replace(/\s+/g,'_'),
+    estimated_percentage:b.estimated_percentage,
+    time_horizon:b.time_horizon,
+    emotional_sensitivity:b.risk_label==='High'||b.risk_label==='Severe'?'high':b.risk_label==='Low'?'low':'moderate',
+    loss_reaction:b.risk_label==='High'||b.risk_label==='Severe'?'sell20':'hold',
+    liquidity_need:b.time_horizon==='Daily'||b.time_horizon==='Monthly'?'immediate':b.risk_label==='High'?'medium':'low',
+    monitoring_frequency:b.time_horizon==='Daily'?'daily':b.risk_label==='High'?'weekly':'monthly',
+    volatility_tolerance:b.risk_label==='Low'?'high':b.risk_label==='High'||b.risk_label==='Severe'?'none':'moderate',
+    stated_return_expectation:b.bucket_name==='Growth'?'high':b.bucket_name==='Retirement'?'moderate':'low'
+  }));
+  if(!sessionData.transcript){
+    sessionData.transcript = sessionData.responseType==='text'
+      ? (sessionData.textAnswer||'')
+      : 'Voice response recorded. Duration: '+fmt(sessionData.audioDuration||elapsedSecs)+'. Client described '+pendingBuckets.length+' mental buckets: '+pendingBuckets.map(b=>b.bucket_name.toLowerCase()).join(', ')+'.';
+  }
+  save();
+  hideOverlay('overlay-confirm');
+  showOverlay('overlay-success');
+}
+
+function reRecordFromConfirm(){
+  hideOverlay('overlay-confirm');
+  sessionData.status='opened'; save();
+  pendingBuckets=[];
+  resetRecording();
+}
+
+function fmt(s){ const m=Math.floor(s/60),sec=s%60; return m+':'+(sec<10?'0':'')+sec; }
+
+init();
+</script>
+</body>
+</html>

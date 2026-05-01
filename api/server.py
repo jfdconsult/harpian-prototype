@@ -524,6 +524,7 @@ def _mock_sectors():
             {"name":"Healthcare","ticker":"XLV","score":68},{"name":"Financials","ticker":"XLF","score":65},
             {"name":"Energy","ticker":"XLE","score":61},{"name":"Materials","ticker":"XLB","score":55},
             {"name":"Consumer Disc.","ticker":"XLY","score":48},{"name":"Consumer Staples","ticker":"XLP","score":38},
+            {"name":"Comm. Services","ticker":"XLC","score":35},
             {"name":"Real Estate","ticker":"XLRE","score":22},{"name":"Utilities","ticker":"XLU","score":18},
         ],
         "commodities": [
