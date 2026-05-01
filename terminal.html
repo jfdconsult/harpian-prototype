@@ -621,6 +621,70 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--g
 /* ══ DASHBOARD V2 — NO SCROLL COMMAND CENTER ══ */
 #screen-dashboard.active{overflow:hidden!important;height:100%!important;padding:0!important;display:flex!important;flex-direction:column!important;}
 
+/* ══ MARKET INTELLIGENCE — NO SCROLL CAUSAL ENGINE ══ */
+#screen-market.active{overflow:hidden!important;height:100%!important;display:flex!important;flex-direction:column!important;padding:10px 14px 10px!important;gap:8px!important;}
+.mi-hdr{display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.mi-body{flex:1;min-height:0;display:flex;flex-direction:column;gap:8px;}
+.mi-row1{flex-shrink:0;}
+.mi-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;flex:1;min-height:0;}
+.mi-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 12px;display:flex;flex-direction:column;gap:5px;overflow:hidden;}
+.mi-card-hdr{font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text3);font-weight:600;flex-shrink:0;}
+.mi-card-body{flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;gap:4px;}
+/* Regime signals */
+.mi-signal{padding:3px 8px;border-radius:4px;font-size:11px;font-family:var(--mono);white-space:nowrap;}
+.mi-signal.r{background:var(--red-bg);color:var(--red);border:1px solid rgba(255,77,79,0.14);}
+.mi-signal.g{background:var(--green-bg);color:var(--green);border:1px solid rgba(62,230,139,0.14);}
+.mi-signal.o{background:var(--orange-bg);color:var(--orange);border:1px solid rgba(245,158,11,0.14);}
+/* Macro table */
+.mi-table{display:flex;flex-direction:column;gap:2px;}
+.mi-tr{display:grid;grid-template-columns:90px 110px 1fr;gap:6px;align-items:center;padding:3px 6px;border-radius:3px;}
+.mi-tr.hd{font-family:var(--mono);font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text4);}
+.mi-tr:not(.hd){font-size:12px;color:var(--text2);background:rgba(255,255,255,0.02);}
+.mi-s{font-family:var(--mono);font-size:11px;font-weight:600;}
+.mi-s.r{color:var(--red);} .mi-s.g{color:var(--green);} .mi-s.o{color:var(--orange);}
+.mi-imp{font-size:11px;color:var(--text3);}
+/* News */
+.mi-news{display:flex;gap:8px;align-items:flex-start;padding:5px 8px;border-radius:4px;cursor:pointer;border-left:2px solid transparent;}
+.mi-news.r{background:var(--red-bg);border-left-color:var(--red);}
+.mi-news.g{background:var(--green-bg);border-left-color:var(--green);}
+.mi-news.o{background:var(--orange-bg);border-left-color:var(--orange);}
+.mi-news:hover{filter:brightness(1.2);}
+.mi-news-imp{font-family:var(--mono);font-size:9px;font-weight:700;text-transform:uppercase;min-width:36px;padding-top:1px;}
+.mi-news-imp.r{color:var(--red);} .mi-news-imp.g{color:var(--green);} .mi-news-imp.o{color:var(--orange);}
+.mi-news-body{flex:1;}
+.mi-news-hl{font-size:12px;color:var(--text1);font-weight:500;line-height:1.3;}
+.mi-news-why{font-size:11px;color:var(--text3);font-family:var(--mono);margin-top:1px;}
+/* Positioning */
+.mi-pos{font-size:12px;padding:3px 8px;border-radius:3px;line-height:1.4;}
+.mi-pos.g{background:var(--green-bg);color:var(--green);}
+.mi-pos.r{background:var(--red-bg);color:var(--red);}
+.mi-pos.o{background:var(--orange-bg);color:var(--orange);}
+.mi-pos-lbl{font-family:var(--mono);font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text4);margin-top:3px;}
+/* Do Not Touch */
+.mi-dnt{display:flex;align-items:center;gap:8px;padding:5px 8px;background:rgba(255,77,79,0.04);border:1px solid rgba(255,77,79,0.1);border-radius:4px;}
+.mi-dnt-tick{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--red);min-width:42px;}
+.mi-dnt-name{font-size:12px;color:var(--text2);flex:1;}
+.mi-dnt-why{font-family:var(--mono);font-size:9px;color:var(--text4);text-align:right;}
+/* Opportunities */
+.mi-opp{display:flex;align-items:center;gap:8px;padding:6px 9px;background:rgba(62,230,139,0.04);border:1px solid rgba(62,230,139,0.12);border-radius:4px;cursor:pointer;}
+.mi-opp:hover{background:rgba(62,230,139,0.09);}
+.mi-opp-n{font-family:var(--mono);font-size:10px;color:var(--text4);min-width:18px;}
+.mi-opp-c{flex:1;}
+.mi-opp-a{font-size:13px;font-weight:600;color:var(--text1);}
+.mi-opp-score{font-family:var(--mono);font-size:11px;margin-left:6px;color:var(--green);}
+.mi-opp-r{font-size:10px;color:var(--text4);font-family:var(--mono);margin-top:1px;}
+.mi-opp-link{font-family:var(--mono);font-size:9px;color:var(--blue);white-space:nowrap;}
+/* Benchmark table */
+.mi-bm-table{display:flex;flex-direction:column;gap:3px;}
+.mi-bm-tr{display:grid;grid-template-columns:85px 58px 68px 58px;gap:4px;align-items:center;padding:4px 7px;border-radius:3px;font-size:12px;}
+.mi-bm-tr.hd{font-family:var(--mono);font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text4);}
+.mi-bm-tr:not(.hd){color:var(--text2);background:rgba(255,255,255,0.02);}
+.mi-bm-tr.hi{background:rgba(201,168,76,0.07);border:1px solid rgba(201,168,76,0.16);}
+.mi-bm-tr .bv-g{color:var(--green);font-family:var(--mono);}
+.mi-bm-tr .bv-r{color:var(--red);font-family:var(--mono);}
+.mi-bm-tr .bv-o{color:var(--orange);font-family:var(--mono);}
+.mi-bm-tr .bv-n{color:var(--text4);font-family:var(--mono);}
+
 /* Ticker Tape */
 .tkr-wrap{height:36px;background:rgba(4,9,16,0.98);border-bottom:1px solid var(--border);overflow:hidden;display:flex;align-items:center;flex-shrink:0;position:relative;}
 .tkr-track{display:flex;align-items:center;animation:tkrScroll 80s linear infinite;white-space:nowrap;will-change:transform;}
@@ -1181,68 +1245,218 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--g
 
 <!-- ══ MARKET INTELLIGENCE ══ -->
 <div class="screen" id="screen-market">
-  <div class="mb16">
-    <div class="kicker">Proprietary Analysis · Harpian Research</div>
-    <div style="display:flex;align-items:flex-end;gap:12px;">
-      <div class="page-title" style="margin-bottom:0;">Dominant Market Intelligence</div>
-      <div class="regime-big" id="mi-regime-badge" style="background:var(--orange-bg);border:1px solid rgba(245,158,11,0.25);color:var(--orange);">CAUTIOUS EXPANSION</div>
+
+  <!-- Header bar -->
+  <div class="mi-hdr">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span class="kicker" style="margin:0;">Causal Engine · Harpian Research</span>
+      <span style="background:var(--orange-bg);border:1px solid rgba(245,158,11,0.25);color:var(--orange);font-family:var(--mono);font-size:10px;font-weight:700;padding:2px 10px;border-radius:3px;letter-spacing:0.1em;">CAUTIOUS EXPANSION</span>
+      <span style="font-family:var(--mono);font-size:9px;color:var(--text4);">Market Trend +22 · VIX 22.4 · Updated 14:47</span>
     </div>
-    <div class="page-sub">Centralized information for daily decision-making · Market intelligence is separate from StormGuard.</div>
+    <button class="tb-btn" style="font-size:9px;" onclick="go('market-trends')">Full Regime Analysis →</button>
   </div>
 
-  <div class="g2 mb12" style="align-items:start;">
-    <div class="panel"><div class="ph"><div class="pt">Market News Stream</div><span class="badge n">Simulated</span></div>
-      <div id="market-sector-context" class="sector-context" style="margin:10px 14px 0;"></div>
-      <div id="news-feed" style="max-height:360px;overflow-y:auto;"></div>
-    </div>
-    <div class="panel"><div class="ph"><div class="pt">Risk Regime</div></div><div class="pb" style="padding:14px;">
-      <div style="text-align:center;margin-bottom:14px;">
-        <div style="font-family:var(--g);font-size:26px;font-weight:700;color:var(--orange);margin-bottom:5px;">CAUTIOUS EXPANSION</div>
-        <div style="font-family:var(--mono);font-size:11px;color:var(--text3);">Market Trend: +22 · VIX: 22.4</div>
+  <!-- Body -->
+  <div class="mi-body">
+
+    <!-- ROW 1: REGIME EXPLANATION (full width) -->
+    <div class="mi-card mi-row1" style="flex-direction:row;align-items:stretch;gap:0;padding:10px 0;">
+      <!-- Left: regime identity -->
+      <div style="padding:0 16px;min-width:180px;display:flex;flex-direction:column;justify-content:center;">
+        <div style="font-family:var(--mono);font-size:8px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text4);">Current Regime</div>
+        <div style="font-family:var(--g);font-size:20px;font-weight:700;color:var(--orange);line-height:1.2;margin:3px 0;">Cautious<br>Expansion</div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--text3);">Score +22 · Cautious Bull</div>
       </div>
-      <div id="mi-sig-list" style="display:flex;flex-direction:column;gap:6px;"></div>
-    </div></div>
-  </div>
-
-  <div class="g3 mb12" style="align-items:start;">
-    <div class="panel"><div class="ph"><div class="pt">Fed Watch</div><span class="badge r">Hawkish</span></div><div class="pb" style="padding:12px 14px;">
-      <div style="font-size:14px;color:var(--text2);line-height:1.65;margin-bottom:10px;">FOMC minutes confirm higher-for-longer. No rate cut expected for 2026. Fed cites persistent inflation and tight labor markets.</div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;"><span class="badge r">Hawkish 72%</span><span class="badge n">Neutral 21%</span><span class="badge g">Dovish 7%</span></div>
-      <div style="padding:8px 10px;background:var(--red-bg);border:1px solid rgba(255,77,79,0.14);border-radius:5px;font-size:14px;color:var(--text2);">Impact: long-duration fixed income subject to 8-12% repricing.</div>
-    </div></div>
-    <div class="panel"><div class="ph"><div class="pt">Do Not Touch</div><span class="badge r">6 items</span></div>
-      <div id="dont-touch-list"></div>
-    </div>
-    <div class="panel"><div class="ph"><div class="pt">Insider Activity</div><span class="badge r">Net Selling</span></div>
-      <div style="overflow:auto;"><table class="tbl" style="font-size:13px;">
-        <thead><tr><th>Company</th><th>Exec</th><th>Type</th><th>Volume</th></tr></thead>
-        <tbody id="insider-table"></tbody>
-      </table></div>
-    </div>
-  </div>
-
-  <div class="g2 mb12" style="align-items:start;">
-    <div class="panel"><div class="ph"><div class="pt">Institutional Positioning · Big Funds</div></div><div class="pb" style="padding:10px 12px;">
-      <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text4);margin-bottom:8px;">Recent changes — largest global funds</div>
-      <div style="display:flex;flex-direction:column;gap:5px;">
-        <div style="display:flex;gap:10px;align-items:center;padding:7px 10px;background:var(--green-bg);border:1px solid rgba(62,230,139,0.12);border-radius:5px;"><span style="font-size:13px;color:var(--green);font-weight:600;width:70px;">Adding</span><span style="font-size:14px;color:var(--text2);">Technology, Energy, Gold, Industrials</span></div>
-        <div style="display:flex;gap:10px;align-items:center;padding:7px 10px;background:var(--red-bg);border:1px solid rgba(255,77,79,0.12);border-radius:5px;"><span style="font-size:13px;color:var(--red);font-weight:600;width:70px;">Reducing</span><span style="font-size:14px;color:var(--text2);">Long Duration Bonds, China Equities, Utilities</span></div>
-        <div style="display:flex;gap:10px;align-items:center;padding:7px 10px;background:var(--orange-bg);border:1px solid rgba(245,158,11,0.12);border-radius:5px;"><span style="font-size:13px;color:var(--orange);font-weight:600;width:70px;">Rotation</span><span style="font-size:14px;color:var(--text2);">Value to Growth in Financials. Risk-On predominant.</span></div>
+      <div style="width:1px;background:var(--border);flex-shrink:0;"></div>
+      <!-- Center: causal signals -->
+      <div style="flex:1;padding:0 14px;display:flex;flex-wrap:wrap;gap:5px;align-items:center;">
+        <div class="mi-signal r">VIX 22.4 elevated → risk present</div>
+        <div class="mi-signal r">Fed hawkish → pressure on duration</div>
+        <div class="mi-signal g">HY spreads stable → credit healthy</div>
+        <div class="mi-signal o">Yield curve flat → structural warning</div>
+        <div class="mi-signal g">Momentum positive → sector rotation active</div>
+        <div class="mi-signal g">Growth data resilient → expansion continues</div>
       </div>
-      <div style="margin-top:8px;font-family:var(--mono);font-size:10px;letter-spacing:0.10em;text-transform:uppercase;color:var(--text4);margin-bottom:5px;">Top Holdings (13F reports)</div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap;">
-        <span class="badge n">NVDA +18%</span><span class="badge n">MSFT +12%</span><span class="badge n">XOM +9%</span><span class="badge n">GLD +8%</span><span class="badge n">JPM +7%</span>
+      <div style="width:1px;background:var(--border);flex-shrink:0;"></div>
+      <!-- Right: conclusions -->
+      <div style="padding:0 14px;min-width:210px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
+        <div style="padding:5px 10px;background:var(--green-bg);border:1px solid rgba(62,230,139,0.14);border-radius:4px;">
+          <div style="font-family:var(--mono);font-size:8px;color:var(--text4);">Conclusion</div>
+          <div style="font-size:12px;color:var(--green);font-weight:600;">Growth with controlled risk</div>
+        </div>
+        <div style="padding:5px 10px;background:var(--orange-bg);border:1px solid rgba(245,158,11,0.14);border-radius:4px;">
+          <div style="font-family:var(--mono);font-size:8px;color:var(--text4);">Action</div>
+          <div style="font-size:12px;color:var(--orange);font-weight:600;">Rotate into momentum sectors</div>
+        </div>
       </div>
-    </div></div>
-    <div class="panel"><div class="ph"><div class="pt">Competitor Performance · HPC vs Market</div></div>
-      <div style="overflow:auto;"><table class="tbl" id="competitor-table" style="font-size:14px;"></table></div>
     </div>
-  </div>
 
-  <div class="panel"><div class="ph"><div class="pt">Sector Momentum Preview · Market Intelligence → Sector Momentum</div><button class="tb-btn au" onclick="go('sector-momentum')">Open Full Analysis →</button></div>
-    <div style="padding:12px 14px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;" id="sm-preview-grid"></div>
-  </div>
-</div>
+    <!-- ROW 2: MACRO DRIVERS | NEWS FLOW | POSITIONING -->
+    <div class="mi-row">
+
+      <!-- MACRO DRIVERS -->
+      <div class="mi-card">
+        <div class="mi-card-hdr">Macro Drivers</div>
+        <div class="mi-card-body">
+          <div class="mi-table">
+            <div class="mi-tr hd"><span>Factor</span><span>State</span><span>Impact</span></div>
+            <div class="mi-tr"><span>Fed</span><span class="mi-s r">Hawkish</span><span class="mi-imp">Bonds under pressure</span></div>
+            <div class="mi-tr"><span>Rates (10Y)</span><span class="mi-s r">4.72% Rising</span><span class="mi-imp">Duration risk elevated</span></div>
+            <div class="mi-tr"><span>Inflation</span><span class="mi-s r">Persistent</span><span class="mi-imp">No cuts expected 2026</span></div>
+            <div class="mi-tr"><span>Yield Curve</span><span class="mi-s o">Flat</span><span class="mi-imp">Structural warning</span></div>
+            <div class="mi-tr"><span>USD</span><span class="mi-s o">Strengthening</span><span class="mi-imp">EM pressure · BRL 5.14</span></div>
+            <div class="mi-tr"><span>HY Spreads</span><span class="mi-s g">Stable</span><span class="mi-imp">Risk appetite intact</span></div>
+            <div class="mi-tr"><span>VIX</span><span class="mi-s o">22.4 Elevated</span><span class="mi-imp">Hedging cost rising</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NEWS FLOW -->
+      <div class="mi-card">
+        <div class="mi-card-hdr">News Flow <span style="font-family:var(--mono);font-size:9px;color:var(--text4);font-weight:400;margin-left:5px;">High signal only</span></div>
+        <div class="mi-card-body">
+          <div class="mi-news r" onclick="go('market-trends')">
+            <div class="mi-news-imp r">Bear</div>
+            <div class="mi-news-body">
+              <div class="mi-news-hl">US 10Y hits 4.72% — highest since Nov 2023</div>
+              <div class="mi-news-why">→ Long-duration assets repricing 8–12%</div>
+            </div>
+          </div>
+          <div class="mi-news o" onclick="go('market')">
+            <div class="mi-news-imp o">Event</div>
+            <div class="mi-news-body">
+              <div class="mi-news-hl">CPI Report tomorrow 08:30 ET</div>
+              <div class="mi-news-why">→ Volatility expected · hold new duration entries</div>
+            </div>
+          </div>
+          <div class="mi-news g" onclick="go('sector-momentum')">
+            <div class="mi-news-imp g">Bull</div>
+            <div class="mi-news-body">
+              <div class="mi-news-hl">Nvidia beats estimates by 38%</div>
+              <div class="mi-news-why">→ XLK momentum confirmed · AlphaDroid signal</div>
+            </div>
+          </div>
+          <div class="mi-news r" onclick="go('market-trends')">
+            <div class="mi-news-imp r">Bear</div>
+            <div class="mi-news-body">
+              <div class="mi-news-hl">Fed minutes: no cut in 2026, hawkish bias</div>
+              <div class="mi-news-why">→ Fixed income risk · Vera Hollanda exposure critical</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- POSITIONING -->
+      <div class="mi-card">
+        <div class="mi-card-hdr">Positioning</div>
+        <div class="mi-card-body">
+          <div class="mi-pos-lbl">Institutional Flow</div>
+          <div class="mi-pos g">Adding → Tech · Energy · Gold · Industrials</div>
+          <div class="mi-pos r">Reducing → Long Duration · China EQ · Utilities</div>
+          <div class="mi-pos o">Rotation → Value → Growth in Financials</div>
+          <div class="mi-pos-lbl">Smart Money</div>
+          <div class="mi-pos g">Crypto Whales → Accumulating BTC · Risk-On signal</div>
+          <div class="mi-pos r">Insiders → Net selling Tech · NVDA · MSFT · caution</div>
+          <div class="mi-pos-lbl">13F Leaders</div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap;">
+            <span class="badge n" style="font-size:10px;">NVDA +18%</span>
+            <span class="badge n" style="font-size:10px;">MSFT +12%</span>
+            <span class="badge n" style="font-size:10px;">GLD +8%</span>
+            <span class="badge n" style="font-size:10px;">XOM +9%</span>
+            <span class="badge n" style="font-size:10px;">JPM +7%</span>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /row2 -->
+
+    <!-- ROW 3: DO NOT TOUCH | OPPORTUNITIES | BENCHMARK -->
+    <div class="mi-row">
+
+      <!-- DO NOT TOUCH -->
+      <div class="mi-card">
+        <div class="mi-card-hdr" style="color:var(--red);">Do Not Touch</div>
+        <div class="mi-card-body">
+          <div class="mi-dnt">
+            <span class="mi-dnt-tick">TLT</span>
+            <span class="mi-dnt-name">Long Duration ETF</span>
+            <span class="mi-dnt-why">Score 35 · Repricing risk</span>
+          </div>
+          <div class="mi-dnt">
+            <span class="mi-dnt-tick">XLRE</span>
+            <span class="mi-dnt-name">Real Estate</span>
+            <span class="mi-dnt-why">Score 22 · Rate sensitivity</span>
+          </div>
+          <div class="mi-dnt">
+            <span class="mi-dnt-tick">XLU</span>
+            <span class="mi-dnt-name">Utilities</span>
+            <span class="mi-dnt-why">Score 38 · Duration analog</span>
+          </div>
+          <div class="mi-dnt">
+            <span class="mi-dnt-tick">FXI</span>
+            <span class="mi-dnt-name">China Equities</span>
+            <span class="mi-dnt-why">Geopolitical risk · tariffs</span>
+          </div>
+          <div class="mi-dnt">
+            <span class="mi-dnt-tick">HYG</span>
+            <span class="mi-dnt-name">High Yield Bonds</span>
+            <span class="mi-dnt-why">Spread compression risk</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- OPPORTUNITIES -->
+      <div class="mi-card">
+        <div class="mi-card-hdr" style="color:var(--green);">Opportunities</div>
+        <div class="mi-card-body">
+          <div class="mi-opp" onclick="go('sector-momentum')">
+            <div class="mi-opp-n">01</div>
+            <div class="mi-opp-c">
+              <div class="mi-opp-a">XLK — Technology <span class="mi-opp-score">82</span></div>
+              <div class="mi-opp-r">Momentum strengthening · AlphaDroid confirmed · NVDA catalyst</div>
+            </div>
+            <span class="mi-opp-link">Simulate →</span>
+          </div>
+          <div class="mi-opp" onclick="go('sector-momentum')">
+            <div class="mi-opp-n">02</div>
+            <div class="mi-opp-c">
+              <div class="mi-opp-a">GLD — Gold <span class="mi-opp-score">78</span></div>
+              <div class="mi-opp-r">Inflation hedge · USD pressure · Institutional adding</div>
+            </div>
+            <span class="mi-opp-link">Simulate →</span>
+          </div>
+          <div class="mi-opp" onclick="go('sector-momentum')">
+            <div class="mi-opp-n">03</div>
+            <div class="mi-opp-c">
+              <div class="mi-opp-a">XLE — Energy <span class="mi-opp-score">61</span></div>
+              <div class="mi-opp-r">Breakout confirmed · OPEC supply cut · momentum</div>
+            </div>
+            <span class="mi-opp-link">Simulate →</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- BENCHMARK / COMPETITOR -->
+      <div class="mi-card">
+        <div class="mi-card-hdr">Benchmark / Competitor</div>
+        <div class="mi-card-body">
+          <div class="mi-bm-table">
+            <div class="mi-bm-tr hd"><span>Strategy</span><span>YTD</span><span>1Y CAGR</span><span>vs S&P</span></div>
+            <div class="mi-bm-tr hi"><span style="font-weight:600;color:var(--gold,#C9A84C);">HPC22</span><span class="bv-g">+22.4%</span><span class="bv-g">+31.2%</span><span class="bv-g">+18.3pp</span></div>
+            <div class="mi-bm-tr hi"><span style="font-weight:600;color:var(--gold,#C9A84C);">HPC11</span><span class="bv-g">+11.2%</span><span class="bv-g">+18.4%</span><span class="bv-g">+7.1pp</span></div>
+            <div class="mi-bm-tr"><span>S&P 500</span><span class="bv-o">+4.1%</span><span class="bv-o">+9.8%</span><span class="bv-n">—</span></div>
+            <div class="mi-bm-tr"><span>Nasdaq</span><span class="bv-o">+2.7%</span><span class="bv-o">+7.3%</span><span class="bv-r">-1.4pp</span></div>
+            <div class="mi-bm-tr"><span>Gold</span><span class="bv-g">+8.9%</span><span class="bv-g">+16.2%</span><span class="bv-g">+4.8pp</span></div>
+            <div class="mi-bm-tr"><span>BTC</span><span class="bv-g">+31.5%</span><span class="bv-g">+52.1%</span><span class="bv-g">+27.4pp</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /row3 -->
+
+  </div><!-- /mi-body -->
+
+</div><!-- /screen-market -->
 
 <!-- ══ STOCK ANALYSIS ══ -->
 <div class="screen" id="screen-stock-analysis">
