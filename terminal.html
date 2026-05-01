@@ -617,6 +617,115 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--g
 .hsi-sleeve:last-child{border-bottom:none;}
 .hsi-sleeve-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
 .hsi-sleeve-name{font-size:13px;color:var(--text2);flex:1;}
+
+/* ══ DASHBOARD V2 — NO SCROLL COMMAND CENTER ══ */
+#screen-dashboard.active{overflow:hidden!important;height:100%!important;padding:0!important;display:flex!important;flex-direction:column!important;}
+
+/* Ticker Tape */
+.tkr-wrap{height:36px;background:rgba(4,9,16,0.98);border-bottom:1px solid var(--border);overflow:hidden;display:flex;align-items:center;flex-shrink:0;position:relative;}
+.tkr-track{display:flex;align-items:center;animation:tkrScroll 80s linear infinite;white-space:nowrap;will-change:transform;}
+.tkr-track:hover{animation-play-state:paused;}
+@keyframes tkrScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.tkr-item{display:inline-flex;align-items:center;gap:5px;padding:0 16px;font-family:var(--mono);font-size:11px;letter-spacing:0.05em;border-right:1px solid rgba(255,255,255,0.04);}
+.tkr-lbl{color:var(--text4);font-size:10px;letter-spacing:0.10em;text-transform:uppercase;}
+.tkr-v{font-weight:500;font-size:11px;}
+.tkr-v.up{color:var(--green);}
+.tkr-v.dn{color:var(--red);}
+.tkr-v.nu{color:var(--text2);}
+.tkr-v.wa{color:var(--orange);}
+.tkr-v.go{color:var(--gold);}
+.tkr-div{padding:0 18px;font-family:var(--mono);font-size:9px;color:var(--text4);letter-spacing:0.20em;text-transform:uppercase;border-right:1px solid rgba(255,255,255,0.04);}
+.tkr-intel{padding:0 16px;font-family:var(--mono);font-size:10px;color:var(--gold);letter-spacing:0.06em;border-right:1px solid rgba(255,255,255,0.04);}
+
+/* Dashboard Grid */
+.dash-grid{flex:1;min-height:0;display:grid;grid-template-rows:auto 1fr 1fr;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding:10px 14px 10px;overflow:hidden;}
+.dash-jim{grid-column:1/-1;min-height:0;overflow:hidden;}
+.dash-card{background:var(--panel);border:1px solid var(--border);border-radius:var(--r);min-height:0;overflow:hidden;display:flex;flex-direction:column;}
+.dch{padding:8px 12px 7px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.dct{font-family:var(--mono);font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--text3);}
+.dcb{flex:1;overflow:hidden;padding:9px 11px;display:flex;flex-direction:column;gap:6px;min-height:0;}
+
+/* JIM Command Bar */
+.jim-bar{background:var(--panel);border:1px solid rgba(212,175,69,0.22);border-radius:var(--r);display:flex;align-items:center;gap:14px;padding:10px 16px;height:100%;}
+.jim-bar.mode-active{border-color:rgba(212,175,69,0.40);background:rgba(10,18,28,1);}
+.jim-bar-pulse{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.jim-bar-pulse.g{background:var(--green);box-shadow:0 0 7px var(--green);animation:pulse 2s infinite;}
+.jim-bar-pulse.r{background:var(--red);box-shadow:0 0 8px var(--red);animation:pulse 1.2s infinite;}
+.jim-bar-id{font-family:var(--mono);font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);flex-shrink:0;}
+.jim-bar-vr{width:1px;height:28px;background:var(--border);flex-shrink:0;}
+.jim-bar-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:4px;font-family:var(--mono);font-size:10px;letter-spacing:0.08em;flex-shrink:0;}
+.jim-bar-badge.r{background:var(--red-bg);color:var(--red);border:1px solid rgba(255,77,79,0.25);}
+.jim-bar-badge.g{background:var(--green-bg);color:var(--green);border:1px solid rgba(62,230,139,0.22);}
+.jim-bar-actions{display:flex;gap:16px;flex:1;min-width:0;align-items:center;}
+.jim-bar-act{display:flex;flex-direction:column;gap:1px;min-width:0;flex:1;}
+.jim-bar-act-tag{font-family:var(--mono);font-size:9px;letter-spacing:0.10em;text-transform:uppercase;}
+.jim-bar-act-txt{font-size:13px;color:var(--text);line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.jim-quiet{font-size:14px;color:var(--text2);flex:1;}
+
+/* Allocation bars */
+.abar{display:flex;flex-direction:column;gap:2px;}
+.abar-meta{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;}
+.abar-track{height:4px;background:rgba(255,255,255,0.05);border-radius:2px;}
+.abar-fill{height:4px;border-radius:2px;}
+
+/* Alert rows */
+.alr{padding:7px 9px;border-radius:5px;display:flex;flex-direction:column;gap:3px;}
+.alr.cr{background:rgba(255,77,79,0.05);border:1px solid rgba(255,77,79,0.22);}
+.alr.wt{background:rgba(245,158,11,0.04);border:1px solid rgba(245,158,11,0.2);}
+.alr.in{background:rgba(255,255,255,0.02);border:1px solid var(--border);}
+.alr-head{display:flex;align-items:center;gap:5px;}
+.alr-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;}
+.alr-sev{font-family:var(--mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;}
+.alr-name{font-size:13px;font-weight:600;color:var(--text);}
+.alr-meta{font-family:var(--mono);font-size:10px;color:var(--text3);}
+.alr-why{font-family:var(--mono);font-size:10px;color:var(--text4);}
+.alr-btns{display:flex;gap:4px;margin-top:2px;}
+.alr-btn{padding:3px 8px;font-family:var(--mono);font-size:9px;letter-spacing:0.06em;text-transform:uppercase;border-radius:3px;cursor:pointer;border:1px solid;background:none;}
+
+/* Opportunity rows */
+.opp{display:flex;align-items:flex-start;gap:7px;padding:5px 8px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:5px;}
+.opp-n{font-family:var(--mono);font-size:10px;color:var(--text4);flex-shrink:0;width:14px;padding-top:1px;}
+.opp-c{flex:1;min-width:0;}
+.opp-a{font-size:13px;font-weight:600;color:var(--text);}
+.opp-r{font-family:var(--mono);font-size:10px;color:var(--text3);}
+.opp-s{font-family:var(--mono);font-size:11px;font-weight:600;}
+.opp-btn{font-family:var(--mono);font-size:9px;letter-spacing:0.06em;text-transform:uppercase;padding:2px 7px;border-radius:3px;border:1px solid rgba(74,143,212,0.3);color:var(--blue);cursor:pointer;background:none;flex-shrink:0;align-self:center;}
+.opp-btn:hover{background:var(--blue-bg);}
+
+/* Pipeline steps */
+.pip{display:flex;align-items:center;gap:8px;padding:6px 9px;border-radius:5px;}
+.pip.ok{background:var(--green-bg);border:1px solid rgba(62,230,139,0.15);}
+.pip.ac{background:var(--blue-bg);border:1px solid rgba(74,143,212,0.18);}
+.pip.pe{background:rgba(245,158,11,0.05);border:1px solid rgba(245,158,11,0.15);}
+.pip.id{background:rgba(255,255,255,0.015);border:1px solid var(--border);}
+.pip-n{font-family:var(--mono);font-size:9px;color:var(--text4);flex-shrink:0;}
+.pip-c{flex:1;min-width:0;}
+.pip-t{font-family:var(--mono);font-size:9px;letter-spacing:0.10em;text-transform:uppercase;}
+.pip-d{font-size:12px;color:var(--text3);line-height:1.3;}
+.pip-pill{font-family:var(--mono);font-size:9px;padding:2px 6px;border-radius:3px;letter-spacing:0.06em;text-transform:uppercase;flex-shrink:0;}
+
+/* News rows */
+.nwr{padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
+.nwr:last-child{border-bottom:none;padding-bottom:0;}
+.nwr-head{display:flex;align-items:center;gap:5px;margin-bottom:2px;}
+.nwr-imp{font-family:var(--mono);font-size:9px;letter-spacing:0.06em;text-transform:uppercase;padding:1px 5px;border-radius:3px;}
+.nwr-src{font-family:var(--mono);font-size:9px;color:var(--text4);}
+.nwr-hl{font-size:12px;font-weight:600;color:var(--text);line-height:1.35;margin-bottom:2px;}
+.nwr-why{font-family:var(--mono);font-size:10px;color:var(--text3);}
+.nwr-area{font-family:var(--mono);font-size:10px;color:var(--text4);}
+
+/* Market Pulse */
+.mpr{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
+.mpr:last-child{border-bottom:none;}
+.mpr-l{font-size:13px;color:var(--text2);}
+.mpr-v{font-family:var(--mono);font-size:12px;font-weight:600;}
+
+/* AUM stats */
+.aum-stat{padding:7px 9px;border-radius:5px;background:rgba(255,255,255,0.02);border:1px solid var(--border);}
+.aum-stat.gr{background:var(--green-bg);border-color:rgba(62,230,139,0.14);}
+.aum-stat.rd{background:var(--red-bg);border-color:rgba(255,77,79,0.14);}
+.aum-lbl{font-family:var(--mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:2px;}
+.aum-val{font-family:var(--g);font-size:18px;font-weight:700;line-height:1;}
 </style>
 </head>
 <body>
@@ -689,311 +798,358 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--g
 <!-- ═══ MAIN ═══ -->
 <div class="main">
 
-<!-- ══ DASHBOARD ══ -->
+<!-- ══ DASHBOARD V2 ══ -->
 <div class="screen active" id="screen-dashboard">
 
-  <!-- ══ ROW 1: JIM DAILY COMMAND CENTER ══ -->
-  <div style="background:var(--panel);border:1px solid rgba(212,175,69,0.25);border-radius:var(--r);padding:16px 20px;margin-bottom:14px;">
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:13px;">
-      <div style="width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 2s infinite;flex-shrink:0;"></div>
-      <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);">Jim · Daily Command Center · Apr 28</div>
-      <div style="margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--text4);">Updated 2 min ago</div>
-    </div>
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:13px;">
-      <!-- A: Market News -->
-      <div style="padding:11px 13px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:6px;">
-        <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text4);margin-bottom:6px;">📡 Market News</div>
-        <div style="font-size:14px;font-weight:600;color:var(--text);line-height:1.45;margin-bottom:5px;">Fed signals "higher for longer" — bonds under pressure</div>
-        <div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:7px;">Bloomberg · 08:14 · Impacto: <span style="color:var(--red);">Alto</span></div>
-        <button class="tb-btn" style="font-size:10px;padding:4px 8px;" onclick="go('market')">Read →</button>
-      </div>
-      <!-- B: Portfolio Watch -->
-      <div style="padding:11px 13px;background:rgba(255,77,79,0.04);border:1px solid rgba(255,77,79,0.18);border-radius:6px;">
-        <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--red);margin-bottom:6px;">👤 Portfolio Watch</div>
-        <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:5px;">Vera Hollanda — +16 pts acima do mandato</div>
-        <div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:7px;">RN 78 vs 62 · DD potencial <span style="color:var(--red);">−22.1%</span></div>
-        <button class="tb-btn" style="font-size:10px;padding:4px 8px;border-color:rgba(255,77,79,0.3);color:var(--red);" onclick="loadClient('hollanda')">Open →</button>
-      </div>
-      <!-- C: Momentum Shift -->
-      <div style="padding:11px 13px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:6px;">
-        <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text4);margin-bottom:6px;">⚡ Momentum Shift</div>
-        <div style="display:flex;flex-direction:column;gap:4px;margin-bottom:7px;">
-          <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="color:var(--text2);">Technology XLK</span><span style="color:var(--green);font-family:var(--mono);font-weight:600;">78→82 ↑+4</span></div>
-          <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="color:var(--text2);">Gold XAU</span><span style="color:var(--green);font-family:var(--mono);font-weight:600;">68→74 ↑+6</span></div>
-          <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="color:var(--text2);">Utilities XLU</span><span style="color:var(--red);font-family:var(--mono);font-weight:600;">42→38 ↓−4</span></div>
-          <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="color:var(--text2);">Bonds TLT</span><span style="color:var(--red);font-family:var(--mono);font-weight:600;">41→35 ↓−6</span></div>
-        </div>
-        <button class="tb-btn" style="font-size:10px;padding:4px 8px;" onclick="go('sector-momentum')">Sector →</button>
-      </div>
-      <!-- D: Economic Calendar -->
-      <div style="padding:11px 13px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:6px;">
-        <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text4);margin-bottom:6px;">📅 Economic Calendar</div>
-        <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:7px;">
-          <div style="padding:5px 7px;background:var(--red-bg);border:1px solid rgba(255,77,79,0.14);border-radius:4px;"><div style="font-size:13px;font-weight:600;color:var(--text);">CPI Report</div><div style="font-family:var(--mono);font-size:10px;color:var(--red);">Tomorrow · 08:30 ET · High Impact</div></div>
-          <div style="padding:5px 7px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:4px;"><div style="font-size:13px;font-weight:600;color:var(--text);">FOMC Minutes</div><div style="font-family:var(--mono);font-size:10px;color:var(--text3);">Qua · 14:00 ET · Medium Impact</div></div>
-          <div style="padding:5px 7px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:4px;"><div style="font-size:13px;font-weight:600;color:var(--text);">Payroll NFP</div><div style="font-family:var(--mono);font-size:10px;color:var(--orange);">Sex · 08:30 ET · High Impact</div></div>
-        </div>
-      </div>
-    </div>
-    <!-- Action line -->
-    <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:rgba(62,230,139,0.07);border:1px solid rgba(62,230,139,0.2);border-radius:6px;">
-      <span style="font-family:var(--mono);font-size:12px;color:var(--green);letter-spacing:0.06em;flex-shrink:0;">→ Suggested Action:</span>
-      <span style="font-size:15px;font-weight:600;color:var(--text);">Review Vera Hollanda · Reduce long fixed income · Increase Technology + Energy exposure · Hold new entries until CPI release</span>
-    </div>
+<!-- ── TICKER TAPE ── -->
+<div class="tkr-wrap">
+  <div class="tkr-track" id="tkr-track">
+    <!-- Market Data Block -->
+    <div class="tkr-div">MARKET</div>
+    <div class="tkr-item"><span class="tkr-lbl">SPX</span><span class="tkr-v up">5,241 +0.82%</span></div>
+    <div class="tkr-item"><span class="tkr-lbl">NDX</span><span class="tkr-v up">18,382 +1.21%</span></div>
+    <div class="tkr-item"><span class="tkr-lbl">10Y</span><span class="tkr-v dn">4.72% ↑</span></div>
+    <div class="tkr-item"><span class="tkr-lbl">GOLD</span><span class="tkr-v up">$2,341 +0.62%</span></div>
+    <div class="tkr-item"><span class="tkr-lbl">BTC</span><span class="tkr-v dn">$62,840 −1.3%</span></div>
+    <div class="tkr-item"><span class="tkr-lbl">USD/BRL</span><span class="tkr-v wa">5.14 ↑</span></div>
+    <div class="tkr-item"><span class="tkr-lbl">VIX</span><span class="tkr-v wa">22.4</span></div>
+    <div class="tkr-item"><span class="tkr-lbl">OIL</span><span class="tkr-v up">$82.10 +1.4%</span></div>
+    <!-- Top Gainers -->
+    <div class="tkr-div">TOP GAINERS</div>
+    <div class="tkr-item"><span class="tkr-lbl">NVDA</span><span class="tkr-v up">+3.2%</span></div>
+    <div class="tkr-item"><span class="tkr-lbl">META</span><span class="tkr-v up">+2.8%</span></div>
+    <div class="tkr-item"><span class="tkr-lbl">XLK</span><span class="tkr-v up">+1.8%</span></div>
+    <div class="tkr-item"><span class="tkr-lbl">TSLA</span><span class="tkr-v up">+2.1%</span></div>
+    <div class="tkr-item"><span class="tkr-lbl">XLE</span><span class="tkr-v up">+2.3%</span></div>
+    <div class="tkr-item"><span class="tkr-lbl">GLD</span><span class="tkr-v up">+0.9%</span></div>
+    <!-- Top Losers -->
+    <div class="tkr-div">TOP LOSERS</div>
+    <div class="tkr-item"><span class="tkr-lbl">TLT</span><span class="tkr-v dn">−1.9%</span></div>
+    <div class="tkr-item"><span class="tkr-lbl">XLU</span><span class="tkr-v dn">−1.4%</span></div>
+    <div class="tkr-item"><span class="tkr-lbl">XLRE</span><span class="tkr-v dn">−1.2%</span></div>
+    <div class="tkr-item"><span class="tkr-lbl">KO</span><span class="tkr-v dn">−1.1%</span></div>
+    <div class="tkr-item"><span class="tkr-lbl">AGG</span><span class="tkr-v dn">−0.8%</span></div>
+    <!-- HARPIAN Intelligence -->
+    <div class="tkr-div">INTELLIGENCE</div>
+    <div class="tkr-intel">⚡ AlphaDroid: Technology leading momentum · Score 82</div>
+    <div class="tkr-intel">⚠ 10Y rising + AlphaDroid signal → duration risk increasing</div>
+    <div class="tkr-intel">📅 CPI tomorrow 08:30 ET → volatility expected before allocation decisions</div>
+    <div class="tkr-intel">🛡 StormGuard: Inactive · Regime: Growth · Threshold −8%</div>
+    <div class="tkr-intel">🔴 Vera Hollanda misaligned · RN 78 vs mandate 62 · Simulate now</div>
+    <!-- REPEAT for seamless loop -->
+    <div class="tkr-div">MARKET</div>
+    <div class="tkr-item"><span class="tkr-lbl">SPX</span><span class="tkr-v up">5,241 +0.82%</span></div>
+    <div class="tkr-item"><span class="tkr-lbl">NDX</span><span class="tkr-v up">18,382 +1.21%</span></div>
+    <div class="tkr-item"><span class="tkr-lbl">10Y</span><span class="tkr-v dn">4.72% ↑</span></div>
+    <div class="tkr-item"><span class="tkr-lbl">GOLD</span><span class="tkr-v up">$2,341 +0.62%</span></div>
+    <div class="tkr-item"><span class="tkr-lbl">BTC</span><span class="tkr-v dn">$62,840 −1.3%</span></div>
+    <div class="tkr-item"><span class="tkr-lbl">USD/BRL</span><span class="tkr-v wa">5.14 ↑</span></div>
+    <div class="tkr-item"><span class="tkr-lbl">VIX</span><span class="tkr-v wa">22.4</span></div>
+    <div class="tkr-item"><span class="tkr-lbl">OIL</span><span class="tkr-v up">$82.10 +1.4%</span></div>
+    <div class="tkr-div">TOP GAINERS</div>
+    <div class="tkr-item"><span class="tkr-lbl">NVDA</span><span class="tkr-v up">+3.2%</span></div>
+    <div class="tkr-item"><span class="tkr-lbl">META</span><span class="tkr-v up">+2.8%</span></div>
+    <div class="tkr-item"><span class="tkr-lbl">XLK</span><span class="tkr-v up">+1.8%</span></div>
+    <div class="tkr-item"><span class="tkr-lbl">TSLA</span><span class="tkr-v up">+2.1%</span></div>
+    <div class="tkr-item"><span class="tkr-lbl">XLE</span><span class="tkr-v up">+2.3%</span></div>
+    <div class="tkr-item"><span class="tkr-lbl">GLD</span><span class="tkr-v up">+0.9%</span></div>
+    <div class="tkr-div">TOP LOSERS</div>
+    <div class="tkr-item"><span class="tkr-lbl">TLT</span><span class="tkr-v dn">−1.9%</span></div>
+    <div class="tkr-item"><span class="tkr-lbl">XLU</span><span class="tkr-v dn">−1.4%</span></div>
+    <div class="tkr-item"><span class="tkr-lbl">XLRE</span><span class="tkr-v dn">−1.2%</span></div>
+    <div class="tkr-item"><span class="tkr-lbl">KO</span><span class="tkr-v dn">−1.1%</span></div>
+    <div class="tkr-item"><span class="tkr-lbl">AGG</span><span class="tkr-v dn">−0.8%</span></div>
+    <div class="tkr-div">INTELLIGENCE</div>
+    <div class="tkr-intel">⚡ AlphaDroid: Technology leading momentum · Score 82</div>
+    <div class="tkr-intel">⚠ 10Y rising + AlphaDroid signal → duration risk increasing</div>
+    <div class="tkr-intel">📅 CPI tomorrow 08:30 ET → volatility expected before allocation decisions</div>
+    <div class="tkr-intel">🛡 StormGuard: Inactive · Regime: Growth · Threshold −8%</div>
+    <div class="tkr-intel">🔴 Vera Hollanda misaligned · RN 78 vs mandate 62 · Simulate now</div>
   </div>
-
-  <!-- ══ ROW 2: MARKET+SECTOR | CLIENT PORTFOLIO OVERVIEW | CRITICAL ALERTS ══ -->
-  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px;align-items:start;">
-
-    <!-- Market Trend mini + Sector Snapshot -->
-    <div style="background:var(--panel);border:1px solid var(--border);border-radius:var(--r);">
-      <div class="ph"><div class="pt">Market &amp; Sector Snapshot</div><span class="badge o">+22 Bull</span></div>
-      <div style="display:flex;flex-direction:column;align-items:center;padding:8px 10px 4px;">
-        <canvas id="dash-gauge-mini" width="240" height="130" style="max-width:100%;display:block;"></canvas>
-        <div style="display:flex;gap:10px;align-items:baseline;">
-          <div id="dash-gauge-mini-val" style="font-family:'Space Grotesk',sans-serif;font-size:34px;font-weight:700;color:#F59E0B;line-height:1;">+22</div>
-          <div id="dash-gauge-mini-reg" style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#F59E0B;">Bull Market</div>
-        </div>
-      </div>
-      <div style="padding:6px 12px 10px;">
-        <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text4);margin-bottom:5px;">Top Setores</div>
-        <div style="display:flex;flex-direction:column;gap:3px;margin-bottom:8px;">
-          <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;"><span style="color:var(--text2);">Technology XLK</span><span style="color:var(--green);font-family:var(--mono);font-weight:600;">82</span></div>
-          <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;"><span style="color:var(--text2);">Industrials XLI</span><span style="color:var(--green);font-family:var(--mono);font-weight:600;">74</span></div>
-          <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;"><span style="color:var(--text2);">Gold XAU</span><span style="color:var(--green);font-family:var(--mono);font-weight:600;">74</span></div>
-        </div>
-        <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text4);margin-bottom:5px;">Bottom Setores</div>
-        <div style="display:flex;flex-direction:column;gap:3px;">
-          <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;"><span style="color:var(--text2);">Real Estate XLRE</span><span style="color:var(--red);font-family:var(--mono);font-weight:600;">22</span></div>
-          <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;"><span style="color:var(--text2);">Utilities XLU</span><span style="color:var(--red);font-family:var(--mono);font-weight:600;">38</span></div>
-          <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;"><span style="color:var(--text2);">Long Bonds TLT</span><span style="color:var(--red);font-family:var(--mono);font-weight:600;">35</span></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Client Portfolio Overview -->
-    <div style="background:var(--panel);border:1px solid var(--border);border-radius:var(--r);">
-      <div class="ph"><div class="pt">Client Portfolio Overview</div><button class="tb-btn" onclick="go('clients')">View All</button></div>
-      <div style="padding:12px 14px;">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
-          <div style="padding:8px 10px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:5px;"><div style="font-family:var(--mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text3);margin-bottom:3px;">AUM Total</div><div style="font-family:var(--g);font-size:20px;font-weight:700;color:var(--gold);">R$25.4M</div></div>
-          <div style="padding:8px 10px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:5px;"><div style="font-family:var(--mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text3);margin-bottom:3px;">Clientes</div><div style="font-family:var(--g);font-size:20px;font-weight:700;color:var(--text);">5 <span style="font-size:13px;color:var(--text3);font-weight:400;">ativos</span></div></div>
-          <div style="padding:8px 10px;background:var(--green-bg);border:1px solid rgba(62,230,139,0.14);border-radius:5px;"><div style="font-family:var(--mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--green);margin-bottom:3px;">Aligned AUM</div><div style="font-family:var(--g);font-size:20px;font-weight:700;color:var(--green);">R$24.5M</div></div>
-          <div style="padding:8px 10px;background:var(--red-bg);border:1px solid rgba(255,77,79,0.14);border-radius:5px;"><div style="font-family:var(--mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--red);margin-bottom:3px;">Misaligned AUM</div><div style="font-family:var(--g);font-size:20px;font-weight:700;color:var(--red);">R$890K</div></div>
-        </div>
-        <!-- Allocation bars -->
-        <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text4);margin-bottom:7px;">Aggregate Allocation</div>
-        <div style="display:flex;flex-direction:column;gap:6px;">
-          <div><div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:12px;margin-bottom:3px;"><span style="color:var(--blue);">HPC11</span><span style="color:var(--blue);">R$8.2M · 32%</span></div><div style="height:5px;background:rgba(255,255,255,0.05);border-radius:3px;"><div style="height:5px;width:32%;background:var(--blue);border-radius:3px;"></div></div></div>
-          <div><div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:12px;margin-bottom:3px;"><span style="color:var(--gold);">HPC22</span><span style="color:var(--gold);">R$4.2M · 17%</span></div><div style="height:5px;background:rgba(255,255,255,0.05);border-radius:3px;"><div style="height:5px;width:17%;background:var(--gold);border-radius:3px;"></div></div></div>
-          <div><div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:12px;margin-bottom:3px;"><span style="color:var(--text2);">Outros</span><span style="color:var(--text2);">R$12.1M · 47%</span></div><div style="height:5px;background:rgba(255,255,255,0.05);border-radius:3px;"><div style="height:5px;width:47%;background:var(--text3);border-radius:3px;"></div></div></div>
-          <div><div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:12px;margin-bottom:3px;"><span style="color:var(--green);">Caixa</span><span style="color:var(--green);">R$890K · 4%</span></div><div style="height:5px;background:rgba(255,255,255,0.05);border-radius:3px;"><div style="height:5px;width:4%;background:var(--green);border-radius:3px;"></div></div></div>
-        </div>
-        <div style="margin-top:10px;display:flex;gap:6px;">
-          <div style="flex:1;text-align:center;padding:5px;background:var(--green-bg);border:1px solid rgba(62,230,139,0.14);border-radius:4px;font-family:var(--mono);font-size:11px;color:var(--green);">75% aligned</div>
-          <div style="flex:1;text-align:center;padding:5px;background:var(--red-bg);border:1px solid rgba(255,77,79,0.14);border-radius:4px;font-family:var(--mono);font-size:11px;color:var(--red);">1 critical</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Critical Alerts -->
-    <div style="background:var(--panel);border:1px solid var(--border);border-radius:var(--r);">
-      <div class="ph"><div class="pt">Critical Alerts</div><span class="badge r">3</span></div>
-      <div style="padding:10px 12px;display:flex;flex-direction:column;gap:8px;">
-        <!-- Alert 1 — Critical -->
-        <div style="padding:10px 12px;background:rgba(255,77,79,0.04);border:1px solid rgba(255,77,79,0.22);border-radius:6px;">
-          <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px;"><div style="width:6px;height:6px;border-radius:50%;background:var(--red);animation:pulse 1.2s infinite;"></div><span style="font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--red);">Critical</span></div>
-          <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:3px;">Vera Hollanda — RN 78 vs 62</div>
-          <div style="font-family:var(--mono);font-size:11px;color:var(--text3);margin-bottom:7px;">Impact: DD −22.1% · Ret −4.2%</div>
-          <div style="display:flex;gap:5px;">
-            <button style="flex:1;padding:5px 0;background:var(--red);border:none;border-radius:4px;font-family:var(--mono);font-size:10px;text-transform:uppercase;color:#fff;cursor:pointer;" onclick="loadClient('hollanda')">Simular</button>
-            <button style="flex:1;padding:5px 0;background:rgba(255,77,79,0.08);border:1px solid rgba(255,77,79,0.25);border-radius:4px;font-family:var(--mono);font-size:10px;text-transform:uppercase;color:var(--red);cursor:pointer;" onclick="loadClient('hollanda')">Open</button>
-            <button style="flex:1;padding:5px 0;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:4px;font-family:var(--mono);font-size:10px;text-transform:uppercase;color:var(--text3);cursor:pointer;" onclick="window.open('presentation-mode.html')">Apres.</button>
-          </div>
-        </div>
-        <!-- Alert 2 — Watch -->
-        <div style="padding:10px 12px;background:rgba(245,158,11,0.04);border:1px solid rgba(245,158,11,0.2);border-radius:6px;">
-          <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px;"><div style="width:6px;height:6px;border-radius:50%;background:var(--orange);"></div><span style="font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--orange);">Watch</span></div>
-          <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:3px;">Silveira FO — RN Gap +6</div>
-          <div style="font-family:var(--mono);font-size:11px;color:var(--text3);margin-bottom:7px;">0% HPC · Multi-asset without protection</div>
-          <div style="display:flex;gap:5px;">
-            <button style="flex:1;padding:5px 0;background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.3);border-radius:4px;font-family:var(--mono);font-size:10px;text-transform:uppercase;color:var(--orange);cursor:pointer;" onclick="loadClient('silveira')">Simular</button>
-            <button style="flex:1;padding:5px 0;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:4px;font-family:var(--mono);font-size:10px;text-transform:uppercase;color:var(--text3);cursor:pointer;" onclick="loadClient('silveira')">Open</button>
-          </div>
-        </div>
-        <!-- Alert 3 — Info -->
-        <div style="padding:10px 12px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:6px;">
-          <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px;"><div style="width:6px;height:6px;border-radius:50%;background:var(--blue);"></div><span style="font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--blue);">Info</span></div>
-          <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:3px;">CPI tomorrow — 08:30 ET</div>
-          <div style="font-family:var(--mono);font-size:11px;color:var(--text3);margin-bottom:7px;">Aguardar antes de novas entradas RF</div>
-          <div style="display:flex;gap:5px;">
-            <button style="flex:1;padding:5px 0;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:4px;font-family:var(--mono);font-size:10px;text-transform:uppercase;color:var(--text3);cursor:pointer;" onclick="go('market')">Market Intel</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══ ROW 3: CLIENT ALLOCATION SNAPSHOT | NEWS THAT MATTER ══ -->
-  <div style="display:grid;grid-template-columns:3fr 2fr;gap:12px;margin-bottom:12px;align-items:start;">
-
-    <!-- Client Allocation Snapshot -->
-    <div style="background:var(--panel);border:1px solid var(--border);border-radius:var(--r);">
-      <div class="ph"><div class="pt">Client Allocation Snapshot</div><button class="tb-btn" onclick="go('clients')">View All</button></div>
-      <div style="overflow-x:auto;"><table class="tbl" style="font-size:14px;">
-        <thead><tr><th>Cliente</th><th>AUM</th><th>HPC11</th><th>HPC22</th><th>Outros</th><th>Ret 12M</th><th>Status</th><th></th></tr></thead>
-        <tbody>
-          <tr style="background:rgba(255,77,79,0.025);">
-            <td><span class="tbl-name">Vera Hollanda</span></td><td>R$890K</td>
-            <td style="font-family:var(--mono);color:var(--text3);">0%</td><td style="font-family:var(--mono);color:var(--text3);">0%</td><td style="font-family:var(--mono);color:var(--red);">100%</td>
-            <td style="color:var(--red);">-4.2%</td><td><span class="badge r">Critical</span></td>
-            <td><button class="tbl-act" style="border-color:rgba(255,77,79,0.35);color:var(--red);" onclick="loadClient('hollanda')">Urgente</button></td>
-          </tr>
-          <tr style="background:rgba(245,158,11,0.015);">
-            <td><span class="tbl-name">Grupo Silveira FO</span></td><td>R$12.1M</td>
-            <td style="font-family:var(--mono);color:var(--text3);">0%</td><td style="font-family:var(--mono);color:var(--text3);">0%</td><td style="font-family:var(--mono);color:var(--orange);">100%</td>
-            <td style="color:var(--green);">+9.8%</td><td><span class="badge o">Watch</span></td>
-            <td><button class="tbl-act" onclick="loadClient('silveira')">Open</button></td>
-          </tr>
-          <tr>
-            <td><span class="tbl-name">Monteiro Family</span></td><td>R$4.2M</td>
-            <td style="font-family:var(--mono);color:var(--text3);">0%</td><td style="font-family:var(--mono);color:var(--gold);">100%</td><td style="font-family:var(--mono);color:var(--text3);">0%</td>
-            <td style="color:var(--green);">+22.4%</td><td><span class="badge g">OK</span></td>
-            <td><button class="tbl-act" onclick="loadClient('monteiro')">Open</button></td>
-          </tr>
-          <tr>
-            <td><span class="tbl-name">Instituto Cavalcante</span></td><td>R$6.4M</td>
-            <td style="font-family:var(--mono);color:var(--blue);">100%</td><td style="font-family:var(--mono);color:var(--text3);">0%</td><td style="font-family:var(--mono);color:var(--text3);">0%</td>
-            <td style="color:var(--green);">+11.2%</td><td><span class="badge g">OK</span></td>
-            <td><button class="tbl-act" onclick="loadClient('cavalcante')">Open</button></td>
-          </tr>
-          <tr>
-            <td><span class="tbl-name">Dr. Carlos Viana</span></td><td>R$1.8M</td>
-            <td style="font-family:var(--mono);color:var(--blue);">100%</td><td style="font-family:var(--mono);color:var(--text3);">0%</td><td style="font-family:var(--mono);color:var(--text3);">0%</td>
-            <td style="color:var(--green);">+14.1%</td><td><span class="badge g">OK</span></td>
-            <td><button class="tbl-act" onclick="loadClient('viana')">Open</button></td>
-          </tr>
-        </tbody>
-      </table></div>
-    </div>
-
-    <!-- News That Matter -->
-    <div style="background:var(--panel);border:1px solid var(--border);border-radius:var(--r);">
-      <div class="ph"><div class="pt">News That Matter</div><button class="tb-btn" onclick="go('market')">Full Feed</button></div>
-      <div style="display:flex;flex-direction:column;gap:0;">
-        <div style="padding:9px 13px;border-bottom:1px solid rgba(255,255,255,0.04);">
-          <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;"><span class="badge r" style="font-size:10px;">BEAR</span><span style="font-family:var(--mono);font-size:10px;color:var(--text3);">Bloomberg · 08:14</span></div>
-          <div style="font-size:14px;font-weight:600;color:var(--text);line-height:1.4;">Fed holds rates; no cut expected for 2026</div>
-          <div style="font-size:13px;color:var(--text3);margin-top:2px;">Impacto direto em RF longa · TLT −2.1%</div>
-        </div>
-        <div style="padding:9px 13px;border-bottom:1px solid rgba(255,255,255,0.04);">
-          <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;"><span class="badge g" style="font-size:10px;">BULL</span><span style="font-family:var(--mono);font-size:10px;color:var(--text3);">Reuters · 07:45</span></div>
-          <div style="font-size:14px;font-weight:600;color:var(--text);line-height:1.4;">Nvidia supera estimativas em 38%</div>
-          <div style="font-size:13px;color:var(--text3);margin-top:2px;">Tech momentum reinforced · XLK +1.8%</div>
-        </div>
-        <div style="padding:9px 13px;border-bottom:1px solid rgba(255,255,255,0.04);">
-          <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;"><span class="badge r" style="font-size:10px;">BEAR</span><span style="font-family:var(--mono);font-size:10px;color:var(--text3);">Valor · 06:30</span></div>
-          <div style="font-size:14px;font-weight:600;color:var(--text);line-height:1.4;">Treasury 10Y atinge 4.72%</div>
-          <div style="font-size:13px;color:var(--text3);margin-top:2px;">Long-duration pressure · Duration risk elevated</div>
-        </div>
-        <div style="padding:9px 13px;border-bottom:1px solid rgba(255,255,255,0.04);">
-          <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;"><span class="badge o" style="font-size:10px;">NEUTRO</span><span style="font-family:var(--mono);font-size:10px;color:var(--text3);">FT · 06:00</span></div>
-          <div style="font-size:14px;font-weight:600;color:var(--text);line-height:1.4;">Gold up +5.8% this month</div>
-          <div style="font-size:13px;color:var(--text3);margin-top:2px;">Inflation hedge · XAU above $2,300</div>
-        </div>
-        <div style="padding:9px 13px;">
-          <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;"><span class="badge g" style="font-size:10px;">BULL</span><span style="font-family:var(--mono);font-size:10px;color:var(--text3);">WSJ · 05:15</span></div>
-          <div style="font-size:14px;font-weight:600;color:var(--text);line-height:1.4;">Oil recovery — Energy XLE +2.3%</div>
-          <div style="font-size:13px;color:var(--text3);margin-top:2px;">Suprimento OPEC reduzido · momentum bull</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══ ROW 4: WHAT CHANGED TODAY | KPI STRIP | INST. FLOW ══ -->
-  <div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px;margin-bottom:12px;align-items:start;">
-
-    <!-- What Changed Today -->
-    <div style="background:var(--panel);border:1px solid var(--border);border-radius:var(--r);">
-      <div class="ph">
-        <div class="pt">What Changed Today</div>
-        <div style="display:flex;align-items:center;gap:5px;"><div style="width:5px;height:5px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;"></div><span style="font-family:var(--mono);font-size:10px;color:var(--text3);">LIVE</span></div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;">
-        <!-- Market -->
-        <div style="padding:8px 12px;border-right:1px solid rgba(255,255,255,0.04);border-bottom:1px solid rgba(255,255,255,0.04);">
-          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text4);margin-bottom:6px;">Market</div>
-          <div style="display:flex;flex-direction:column;gap:4px;font-family:var(--mono);font-size:12px;">
-            <div style="display:flex;justify-content:space-between;"><span style="color:var(--text3);">Market Trend</span><span style="color:var(--green);">+18→+22 ↑</span></div>
-            <div style="display:flex;justify-content:space-between;"><span style="color:var(--text3);">VIX</span><span style="color:var(--orange);">24.1→22.4 ↓</span></div>
-            <div style="display:flex;justify-content:space-between;"><span style="color:var(--text3);">10Y Treasury</span><span style="color:var(--red);">4.65%→4.72% ↑</span></div>
-            <div style="display:flex;justify-content:space-between;"><span style="color:var(--text3);">USD/BRL</span><span style="color:var(--orange);">5.11→5.14 ↑</span></div>
-          </div>
-        </div>
-        <!-- Sectors -->
-        <div style="padding:8px 12px;border-bottom:1px solid rgba(255,255,255,0.04);">
-          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text4);margin-bottom:6px;">Sectors</div>
-          <div style="display:flex;flex-direction:column;gap:4px;font-family:var(--mono);font-size:12px;">
-            <div style="display:flex;justify-content:space-between;"><span style="color:var(--text3);">Technology</span><span style="color:var(--green);">78→82 ↑+4</span></div>
-            <div style="display:flex;justify-content:space-between;"><span style="color:var(--text3);">Gold/XAU</span><span style="color:var(--green);">68→74 ↑+6</span></div>
-            <div style="display:flex;justify-content:space-between;"><span style="color:var(--text3);">Utilities</span><span style="color:var(--red);">42→38 ↓−4</span></div>
-            <div style="display:flex;justify-content:space-between;"><span style="color:var(--text3);">Bonds TLT</span><span style="color:var(--red);">41→35 ↓−6</span></div>
-          </div>
-        </div>
-        <!-- Clients -->
-        <div style="padding:8px 12px;border-right:1px solid rgba(255,255,255,0.04);">
-          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text4);margin-bottom:6px;">Clients</div>
-          <div style="display:flex;flex-direction:column;gap:4px;font-family:var(--mono);font-size:12px;">
-            <div style="display:flex;justify-content:space-between;"><span style="color:var(--text3);">Hollanda RN Gap</span><span style="color:var(--red);">+16 (inalterado)</span></div>
-            <div style="display:flex;justify-content:space-between;"><span style="color:var(--text3);">Silveira Gap</span><span style="color:var(--orange);">+6 (inalterado)</span></div>
-            <div style="display:flex;justify-content:space-between;"><span style="color:var(--text3);">Monteiro RN</span><span style="color:var(--green);">67 (alinhado)</span></div>
-            <div style="display:flex;justify-content:space-between;"><span style="color:var(--text3);">HPC avg. perf.</span><span style="color:var(--green);">+16.2% YTD</span></div>
-          </div>
-        </div>
-        <!-- News -->
-        <div style="padding:8px 12px;">
-          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text4);margin-bottom:6px;">News Signals</div>
-          <div style="display:flex;flex-direction:column;gap:4px;font-family:var(--mono);font-size:12px;">
-            <div style="display:flex;justify-content:space-between;"><span style="color:var(--text3);">Fed tone</span><span style="color:var(--red);">Hawkish ↑</span></div>
-            <div style="display:flex;justify-content:space-between;"><span style="color:var(--text3);">Tech earnings</span><span style="color:var(--green);">Beat ↑</span></div>
-            <div style="display:flex;justify-content:space-between;"><span style="color:var(--text3);">Oil supply</span><span style="color:var(--green);">Reduzido ↑</span></div>
-            <div style="display:flex;justify-content:space-between;"><span style="color:var(--text3);">CPI (tomorrow)</span><span style="color:var(--orange);">Hold</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- KPI Strip -->
-    <div style="display:flex;flex-direction:column;gap:8px;">
-      <div class="kpi"><div class="kpi-lbl">AUM Total</div><div class="kpi-val au">R$25.4M</div><div class="kpi-delta up">▲ +12.3% YTD</div><div style="font-family:var(--mono);font-size:10px;color:var(--text4);margin-top:3px;">2 min ago</div></div>
-      <div class="kpi"><div class="kpi-lbl">Alertas</div><div class="kpi-val r">3</div><div class="kpi-sub">1 critical · 2 watch</div><div style="font-family:var(--mono);font-size:10px;color:var(--text4);margin-top:3px;">Now</div></div>
-      <div class="kpi"><div class="kpi-lbl">Avg. Base Ret.</div><div class="kpi-val g">+18.7%</div><div class="kpi-delta up">▲ CDI +5.9%</div><div style="font-family:var(--mono);font-size:10px;color:var(--text4);margin-top:3px;">12M rolling</div></div>
-      <div class="kpi"><div class="kpi-lbl">Aligned</div><div class="kpi-val">9<span style="font-size:13px;color:var(--text3);font-weight:400;">/12</span></div><div class="kpi-sub">75% · 1 critical</div><div style="font-family:var(--mono);font-size:10px;color:var(--text4);margin-top:3px;">2 min ago</div></div>
-    </div>
-
-    <!-- Institutional Flow -->
-    <div style="background:var(--panel);border:1px solid var(--border);border-radius:var(--r);">
-      <div class="ph"><div class="pt">Execution Pipeline</div></div>
-      <div style="padding:10px 12px;display:flex;flex-direction:column;gap:6px;">
-        <div style="padding:8px 10px;background:var(--green-bg);border:1px solid rgba(62,230,139,0.14);border-radius:5px;"><div style="font-family:var(--mono);font-size:10px;color:var(--green);margin-bottom:2px;">01 · Diagnosis</div><div style="font-size:14px;color:var(--text2);">5 clientes mapeados · 2 pendentes</div></div>
-        <div style="padding:8px 10px;background:var(--blue-bg);border:1px solid rgba(74,143,212,0.14);border-radius:5px;"><div style="font-family:var(--mono);font-size:10px;color:var(--blue);margin-bottom:2px;">02 · HPC Simulation</div><div style="font-size:14px;color:var(--text2);">Hollanda pendente · Silveira agendado</div></div>
-        <div style="padding:8px 10px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:5px;"><div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:2px;">03 · Allocation</div><div style="font-size:14px;color:var(--text3);">Awaiting Vera approval</div></div>
-        <div style="padding:8px 10px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:5px;"><div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:2px;">04 · Lynx Execution</div><div style="font-size:14px;color:var(--text3);">Monteiro · Cavalcante · Ativo</div></div>
-      </div>
-      <div style="padding:8px 12px;border-top:1px solid var(--border);">
-        <button class="tb-btn au" style="width:100%;justify-content:center;" onclick="loadClient('hollanda')">Execute Next Step →</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══ HOOK BANNER ══ -->
-  <div style="display:flex;align-items:center;gap:14px;padding:12px 20px;background:rgba(212,175,69,0.05);border:1px solid rgba(212,175,69,0.18);border-radius:var(--r);">
-    <span style="font-size:22px;">🚀</span>
-    <div style="flex:1;"><div style="font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:2px;">Market Signal · Apr 28</div><div style="font-size:15px;font-weight:600;color:var(--text);">Momentum Expansion — Technology and Industrials in acceleration phase · Gold confirming bull</div></div>
-    <button class="tb-btn au" onclick="go('sector-momentum')">Sector Momentum →</button>
-  </div>
-
 </div>
+
+<!-- ── DASHBOARD GRID ── -->
+<div class="dash-grid">
+
+  <!-- ══ ROW 1: JIM COMMAND CENTER ══ -->
+  <div class="dash-jim">
+    <div class="jim-bar mode-active" id="jim-cmd-bar">
+
+      <!-- Identity -->
+      <div class="jim-bar-pulse r" id="jim-cmd-pulse"></div>
+      <div class="jim-bar-id">JIM · Command Center</div>
+      <span class="jim-bar-badge r" id="jim-cmd-badge">1 Critical · 2 Actions · 1 Opportunity</span>
+      <div class="jim-bar-vr"></div>
+
+      <!-- Active Actions -->
+      <div class="jim-bar-actions" id="jim-cmd-actions">
+        <div class="jim-bar-act">
+          <span class="jim-bar-act-tag" style="color:var(--red);">⚠ Portfolio Alert</span>
+          <span class="jim-bar-act-txt">Vera Hollanda misaligned — RN 78 vs mandate 62 · DD risk −22.1%</span>
+        </div>
+        <div class="jim-bar-vr"></div>
+        <div class="jim-bar-act">
+          <span class="jim-bar-act-tag" style="color:var(--gold);">→ Suggested Action</span>
+          <span class="jim-bar-act-txt">Simulate reduction in long-duration bonds · Increase Technology + Energy</span>
+        </div>
+        <div class="jim-bar-vr"></div>
+        <div class="jim-bar-act">
+          <span class="jim-bar-act-tag" style="color:var(--orange);">📅 Macro Event</span>
+          <span class="jim-bar-act-txt">CPI tomorrow 08:30 ET — avoid new duration exposure before release</span>
+        </div>
+        <div class="jim-bar-vr"></div>
+        <div class="jim-bar-act">
+          <span class="jim-bar-act-tag" style="color:var(--green);">⚡ Momentum</span>
+          <span class="jim-bar-act-txt">Technology leads at 82 · Bonds weakest at 35 · Gold confirming bull</span>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <button class="tb-btn au" style="flex-shrink:0;" onclick="jimToggle()">Open JIM →</button>
+    </div>
+  </div>
+
+  <!-- ══ ROW 2: PORTFOLIO OVERVIEW ══ -->
+  <div class="dash-card">
+    <div class="dch">
+      <span class="dct">Portfolio Overview</span>
+      <button class="tb-btn" style="font-size:9px;padding:3px 8px;" onclick="go('clients')">Open Portfolios →</button>
+    </div>
+    <div class="dcb">
+      <!-- AUM Stats -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;">
+        <div class="aum-stat"><div class="aum-lbl" style="color:var(--gold);">AUM Total</div><div class="aum-val" style="color:var(--gold);">R$25.4M</div></div>
+        <div class="aum-stat"><div class="aum-lbl" style="color:var(--text3);">Clients</div><div class="aum-val" style="color:var(--text);">5 <span style="font-size:12px;font-weight:400;color:var(--text3);">active</span></div></div>
+        <div class="aum-stat gr"><div class="aum-lbl" style="color:var(--green);">Aligned AUM</div><div class="aum-val" style="color:var(--green);">R$24.5M</div></div>
+        <div class="aum-stat rd"><div class="aum-lbl" style="color:var(--red);">Misaligned</div><div class="aum-val" style="color:var(--red);">R$890K</div></div>
+      </div>
+      <!-- Allocation bars -->
+      <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text4);margin-top:2px;">Aggregate Allocation</div>
+      <div style="display:flex;flex-direction:column;gap:5px;">
+        <div class="abar"><div class="abar-meta"><span style="color:var(--blue);">HPC11</span><span style="color:var(--blue);">R$8.2M · 32%</span></div><div class="abar-track"><div class="abar-fill" style="width:32%;background:var(--blue);"></div></div></div>
+        <div class="abar"><div class="abar-meta"><span style="color:var(--gold);">HPC22</span><span style="color:var(--gold);">R$4.2M · 17%</span></div><div class="abar-track"><div class="abar-fill" style="width:17%;background:var(--gold);"></div></div></div>
+        <div class="abar"><div class="abar-meta"><span style="color:var(--text3);">Other</span><span style="color:var(--text3);">R$12.1M · 47%</span></div><div class="abar-track"><div class="abar-fill" style="width:47%;background:var(--text4);"></div></div></div>
+        <div class="abar"><div class="abar-meta"><span style="color:var(--green);">Cash</span><span style="color:var(--green);">R$890K · 4%</span></div><div class="abar-track"><div class="abar-fill" style="width:4%;background:var(--green);"></div></div></div>
+      </div>
+      <!-- Status strip -->
+      <div style="display:flex;gap:5px;margin-top:2px;">
+        <div style="flex:1;text-align:center;padding:4px;background:var(--green-bg);border:1px solid rgba(62,230,139,0.14);border-radius:4px;font-family:var(--mono);font-size:10px;color:var(--green);">75% aligned</div>
+        <div style="flex:1;text-align:center;padding:4px;background:var(--red-bg);border:1px solid rgba(255,77,79,0.14);border-radius:4px;font-family:var(--mono);font-size:10px;color:var(--red);">1 critical</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ ROW 2: CRITICAL ALERTS ══ -->
+  <div class="dash-card">
+    <div class="dch">
+      <span class="dct">Critical Alerts</span>
+      <span class="badge r" style="font-size:10px;padding:2px 6px;">3</span>
+    </div>
+    <div class="dcb">
+      <!-- Alert 1 — Critical -->
+      <div class="alr cr">
+        <div class="alr-head"><div class="alr-dot" style="background:var(--red);animation:pulse 1.2s infinite;"></div><span class="alr-sev" style="color:var(--red);">Critical</span></div>
+        <div class="alr-name">Vera Hollanda — RN 78 vs 62</div>
+        <div class="alr-meta">Impact: DD −22.1% · Return −4.2%</div>
+        <div class="alr-why">Why: 100% non-HARPIAN · mandate breach +16pts</div>
+        <div class="alr-btns">
+          <button class="alr-btn" style="border-color:rgba(255,77,79,0.4);color:var(--red);" onclick="loadClient('hollanda')">Simulate</button>
+          <button class="alr-btn" style="border-color:var(--border);color:var(--text3);" onclick="loadClient('hollanda')">Open</button>
+          <button class="alr-btn" style="border-color:var(--border);color:var(--text3);" onclick="window.open('presentation-mode.html')">Present</button>
+        </div>
+      </div>
+      <!-- Alert 2 — Watch -->
+      <div class="alr wt">
+        <div class="alr-head"><div class="alr-dot" style="background:var(--orange);"></div><span class="alr-sev" style="color:var(--orange);">Watch</span></div>
+        <div class="alr-name">Silveira FO — RN Gap +6</div>
+        <div class="alr-meta">0% HPC · Multi-asset without protection</div>
+        <div class="alr-btns">
+          <button class="alr-btn" style="border-color:rgba(245,158,11,0.4);color:var(--orange);" onclick="loadClient('silveira')">Simulate</button>
+          <button class="alr-btn" style="border-color:var(--border);color:var(--text3);" onclick="loadClient('silveira')">Open</button>
+        </div>
+      </div>
+      <!-- Alert 3 — Info -->
+      <div class="alr in">
+        <div class="alr-head"><div class="alr-dot" style="background:var(--blue);"></div><span class="alr-sev" style="color:var(--blue);">Info</span></div>
+        <div class="alr-name">CPI tomorrow — 08:30 ET</div>
+        <div class="alr-meta">High impact · Avoid new duration entries</div>
+        <div class="alr-btns">
+          <button class="alr-btn" style="border-color:var(--border);color:var(--text3);" onclick="go('market')">Market Intel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ ROW 2: MARKET PULSE ══ -->
+  <div class="dash-card">
+    <div class="dch">
+      <span class="dct">Market Pulse</span>
+      <button class="tb-btn" style="font-size:9px;padding:3px 8px;" onclick="go('market-trends')">Open Trends →</button>
+    </div>
+    <div class="dcb">
+      <!-- Regime banner -->
+      <div style="padding:8px 10px;background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.22);border-radius:5px;display:flex;align-items:center;gap:10px;">
+        <div>
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text4);">Market Trend</div>
+          <div style="font-family:var(--g);font-size:22px;font-weight:700;color:var(--orange);line-height:1.1;">+22</div>
+          <div style="font-family:var(--mono);font-size:10px;color:var(--orange);">Cautious Bull</div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;gap:4px;">
+          <div style="padding:4px 7px;background:var(--green-bg);border:1px solid rgba(62,230,139,0.14);border-radius:4px;">
+            <div style="font-family:var(--mono);font-size:9px;color:var(--text4);">LEADER</div>
+            <div style="font-size:13px;font-weight:600;color:var(--green);">Technology XLK <span style="font-family:var(--mono);font-size:11px;">82</span></div>
+          </div>
+          <div style="padding:4px 7px;background:var(--red-bg);border:1px solid rgba(255,77,79,0.14);border-radius:4px;">
+            <div style="font-family:var(--mono);font-size:9px;color:var(--text4);">WEAKEST</div>
+            <div style="font-size:13px;font-weight:600;color:var(--red);">Bonds / TLT <span style="font-family:var(--mono);font-size:11px;">35</span></div>
+          </div>
+        </div>
+      </div>
+      <!-- Key market metrics -->
+      <div class="mpr"><span class="mpr-l">AlphaDroid Signal</span><span class="mpr-v" style="color:var(--orange);">Moderate Risk-On</span></div>
+      <div class="mpr"><span class="mpr-l">StormGuard</span><span class="mpr-v" style="color:var(--green);">Inactive · Growth</span></div>
+      <div class="mpr"><span class="mpr-l">10Y Treasury</span><span class="mpr-v" style="color:var(--red);">4.72% ↑ Rising</span></div>
+      <div class="mpr"><span class="mpr-l">VIX</span><span class="mpr-v" style="color:var(--orange);">22.4 · Caution</span></div>
+      <div class="mpr"><span class="mpr-l">USD/BRL</span><span class="mpr-v" style="color:var(--orange);">5.14 · Pressure</span></div>
+    </div>
+  </div>
+
+  <!-- ══ ROW 3: OPPORTUNITY ENGINE ══ -->
+  <div class="dash-card">
+    <div class="dch">
+      <span class="dct">Opportunity Engine</span>
+      <span class="badge g" style="font-size:10px;padding:2px 6px;">AlphaDroid</span>
+    </div>
+    <div class="dcb">
+      <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text4);">Top Actionable Opportunities</div>
+      <div class="opp">
+        <div class="opp-n">01</div>
+        <div class="opp-c">
+          <div class="opp-a">XLK — Technology</div>
+          <div class="opp-r">Momentum strengthening · AlphaDroid confirmed</div>
+        </div>
+        <div class="opp-s" style="color:var(--green);">82</div>
+        <button class="opp-btn" onclick="go('sector-momentum')">Simulate</button>
+      </div>
+      <div class="opp">
+        <div class="opp-n">02</div>
+        <div class="opp-c">
+          <div class="opp-a">XLE — Energy</div>
+          <div class="opp-r">Breakout confirmed · OPEC supply cut</div>
+        </div>
+        <div class="opp-s" style="color:var(--green);">61</div>
+        <button class="opp-btn" onclick="go('sector-momentum')">Simulate</button>
+      </div>
+      <div class="opp">
+        <div class="opp-n">03</div>
+        <div class="opp-c">
+          <div class="opp-a">GLD — Gold</div>
+          <div class="opp-r">Hedge validation active · Inflation + macro</div>
+        </div>
+        <div class="opp-s" style="color:var(--green);">78</div>
+        <button class="opp-btn" onclick="go('sector-momentum')">Simulate</button>
+      </div>
+      <!-- What to avoid -->
+      <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text4);margin-top:2px;">Avoid Now</div>
+      <div style="display:flex;gap:5px;flex-wrap:wrap;">
+        <span class="badge r" style="font-size:10px;">TLT 35 ↓</span>
+        <span class="badge r" style="font-size:10px;">XLRE 22 ↓</span>
+        <span class="badge r" style="font-size:10px;">XLU 38 ↓</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ ROW 3: EXECUTION PIPELINE ══ -->
+  <div class="dash-card">
+    <div class="dch">
+      <span class="dct">Execution Pipeline</span>
+      <button class="tb-btn" style="font-size:9px;padding:3px 8px;" onclick="loadClient('hollanda')">Execute Next →</button>
+    </div>
+    <div class="dcb">
+      <div class="pip ok">
+        <div class="pip-n">01</div>
+        <div class="pip-c">
+          <div class="pip-t" style="color:var(--green);">Diagnosis</div>
+          <div class="pip-d">5 clients mapped · 2 pending</div>
+        </div>
+        <span class="pip-pill" style="background:var(--green-bg);color:var(--green);border:1px solid rgba(62,230,139,0.2);">Done</span>
+      </div>
+      <div class="pip ac">
+        <div class="pip-n">02</div>
+        <div class="pip-c">
+          <div class="pip-t" style="color:var(--blue);">HPC Simulation</div>
+          <div class="pip-d">Hollanda pending · Silveira scheduled</div>
+        </div>
+        <span class="pip-pill" style="background:var(--blue-bg);color:var(--blue);border:1px solid rgba(74,143,212,0.22);">Active</span>
+      </div>
+      <div class="pip pe">
+        <div class="pip-n">03</div>
+        <div class="pip-c">
+          <div class="pip-t" style="color:var(--orange);">Allocation</div>
+          <div class="pip-d">Awaiting Vera approval</div>
+        </div>
+        <span class="pip-pill" style="background:var(--orange-bg);color:var(--orange);border:1px solid rgba(245,158,11,0.2);">Pending</span>
+      </div>
+      <div class="pip id">
+        <div class="pip-n">04</div>
+        <div class="pip-c">
+          <div class="pip-t" style="color:var(--text4);">Lynx Execution</div>
+          <div class="pip-d">Monteiro · Cavalcante active</div>
+        </div>
+        <span class="pip-pill" style="background:rgba(255,255,255,0.02);color:var(--text4);border:1px solid var(--border);">Idle</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ ROW 3: NEWS THAT MATTER ══ -->
+  <div class="dash-card">
+    <div class="dch">
+      <span class="dct">News That Matter</span>
+      <button class="tb-btn" style="font-size:9px;padding:3px 8px;" onclick="go('market')">Full Feed →</button>
+    </div>
+    <div class="dcb">
+      <div class="nwr">
+        <div class="nwr-head">
+          <span class="nwr-imp" style="background:var(--red-bg);color:var(--red);border:1px solid rgba(255,77,79,0.2);">Bear</span>
+          <span class="nwr-src">Bloomberg · 08:14</span>
+          <span class="nwr-area">· Bonds / Duration</span>
+        </div>
+        <div class="nwr-hl">Fed signals "higher for longer" — no cut for 2026</div>
+        <div class="nwr-why">Why it matters: long-duration bonds under 8–12% repricing risk</div>
+      </div>
+      <div class="nwr">
+        <div class="nwr-head">
+          <span class="nwr-imp" style="background:var(--orange-bg);color:var(--orange);border:1px solid rgba(245,158,11,0.2);">Event</span>
+          <span class="nwr-src">Calendar · Tomorrow</span>
+          <span class="nwr-area">· Equities / Rates / USD</span>
+        </div>
+        <div class="nwr-hl">CPI Report 08:30 ET — high impact</div>
+        <div class="nwr-why">Why it matters: volatility expected · hold new duration entries</div>
+      </div>
+      <div class="nwr">
+        <div class="nwr-head">
+          <span class="nwr-imp" style="background:var(--green-bg);color:var(--green);border:1px solid rgba(62,230,139,0.2);">Bull</span>
+          <span class="nwr-src">Reuters · 07:45</span>
+          <span class="nwr-area">· Technology</span>
+        </div>
+        <div class="nwr-hl">Nvidia beats estimates by 38% — AI demand accelerating</div>
+        <div class="nwr-why">Why it matters: XLK momentum reinforced · confirms AlphaDroid signal</div>
+      </div>
+      <div class="nwr">
+        <div class="nwr-head">
+          <span class="nwr-imp" style="background:var(--red-bg);color:var(--red);border:1px solid rgba(255,77,79,0.2);">Bear</span>
+          <span class="nwr-src">Valor · 06:30</span>
+          <span class="nwr-area">· Fixed Income</span>
+        </div>
+        <div class="nwr-hl">Treasury 10Y reaches 4.72% — highest since Nov 2023</div>
+        <div class="nwr-why">Why it matters: TLT at 35 · Vera Hollanda duration exposure critical</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /dash-grid -->
+
+</div><!-- /screen-dashboard -->
 
 <!-- ══ MARKET INTELLIGENCE ══ -->
 <div class="screen" id="screen-market">
