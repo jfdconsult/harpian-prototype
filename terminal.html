@@ -621,87 +621,74 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--g
 /* ══ DASHBOARD V2 — NO SCROLL COMMAND CENTER ══ */
 #screen-dashboard.active{overflow:hidden!important;height:100%!important;padding:0!important;display:flex!important;flex-direction:column!important;}
 
-/* ══ MARKET TRENDS — ALLOCATION DECISION ENGINE ══ */
-#screen-market-trends.active{overflow:hidden!important;height:100%!important;display:flex!important;flex-direction:column!important;padding:10px 14px!important;gap:8px!important;}
-.de-hero{flex-shrink:0;display:grid;grid-template-columns:auto auto 1fr auto;background:var(--surface);border:1px solid var(--border);border-radius:7px;overflow:hidden;}
-.de-hs{padding:12px 16px;border-right:1px solid var(--border);display:flex;flex-direction:column;justify-content:center;}
-.de-hs:last-child{border-right:none;}
-.de-score{font-family:var(--g);font-size:46px;font-weight:800;line-height:1;color:var(--orange);}
-.de-score-name{font-family:var(--mono);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--orange);font-weight:700;margin-top:3px;}
-.de-score-sub{font-size:10px;color:var(--text4);font-family:var(--mono);margin-top:3px;}
-.de-pill-row{display:flex;flex-direction:column;gap:5px;}
-.de-pill{display:flex;align-items:center;gap:6px;}
-.de-pill-k{font-family:var(--mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text4);min-width:66px;}
-.de-pill-v{font-family:var(--mono);font-size:10px;font-weight:700;padding:2px 8px;border-radius:3px;}
-.de-pill-v.o{background:rgba(245,158,11,0.12);color:var(--orange);}
-.de-pill-v.g{background:rgba(62,230,139,0.1);color:var(--green);}
-.de-pill-v.r{background:rgba(255,77,79,0.1);color:var(--red);}
-.de-decision{font-family:var(--g);font-size:34px;font-weight:800;color:var(--green);line-height:1;}
-.de-tactic{display:flex;align-items:center;gap:8px;padding:3px 0;}
-.de-tactic-v{font-family:var(--mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text4);min-width:52px;}
-.de-tactic-t{font-size:13px;font-weight:600;}
-.de-tactic-t.g{color:var(--green);} .de-tactic-t.r{color:var(--red);} .de-tactic-t.n{color:var(--text2);}
-.de-conf-score{font-family:var(--g);font-size:24px;font-weight:700;color:var(--orange);}
-.de-conf-bar{width:80px;height:3px;background:rgba(255,255,255,0.08);border-radius:2px;overflow:hidden;margin:5px 0;}
-.de-conf-fill{height:100%;width:72%;background:var(--orange);border-radius:2px;}
-.de-brk{font-family:var(--mono);font-size:10px;color:var(--red);line-height:1.6;margin-top:4px;}
-.de-mid{display:grid;grid-template-columns:2fr 3fr;gap:8px;flex:1;min-height:0;}
-.de-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:11px 13px;display:flex;flex-direction:column;gap:6px;overflow:hidden;}
-.de-card-t{font-family:var(--mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text4);font-weight:600;flex-shrink:0;}
-.de-hpc{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:5px;border:1px solid transparent;}
-.de-hpc.h11{background:rgba(74,143,212,0.06);border-color:rgba(74,143,212,0.2);}
-.de-hpc.h22{background:rgba(201,168,76,0.06);border-color:rgba(201,168,76,0.2);}
-.de-hpc-id{min-width:52px;}
-.de-hpc-name{font-family:var(--g);font-size:13px;font-weight:700;}
-.de-hpc-name.b{color:var(--blue);}
-.de-hpc-name.au{color:#C9A84C;}
-.de-hpc-sub{font-family:var(--mono);font-size:9px;color:var(--text4);margin-top:1px;}
-.de-hpc-pct{font-family:var(--g);font-size:24px;font-weight:800;min-width:50px;text-align:right;}
-.de-hpc-pct.b{color:var(--blue);}
-.de-hpc-pct.au{color:#C9A84C;}
-.de-hpc-bar-wrap{flex:1;height:7px;background:rgba(255,255,255,0.07);border-radius:4px;overflow:hidden;}
-.de-hpc-bar{height:100%;border-radius:4px;}
-.de-hpc-bar.b{background:var(--blue);}
-.de-hpc-bar.au{background:#C9A84C;}
-.de-hpc-desc{font-family:var(--mono);font-size:9px;color:var(--text4);min-width:130px;text-align:right;}
-.de-bias{background:rgba(245,158,11,0.07);border:1px solid rgba(245,158,11,0.2);border-radius:4px;padding:7px 10px;}
-.de-bias-lbl{font-family:var(--mono);font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text4);}
-.de-bias-val{font-size:14px;font-weight:700;color:var(--orange);margin-top:3px;}
-.de-scenarios{display:flex;gap:5px;flex-wrap:wrap;}
-.de-sc{font-family:var(--mono);font-size:9px;padding:3px 8px;border-radius:3px;cursor:pointer;border:1px solid var(--border);color:var(--text4);}
-.de-sc.active{background:rgba(245,158,11,0.14);color:var(--orange);border-color:rgba(245,158,11,0.35);}
-.de-sc:hover:not(.active){color:var(--text2);}
-.de-ctas{display:flex;gap:6px;margin-top:auto;}
-.de-btn{padding:7px 12px;border-radius:4px;font-family:var(--mono);font-size:10px;font-weight:600;cursor:pointer;border:none;letter-spacing:0.04em;}
-.de-btn.p{background:rgba(245,158,11,0.14);color:var(--orange);border:1px solid rgba(245,158,11,0.35);}
-.de-btn.p:hover{background:rgba(245,158,11,0.24);}
-.de-btn.s{background:rgba(74,143,212,0.1);color:var(--blue);border:1px solid rgba(74,143,212,0.28);}
-.de-btn.s:hover{background:rgba(74,143,212,0.2);}
-.de-struct{flex:1;min-height:0;display:grid;grid-template-rows:auto 1fr;gap:8px;}
-.de-matrix{display:grid;grid-template-columns:85px repeat(3,1fr);border:1px solid var(--border);border-radius:4px;overflow:hidden;}
-.de-mx{padding:5px 10px;font-family:var(--mono);font-size:11px;border-bottom:1px solid var(--border);border-right:1px solid var(--border);}
-.de-mx:nth-child(4n){border-right:none;}
-.de-mx.hd{font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text4);background:rgba(255,255,255,0.025);}
-.de-mx.lbl{color:var(--text4);font-size:10px;}
-.de-mx.nb{border-bottom:none;}
-.de-mx-interp{font-size:11px;color:var(--text3);font-family:var(--mono);padding:5px 9px;background:rgba(255,255,255,0.025);border-radius:3px;}
-.de-drivers{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.de-drv-col{display:flex;flex-direction:column;gap:3px;}
-.de-drv-hdr{font-family:var(--mono);font-size:8px;letter-spacing:0.14em;text-transform:uppercase;font-weight:700;padding-bottom:3px;}
-.de-drv-hdr.g{color:var(--green);} .de-drv-hdr.r{color:var(--red);}
-.de-drv{display:flex;align-items:center;gap:7px;padding:4px 8px;border-radius:3px;font-size:12px;color:var(--text2);}
-.de-drv.g{background:var(--green-bg);} .de-drv.r{background:var(--red-bg);}
-.de-sign{font-family:var(--mono);font-weight:800;font-size:13px;}
-.de-sign.g{color:var(--green);} .de-sign.r{color:var(--red);}
-.de-ctx-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;flex-shrink:0;}
-.de-ctx{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:9px 11px;display:flex;flex-direction:column;gap:3px;}
-.de-ctx-t{font-family:var(--mono);font-size:8px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text4);font-weight:700;margin-bottom:3px;}
-.de-ctx-ln{display:flex;justify-content:space-between;align-items:center;}
-.de-ctx-k{font-size:11px;color:var(--text4);}
-.de-ctx-v{font-family:var(--mono);font-size:11px;font-weight:600;}
-.de-ctx-v.g{color:var(--green);} .de-ctx-v.r{color:var(--red);} .de-ctx-v.o{color:var(--orange);} .de-ctx-v.n{color:var(--text2);}
-
-
+/* ══ MARKET TRENDS — INSTITUTIONAL MEMO ══ */
+#screen-market-trends.active{overflow:hidden!important;height:100%!important;display:flex!important;flex-direction:column!important;padding:14px 20px 12px!important;gap:0!important;}
+.mm-thesis{flex-shrink:0;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,0.07);margin-bottom:12px;display:flex;align-items:flex-start;gap:24px;}
+.mm-score{font-family:var(--g);font-size:52px;font-weight:800;line-height:1;color:var(--orange);}
+.mm-score-lbl{font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--orange);font-weight:700;margin-top:4px;}
+.mm-thesis-txt{font-size:13px;color:var(--text2);margin:6px 0 10px;font-style:italic;}
+.mm-pills{display:flex;gap:22px;}
+.mm-pill{display:flex;flex-direction:column;gap:3px;}
+.mm-pill-k{font-family:var(--mono);font-size:8px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text4);}
+.mm-pill-v{font-family:var(--mono);font-size:11px;font-weight:700;}
+.mm-pill-v.o{color:var(--orange);} .mm-pill-v.g{color:var(--green);} .mm-pill-v.r{color:var(--red);}
+.mm-body{flex:1;min-height:0;display:grid;grid-template-columns:52fr 48fr;gap:24px;}
+.mm-col{display:flex;flex-direction:column;overflow:hidden;}
+.mm-sec{padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05);flex-shrink:0;}
+.mm-sec:last-child{border-bottom:none;}
+.mm-sec-lbl{font-family:var(--mono);font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text4);margin-bottom:8px;display:flex;align-items:center;gap:8px;}
+.mm-sec-lbl::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.04);}
+.mm-action{font-family:var(--g);font-size:30px;font-weight:800;color:var(--green);line-height:1;margin-bottom:8px;}
+.mm-alloc{display:flex;flex-direction:column;gap:5px;margin-bottom:7px;}
+.mm-alloc-row{display:flex;align-items:center;gap:10px;}
+.mm-alloc-id{font-family:var(--mono);font-size:11px;font-weight:700;min-width:44px;}
+.mm-alloc-id.b{color:var(--blue);} .mm-alloc-id.au{color:#C9A84C;}
+.mm-alloc-bar{flex:1;height:6px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden;}
+.mm-alloc-fill{height:100%;border-radius:3px;}
+.mm-alloc-fill.b{background:var(--blue);} .mm-alloc-fill.au{background:#C9A84C;}
+.mm-alloc-pct{font-family:var(--mono);font-size:13px;font-weight:700;min-width:34px;text-align:right;}
+.mm-alloc-pct.b{color:var(--blue);} .mm-alloc-pct.au{color:#C9A84C;}
+.mm-alloc-desc{font-family:var(--mono);font-size:9px;color:var(--text4);min-width:145px;}
+.mm-mode-line{font-family:var(--mono);font-size:9px;color:var(--text4);margin-top:2px;}
+.mm-mode-line span{color:var(--orange);margin-left:5px;}
+.mm-tactic{display:flex;gap:8px;align-items:center;padding:2px 0;}
+.mm-tactic-k{font-family:var(--mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text4);min-width:50px;}
+.mm-tactic-v{font-size:12px;font-weight:600;}
+.mm-tactic-v.g{color:var(--green);} .mm-tactic-v.r{color:var(--red);} .mm-tactic-v.n{color:var(--text2);}
+.mm-tf-row{display:flex;align-items:center;padding:3px 0;gap:8px;}
+.mm-tf-k{font-size:11px;color:var(--text4);min-width:72px;}
+.mm-tf-v{font-family:var(--mono);font-size:11px;font-weight:700;}
+.mm-tf-v.o{color:var(--orange);} .mm-tf-v.g{color:var(--green);}
+.mm-tf-score{font-family:var(--mono);font-size:10px;color:var(--text4);}
+.mm-tf-interp{font-family:var(--mono);font-size:10px;color:var(--text3);padding:6px 9px;background:rgba(255,255,255,0.025);border-radius:3px;margin-top:7px;line-height:1.5;}
+.mm-drv-group{display:flex;flex-direction:column;gap:2px;}
+.mm-drv-row{display:flex;justify-content:space-between;align-items:center;padding:2px 0;}
+.mm-drv-k{font-size:11px;color:var(--text3);}
+.mm-drv-v{font-family:var(--mono);font-size:11px;font-weight:600;}
+.mm-drv-v.g{color:var(--green);} .mm-drv-v.r{color:var(--red);} .mm-drv-v.o{color:var(--orange);}
+.mm-drv-sep{height:1px;background:rgba(255,255,255,0.04);margin:5px 0;}
+.mm-struct-row{display:flex;justify-content:space-between;align-items:center;padding:2px 0;}
+.mm-struct-k{font-size:11px;color:var(--text3);}
+.mm-struct-v{font-family:var(--mono);font-size:11px;font-weight:600;}
+.mm-struct-v.g{color:var(--green);} .mm-struct-v.r{color:var(--red);} .mm-struct-v.n{color:var(--text2);}
+.mm-leaders{display:flex;gap:12px;margin-top:7px;flex-wrap:wrap;}
+.mm-leader{font-family:var(--mono);font-size:12px;font-weight:700;}
+.mm-leader.g{color:var(--green);} .mm-leader.r{color:var(--red);}
+.mm-conf{display:flex;align-items:baseline;gap:5px;margin-bottom:4px;}
+.mm-conf-n{font-family:var(--g);font-size:28px;font-weight:800;color:var(--orange);}
+.mm-conf-d{font-family:var(--mono);font-size:11px;color:var(--text4);}
+.mm-conf-bar{height:3px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden;margin-bottom:10px;}
+.mm-conf-fill{height:100%;width:72%;background:var(--orange);border-radius:2px;}
+.mm-brk-lbl{font-family:var(--mono);font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text4);margin-bottom:5px;}
+.mm-brk-row{display:flex;align-items:center;gap:8px;padding:2px 0;}
+.mm-brk-cond{font-family:var(--mono);font-size:11px;color:var(--red);font-weight:600;}
+.mm-brk-act{font-family:var(--mono);font-size:11px;color:var(--text3);}
+.mm-ctas{display:flex;gap:6px;margin-top:10px;}
+.mm-cta{padding:6px 13px;border-radius:4px;font-family:var(--mono);font-size:10px;font-weight:600;cursor:pointer;letter-spacing:0.04em;}
+.mm-cta.p{background:rgba(245,158,11,0.14);color:var(--orange);border:1px solid rgba(245,158,11,0.35);}
+.mm-cta.p:hover{background:rgba(245,158,11,0.24);}
+.mm-cta.s{background:rgba(74,143,212,0.1);color:var(--blue);border:1px solid rgba(74,143,212,0.28);}
+.mm-cta.s:hover{background:rgba(74,143,212,0.18);}
 /* ══ MARKET INTELLIGENCE — NO SCROLL CAUSAL ENGINE ══ */
 #screen-market.active{overflow:hidden!important;height:100%!important;display:flex!important;flex-direction:column!important;padding:10px 14px 10px!important;gap:8px!important;}
 .mi-hdr{display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
@@ -1572,171 +1559,169 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--g
 <!-- ══ MARKET TRENDS ══ -->
 <div class="screen" id="screen-market-trends">
 
-  <!-- ZONE 1: HERO / DECISION CORE -->
-  <div class="de-hero">
-    <!-- Section 1: Market State -->
-    <div class="de-hs" style="min-width:155px;">
-      <div style="font-family:var(--mono);font-size:8px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text4);">Market State</div>
-      <div class="de-score" style="margin-top:3px;">+22</div>
-      <div class="de-score-name">Cautious Bull</div>
-      <div class="de-score-sub">Growth intact · inflation constraining upside</div>
+  <!-- ① MARKET THESIS — dominant header, full width -->
+  <div class="mm-thesis">
+    <div>
+      <div class="mm-score">+22</div>
+      <div class="mm-score-lbl">Cautious Bull</div>
     </div>
-    <!-- Section 2: Regime / Trend / Execution -->
-    <div class="de-hs" style="min-width:190px;">
-      <div style="font-family:var(--mono);font-size:8px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text4);margin-bottom:8px;">State</div>
-      <div class="de-pill-row">
-        <div class="de-pill"><span class="de-pill-k">Regime</span><span class="de-pill-v o">Neutral Positive</span></div>
-        <div class="de-pill"><span class="de-pill-k">Trend</span><span class="de-pill-v g">Positive</span></div>
-        <div class="de-pill"><span class="de-pill-k">Execution</span><span class="de-pill-v r">Fragile</span></div>
-      </div>
-    </div>
-    <!-- Section 3: Primary Decision + Tactical -->
-    <div class="de-hs">
-      <div style="font-family:var(--mono);font-size:8px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text4);margin-bottom:6px;">Primary Decision</div>
-      <div class="de-decision">Stay Invested</div>
-      <div style="margin-top:10px;display:flex;flex-direction:column;gap:2px;">
-        <div class="de-tactic"><span class="de-tactic-v">Rotate</span><span class="de-tactic-t g">→ Tech / Energy</span></div>
-        <div class="de-tactic"><span class="de-tactic-v">Avoid</span><span class="de-tactic-t r">→ Long Duration</span></div>
-        <div class="de-tactic"><span class="de-tactic-v">Maintain</span><span class="de-tactic-t n">→ Core HPC exposure</span></div>
-      </div>
-    </div>
-    <!-- Section 4: Confidence + Break Conditions -->
-    <div class="de-hs" style="min-width:185px;">
-      <div style="font-family:var(--mono);font-size:8px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text4);">Confidence</div>
-      <div style="display:flex;align-items:baseline;gap:4px;margin-top:4px;">
-        <span class="de-conf-score">7.2</span>
-        <span style="font-family:var(--mono);font-size:10px;color:var(--text4);">/ 10</span>
-      </div>
-      <div class="de-conf-bar"><div class="de-conf-fill"></div></div>
-      <div style="font-family:var(--mono);font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text4);margin-top:10px;">Break Conditions</div>
-      <div class="de-brk">VIX &gt; 28 → Defensive<br>10Y &gt; 5.2% → Defensive shift</div>
-    </div>
-  </div><!-- /de-hero -->
-
-  <!-- MIDDLE ROW: ALLOCATION ENGINE + MARKET STRUCTURE -->
-  <div class="de-mid">
-
-    <!-- ZONE 2: HARPIAN ALLOCATION ENGINE (40%) -->
-    <div class="de-card">
-      <div class="de-card-t">Harpian Allocation Engine</div>
-
-      <!-- HPC11 -->
-      <div class="de-hpc h11">
-        <div class="de-hpc-id">
-          <div class="de-hpc-name b">HPC11</div>
-          <div class="de-hpc-sub">Core ETF · Diversified</div>
+    <div style="flex:1;">
+      <div class="mm-thesis-txt">Resilient growth, but tightening financial conditions cap upside</div>
+      <div class="mm-pills">
+        <div class="mm-pill">
+          <span class="mm-pill-k">Regime</span>
+          <span class="mm-pill-v o">Neutral +</span>
         </div>
-        <div class="de-hpc-pct b">60%</div>
-        <div class="de-hpc-bar-wrap"><div class="de-hpc-bar b" style="width:60%;"></div></div>
-        <div class="de-hpc-desc">Lower vol · regime-resilient</div>
-      </div>
-
-      <!-- HPC22 -->
-      <div class="de-hpc h22">
-        <div class="de-hpc-id">
-          <div class="de-hpc-name au">HPC22</div>
-          <div class="de-hpc-sub">Equity · Growth</div>
+        <div class="mm-pill">
+          <span class="mm-pill-k">Trend</span>
+          <span class="mm-pill-v g">Positive</span>
         </div>
-        <div class="de-hpc-pct au">40%</div>
-        <div class="de-hpc-bar-wrap"><div class="de-hpc-bar au" style="width:40%;"></div></div>
-        <div class="de-hpc-desc">Higher return · equity beta</div>
-      </div>
-
-      <!-- Suggested Bias -->
-      <div class="de-bias">
-        <div class="de-bias-lbl">Suggested Bias · Cautious Bull</div>
-        <div class="de-bias-val">HPC11 60% / HPC22 40%</div>
-      </div>
-
-      <!-- Scenarios -->
-      <div style="font-family:var(--mono);font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text4);">Alternative Scenarios</div>
-      <div class="de-scenarios">
-        <span class="de-sc">Defensive · 80/20</span>
-        <span class="de-sc active">Cautious · 60/40</span>
-        <span class="de-sc">Bullish · 40/60</span>
-        <span class="de-sc">Aggressive · 30/70</span>
-      </div>
-
-      <!-- CTAs -->
-      <div class="de-ctas">
-        <button class="de-btn p" onclick="go('hpc11-hpc22')">Simulate Allocation</button>
-        <button class="de-btn s" onclick="jimToggle()">Ask JIM Why →</button>
+        <div class="mm-pill">
+          <span class="mm-pill-k">Execution</span>
+          <span class="mm-pill-v r">Fragile</span>
+        </div>
       </div>
     </div>
+  </div>
 
-    <!-- ZONE 3: MARKET STRUCTURE VALIDATION (60%) -->
-    <div class="de-card">
-      <div class="de-card-t">Market Structure Validation</div>
-      <div class="de-struct">
-        <div>
-          <!-- Timeframe Matrix -->
-          <div class="de-matrix">
-            <div class="de-mx hd"></div>
-            <div class="de-mx hd">Intraday</div>
-            <div class="de-mx hd">Weekly</div>
-            <div class="de-mx hd">Monthly</div>
-            <div class="de-mx lbl">Trend</div>
-            <div class="de-mx" style="color:var(--orange);">Weak</div>
-            <div class="de-mx" style="color:var(--green);">Bull</div>
-            <div class="de-mx" style="color:var(--green);font-weight:700;">Strong Bull</div>
-            <div class="de-mx lbl">Score</div>
-            <div class="de-mx" style="color:var(--orange);">-0.4</div>
-            <div class="de-mx" style="color:var(--green);">+1.2</div>
-            <div class="de-mx" style="color:var(--green);font-weight:700;">+2.3</div>
-            <div class="de-mx lbl nb">State</div>
-            <div class="de-mx nb" style="color:var(--orange);">Caut Bear</div>
-            <div class="de-mx nb" style="color:var(--green);">Bull</div>
-            <div class="de-mx nb" style="color:var(--green);font-weight:700;">Strong Bull</div>
+  <!-- BODY — 2-column memo layout -->
+  <div class="mm-body">
+
+    <!-- ═══ LEFT COLUMN ═══ -->
+    <div class="mm-col">
+
+      <!-- ② DECISION + ALLOCATION -->
+      <div class="mm-sec">
+        <div class="mm-sec-lbl">Decision + Allocation</div>
+        <div class="mm-action">Stay Invested</div>
+        <div class="mm-alloc">
+          <div class="mm-alloc-row">
+            <span class="mm-alloc-id b">HPC11</span>
+            <div class="mm-alloc-bar"><div class="mm-alloc-fill b" style="width:60%;"></div></div>
+            <span class="mm-alloc-pct b">60%</span>
+            <span class="mm-alloc-desc">Core ETF · lower vol · regime-resilient</span>
           </div>
-          <div class="de-mx-interp" style="margin-top:6px;">↳ Short-term weakness inside long-term uptrend — no change to strategic allocation</div>
-        </div>
-        <!-- Trend Drivers -->
-        <div class="de-drivers">
-          <div class="de-drv-col">
-            <div class="de-drv-hdr g">▲ Positives</div>
-            <div class="de-drv g"><span class="de-sign g">+</span>Growth resilience</div>
-            <div class="de-drv g"><span class="de-sign g">+</span>Earnings strength</div>
-            <div class="de-drv g"><span class="de-sign g">+</span>Sector momentum</div>
-          </div>
-          <div class="de-drv-col">
-            <div class="de-drv-hdr r">▼ Risks</div>
-            <div class="de-drv r"><span class="de-sign r">−</span>Rising rates</div>
-            <div class="de-drv r"><span class="de-sign r">−</span>Elevated volatility</div>
-            <div class="de-drv r"><span class="de-sign r">−</span>Yield curve pressure</div>
+          <div class="mm-alloc-row">
+            <span class="mm-alloc-id au">HPC22</span>
+            <div class="mm-alloc-bar"><div class="mm-alloc-fill au" style="width:40%;"></div></div>
+            <span class="mm-alloc-pct au">40%</span>
+            <span class="mm-alloc-desc">Equity · higher return · equity beta</span>
           </div>
         </div>
+        <div class="mm-mode-line">Allocation Mode: <span>Cautious Growth</span></div>
+        <div class="mm-mode-line">Expected Behavior: <span>Balanced exposure, controlled volatility</span></div>
       </div>
-    </div>
 
-  </div><!-- /de-mid -->
+      <!-- TACTICAL -->
+      <div class="mm-sec">
+        <div class="mm-sec-lbl">Tactical</div>
+        <div class="mm-tactic">
+          <span class="mm-tactic-k">Rotate</span>
+          <span class="mm-tactic-v g">→ Tech / Energy</span>
+        </div>
+        <div class="mm-tactic">
+          <span class="mm-tactic-k">Avoid</span>
+          <span class="mm-tactic-v r">→ Long Duration</span>
+        </div>
+        <div class="mm-tactic">
+          <span class="mm-tactic-k">Maintain</span>
+          <span class="mm-tactic-v n">→ Core HPC exposure</span>
+        </div>
+        <div class="mm-ctas" style="margin-top:8px;">
+          <button class="mm-cta p" onclick="go('hpc11-hpc22')">Simulate Allocation</button>
+          <button class="mm-cta s" onclick="jimToggle()">Ask JIM →</button>
+        </div>
+      </div>
 
-  <!-- ZONE 4: CONTEXT ENGINE (4 cards) -->
-  <div class="de-ctx-row">
-    <div class="de-ctx">
-      <div class="de-ctx-t">Macro</div>
-      <div class="de-ctx-ln"><span class="de-ctx-k">Fed</span><span class="de-ctx-v r">Hawkish</span></div>
-      <div class="de-ctx-ln"><span class="de-ctx-k">Rates (10Y)</span><span class="de-ctx-v r">4.72% ↑</span></div>
-      <div class="de-ctx-ln"><span class="de-ctx-k">Inflation</span><span class="de-ctx-v o">Sticky</span></div>
-    </div>
-    <div class="de-ctx">
-      <div class="de-ctx-t">Positioning</div>
-      <div class="de-ctx-ln"><span class="de-ctx-k">Funds</span><span class="de-ctx-v o">Rotating bonds</span></div>
-      <div class="de-ctx-ln"><span class="de-ctx-k">Insiders</span><span class="de-ctx-v n">Neutral</span></div>
-      <div class="de-ctx-ln"><span class="de-ctx-k">Crypto Whales</span><span class="de-ctx-v g">Accumulating</span></div>
-    </div>
-    <div class="de-ctx">
-      <div class="de-ctx-t">Sentiment</div>
-      <div class="de-ctx-ln"><span class="de-ctx-k">VIX</span><span class="de-ctx-v o">22.4 · Elevated</span></div>
-      <div class="de-ctx-ln"><span class="de-ctx-k">Put / Call</span><span class="de-ctx-v o">1.12 · Cautious</span></div>
-      <div class="de-ctx-ln"><span class="de-ctx-k">Fear / Greed</span><span class="de-ctx-v n">Neutral</span></div>
-    </div>
-    <div class="de-ctx">
-      <div class="de-ctx-t">Structure &amp; Momentum</div>
-      <div class="de-ctx-ln"><span class="de-ctx-k">S&amp;P 500</span><span class="de-ctx-v g">Near ATH</span></div>
-      <div class="de-ctx-ln"><span class="de-ctx-k">Tech</span><span class="de-ctx-v g">Leading ↑</span></div>
-      <div class="de-ctx-ln"><span class="de-ctx-k">Bonds</span><span class="de-ctx-v r">Weak ↓</span></div>
-    </div>
-  </div><!-- /de-ctx-row -->
+      <!-- ③ TIMEFRAME ALIGNMENT -->
+      <div class="mm-sec">
+        <div class="mm-sec-lbl">Timeframe Alignment</div>
+        <div class="mm-tf-row">
+          <span class="mm-tf-k">Intraday</span>
+          <span class="mm-tf-v o">Weak</span>
+          <span class="mm-tf-score">-0.4</span>
+          <span class="mm-tf-v o" style="margin-left:auto;font-size:9px;">Caut Bear</span>
+        </div>
+        <div class="mm-tf-row">
+          <span class="mm-tf-k">Weekly</span>
+          <span class="mm-tf-v g">Bull</span>
+          <span class="mm-tf-score">+1.2</span>
+          <span class="mm-tf-v g" style="margin-left:auto;font-size:9px;">Bull</span>
+        </div>
+        <div class="mm-tf-row">
+          <span class="mm-tf-k">Monthly</span>
+          <span class="mm-tf-v g" style="font-weight:800;">Strong Bull</span>
+          <span class="mm-tf-score">+2.3</span>
+          <span class="mm-tf-v g" style="margin-left:auto;font-size:9px;font-weight:800;">Strong Bull</span>
+        </div>
+        <div class="mm-tf-interp">Short-term weakness inside long-term uptrend<br>No change in strategic allocation</div>
+      </div>
+
+    </div><!-- /LEFT COLUMN -->
+
+    <!-- ═══ RIGHT COLUMN ═══ -->
+    <div class="mm-col">
+
+      <!-- ④ WHAT'S DRIVING THIS — unified block, no sub-cards -->
+      <div class="mm-sec">
+        <div class="mm-sec-lbl">What's Driving This</div>
+        <!-- Group 1: Growth signals -->
+        <div class="mm-drv-group">
+          <div class="mm-drv-row"><span class="mm-drv-k">Growth</span><span class="mm-drv-v g">Resilient</span></div>
+          <div class="mm-drv-row"><span class="mm-drv-k">Earnings</span><span class="mm-drv-v g">Strong</span></div>
+          <div class="mm-drv-row"><span class="mm-drv-k">Momentum</span><span class="mm-drv-v g">Expanding</span></div>
+        </div>
+        <div class="mm-drv-sep"></div>
+        <!-- Group 2: Constraint signals -->
+        <div class="mm-drv-group">
+          <div class="mm-drv-row"><span class="mm-drv-k">Rates</span><span class="mm-drv-v r">Rising</span></div>
+          <div class="mm-drv-row"><span class="mm-drv-k">Volatility</span><span class="mm-drv-v o">Elevated</span></div>
+          <div class="mm-drv-row"><span class="mm-drv-k">Curve</span><span class="mm-drv-v o">Pressured</span></div>
+        </div>
+        <div class="mm-drv-sep"></div>
+        <!-- Group 3: Positioning signals -->
+        <div class="mm-drv-group">
+          <div class="mm-drv-row"><span class="mm-drv-k">Liquidity</span><span class="mm-drv-v o">Tightening</span></div>
+          <div class="mm-drv-row"><span class="mm-drv-k">Positioning</span><span class="mm-drv-v o">Rotating</span></div>
+          <div class="mm-drv-row"><span class="mm-drv-k">Sentiment</span><span class="mm-drv-v o">Cautious</span></div>
+        </div>
+      </div>
+
+      <!-- ⑤ MARKET STRUCTURE -->
+      <div class="mm-sec">
+        <div class="mm-sec-lbl">Market Structure</div>
+        <div class="mm-struct-row"><span class="mm-struct-k">S&amp;P 500</span><span class="mm-struct-v g">Near ATH</span></div>
+        <div class="mm-struct-row"><span class="mm-struct-k">Breadth</span><span class="mm-struct-v g">Healthy</span></div>
+        <div class="mm-struct-row"><span class="mm-struct-k">Breakdown</span><span class="mm-struct-v n">None</span></div>
+        <div class="mm-leaders">
+          <span class="mm-leader g">Tech ↑</span>
+          <span class="mm-leader g">Energy ↑</span>
+          <span class="mm-leader r">Bonds ↓</span>
+        </div>
+      </div>
+
+      <!-- ⑥ RISK LAYER -->
+      <div class="mm-sec">
+        <div class="mm-sec-lbl">Risk Layer</div>
+        <div class="mm-conf">
+          <span class="mm-conf-n">7.2</span>
+          <span class="mm-conf-d">/ 10 confidence</span>
+        </div>
+        <div class="mm-conf-bar"><div class="mm-conf-fill"></div></div>
+        <div class="mm-brk-lbl">Break Conditions</div>
+        <div class="mm-brk-row">
+          <span class="mm-brk-cond">VIX &gt; 28</span>
+          <span class="mm-brk-act">→ Shift to defensive</span>
+        </div>
+        <div class="mm-brk-row">
+          <span class="mm-brk-cond">10Y &gt; 5.2%</span>
+          <span class="mm-brk-act">→ Shift to defensive</span>
+        </div>
+      </div>
+
+    </div><!-- /RIGHT COLUMN -->
+
+  </div><!-- /mm-body -->
 
   <!-- Hidden legacy IDs for JS compatibility -->
   <div style="display:none;">
