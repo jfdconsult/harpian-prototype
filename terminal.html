@@ -1004,37 +1004,53 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--g
     </div>
   </div>
 
-  <!-- ══ ROW 2: MARKET PULSE ══ -->
+  <!-- ══ ROW 2: NEWS THAT MATTER ══ -->
   <div class="dash-card">
     <div class="dch">
-      <span class="dct">Market Pulse</span>
-      <button class="tb-btn" style="font-size:9px;padding:3px 8px;" onclick="go('market-trends')">Open Trends →</button>
+      <span class="dct">News That Matter</span>
+      <button class="tb-btn" style="font-size:9px;padding:3px 8px;" onclick="go('market')">Full Feed →</button>
     </div>
     <div class="dcb">
-      <!-- Regime banner -->
-      <div style="padding:8px 10px;background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.22);border-radius:5px;display:flex;align-items:center;gap:10px;">
-        <div>
-          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text4);">Market Trend</div>
-          <div style="font-family:var(--g);font-size:22px;font-weight:700;color:var(--orange);line-height:1.1;">+22</div>
-          <div style="font-family:var(--mono);font-size:10px;color:var(--orange);">Cautious Bull</div>
+      <div class="nwr">
+        <div class="nwr-head">
+          <span class="nwr-imp" style="background:var(--red-bg);color:var(--red);border:1px solid rgba(255,77,79,0.2);">Bear</span>
+          <span class="nwr-src">Bloomberg · 08:14</span>
+          <span class="nwr-area">· Bonds / Duration</span>
         </div>
-        <div style="flex:1;display:flex;flex-direction:column;gap:4px;">
-          <div style="padding:4px 7px;background:var(--green-bg);border:1px solid rgba(62,230,139,0.14);border-radius:4px;">
-            <div style="font-family:var(--mono);font-size:9px;color:var(--text4);">LEADER</div>
-            <div style="font-size:13px;font-weight:600;color:var(--green);">Technology XLK <span style="font-family:var(--mono);font-size:11px;">82</span></div>
-          </div>
-          <div style="padding:4px 7px;background:var(--red-bg);border:1px solid rgba(255,77,79,0.14);border-radius:4px;">
-            <div style="font-family:var(--mono);font-size:9px;color:var(--text4);">WEAKEST</div>
-            <div style="font-size:13px;font-weight:600;color:var(--red);">Bonds / TLT <span style="font-family:var(--mono);font-size:11px;">35</span></div>
-          </div>
-        </div>
+        <div class="nwr-hl">Fed signals "higher for longer" — no cut for 2026</div>
+        <div class="nwr-why">Why it matters: long-duration bonds under 8–12% repricing risk</div>
+        <button class="tb-btn" style="font-size:9px;padding:2px 7px;margin-top:4px;" onclick="go('market-trends')">View Trends →</button>
       </div>
-      <!-- Key market metrics -->
-      <div class="mpr"><span class="mpr-l">AlphaDroid Signal</span><span class="mpr-v" style="color:var(--orange);">Moderate Risk-On</span></div>
-      <div class="mpr"><span class="mpr-l">StormGuard</span><span class="mpr-v" style="color:var(--green);">Inactive · Growth</span></div>
-      <div class="mpr"><span class="mpr-l">10Y Treasury</span><span class="mpr-v" style="color:var(--red);">4.72% ↑ Rising</span></div>
-      <div class="mpr"><span class="mpr-l">VIX</span><span class="mpr-v" style="color:var(--orange);">22.4 · Caution</span></div>
-      <div class="mpr"><span class="mpr-l">USD/BRL</span><span class="mpr-v" style="color:var(--orange);">5.14 · Pressure</span></div>
+      <div class="nwr">
+        <div class="nwr-head">
+          <span class="nwr-imp" style="background:var(--orange-bg);color:var(--orange);border:1px solid rgba(245,158,11,0.2);">Event</span>
+          <span class="nwr-src">Calendar · Tomorrow</span>
+          <span class="nwr-area">· Equities / Rates / USD</span>
+        </div>
+        <div class="nwr-hl">CPI Report 08:30 ET — high impact</div>
+        <div class="nwr-why">Why it matters: volatility expected · hold new duration entries</div>
+        <button class="tb-btn" style="font-size:9px;padding:2px 7px;margin-top:4px;" onclick="go('market')">Market Intel →</button>
+      </div>
+      <div class="nwr">
+        <div class="nwr-head">
+          <span class="nwr-imp" style="background:var(--green-bg);color:var(--green);border:1px solid rgba(62,230,139,0.2);">Bull</span>
+          <span class="nwr-src">Reuters · 07:45</span>
+          <span class="nwr-area">· Technology</span>
+        </div>
+        <div class="nwr-hl">Nvidia beats estimates by 38% — AI demand accelerating</div>
+        <div class="nwr-why">Why it matters: XLK momentum reinforced · confirms AlphaDroid signal</div>
+        <button class="tb-btn" style="font-size:9px;padding:2px 7px;margin-top:4px;" onclick="go('sector-momentum')">Sector Momentum →</button>
+      </div>
+      <div class="nwr">
+        <div class="nwr-head">
+          <span class="nwr-imp" style="background:var(--red-bg);color:var(--red);border:1px solid rgba(255,77,79,0.2);">Bear</span>
+          <span class="nwr-src">Valor · 06:30</span>
+          <span class="nwr-area">· Fixed Income</span>
+        </div>
+        <div class="nwr-hl">Treasury 10Y reaches 4.72% — highest since Nov 2023</div>
+        <div class="nwr-why">Why it matters: TLT at 35 · Vera Hollanda duration exposure critical</div>
+        <button class="tb-btn" style="font-size:9px;padding:2px 7px;margin-top:4px;" onclick="go('market-trends')">View Trends →</button>
+      </div>
     </div>
   </div>
 
@@ -1125,49 +1141,37 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--g
     </div>
   </div>
 
-  <!-- ══ ROW 3: NEWS THAT MATTER ══ -->
+  <!-- ══ ROW 3: MARKET PULSE ══ -->
   <div class="dash-card">
     <div class="dch">
-      <span class="dct">News That Matter</span>
-      <button class="tb-btn" style="font-size:9px;padding:3px 8px;" onclick="go('market')">Full Feed →</button>
+      <span class="dct">Market Pulse</span>
+      <button class="tb-btn" style="font-size:9px;padding:3px 8px;" onclick="go('market-trends')">Open Trends →</button>
     </div>
     <div class="dcb">
-      <div class="nwr">
-        <div class="nwr-head">
-          <span class="nwr-imp" style="background:var(--red-bg);color:var(--red);border:1px solid rgba(255,77,79,0.2);">Bear</span>
-          <span class="nwr-src">Bloomberg · 08:14</span>
-          <span class="nwr-area">· Bonds / Duration</span>
+      <!-- Regime banner -->
+      <div style="padding:8px 10px;background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.22);border-radius:5px;display:flex;align-items:center;gap:10px;">
+        <div>
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text4);">Market Trend</div>
+          <div style="font-family:var(--g);font-size:22px;font-weight:700;color:var(--orange);line-height:1.1;">+22</div>
+          <div style="font-family:var(--mono);font-size:10px;color:var(--orange);">Cautious Bull</div>
         </div>
-        <div class="nwr-hl">Fed signals "higher for longer" — no cut for 2026</div>
-        <div class="nwr-why">Why it matters: long-duration bonds under 8–12% repricing risk</div>
-      </div>
-      <div class="nwr">
-        <div class="nwr-head">
-          <span class="nwr-imp" style="background:var(--orange-bg);color:var(--orange);border:1px solid rgba(245,158,11,0.2);">Event</span>
-          <span class="nwr-src">Calendar · Tomorrow</span>
-          <span class="nwr-area">· Equities / Rates / USD</span>
+        <div style="flex:1;display:flex;flex-direction:column;gap:4px;">
+          <div style="padding:4px 7px;background:var(--green-bg);border:1px solid rgba(62,230,139,0.14);border-radius:4px;">
+            <div style="font-family:var(--mono);font-size:9px;color:var(--text4);">LEADER</div>
+            <div style="font-size:13px;font-weight:600;color:var(--green);">Technology XLK <span style="font-family:var(--mono);font-size:11px;">82</span></div>
+          </div>
+          <div style="padding:4px 7px;background:var(--red-bg);border:1px solid rgba(255,77,79,0.14);border-radius:4px;">
+            <div style="font-family:var(--mono);font-size:9px;color:var(--text4);">WEAKEST</div>
+            <div style="font-size:13px;font-weight:600;color:var(--red);">Bonds / TLT <span style="font-family:var(--mono);font-size:11px;">35</span></div>
+          </div>
         </div>
-        <div class="nwr-hl">CPI Report 08:30 ET — high impact</div>
-        <div class="nwr-why">Why it matters: volatility expected · hold new duration entries</div>
       </div>
-      <div class="nwr">
-        <div class="nwr-head">
-          <span class="nwr-imp" style="background:var(--green-bg);color:var(--green);border:1px solid rgba(62,230,139,0.2);">Bull</span>
-          <span class="nwr-src">Reuters · 07:45</span>
-          <span class="nwr-area">· Technology</span>
-        </div>
-        <div class="nwr-hl">Nvidia beats estimates by 38% — AI demand accelerating</div>
-        <div class="nwr-why">Why it matters: XLK momentum reinforced · confirms AlphaDroid signal</div>
-      </div>
-      <div class="nwr">
-        <div class="nwr-head">
-          <span class="nwr-imp" style="background:var(--red-bg);color:var(--red);border:1px solid rgba(255,77,79,0.2);">Bear</span>
-          <span class="nwr-src">Valor · 06:30</span>
-          <span class="nwr-area">· Fixed Income</span>
-        </div>
-        <div class="nwr-hl">Treasury 10Y reaches 4.72% — highest since Nov 2023</div>
-        <div class="nwr-why">Why it matters: TLT at 35 · Vera Hollanda duration exposure critical</div>
-      </div>
+      <!-- Key market metrics -->
+      <div class="mpr"><span class="mpr-l">AlphaDroid Signal</span><span class="mpr-v" style="color:var(--orange);">Moderate Risk-On</span></div>
+      <div class="mpr"><span class="mpr-l">StormGuard</span><span class="mpr-v" style="color:var(--green);">Inactive · Growth</span></div>
+      <div class="mpr"><span class="mpr-l">10Y Treasury</span><span class="mpr-v" style="color:var(--red);">4.72% ↑ Rising</span></div>
+      <div class="mpr"><span class="mpr-l">VIX</span><span class="mpr-v" style="color:var(--orange);">22.4 · Caution</span></div>
+      <div class="mpr"><span class="mpr-l">USD/BRL</span><span class="mpr-v" style="color:var(--orange);">5.14 · Pressure</span></div>
     </div>
   </div>
 
