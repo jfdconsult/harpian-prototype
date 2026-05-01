@@ -621,6 +621,67 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--g
 /* ══ DASHBOARD V2 — NO SCROLL COMMAND CENTER ══ */
 #screen-dashboard.active{overflow:hidden!important;height:100%!important;padding:0!important;display:flex!important;flex-direction:column!important;}
 
+/* ══ MARKET TRENDS — DECISION ENGINE ══ */
+#screen-market-trends.active{overflow:hidden!important;height:100%!important;display:flex!important;flex-direction:column!important;padding:10px 14px!important;gap:7px!important;}
+.dt-headline{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid rgba(245,158,11,0.28);border-radius:6px;padding:12px 18px;}
+.dt-score-big{font-family:var(--g);font-size:48px;font-weight:800;line-height:1;color:var(--orange);}
+.dt-score-label{font-family:var(--mono);font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:var(--orange);font-weight:700;}
+.dt-score-sub{font-size:10px;color:var(--text4);font-family:var(--mono);margin-top:2px;}
+.dt-headline-interp{font-size:14px;color:var(--text2);font-style:italic;text-align:right;line-height:1.5;}
+.dt-body{flex:1;min-height:0;display:flex;flex-direction:column;gap:7px;}
+.dt-row{display:grid;gap:7px;flex:1;min-height:0;}
+.dt-row.r2{grid-template-columns:1fr 2fr;}
+.dt-row.r3{grid-template-columns:1fr 2fr;}
+.dt-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 12px;display:flex;flex-direction:column;gap:5px;overflow:hidden;}
+.dt-card-title{font-family:var(--mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text4);font-weight:600;flex-shrink:0;}
+/* Decision bullets */
+.dt-action{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:4px;border-left:3px solid transparent;}
+.dt-action.g{background:var(--green-bg);border-left-color:var(--green);}
+.dt-action.o{background:var(--orange-bg);border-left-color:var(--orange);}
+.dt-action.r{background:var(--red-bg);border-left-color:var(--red);}
+.dt-action-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.dt-action-dot.g{background:var(--green);box-shadow:0 0 6px rgba(62,230,139,0.5);}
+.dt-action-dot.o{background:var(--orange);box-shadow:0 0 6px rgba(245,158,11,0.5);}
+.dt-action-dot.r{background:var(--red);box-shadow:0 0 6px rgba(255,77,79,0.5);}
+.dt-action-txt{font-size:14px;font-weight:700;color:var(--text1);}
+/* Timeframe matrix */
+.dt-matrix{display:grid;grid-template-columns:90px 1fr 1fr 1fr;border:1px solid var(--border);border-radius:4px;overflow:hidden;}
+.dt-mx-cell{padding:5px 10px;font-family:var(--mono);font-size:11px;border-bottom:1px solid var(--border);border-right:1px solid var(--border);}
+.dt-mx-cell:last-child,.dt-mx-cell:nth-child(4n){border-right:none;}
+.dt-mx-cell.hd{font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text4);background:rgba(255,255,255,0.02);}
+.dt-mx-cell.lbl{color:var(--text4);font-size:10px;}
+.dt-mx-cell.nb{border-bottom:none;}
+.dt-mx-interp{font-size:11px;color:var(--text3);font-family:var(--mono);padding:6px 9px;background:rgba(255,255,255,0.025);border-radius:3px;}
+/* Drivers */
+.dt-drivers{display:grid;grid-template-columns:1fr 1fr;gap:8px;flex:1;min-height:0;}
+.dt-driver-col{display:flex;flex-direction:column;gap:4px;}
+.dt-driver-hdr{font-family:var(--mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;font-weight:700;padding:2px 0 4px;}
+.dt-driver-hdr.g{color:var(--green);}
+.dt-driver-hdr.r{color:var(--red);}
+.dt-driver-item{font-size:12px;color:var(--text2);padding:4px 8px;border-radius:3px;display:flex;align-items:center;gap:7px;}
+.dt-driver-item.g{background:var(--green-bg);}
+.dt-driver-item.r{background:var(--red-bg);}
+.dt-sign{font-family:var(--mono);font-weight:800;font-size:13px;}
+.dt-sign.g{color:var(--green);}
+.dt-sign.r{color:var(--red);}
+/* Context grid */
+.dt-ctx-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:1fr 1fr;gap:7px;}
+.dt-ctx{background:var(--surface);border:1px solid var(--border);border-radius:5px;padding:8px 10px;display:flex;flex-direction:column;gap:3px;overflow:hidden;}
+.dt-ctx-title{font-family:var(--mono);font-size:8px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text4);font-weight:700;flex-shrink:0;margin-bottom:2px;}
+.dt-ctx-line{display:flex;justify-content:space-between;align-items:center;}
+.dt-ctx-key{font-size:11px;color:var(--text4);}
+.dt-ctx-val{font-family:var(--mono);font-size:11px;font-weight:600;}
+.dt-ctx-val.g{color:var(--green);} .dt-ctx-val.r{color:var(--red);} .dt-ctx-val.o{color:var(--orange);} .dt-ctx-val.n{color:var(--text2);}
+/* Footer */
+.dt-footer{flex-shrink:0;display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:8px 14px;}
+.dt-conf-lbl{font-family:var(--mono);font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text4);}
+.dt-conf-score{font-family:var(--g);font-size:20px;font-weight:700;color:var(--orange);}
+.dt-conf-bar{width:100px;height:4px;background:rgba(255,255,255,0.08);border-radius:2px;overflow:hidden;}
+.dt-conf-fill{height:100%;width:72%;background:var(--orange);border-radius:2px;}
+.dt-div{width:1px;height:26px;background:var(--border);}
+.dt-brk-lbl{font-family:var(--mono);font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text4);}
+.dt-brk-cond{font-family:var(--mono);font-size:12px;color:var(--red);font-weight:600;}
+
 /* ══ MARKET INTELLIGENCE — NO SCROLL CAUSAL ENGINE ══ */
 #screen-market.active{overflow:hidden!important;height:100%!important;display:flex!important;flex-direction:column!important;padding:10px 14px 10px!important;gap:8px!important;}
 .mi-hdr{display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
@@ -1490,114 +1551,189 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--g
 
 <!-- ══ MARKET TRENDS ══ -->
 <div class="screen" id="screen-market-trends">
-  <div class="mb16">
-    <div class="kicker">Regime Intelligence Center</div>
-    <div class="page-title">Market Regime Intelligence</div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;align-items:center;">
-      <div class="re-chip pos"><div class="re-chip-dot"></div>MACRO TREND&nbsp;<strong id="re-chip-macro">+25</strong></div>
-      <div class="re-chip neu"><div class="re-chip-dot"></div>MKT STRUCTURE&nbsp;<strong id="re-chip-struct">+18</strong></div>
-      <div class="re-chip watch"><div class="re-chip-dot"></div>RISK SHIELD&nbsp;<strong id="re-chip-risk">32 · WATCH</strong></div>
-      <div style="margin-left:auto;font-family:var(--mono);font-size:9px;color:var(--text4);" id="re-updated">Updated 14:30 UTC</div>
-    </div>
-  </div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start;">
-    <!-- LEFT COLUMN -->
-    <div>
-      <div class="panel mb12">
-        <div class="ph"><div class="pt">Market Regime Gauge · Composite Score [-100 → +100]</div></div>
-        <div class="pb" style="display:flex;flex-direction:column;align-items:center;padding-bottom:0;">
-          <canvas id="market-trend-gauge" width="300" height="162" style="max-width:100%;display:block;"></canvas>
-          <div id="market-trend-gauge-val" style="font-family:'Space Grotesk',sans-serif;font-size:56px;font-weight:700;line-height:1;margin-top:4px;color:#F59E0B;">+22</div>
-          <div id="market-trend-gauge-reg" style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.18em;text-transform:uppercase;margin-top:6px;color:#F59E0B;margin-bottom:14px;">Cautious Bull</div>
-        </div>
-        <div style="padding:10px 14px;border-top:1px solid var(--border);">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-            <div>
-              <div class="re-section-title" style="color:var(--green);">▲ Top Positive</div>
-              <div id="re-pos-drivers"></div>
-            </div>
-            <div>
-              <div class="re-section-title" style="color:var(--red);">▼ Top Negative</div>
-              <div id="re-neg-drivers"></div>
-            </div>
+
+  <!-- LAYER 1: HEADLINE -->
+  <div class="dt-headline">
+    <div style="display:flex;align-items:baseline;gap:14px;">
+      <div>
+        <div style="font-family:var(--mono);font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text4);margin-bottom:3px;">Market Trend · Decision Layer</div>
+        <div style="display:flex;align-items:baseline;gap:12px;">
+          <span class="dt-score-big">+22</span>
+          <div>
+            <div class="dt-score-label">Cautious Bull</div>
+            <div class="dt-score-sub">Composite Score  [-100 → +100]</div>
           </div>
         </div>
-        <div style="padding:8px 14px 12px;border-top:1px solid var(--border);">
-          <div class="re-section-title">Score Decomposition · Final = 0.6×Macro + 0.4×Structure + Risk Adj.</div>
-          <div id="re-score-decomp"></div>
-        </div>
-      </div>
-      <div class="panel mb12">
-        <div class="ph">
-          <div class="pt">Regime Timeline · Score History</div>
-          <div style="display:flex;gap:3px;">
-            <button class="re-tl-btn active" data-period="5Y"  onclick="setTimelinePeriod('5Y')">5Y</button>
-            <button class="re-tl-btn" data-period="10Y" onclick="setTimelinePeriod('10Y')">10Y</button>
-            <button class="re-tl-btn" data-period="20Y" onclick="setTimelinePeriod('20Y')">20Y</button>
-            <button class="re-tl-btn" data-period="30Y" onclick="setTimelinePeriod('30Y')">30Y</button>
-          </div>
-        </div>
-        <div class="pb" style="padding:10px 14px 8px;">
-          <div id="re-timeline"></div>
-          <div style="display:flex;justify-content:space-between;margin-top:3px;">
-            <span style="font-family:var(--mono);font-size:9px;color:var(--text4);" id="re-tl-start-label">5 years ago (2021)</span>
-            <span style="font-family:var(--mono);font-size:9px;color:var(--orange);">Today +22</span>
-          </div>
-        </div>
-      </div>
-      <div class="panel">
-        <div class="ph"><div class="pt">Market Narrative · Regime Context</div></div>
-        <div id="re-narrative" style="padding:4px 14px;"></div>
       </div>
     </div>
-    <!-- RIGHT COLUMN -->
-    <div>
-      <div class="panel mb12">
-        <div class="ph"><div class="pt">System Alerts · Anomaly Detection</div><div id="re-alert-badge" style="font-family:var(--mono);font-size:9px;background:rgba(245,158,11,0.12);color:var(--orange);padding:2px 8px;border-radius:3px;"></div></div>
-        <div style="padding:4px 14px 2px;" id="re-alerts"></div>
-      </div>
-      <div class="panel mb12">
-        <div class="ph"><div class="pt">Regime Interpretation · Institutional Analysis</div></div>
-        <div class="pb" style="padding:12px 14px;" id="re-interpretation"></div>
-      </div>
-      <div class="panel mb12" id="re-stormguard-panel">
-        <div class="ph"><div class="pt">StormGuard™ · Portfolio Defense Mechanism</div></div>
-        <div class="pb" style="padding:12px 14px;">
-          <div style="font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--text4);margin-bottom:7px;">Current State · Triggered by Regime Score thresholds</div>
-          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;">
-            <div class="sg-state off" id="sg-btn-off" onclick="setSG('off')"><div class="sg-state-dot"></div>OFF</div>
-            <div class="sg-state watch active" id="sg-btn-watch" onclick="setSG('watch')"><div class="sg-state-dot"></div>WATCH</div>
-            <div class="sg-state activate" id="sg-btn-activate" onclick="setSG('activate')"><div class="sg-state-dot"></div>ACTIVE</div>
-            <div class="sg-state defensive" id="sg-btn-defensive" onclick="setSG('defensive')"><div class="sg-state-dot"></div>DEFENSIVE</div>
-          </div>
-          <div id="sg-description" style="padding:10px 12px;background:var(--orange-bg);border:1px solid rgba(245,158,11,0.18);border-radius:6px;">
-            <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--orange);margin-bottom:4px;">WATCH · Regime Score > +15</div>
-            <div style="font-size:14px;color:var(--text2);line-height:1.6;">Monitoring intensified. Allocation review recommended for clients RN > 55. No automatic action yet — advisory alert only.</div>
-          </div>
-        </div>
-      </div>
-      <div class="panel">
-        <div class="ph"><div class="pt">Market Structure · Key Assets</div></div>
-        <div id="re-structure"></div>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;">
+      <div class="dt-headline-interp">"Trend constructive, but limited by rates and elevated volatility"</div>
+      <div style="display:flex;gap:5px;">
+        <span class="badge o">Cautious</span>
+        <span class="badge r">Fed Hawkish</span>
+        <span class="badge g">Growth Intact</span>
+        <span class="badge n">VIX 22.4</span>
       </div>
     </div>
   </div>
-  <!-- ── Technical Depth Row ── -->
-  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-top:14px;">
-    <div class="panel">
-      <div class="ph"><div class="pt">Risk Shield · Component Breakdown</div><span class="re-chip watch" style="padding:2px 7px;font-size:9px;">WATCH</span></div>
-      <div style="padding:8px 14px 12px;" id="re-risk-shield"></div>
-    </div>
-    <div class="panel">
-      <div class="ph"><div class="pt">Correlation Engine · Cross-Asset</div></div>
-      <div style="padding:8px 14px 12px;" id="re-correlations"></div>
-    </div>
-    <div class="panel">
-      <div class="ph"><div class="pt">Market Internals · Breadth & Momentum</div></div>
-      <div style="padding:8px 14px 12px;" id="re-internals"></div>
+
+  <!-- BODY -->
+  <div class="dt-body">
+
+    <!-- ROW 2: DECISION + TIMEFRAME MATRIX -->
+    <div class="dt-row r2">
+
+      <!-- DECISION -->
+      <div class="dt-card">
+        <div class="dt-card-title">Recommended Action</div>
+        <div style="flex:1;display:flex;flex-direction:column;justify-content:space-evenly;">
+          <div class="dt-action g">
+            <div class="dt-action-dot g"></div>
+            <span class="dt-action-txt">Stay Invested</span>
+          </div>
+          <div class="dt-action o">
+            <div class="dt-action-dot o"></div>
+            <span class="dt-action-txt">Rotate → Tech &amp; Energy</span>
+          </div>
+          <div class="dt-action r">
+            <div class="dt-action-dot r"></div>
+            <span class="dt-action-txt">Avoid Long Duration</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- TIMEFRAME MATRIX -->
+      <div class="dt-card">
+        <div class="dt-card-title">Timeframe Matrix</div>
+        <div class="dt-matrix">
+          <div class="dt-mx-cell hd"></div>
+          <div class="dt-mx-cell hd">Intraday</div>
+          <div class="dt-mx-cell hd">Weekly</div>
+          <div class="dt-mx-cell hd">Monthly</div>
+
+          <div class="dt-mx-cell lbl">Trend</div>
+          <div class="dt-mx-cell" style="color:var(--orange);">Weak</div>
+          <div class="dt-mx-cell" style="color:var(--green);">Bull</div>
+          <div class="dt-mx-cell" style="color:var(--green);font-weight:700;">Strong Bull</div>
+
+          <div class="dt-mx-cell lbl">Score</div>
+          <div class="dt-mx-cell" style="color:var(--orange);">-0.4</div>
+          <div class="dt-mx-cell" style="color:var(--green);">+1.2</div>
+          <div class="dt-mx-cell" style="color:var(--green);font-weight:700;">+2.3</div>
+
+          <div class="dt-mx-cell lbl nb">State</div>
+          <div class="dt-mx-cell nb" style="color:var(--orange);">Caut Bear</div>
+          <div class="dt-mx-cell nb" style="color:var(--green);">Bull</div>
+          <div class="dt-mx-cell nb" style="color:var(--green);font-weight:700;">Strong Bull</div>
+        </div>
+        <div class="dt-mx-interp">↳ Short-term weakness inside long-term uptrend — no change to strategic allocation</div>
+      </div>
+
+    </div><!-- /row2 -->
+
+    <!-- ROW 3: TREND DRIVERS + CONTEXT MODULES -->
+    <div class="dt-row r3">
+
+      <!-- TREND DRIVERS -->
+      <div class="dt-card">
+        <div class="dt-card-title">Trend Drivers</div>
+        <div class="dt-drivers">
+          <div class="dt-driver-col">
+            <div class="dt-driver-hdr g">▲ Positives</div>
+            <div class="dt-driver-item g"><span class="dt-sign g">+</span>Growth resilience</div>
+            <div class="dt-driver-item g"><span class="dt-sign g">+</span>Earnings strength</div>
+            <div class="dt-driver-item g"><span class="dt-sign g">+</span>Sector momentum</div>
+          </div>
+          <div class="dt-driver-col">
+            <div class="dt-driver-hdr r">▼ Risks</div>
+            <div class="dt-driver-item r"><span class="dt-sign r">−</span>Rising rates</div>
+            <div class="dt-driver-item r"><span class="dt-sign r">−</span>Elevated volatility</div>
+            <div class="dt-driver-item r"><span class="dt-sign r">−</span>Yield curve inversion</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONTEXT MODULES (6 compact cards, 3×2 grid) -->
+      <div class="dt-ctx-grid">
+
+        <div class="dt-ctx">
+          <div class="dt-ctx-title">Macro</div>
+          <div class="dt-ctx-line"><span class="dt-ctx-key">Fed</span><span class="dt-ctx-val r">Hawkish</span></div>
+          <div class="dt-ctx-line"><span class="dt-ctx-key">Rates</span><span class="dt-ctx-val r">Rising · 4.72%</span></div>
+          <div class="dt-ctx-line"><span class="dt-ctx-key">Inflation</span><span class="dt-ctx-val o">Sticky</span></div>
+        </div>
+
+        <div class="dt-ctx">
+          <div class="dt-ctx-title">Positioning</div>
+          <div class="dt-ctx-line"><span class="dt-ctx-key">Funds</span><span class="dt-ctx-val o">Rotating bonds</span></div>
+          <div class="dt-ctx-line"><span class="dt-ctx-key">Insiders</span><span class="dt-ctx-val r">Net selling</span></div>
+          <div class="dt-ctx-line"><span class="dt-ctx-key">Crypto</span><span class="dt-ctx-val g">Accumulating</span></div>
+        </div>
+
+        <div class="dt-ctx">
+          <div class="dt-ctx-title">Sentiment</div>
+          <div class="dt-ctx-line"><span class="dt-ctx-key">VIX</span><span class="dt-ctx-val o">22.4 · Elevated</span></div>
+          <div class="dt-ctx-line"><span class="dt-ctx-key">Fear / Greed</span><span class="dt-ctx-val n">Neutral</span></div>
+          <div class="dt-ctx-line"><span class="dt-ctx-key">Put / Call</span><span class="dt-ctx-val o">1.12 · Cautious</span></div>
+        </div>
+
+        <div class="dt-ctx">
+          <div class="dt-ctx-title">Structure</div>
+          <div class="dt-ctx-line"><span class="dt-ctx-key">S&amp;P 500</span><span class="dt-ctx-val g">Near ATH</span></div>
+          <div class="dt-ctx-line"><span class="dt-ctx-key">Breakdown</span><span class="dt-ctx-val g">None</span></div>
+          <div class="dt-ctx-line"><span class="dt-ctx-key">Drawdown</span><span class="dt-ctx-val g">Minimal</span></div>
+        </div>
+
+        <div class="dt-ctx">
+          <div class="dt-ctx-title">Momentum</div>
+          <div class="dt-ctx-line"><span class="dt-ctx-key">Tech</span><span class="dt-ctx-val g">Leading</span></div>
+          <div class="dt-ctx-line"><span class="dt-ctx-key">Energy</span><span class="dt-ctx-val g">Accelerating</span></div>
+          <div class="dt-ctx-line"><span class="dt-ctx-key">Bonds</span><span class="dt-ctx-val r">Weak</span></div>
+        </div>
+
+        <div class="dt-ctx">
+          <div class="dt-ctx-title">StormGuard™</div>
+          <div class="dt-ctx-line"><span class="dt-ctx-key">State</span><span class="dt-ctx-val o">WATCH</span></div>
+          <div class="dt-ctx-line"><span class="dt-ctx-key">Threshold</span><span class="dt-ctx-val n">-8%</span></div>
+          <div class="dt-ctx-line"><span class="dt-ctx-key">Trigger</span><span class="dt-ctx-val n">Score &lt; -15</span></div>
+        </div>
+
+      </div><!-- /dt-ctx-grid -->
+
+    </div><!-- /row3 -->
+
+  </div><!-- /dt-body -->
+
+  <!-- FOOTER: CONFIDENCE + BREAK CONDITIONS -->
+  <div class="dt-footer">
+    <span class="dt-conf-lbl">Confidence</span>
+    <span class="dt-conf-score">7.2</span>
+    <span style="font-family:var(--mono);font-size:10px;color:var(--text4);">/ 10</span>
+    <div class="dt-conf-bar"><div class="dt-conf-fill"></div></div>
+    <div class="dt-div"></div>
+    <span class="dt-brk-lbl">Break Conditions</span>
+    <span class="dt-brk-cond">If VIX &gt; 28 or 10Y &gt; 5.2% → shift to defensive</span>
+    <div style="margin-left:auto;display:flex;gap:6px;">
+      <button class="tb-btn" style="font-size:9px;" onclick="go('sector-momentum')">Sector Detail →</button>
+      <button class="tb-btn" style="font-size:9px;" onclick="go('market')">Market Intel →</button>
     </div>
   </div>
-</div>
+
+  <!-- Hidden legacy IDs for JS compatibility -->
+  <div style="display:none;">
+    <div id="re-pos-drivers"></div><div id="re-neg-drivers"></div><div id="re-score-decomp"></div>
+    <div id="re-alerts"></div><div id="re-alert-badge"></div><div id="re-interpretation"></div>
+    <div id="re-structure"></div><div id="re-risk-shield"></div><div id="re-correlations"></div>
+    <div id="re-internals"></div><div id="re-narrative"></div><div id="re-timeline"></div>
+    <div id="re-tl-start-label"></div><div id="re-chip-macro"></div><div id="re-chip-struct"></div>
+    <div id="re-chip-risk"></div><div id="re-updated"></div><div id="re-stormguard-panel"></div>
+    <div id="sg-btn-off"></div><div id="sg-btn-watch"></div><div id="sg-btn-activate"></div>
+    <div id="sg-btn-defensive"></div><div id="sg-description"></div>
+    <canvas id="market-trend-gauge"></canvas>
+    <div id="market-trend-gauge-val"></div><div id="market-trend-gauge-reg"></div>
+  </div>
+
+</div><!-- /screen-market-trends -->
 
 <!-- ══ CLIENTS OVERVIEW ══ -->
 <div class="screen" id="screen-clients">
