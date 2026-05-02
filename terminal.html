@@ -3589,9 +3589,11 @@ function pfFmt(v, dec=1) {
   return (v >= 0 ? '+' : '') + v.toFixed(dec) + '%';
 }
 function pfFmtUSD(v) {
-  if (v >= 1e6) return '$' + (v/1e6).toFixed(2) + 'M';
-  if (v >= 1e3) return '$' + (v/1e3).toFixed(0) + 'K';
-  return '$' + v.toFixed(0);
+  const abs = Math.abs(v);
+  const sign = v < 0 ? '-' : '';
+  if (abs >= 1e6) return sign + '$' + (abs/1e6).toFixed(2) + 'M';
+  if (abs >= 1e3) return sign + '$' + (abs/1e3).toFixed(0) + 'K';
+  return sign + '$' + abs.toFixed(0);
 }
 
 // ─── Main render ─────────────────────────────────────────────────────────────
@@ -3674,7 +3676,7 @@ function pfDrawHero(hpcSeries, spySeries) {
   const xSc = function(i) { return pad.l + (i / (n - 1)) * cW; };
   const ySc = function(v) { return pad.t + cH - ((v - yMin) / (yMax - yMin)) * cH; };
 
-  let out = '<svg xmlns="http://www.w3.org/2000/svg" width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '">';
+  let out = '<svg id="pf-hero-svg" xmlns="http://www.w3.org/2000/svg" width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '">';
 
   // Grid
   const yTicks = 4;
@@ -3820,7 +3822,7 @@ function pfDrawDD(hpcSeries, spySeries) {
   const xSc = function(i) { return pad.l + (i / (n - 1)) * cW; };
   const ySc = function(v) { return pad.t + ((0 - v) / (0 - yMin)) * cH; };
 
-  let out = '<svg xmlns="http://www.w3.org/2000/svg" width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '">';
+  let out = '<svg id="pf-dd-svg" xmlns="http://www.w3.org/2000/svg" width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '">';
   out += '<line x1="' + pad.l + '" y1="' + pad.t + '" x2="' + (W - pad.r) + '" y2="' + pad.t + '" stroke="rgba(255,255,255,0.1)" stroke-width="1" stroke-dasharray="3,3"/>';
 
   const yTicks = [0, yMin * 0.33, yMin * 0.66, yMin];
