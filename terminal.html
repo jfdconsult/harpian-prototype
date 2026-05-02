@@ -92,6 +92,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--g
 .sm-badge{font-family:var(--mono);font-size:9px;padding:2px 6px;border-radius:3px;border:1px solid;width:52px;text-align:center;flex-shrink:0;}
 .screen.active{display:block;}
 #screen-performance.active{display:flex!important;flex-direction:column;}
+#screen-strat-perf.active{display:flex!important;flex-direction:column;}
 #screen-client-gap.active{display:flex!important;flex-direction:column;}
 
 /* ── COMMON ── */
@@ -912,8 +913,9 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--g
 
     <div class="sb-sec">Strategies</div>
     <div class="sb-nav">
-      <div class="sb-item" id="nav-performance" onclick="go('performance')"><div class="sb-icon">📊</div><div class="sb-lbl">Performance</div></div>
-      <div class="sb-item" id="nav-client-gap" onclick="go('client-gap')"><div class="sb-icon">🎯</div><div class="sb-lbl">Client Gap Analysis</div></div>
+      <div class="sb-item" id="nav-performance" onclick="go('performance')"><div class="sb-icon">📊</div><div class="sb-lbl">HPC vs Competitors</div></div>
+      <div class="sb-item" id="nav-strat-perf" onclick="go('strat-perf')"><div class="sb-icon">🎯</div><div class="sb-lbl">Strategy Performance</div></div>
+      <div class="sb-item" id="nav-client-gap" onclick="go('client-gap')"><div class="sb-icon">📈</div><div class="sb-lbl">Client Gap Analysis</div></div>
       <div class="sb-item" id="nav-alerts" onclick="go('alerts')"><div class="sb-icon">🔔</div><div class="sb-lbl">Alerts</div><div class="sb-badge r">3</div></div>
     </div>
 
@@ -2130,12 +2132,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--g
 <!-- ══ PERFORMANCE ══ -->
 <div class="screen" id="screen-performance" style="display:none;padding:0;height:calc(100vh - var(--topbar));overflow:hidden;flex-direction:column;">
 
-  <!-- MODE TAB BAR -->
-  <div id="pf-mode-bar" style="height:36px;display:flex;align-items:center;gap:0;border-bottom:1px solid var(--border);flex-shrink:0;background:rgba(0,0,0,0.2);padding:0 16px;">
-    <button id="pf-mode-comp" onclick="pfSetMode('competitors')" style="padding:6px 14px;font-family:var(--mono);font-size:9px;letter-spacing:0.1em;background:rgba(212,175,69,0.12);color:var(--gold);border:none;border-bottom:2px solid var(--gold);cursor:pointer;font-weight:700;text-transform:uppercase;">HPC vs Competitors</button>
-    <button id="pf-mode-strat" onclick="pfSetMode('strategies')" style="padding:6px 14px;font-family:var(--mono);font-size:9px;letter-spacing:0.1em;background:transparent;color:var(--text4);border:none;border-bottom:2px solid transparent;cursor:pointer;font-weight:400;text-transform:uppercase;">Strategy Performance</button>
-  </div>
-
   <!-- TOP CONTROL BAR -->
   <div id="pf-topbar" style="height:52px;display:flex;align-items:center;gap:10px;padding:0 16px;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--bg2);">
     <span style="font-family:var(--mono);font-size:11px;font-weight:700;color:var(--gold);letter-spacing:0.12em;text-transform:uppercase;flex-shrink:0;">Performance</span>
@@ -2220,29 +2216,37 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--g
 
   </div>
 
-  <!-- ── Mode 2: Strategy Performance ──────────────────────────────── -->
-  <div id="pf-strat-panel" style="display:none;flex:1;min-height:0;overflow:hidden;flex-direction:column;">
-    <div style="display:flex;flex:1;min-height:0;overflow:hidden;">
-      <!-- Left: CAGR chart + metrics table -->
-      <div style="flex:1;display:flex;flex-direction:column;min-height:0;border-right:1px solid var(--border);">
-        <div id="pf-strat-chart" style="flex:0 0 260px;padding:12px 16px 0;overflow:hidden;"></div>
-        <div style="flex:1;overflow-y:auto;padding:4px 0;" id="pf-strat-table-wrap"></div>
-      </div>
-      <!-- Right: Strategy list -->
-      <div style="width:300px;flex-shrink:0;display:flex;flex-direction:column;min-height:0;position:relative;">
-        <div style="padding:8px 12px 4px;border-bottom:1px solid var(--border);flex-shrink:0;">
-          <span style="font-family:var(--mono);font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text4);">Strategy List</span>
-        </div>
-        <div id="pf-strat-list" style="flex:1;overflow-y:auto;"></div>
-        <div style="position:absolute;bottom:0;left:0;right:0;height:40px;background:linear-gradient(to bottom,transparent,rgba(13,18,28,0.95));pointer-events:none;display:flex;align-items:flex-end;justify-content:center;padding-bottom:5px;">
-          <span style="font-family:monospace;font-size:9px;color:rgba(255,255,255,0.2);">↓ scroll</span>
-        </div>
-      </div>
+</div>
+
+<!-- ══ STRATEGY PERFORMANCE ══ -->
+<div class="screen" id="screen-strat-perf" style="display:none;padding:0;height:calc(100vh - var(--topbar));overflow:hidden;flex-direction:column;">
+
+  <!-- TOP BAR -->
+  <div style="height:52px;display:flex;align-items:center;gap:10px;padding:0 16px;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--bg2);">
+    <span style="font-family:var(--mono);font-size:11px;font-weight:700;color:var(--gold);letter-spacing:0.12em;text-transform:uppercase;flex-shrink:0;">Strategy Performance</span>
+    <div style="display:flex;gap:0;border:1px solid var(--border);border-radius:4px;overflow:hidden;flex-shrink:0;">
+      <button id="sp-btn-hpc11" onclick="spSetHPC('HPC11')" style="padding:5px 14px;font-family:var(--mono);font-size:9px;letter-spacing:0.1em;border:none;cursor:pointer;background:rgba(212,175,69,0.12);color:var(--gold);font-weight:700;border-right:1px solid var(--border);">HPC11</button>
+      <button id="sp-btn-hpc22" onclick="spSetHPC('HPC22')" style="padding:5px 14px;font-family:var(--mono);font-size:9px;letter-spacing:0.1em;border:none;cursor:pointer;background:transparent;color:var(--text4);">HPC22</button>
     </div>
-    <!-- Sector momentum strip -->
-    <div id="pf-sector-strip" style="height:160px;flex-shrink:0;border-top:1px solid var(--border);overflow:hidden;padding:8px 16px;display:flex;flex-direction:column;gap:6px;">
-      <div style="font-family:var(--mono);font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text4);">Sector Momentum — Current State</div>
-      <div id="pf-sector-bars" style="flex:1;display:flex;gap:6px;align-items:flex-end;overflow-x:auto;"></div>
+    <div style="margin-left:auto;font-family:var(--mono);font-size:9px;color:var(--text4);">HPC11 = ETF strategies · HPC22 = Stock strategies (ACT1+ACT2 avg per sector)</div>
+  </div>
+
+  <!-- MAIN AREA -->
+  <div style="display:flex;flex:1;min-height:0;overflow:hidden;">
+    <!-- LEFT: Chart + Table -->
+    <div style="flex:1;display:flex;flex-direction:column;min-height:0;border-right:1px solid var(--border);">
+      <div id="sp-strat-chart" style="flex:0 0 260px;padding:12px 16px 0;overflow:hidden;"></div>
+      <div style="flex:1;overflow-y:auto;padding:4px 0;" id="sp-strat-table-wrap"></div>
+    </div>
+    <!-- RIGHT: Strategy list -->
+    <div style="width:280px;flex-shrink:0;display:flex;flex-direction:column;min-height:0;position:relative;">
+      <div style="padding:8px 12px 4px;border-bottom:1px solid var(--border);flex-shrink:0;">
+        <span style="font-family:var(--mono);font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text4);">Strategy List</span>
+      </div>
+      <div id="sp-strat-list" style="flex:1;overflow-y:auto;"></div>
+      <div style="position:absolute;bottom:0;left:0;right:0;height:40px;background:linear-gradient(to bottom,transparent,rgba(13,18,28,0.95));pointer-events:none;display:flex;align-items:flex-end;justify-content:center;padding-bottom:5px;">
+        <span style="font-family:monospace;font-size:9px;color:rgba(255,255,255,0.2);">↓ scroll</span>
+      </div>
     </div>
   </div>
 </div>
@@ -2842,7 +2846,7 @@ function renderSectorContextBanner(id, target, count) {
 }
 
 // ═══════════════ NAVIGATION ═══════════════
-const SCREEN_NAMES = {dashboard:'Dashboard',market:'Market Intelligence','market-trends':'Market Trends','social-radar':'Social Media Radar','stock-analysis':'Stock Analysis',clients:'Clients Overview','client-profile':'Client Profile',onboarding:'Onboarding',upload:'Portfolio Upload',hpc:'HPC Strategies','sector-momentum':'Sector Momentum','rpm-momentum':'RPM Momentum',alerts:'Alerts',compounding:'Compounding Gap',performance:'Performance','client-gap':'Client Gap Analysis',integrations:'Integrations','fo-profile':'Settings / FO Profile'};
+const SCREEN_NAMES = {dashboard:'Dashboard',market:'Market Intelligence','market-trends':'Market Trends','social-radar':'Social Media Radar','stock-analysis':'Stock Analysis',clients:'Clients Overview','client-profile':'Client Profile',onboarding:'Onboarding',upload:'Portfolio Upload',hpc:'HPC Strategies','sector-momentum':'Sector Momentum','rpm-momentum':'RPM Momentum',alerts:'Alerts',compounding:'Compounding Gap',performance:'HPC vs Competitors','strat-perf':'Strategy Performance','client-gap':'Client Gap Analysis',integrations:'Integrations','fo-profile':'Settings / FO Profile'};
 
 function go(id, opts = {}) {
   if(id === 'clients' && !opts.keepClient) {
@@ -2871,6 +2875,7 @@ function go(id, opts = {}) {
   if(id === 'sector-momentum') renderSectorMomentum();
   if(id === 'rpm-momentum') renderRPM();
   if(id === 'performance') renderPerformance();
+  if(id === 'strat-perf') renderStratPerf();
   if(id === 'client-gap') cgaRender();
   if(id === 'hpc') setTimeout(hsiInit, 80);
 }
@@ -3707,7 +3712,8 @@ function pfActiveSeries(id) {
   if (!a) return null;
   const period = pfPeriod;
   const now = '2025-12-31';
-  let fromDate = '2003-12-31';
+  // Max uses 2004-12-31 so HPC11/HPC22 and SPY all start from the same baseline
+  let fromDate = '2004-12-31';
   if (period === '1Y') fromDate = '2024-12-31';
   else if (period === '3Y') fromDate = '2022-12-31';
   else if (period === '5Y') fromDate = '2020-12-31';
@@ -3743,22 +3749,6 @@ function pfRender() { renderPerformance(); }
 
 function renderPerformance() {
   pfGetDB();
-
-  // Ensure mode panels reflect current pfMode
-  const _mainArea = document.querySelector('#screen-performance > div:nth-child(3)');
-  const _bottomStrip = document.querySelector('#screen-performance > div:nth-child(4)');
-  const _stratPanel = document.getElementById('pf-strat-panel');
-  if (pfMode === 'strategies') {
-    if (_mainArea) _mainArea.style.display = 'none';
-    if (_bottomStrip) _bottomStrip.style.display = 'none';
-    if (_stratPanel) _stratPanel.style.display = 'flex';
-    pfDrawStratPanel();
-    return;
-  } else {
-    if (_mainArea) _mainArea.style.display = 'flex';
-    if (_bottomStrip) _bottomStrip.style.display = 'flex';
-    if (_stratPanel) _stratPanel.style.display = 'none';
-  }
 
   // Period buttons
   const pbEl = document.getElementById('pf-period-btns');
@@ -4145,42 +4135,160 @@ function pfToggleComp(id) {
 }
 function pfFilterPanel() { pfDrawRightPanel(); }
 
-// ─── Mode control ─────────────────────────────────────────────────────────────
-let pfMode = 'competitors';
-let pfStratSelected = new Set();
+// ─── Strategy Performance (separate screen) ───────────────────────────────────
+let spHPC = 'HPC11';
+let spStratSelected = new Set();
 
-function pfSetMode(mode) {
-  pfMode = mode;
-  const b1 = document.getElementById('pf-mode-comp');
-  const b2 = document.getElementById('pf-mode-strat');
-  const mainArea = document.querySelector('#screen-performance > div:nth-child(3)');
-  const bottomStrip = document.querySelector('#screen-performance > div:nth-child(4)');
-  const stratPanel = document.getElementById('pf-strat-panel');
-  if (b1) { b1.style.background = mode==='competitors'?'rgba(212,175,69,0.12)':'transparent'; b1.style.color = mode==='competitors'?'var(--gold)':'var(--text4)'; b1.style.borderBottom = mode==='competitors'?'2px solid var(--gold)':'2px solid transparent'; b1.style.fontWeight = mode==='competitors'?'700':'400'; }
-  if (b2) { b2.style.background = mode==='strategies'?'rgba(212,175,69,0.12)':'transparent'; b2.style.color = mode==='strategies'?'var(--gold)':'var(--text4)'; b2.style.borderBottom = mode==='strategies'?'2px solid var(--gold)':'2px solid transparent'; b2.style.fontWeight = mode==='strategies'?'700':'400'; }
-  if (mode === 'competitors') {
-    if (mainArea) mainArea.style.display = 'flex';
-    if (bottomStrip) bottomStrip.style.display = 'flex';
-    if (stratPanel) stratPanel.style.display = 'none';
-  } else {
-    if (mainArea) mainArea.style.display = 'none';
-    if (bottomStrip) bottomStrip.style.display = 'none';
-    if (stratPanel) { stratPanel.style.display = 'flex'; pfDrawStratPanel(); }
+function spSetHPC(hpc) {
+  spHPC = hpc;
+  const b11 = document.getElementById('sp-btn-hpc11');
+  const b22 = document.getElementById('sp-btn-hpc22');
+  const on11 = hpc === 'HPC11';
+  if (b11) { b11.style.background = on11?'rgba(212,175,69,0.12)':'transparent'; b11.style.color = on11?'var(--gold)':'var(--text4)'; b11.style.fontWeight = on11?'700':'400'; }
+  if (b22) { b22.style.background = !on11?'rgba(212,175,69,0.12)':'transparent'; b22.style.color = !on11?'var(--gold)':'var(--text4)'; b22.style.fontWeight = !on11?'700':'400'; }
+  spStratSelected.clear();
+  renderStratPerf();
+}
+
+function spStratToggle(id) {
+  if (spStratSelected.has(id)) spStratSelected.clear();
+  else { spStratSelected.clear(); spStratSelected.add(id); }
+  renderStratPerf();
+}
+
+// Average ACT1+ACT2 per sector for HPC22 display
+function pfGroupHPC22() {
+  if (typeof HPC22_STRATEGIES === 'undefined') return [];
+  const sectors = {};
+  for (const s of HPC22_STRATEGIES) {
+    if (s.act === 'Base' || s.act === 'Core') continue;
+    const sec = s.sector;
+    if (!sectors[sec]) sectors[sec] = { sector: sec, count: 0, cagr_all: 0, cagr_5y: 0, cagr_3y: 0, cagr_1y: 0, ytd: 0, maxdd: 0, sharpe: 0 };
+    const g = sectors[sec];
+    g.count++;
+    g.cagr_all += parseFloat(s.cagr_all) || 0;
+    g.cagr_5y  += parseFloat(s.cagr_5y)  || 0;
+    g.cagr_3y  += parseFloat(s.cagr_3y)  || 0;
+    g.cagr_1y  += parseFloat(s.cagr_1y)  || 0;
+    g.ytd      += parseFloat(s.ytd)       || 0;
+    g.maxdd    += parseFloat(s.maxdd)     || 0;
+    g.sharpe   += parseFloat(s.sharpe)    || 0;
   }
+  return Object.entries(sectors).map(([sec, g]) => ({
+    id: sec, label: sec,
+    cagr_all: (g.cagr_all / g.count).toFixed(1),
+    cagr_5y:  (g.cagr_5y  / g.count).toFixed(1),
+    cagr_3y:  (g.cagr_3y  / g.count).toFixed(1),
+    cagr_1y:  (g.cagr_1y  / g.count).toFixed(1),
+    ytd:      (g.ytd      / g.count).toFixed(1),
+    maxdd:    (g.maxdd    / g.count).toFixed(1),
+    sharpe:   (g.sharpe   / g.count).toFixed(2),
+  }));
 }
 
-function pfStratToggle(id) {
-  if (pfStratSelected.has(id)) pfStratSelected.clear();
-  else { pfStratSelected.clear(); pfStratSelected.add(id); }
-  pfDrawStratPanel();
+function renderStratPerf() {
+  const db = spHPC === 'HPC11'
+    ? (typeof HPC11_STRATEGIES !== 'undefined' ? HPC11_STRATEGIES : [])
+    : pfGroupHPC22();
+  spDrawStratList(db);
+  spDrawStratChart(db);
+  spDrawStratTable(db);
 }
 
-function pfDrawStratPanel() {
-  const db = pfHPC === 'HPC11' ? (typeof HPC11_STRATEGIES !== 'undefined' ? HPC11_STRATEGIES : []) : (typeof HPC22_STRATEGIES !== 'undefined' ? HPC22_STRATEGIES : []);
-  pfDrawStratList(db);
-  pfDrawStratChart(db);
-  pfDrawStratTable(db);
-  pfDrawSectorStrip();
+function spDrawStratList(db) {
+  const el = document.getElementById('sp-strat-list');
+  if (!el) return;
+  let html = '';
+  for (const s of db) {
+    const on = spStratSelected.has(s.id);
+    const cagr = s.cagr_all || s.cagr_5y || '—';
+    const dd = s.maxdd || '—';
+    const cagrVal = parseFloat(cagr);
+    html += '<div onclick="spStratToggle(\'' + s.id + '\')" style="padding:9px 12px;border-bottom:1px solid rgba(255,255,255,0.03);cursor:pointer;border-left:2px solid ' + (on?'var(--gold)':'transparent') + ';background:' + (on?'rgba(212,175,69,0.06)':'transparent') + ';">'
+      + '<div style="font-family:var(--mono);font-size:10px;color:' + (on?'var(--gold)':'var(--text2)') + ';font-weight:' + (on?'600':'400') + ';white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + s.label + '</div>'
+      + '<div style="font-family:var(--mono);font-size:9px;color:var(--text3);margin-top:2px;">'
+      + 'CAGR <span style="color:' + (cagrVal>=0?'var(--green)':'var(--red)') + ';">' + (cagr !== '—' ? (cagrVal>=0?'+':'') + cagrVal.toFixed(1) + '%' : '—') + '</span>'
+      + (dd !== '—' ? ' &nbsp;·&nbsp; DD <span style="color:var(--red);">-' + Math.abs(parseFloat(dd)).toFixed(0) + '%</span>' : '')
+      + (s.sharpe ? ' &nbsp;·&nbsp; Sh <span style="color:var(--text3);">' + parseFloat(s.sharpe).toFixed(2) + '</span>' : '')
+      + '</div></div>';
+  }
+  el.innerHTML = html || '<div style="padding:12px;font-family:var(--mono);font-size:10px;color:var(--text4);">No strategies found.</div>';
+}
+
+function spDrawStratChart(db) {
+  const el = document.getElementById('sp-strat-chart');
+  if (!el || !db.length) return;
+  const periods = ['ytd','cagr_1y','cagr_3y','cagr_5y','cagr_all'];
+  const labels  = ['YTD','1Y','3Y','5Y','All'];
+  const selected = db.filter(s => spStratSelected.has(s.id));
+  const display = selected.length ? selected : db.slice(0, 7);
+  const W = el.offsetWidth || 600, H = 220;
+  const barW = Math.min(34, (W - 80) / (display.length * periods.length + display.length));
+  const groupW = barW * periods.length + 4;
+  const colors = ['#22C55E','#3B82F6','#F59E0B','#E879F9','#22D3EE','#FB923C','#A78BFA'];
+  let allVals = [];
+  for (const s of display) for (const p of periods) { const v = parseFloat(s[p]); if (!isNaN(v)) allVals.push(v); }
+  if (!allVals.length) return;
+  const maxV = Math.max(...allVals.filter(v=>v>0), 10);
+  const minV = Math.min(...allVals.filter(v=>v<0), 0);
+  const padT=20,padB=30,padL=4,padR=4;
+  const cH = H - padT - padB;
+  const zeroY = padT + cH * maxV / (maxV - minV);
+  function ySc(v) { return padT + cH * (maxV - v) / (maxV - minV); }
+  let out = '<svg xmlns="http://www.w3.org/2000/svg" width="' + W + '" height="' + H + '">';
+  out += '<line x1="' + padL + '" y1="' + zeroY.toFixed(1) + '" x2="' + (W-padR) + '" y2="' + zeroY.toFixed(1) + '" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>';
+  let gx = padL + 10;
+  for (let si = 0; si < display.length; si++) {
+    const s = display[si];
+    const color = colors[si % colors.length];
+    for (let pi = 0; pi < periods.length; pi++) {
+      const v = parseFloat(s[periods[pi]]);
+      if (isNaN(v)) { gx += barW + 1; continue; }
+      const y1 = ySc(Math.max(v, 0)), y2 = ySc(Math.min(v, 0));
+      out += '<rect x="' + gx.toFixed(1) + '" y="' + y1.toFixed(1) + '" width="' + Math.max(1, barW-1) + '" height="' + Math.max(1, Math.abs(y2-y1)).toFixed(1) + '" fill="' + color + '" opacity="0.80" rx="1"/>';
+      gx += barW + 1;
+    }
+    out += '<text x="' + (gx - groupW/2).toFixed(1) + '" y="' + (H-10) + '" text-anchor="middle" font-family="monospace" font-size="8" fill="' + color + '">' + (s.label||s.id).substring(0,13) + '</text>';
+    gx += 10;
+  }
+  let lx = padL + 4;
+  for (let pi = 0; pi < labels.length; pi++) {
+    out += '<rect x="' + lx + '" y="4" width="8" height="8" fill="rgba(255,255,255,' + (0.15 + pi*0.06) + ')"/>';
+    out += '<text x="' + (lx+10) + '" y="12" font-family="monospace" font-size="8" fill="rgba(255,255,255,0.4)">' + labels[pi] + '</text>';
+    lx += 38;
+  }
+  out += '</svg>';
+  el.innerHTML = out;
+}
+
+function spDrawStratTable(db) {
+  const el = document.getElementById('sp-strat-table-wrap');
+  if (!el) return;
+  const thS = 'padding:5px 8px;text-align:right;font-family:var(--mono);font-size:8px;color:var(--text4);letter-spacing:0.08em;text-transform:uppercase;white-space:nowrap;';
+  const tdS = function(c) { return 'padding:4px 8px;text-align:right;font-family:var(--mono);font-size:10px;color:' + c + ';white-space:nowrap;'; };
+  function fmtP(v) { return isNaN(v) ? '—' : (v>=0?'+':'')+v.toFixed(1)+'%'; }
+  let html = '<table style="width:100%;border-collapse:collapse;">'
+    + '<thead><tr style="border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--bg2);">'
+    + '<th style="' + thS + 'text-align:left;">Strategy</th>'
+    + ['CAGR All','5Y','3Y','1Y','YTD','MaxDD','Sharpe'].map(h=>'<th style="' + thS + '">' + h + '</th>').join('')
+    + '</tr></thead><tbody>';
+  for (const s of db) {
+    const on = spStratSelected.has(s.id);
+    const ca = parseFloat(s.cagr_all), c5 = parseFloat(s.cagr_5y), c3 = parseFloat(s.cagr_3y), c1 = parseFloat(s.cagr_1y), ytd = parseFloat(s.ytd);
+    const dd = parseFloat(s.maxdd), sh = parseFloat(s.sharpe);
+    html += '<tr style="border-bottom:1px solid rgba(255,255,255,0.03);cursor:pointer;' + (on?'background:rgba(212,175,69,0.05);':'') + '" onclick="spStratToggle(\'' + s.id + '\')">'
+      + '<td style="padding:4px 8px;font-family:var(--mono);font-size:9px;color:' + (on?'var(--gold)':'var(--text2)') + ';white-space:nowrap;">' + (s.label||s.id) + '</td>'
+      + '<td style="' + tdS(ca>=0?'var(--green)':'var(--red)') + '">' + fmtP(ca) + '</td>'
+      + '<td style="' + tdS(c5>=0?'var(--green)':'var(--red)') + '">' + fmtP(c5) + '</td>'
+      + '<td style="' + tdS(c3>=0?'var(--green)':'var(--red)') + '">' + fmtP(c3) + '</td>'
+      + '<td style="' + tdS(c1>=0?'var(--green)':'var(--red)') + '">' + fmtP(c1) + '</td>'
+      + '<td style="' + tdS(ytd>=0?'var(--green)':'var(--red)') + '">' + fmtP(ytd) + '</td>'
+      + '<td style="' + tdS('var(--red)') + '">' + (isNaN(dd)?'—':'-'+Math.abs(dd).toFixed(0)+'%') + '</td>'
+      + '<td style="' + tdS('var(--text3)') + '">' + (isNaN(sh)?'—':sh.toFixed(2)) + '</td>'
+      + '</tr>';
+  }
+  html += '</tbody></table>';
+  el.innerHTML = html;
 }
 
 function pfDrawStratList(db) {
