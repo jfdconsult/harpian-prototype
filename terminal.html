@@ -92,6 +92,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--g
 .sm-badge{font-family:var(--mono);font-size:9px;padding:2px 6px;border-radius:3px;border:1px solid;width:52px;text-align:center;flex-shrink:0;}
 .screen.active{display:block;}
 #screen-performance.active{display:flex!important;flex-direction:column;}
+#screen-client-gap.active{display:flex!important;flex-direction:column;}
 
 /* ── COMMON ── */
 .kicker{font-family:var(--mono);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:var(--gold);margin-bottom:5px;}
@@ -911,16 +912,9 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--g
 
     <div class="sb-sec">Strategies</div>
     <div class="sb-nav">
-      <div class="sb-item" id="nav-hpc" onclick="go('hpc')"><div class="sb-icon">⚡</div><div class="sb-lbl">HPC11 / HPC22</div></div>
-      <div class="sb-item" id="nav-sector-momentum" onclick="go('sector-momentum')"><div class="sb-icon">🎯</div><div class="sb-lbl">Sector Momentum</div></div>
-      <div class="sb-item" id="nav-rpm-momentum" onclick="go('rpm-momentum')"><div class="sb-icon">🔥</div><div class="sb-lbl">RPM Momentum</div></div>
-    </div>
-
-    <div class="sb-sec">Analytics</div>
-    <div class="sb-nav">
+      <div class="sb-item" id="nav-performance" onclick="go('performance')"><div class="sb-icon">📊</div><div class="sb-lbl">Performance</div></div>
+      <div class="sb-item" id="nav-client-gap" onclick="go('client-gap')"><div class="sb-icon">🎯</div><div class="sb-lbl">Client Gap Analysis</div></div>
       <div class="sb-item" id="nav-alerts" onclick="go('alerts')"><div class="sb-icon">🔔</div><div class="sb-lbl">Alerts</div><div class="sb-badge r">3</div></div>
-      <div class="sb-item" id="nav-compounding" onclick="go('compounding')"><div class="sb-icon">📈</div><div class="sb-lbl">Compounding Gap</div></div>
-      <div class="sb-item" id="nav-performance" onclick="go('performance')"><div class="sb-icon">🏆</div><div class="sb-lbl">Performance</div></div>
     </div>
 
     <div class="sb-sec">System</div>
@@ -2136,6 +2130,12 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--g
 <!-- ══ PERFORMANCE ══ -->
 <div class="screen" id="screen-performance" style="display:none;padding:0;height:calc(100vh - var(--topbar));overflow:hidden;flex-direction:column;">
 
+  <!-- MODE TAB BAR -->
+  <div id="pf-mode-bar" style="height:36px;display:flex;align-items:center;gap:0;border-bottom:1px solid var(--border);flex-shrink:0;background:rgba(0,0,0,0.2);padding:0 16px;">
+    <button id="pf-mode-comp" onclick="pfSetMode('competitors')" style="padding:6px 14px;font-family:var(--mono);font-size:9px;letter-spacing:0.1em;background:rgba(212,175,69,0.12);color:var(--gold);border:none;border-bottom:2px solid var(--gold);cursor:pointer;font-weight:700;text-transform:uppercase;">HPC vs Competitors</button>
+    <button id="pf-mode-strat" onclick="pfSetMode('strategies')" style="padding:6px 14px;font-family:var(--mono);font-size:9px;letter-spacing:0.1em;background:transparent;color:var(--text4);border:none;border-bottom:2px solid transparent;cursor:pointer;font-weight:400;text-transform:uppercase;">Strategy Performance</button>
+  </div>
+
   <!-- TOP CONTROL BAR -->
   <div id="pf-topbar" style="height:52px;display:flex;align-items:center;gap:10px;padding:0 16px;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--bg2);">
     <span style="font-family:var(--mono);font-size:11px;font-weight:700;color:var(--gold);letter-spacing:0.12em;text-transform:uppercase;flex-shrink:0;">Performance</span>
@@ -2218,6 +2218,142 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--g
       <div id="pf-metrics-body" style="flex:1;overflow:hidden;"></div>
     </div>
 
+  </div>
+
+  <!-- ── Mode 2: Strategy Performance ──────────────────────────────── -->
+  <div id="pf-strat-panel" style="display:none;flex:1;min-height:0;overflow:hidden;flex-direction:column;">
+    <div style="display:flex;flex:1;min-height:0;overflow:hidden;">
+      <!-- Left: CAGR chart + metrics table -->
+      <div style="flex:1;display:flex;flex-direction:column;min-height:0;border-right:1px solid var(--border);">
+        <div id="pf-strat-chart" style="flex:0 0 260px;padding:12px 16px 0;overflow:hidden;"></div>
+        <div style="flex:1;overflow-y:auto;padding:4px 0;" id="pf-strat-table-wrap"></div>
+      </div>
+      <!-- Right: Strategy list -->
+      <div style="width:300px;flex-shrink:0;display:flex;flex-direction:column;min-height:0;position:relative;">
+        <div style="padding:8px 12px 4px;border-bottom:1px solid var(--border);flex-shrink:0;">
+          <span style="font-family:var(--mono);font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text4);">Strategy List</span>
+        </div>
+        <div id="pf-strat-list" style="flex:1;overflow-y:auto;"></div>
+        <div style="position:absolute;bottom:0;left:0;right:0;height:40px;background:linear-gradient(to bottom,transparent,rgba(13,18,28,0.95));pointer-events:none;display:flex;align-items:flex-end;justify-content:center;padding-bottom:5px;">
+          <span style="font-family:monospace;font-size:9px;color:rgba(255,255,255,0.2);">↓ scroll</span>
+        </div>
+      </div>
+    </div>
+    <!-- Sector momentum strip -->
+    <div id="pf-sector-strip" style="height:160px;flex-shrink:0;border-top:1px solid var(--border);overflow:hidden;padding:8px 16px;display:flex;flex-direction:column;gap:6px;">
+      <div style="font-family:var(--mono);font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text4);">Sector Momentum — Current State</div>
+      <div id="pf-sector-bars" style="flex:1;display:flex;gap:6px;align-items:flex-end;overflow-x:auto;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CLIENT GAP ANALYSIS ══ -->
+<div class="screen" id="screen-client-gap" style="display:none;padding:0;height:calc(100vh - var(--topbar));overflow:hidden;flex-direction:column;">
+
+  <!-- Top Bar -->
+  <div style="height:52px;display:flex;align-items:center;gap:12px;padding:0 20px;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--bg2);">
+    <span style="font-family:var(--mono);font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text4);">Client Gap Analysis</span>
+    <div style="width:1px;height:20px;background:var(--border);"></div>
+    <input id="cga-capital" type="number" value="1000000" step="100000" oninput="cgaRender()" style="width:130px;padding:4px 8px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:4px;color:var(--text2);font-family:var(--mono);font-size:10px;" placeholder="Capital ($)"/>
+    <input id="cga-client-return" type="number" value="8" step="0.5" oninput="cgaRender()" style="width:90px;padding:4px 8px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:4px;color:var(--text2);font-family:var(--mono);font-size:10px;" placeholder="Client CAGR %"/>
+    <span style="font-family:var(--mono);font-size:9px;color:var(--text4);">client CAGR %</span>
+    <div style="width:1px;height:20px;background:var(--border);"></div>
+    <select id="cga-period" onchange="cgaRender()" style="padding:4px 8px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:4px;color:var(--text2);font-family:var(--mono);font-size:10px;">
+      <option value="1">1 Year</option>
+      <option value="3">3 Years</option>
+      <option value="5" selected>5 Years</option>
+      <option value="10">10 Years</option>
+      <option value="20">20 Years</option>
+    </select>
+    <input id="cga-mgmt-fee" type="number" value="1.5" step="0.1" oninput="cgaRender()" style="width:70px;padding:4px 8px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:4px;color:var(--text2);font-family:var(--mono);font-size:10px;" placeholder="Mgmt %"/>
+    <span style="font-family:var(--mono);font-size:9px;color:var(--text4);">mgmt fee %</span>
+    <input id="cga-perf-fee" type="number" value="20" step="1" oninput="cgaRender()" style="width:70px;padding:4px 8px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:4px;color:var(--text2);font-family:var(--mono);font-size:10px;" placeholder="Perf %"/>
+    <span style="font-family:var(--mono);font-size:9px;color:var(--text4);">performance fee %</span>
+  </div>
+
+  <!-- Main content -->
+  <div style="display:flex;flex:1;min-height:0;overflow:hidden;">
+
+    <!-- Left: Portfolio Projection (dominant) -->
+    <div style="flex:1;display:flex;flex-direction:column;min-height:0;border-right:1px solid var(--border);padding:20px 24px;">
+
+      <div style="font-family:var(--mono);font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text4);margin-bottom:16px;">Portfolio Projection</div>
+
+      <!-- Current Portfolio -->
+      <div style="margin-bottom:20px;padding:16px;background:rgba(255,255,255,0.02);border-radius:6px;border-left:3px solid var(--text4);">
+        <div style="font-family:var(--mono);font-size:9px;color:var(--text4);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.1em;">Current Portfolio</div>
+        <div id="cga-current-val" style="font-family:var(--mono);font-size:32px;font-weight:700;color:var(--text2);">$1,080,000</div>
+        <div id="cga-current-meta" style="font-family:var(--mono);font-size:10px;color:var(--text4);margin-top:4px;">8.0% CAGR · 5 years</div>
+      </div>
+
+      <!-- HPC11 -->
+      <div style="margin-bottom:16px;padding:16px;background:rgba(34,197,94,0.05);border-radius:6px;border-left:3px solid #22C55E;">
+        <div style="font-family:var(--mono);font-size:9px;color:#22C55E;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.1em;">HPC11 — HARPIAN Core Level 11</div>
+        <div id="cga-hpc11-val" style="font-family:var(--mono);font-size:32px;font-weight:700;color:#22C55E;">$1,762,000</div>
+        <div id="cga-hpc11-gain" style="font-family:var(--mono);font-size:13px;font-weight:600;color:#22C55E;margin-top:4px;">+ $682,000 advantage · +63.1% outperformance</div>
+        <div id="cga-hpc11-meta" style="font-family:var(--mono);font-size:10px;color:rgba(34,197,94,0.6);margin-top:2px;">13.0% CAGR · 5 years</div>
+      </div>
+
+      <!-- HPC22 -->
+      <div style="padding:16px;background:rgba(59,130,246,0.05);border-radius:6px;border-left:3px solid #3B82F6;">
+        <div style="font-family:var(--mono);font-size:9px;color:#3B82F6;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.1em;">HPC22 — HARPIAN Core Level 22</div>
+        <div id="cga-hpc22-val" style="font-family:var(--mono);font-size:32px;font-weight:700;color:#3B82F6;">$6,521,000</div>
+        <div id="cga-hpc22-gain" style="font-family:var(--mono);font-size:13px;font-weight:600;color:#3B82F6;margin-top:4px;">+ $5,441,000 advantage · +504.0% outperformance</div>
+        <div id="cga-hpc22-meta" style="font-family:var(--mono);font-size:10px;color:rgba(59,130,246,0.6);margin-top:2px;">52.1% CAGR · 5 years</div>
+      </div>
+
+    </div>
+
+    <!-- Right: FO Revenue Analysis -->
+    <div style="width:380px;flex-shrink:0;display:flex;flex-direction:column;min-height:0;padding:20px 24px;background:rgba(0,0,0,0.15);">
+
+      <div style="font-family:var(--mono);font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text4);margin-bottom:16px;">Family Office Revenue Analysis</div>
+
+      <!-- HPC11 FO Revenue -->
+      <div style="margin-bottom:16px;padding:14px;background:rgba(34,197,94,0.04);border-radius:6px;border:1px solid rgba(34,197,94,0.15);">
+        <div style="font-family:var(--mono);font-size:9px;color:#22C55E;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.1em;">HPC11 — Revenue Opportunity</div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+          <span style="font-family:var(--mono);font-size:10px;color:var(--text4);">Management Fee</span>
+          <span id="cga-hpc11-mgmt" style="font-family:var(--mono);font-size:10px;color:#22C55E;">+$10,230</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+          <span style="font-family:var(--mono);font-size:10px;color:var(--text4);">Performance Fee</span>
+          <span id="cga-hpc11-perf" style="font-family:var(--mono);font-size:10px;color:#22C55E;">+$136,400</span>
+        </div>
+        <div style="border-top:1px solid rgba(34,197,94,0.2);padding-top:8px;display:flex;justify-content:space-between;">
+          <span style="font-family:var(--mono);font-size:10px;color:#22C55E;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;">Lost Revenue</span>
+          <span id="cga-hpc11-total" style="font-family:var(--mono);font-size:14px;font-weight:700;color:#22C55E;">+$146,630</span>
+        </div>
+      </div>
+
+      <!-- HPC22 FO Revenue -->
+      <div style="margin-bottom:20px;padding:14px;background:rgba(59,130,246,0.04);border-radius:6px;border:1px solid rgba(59,130,246,0.15);">
+        <div style="font-family:var(--mono);font-size:9px;color:#3B82F6;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.1em;">HPC22 — Revenue Opportunity</div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+          <span style="font-family:var(--mono);font-size:10px;color:var(--text4);">Management Fee</span>
+          <span id="cga-hpc22-mgmt" style="font-family:var(--mono);font-size:10px;color:#3B82F6;">+$81,615</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+          <span style="font-family:var(--mono);font-size:10px;color:var(--text4);">Performance Fee</span>
+          <span id="cga-hpc22-perf" style="font-family:var(--mono);font-size:10px;color:#3B82F6;">+$1,088,200</span>
+        </div>
+        <div style="border-top:1px solid rgba(59,130,246,0.2);padding-top:8px;display:flex;justify-content:space-between;">
+          <span style="font-family:var(--mono);font-size:10px;color:#3B82F6;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;">Lost Revenue</span>
+          <span id="cga-hpc22-total" style="font-family:var(--mono);font-size:14px;font-weight:700;color:#3B82F6;">+$1,169,815</span>
+        </div>
+      </div>
+
+      <!-- Disclaimer -->
+      <div style="padding:10px 12px;background:rgba(255,255,255,0.02);border-radius:4px;border-left:2px solid var(--border);">
+        <div style="font-family:var(--mono);font-size:8px;color:var(--text4);line-height:1.6;">
+          This simulation uses HARPIAN historical CAGR data for HPC11 and HPC22.<br>
+          Results are hypothetical and do not constitute investment advice.<br>
+          Past performance does not guarantee future results.<br>
+          For internal use only — not to be shared with clients.
+        </div>
+      </div>
+
+    </div>
   </div>
 </div>
 
@@ -2706,7 +2842,7 @@ function renderSectorContextBanner(id, target, count) {
 }
 
 // ═══════════════ NAVIGATION ═══════════════
-const SCREEN_NAMES = {dashboard:'Dashboard',market:'Market Intelligence','market-trends':'Market Trends','social-radar':'Social Media Radar','stock-analysis':'Stock Analysis',clients:'Clients Overview','client-profile':'Client Profile',onboarding:'Onboarding',upload:'Portfolio Upload',hpc:'HPC Strategies','sector-momentum':'Sector Momentum','rpm-momentum':'RPM Momentum',alerts:'Alerts',compounding:'Compounding Gap',performance:'Performance',integrations:'Integrations','fo-profile':'Settings / FO Profile'};
+const SCREEN_NAMES = {dashboard:'Dashboard',market:'Market Intelligence','market-trends':'Market Trends','social-radar':'Social Media Radar','stock-analysis':'Stock Analysis',clients:'Clients Overview','client-profile':'Client Profile',onboarding:'Onboarding',upload:'Portfolio Upload',hpc:'HPC Strategies','sector-momentum':'Sector Momentum','rpm-momentum':'RPM Momentum',alerts:'Alerts',compounding:'Compounding Gap',performance:'Performance','client-gap':'Client Gap Analysis',integrations:'Integrations','fo-profile':'Settings / FO Profile'};
 
 function go(id, opts = {}) {
   if(id === 'clients' && !opts.keepClient) {
@@ -2735,6 +2871,7 @@ function go(id, opts = {}) {
   if(id === 'sector-momentum') renderSectorMomentum();
   if(id === 'rpm-momentum') renderRPM();
   if(id === 'performance') renderPerformance();
+  if(id === 'client-gap') cgaRender();
   if(id === 'hpc') setTimeout(hsiInit, 80);
 }
 
@@ -3607,6 +3744,22 @@ function pfRender() { renderPerformance(); }
 function renderPerformance() {
   pfGetDB();
 
+  // Ensure mode panels reflect current pfMode
+  const _mainArea = document.querySelector('#screen-performance > div:nth-child(3)');
+  const _bottomStrip = document.querySelector('#screen-performance > div:nth-child(4)');
+  const _stratPanel = document.getElementById('pf-strat-panel');
+  if (pfMode === 'strategies') {
+    if (_mainArea) _mainArea.style.display = 'none';
+    if (_bottomStrip) _bottomStrip.style.display = 'none';
+    if (_stratPanel) _stratPanel.style.display = 'flex';
+    pfDrawStratPanel();
+    return;
+  } else {
+    if (_mainArea) _mainArea.style.display = 'flex';
+    if (_bottomStrip) _bottomStrip.style.display = 'flex';
+    if (_stratPanel) _stratPanel.style.display = 'none';
+  }
+
   // Period buttons
   const pbEl = document.getElementById('pf-period-btns');
   if (pbEl) {
@@ -3992,6 +4145,158 @@ function pfToggleComp(id) {
 }
 function pfFilterPanel() { pfDrawRightPanel(); }
 
+// ─── Mode control ─────────────────────────────────────────────────────────────
+let pfMode = 'competitors';
+let pfStratSelected = new Set();
+
+function pfSetMode(mode) {
+  pfMode = mode;
+  const b1 = document.getElementById('pf-mode-comp');
+  const b2 = document.getElementById('pf-mode-strat');
+  const mainArea = document.querySelector('#screen-performance > div:nth-child(3)');
+  const bottomStrip = document.querySelector('#screen-performance > div:nth-child(4)');
+  const stratPanel = document.getElementById('pf-strat-panel');
+  if (b1) { b1.style.background = mode==='competitors'?'rgba(212,175,69,0.12)':'transparent'; b1.style.color = mode==='competitors'?'var(--gold)':'var(--text4)'; b1.style.borderBottom = mode==='competitors'?'2px solid var(--gold)':'2px solid transparent'; b1.style.fontWeight = mode==='competitors'?'700':'400'; }
+  if (b2) { b2.style.background = mode==='strategies'?'rgba(212,175,69,0.12)':'transparent'; b2.style.color = mode==='strategies'?'var(--gold)':'var(--text4)'; b2.style.borderBottom = mode==='strategies'?'2px solid var(--gold)':'2px solid transparent'; b2.style.fontWeight = mode==='strategies'?'700':'400'; }
+  if (mode === 'competitors') {
+    if (mainArea) mainArea.style.display = 'flex';
+    if (bottomStrip) bottomStrip.style.display = 'flex';
+    if (stratPanel) stratPanel.style.display = 'none';
+  } else {
+    if (mainArea) mainArea.style.display = 'none';
+    if (bottomStrip) bottomStrip.style.display = 'none';
+    if (stratPanel) { stratPanel.style.display = 'flex'; pfDrawStratPanel(); }
+  }
+}
+
+function pfStratToggle(id) {
+  if (pfStratSelected.has(id)) pfStratSelected.clear();
+  else { pfStratSelected.clear(); pfStratSelected.add(id); }
+  pfDrawStratPanel();
+}
+
+function pfDrawStratPanel() {
+  const db = pfHPC === 'HPC11' ? (typeof HPC11_STRATEGIES !== 'undefined' ? HPC11_STRATEGIES : []) : (typeof HPC22_STRATEGIES !== 'undefined' ? HPC22_STRATEGIES : []);
+  pfDrawStratList(db);
+  pfDrawStratChart(db);
+  pfDrawStratTable(db);
+  pfDrawSectorStrip();
+}
+
+function pfDrawStratList(db) {
+  const el = document.getElementById('pf-strat-list');
+  if (!el) return;
+  let html = '';
+  for (const s of db) {
+    const on = pfStratSelected.has(s.id);
+    const cagr = s.cagr_all || s.cagr_5y || '—';
+    const dd = s.maxdd || '—';
+    html += '<div onclick="pfStratToggle(\'' + s.id + '\')" style="padding:9px 12px;border-bottom:1px solid rgba(255,255,255,0.03);cursor:pointer;border-left:2px solid ' + (on?'var(--gold)':'transparent') + ';background:' + (on?'rgba(212,175,69,0.06)':'transparent') + ';">'
+      + '<div style="font-family:var(--mono);font-size:10px;color:' + (on?'var(--gold)':'var(--text2)') + ';font-weight:' + (on?'600':'400') + ';white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + s.label + '</div>'
+      + '<div style="font-family:var(--mono);font-size:9px;color:var(--text3);margin-top:2px;">'
+      + 'CAGR <span style="color:' + (parseFloat(cagr)>=0?'var(--green)':'var(--red)') + ';">' + (cagr !== '—' ? (parseFloat(cagr)>=0?'+':'') + parseFloat(cagr).toFixed(1) + '%' : '—') + '</span>'
+      + ' &nbsp;·&nbsp; DD <span style="color:var(--red);">' + (dd !== '—' ? '-' + Math.abs(parseFloat(dd)).toFixed(0) + '%' : '—') + '</span>'
+      + (s.sharpe ? ' &nbsp;·&nbsp; Sh <span style="color:var(--text3);">' + parseFloat(s.sharpe).toFixed(2) + '</span>' : '')
+      + '</div>'
+      + '</div>';
+  }
+  el.innerHTML = html || '<div style="padding:12px;font-family:var(--mono);font-size:10px;color:var(--text4);">No strategies found.</div>';
+}
+
+function pfDrawStratChart(db) {
+  const el = document.getElementById('pf-strat-chart');
+  if (!el || !db.length) return;
+  const periods = ['ytd','cagr_1y','cagr_3y','cagr_5y','cagr_all'];
+  const labels  = ['YTD','1Y','3Y','5Y','All'];
+  const selected = db.filter(s => pfStratSelected.has(s.id));
+  const display = selected.length ? selected : db.slice(0, 6);
+  const W = el.offsetWidth || 600, H = 220;
+  const n = display.length, barW = Math.min(36, (W - 80) / (n * periods.length + n));
+  const groupW = barW * periods.length + 4;
+  const colors = ['#22C55E','#3B82F6','#F59E0B','#E879F9','#22D3EE','#FB923C'];
+  let allVals = [];
+  for (const s of display) for (const p of periods) { const v = parseFloat(s[p]); if (!isNaN(v)) allVals.push(v); }
+  const maxV = Math.max(...allVals.filter(v=>v>0), 10);
+  const minV = Math.min(...allVals.filter(v=>v<0), 0);
+  const padT=20,padB=28,padL=4,padR=4;
+  const cH = H - padT - padB;
+  const zeroY = padT + cH * maxV / (maxV - minV);
+  function ySc(v) { return padT + cH * (maxV - v) / (maxV - minV); }
+  let out = '<svg xmlns="http://www.w3.org/2000/svg" width="' + W + '" height="' + H + '">';
+  out += '<line x1="' + padL + '" y1="' + zeroY.toFixed(1) + '" x2="' + (W-padR) + '" y2="' + zeroY.toFixed(1) + '" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>';
+  let gx = padL + 10;
+  for (let si = 0; si < display.length; si++) {
+    const s = display[si];
+    const color = colors[si % colors.length];
+    for (let pi = 0; pi < periods.length; pi++) {
+      const v = parseFloat(s[periods[pi]]);
+      if (isNaN(v)) { gx += barW + 1; continue; }
+      const y1 = ySc(Math.max(v, 0)), y2 = ySc(Math.min(v, 0));
+      out += '<rect x="' + gx.toFixed(1) + '" y="' + y1.toFixed(1) + '" width="' + (barW-1) + '" height="' + Math.max(1, Math.abs(y2-y1)).toFixed(1) + '" fill="' + color + '" opacity="0.75" rx="1"/>';
+      gx += barW + 1;
+    }
+    out += '<text x="' + (gx - groupW/2).toFixed(1) + '" y="' + (H-8) + '" text-anchor="middle" font-family="monospace" font-size="8" fill="' + color + '">' + (s.label||s.id).substring(0,10) + '</text>';
+    gx += 8;
+  }
+  let lx = padL + 4;
+  for (let pi = 0; pi < labels.length; pi++) {
+    out += '<rect x="' + lx + '" y="4" width="8" height="8" fill="rgba(255,255,255,' + (0.2 + pi*0.05) + ')"/>';
+    out += '<text x="' + (lx+10) + '" y="12" font-family="monospace" font-size="8" fill="rgba(255,255,255,0.4)">' + labels[pi] + '</text>';
+    lx += 36;
+  }
+  out += '</svg>';
+  el.innerHTML = out;
+}
+
+function pfDrawStratTable(db) {
+  const el = document.getElementById('pf-strat-table-wrap');
+  if (!el) return;
+  const thS = 'padding:5px 8px;text-align:right;font-family:var(--mono);font-size:8px;color:var(--text4);letter-spacing:0.08em;text-transform:uppercase;white-space:nowrap;';
+  const tdS = function(c) { return 'padding:4px 8px;text-align:right;font-family:var(--mono);font-size:10px;color:' + c + ';white-space:nowrap;'; };
+  let html = '<table style="width:100%;border-collapse:collapse;">'
+    + '<thead><tr style="border-bottom:1px solid var(--border);">'
+    + '<th style="' + thS + 'text-align:left;">Strategy</th>'
+    + ['CAGR All','5Y','3Y','1Y','YTD','MaxDD','Sharpe'].map(h=>'<th style="' + thS + '">' + h + '</th>').join('')
+    + '</tr></thead><tbody>';
+  for (const s of db) {
+    const on = pfStratSelected.has(s.id);
+    const ca = parseFloat(s.cagr_all), c5 = parseFloat(s.cagr_5y), c3 = parseFloat(s.cagr_3y), c1 = parseFloat(s.cagr_1y), ytd = parseFloat(s.ytd);
+    const dd = parseFloat(s.maxdd), sh = parseFloat(s.sharpe);
+    function fmtP(v) { return isNaN(v) ? '—' : (v>=0?'+':'')+v.toFixed(1)+'%'; }
+    html += '<tr style="border-bottom:1px solid rgba(255,255,255,0.03);' + (on?'background:rgba(212,175,69,0.05);border-left:2px solid var(--gold);':'') + '">'
+      + '<td style="padding:4px 8px;font-family:var(--mono);font-size:9px;color:' + (on?'var(--gold)':'var(--text2)') + ';white-space:nowrap;max-width:140px;overflow:hidden;text-overflow:ellipsis;">' + (s.label||s.id) + '</td>'
+      + '<td style="' + tdS(ca>=0?'var(--green)':'var(--red)') + '">' + fmtP(ca) + '</td>'
+      + '<td style="' + tdS(c5>=0?'var(--green)':'var(--red)') + '">' + fmtP(c5) + '</td>'
+      + '<td style="' + tdS(c3>=0?'var(--green)':'var(--red)') + '">' + fmtP(c3) + '</td>'
+      + '<td style="' + tdS(c1>=0?'var(--green)':'var(--red)') + '">' + fmtP(c1) + '</td>'
+      + '<td style="' + tdS(ytd>=0?'var(--green)':'var(--red)') + '">' + fmtP(ytd) + '</td>'
+      + '<td style="' + tdS('var(--red)') + '">' + (isNaN(dd)?'—':'-'+Math.abs(dd).toFixed(0)+'%') + '</td>'
+      + '<td style="' + tdS('var(--text3)') + '">' + (isNaN(sh)?'—':sh.toFixed(2)) + '</td>'
+      + '</tr>';
+  }
+  html += '</tbody></table>';
+  el.innerHTML = html;
+}
+
+function pfDrawSectorStrip() {
+  const el = document.getElementById('pf-sector-bars');
+  if (!el || typeof SECTORS === 'undefined') return;
+  const items = typeof SECTORS !== 'undefined' ? SECTORS : [];
+  let html = '';
+  for (const s of items.slice(0, 11)) {
+    const score = s.score || 0;
+    const color = score > 60 ? 'var(--green)' : score > 40 ? 'var(--gold)' : 'var(--red)';
+    const label = score > 60 ? '▲' : score > 40 ? '●' : '▼';
+    const barH = Math.max(8, Math.round(score * 0.9));
+    html += '<div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;min-width:40px;">'
+      + '<span style="font-family:var(--mono);font-size:8px;color:' + color + ';">' + label + '</span>'
+      + '<div style="height:' + barH + 'px;width:100%;background:' + color + ';opacity:0.7;border-radius:2px;max-width:28px;"></div>'
+      + '<span style="font-family:var(--mono);font-size:7px;color:var(--text4);text-align:center;white-space:nowrap;">' + (s.ticker||s.name||'').substring(0,4) + '</span>'
+      + '</div>';
+  }
+  el.innerHTML = html || '<span style="font-family:var(--mono);font-size:9px;color:var(--text4);">Loading sector data...</span>';
+}
+
 // ─── Utility ─────────────────────────────────────────────────────────────────
 function pfHexRgb(hex) {
   const h = hex.replace('#','');
@@ -3999,6 +4304,84 @@ function pfHexRgb(hex) {
   const g = parseInt(h.substring(2,4),16);
   const b = parseInt(h.substring(4,6),16);
   return r + ',' + g + ',' + b;
+}
+
+// ─── Client Gap Analysis ──────────────────────────────────────────────────────
+function cgaFmt(v) {
+  const abs = Math.abs(v);
+  const sign = v < 0 ? '-' : '+';
+  if (abs >= 1e6) return sign + '$' + (abs/1e6).toFixed(2) + 'M';
+  if (abs >= 1e3) return sign + '$' + Math.round(abs/1e3) + 'K';
+  return sign + '$' + Math.round(abs);
+}
+function cgaFmtAbs(v) {
+  if (v >= 1e6) return '$' + (v/1e6).toFixed(2) + 'M';
+  if (v >= 1e3) return '$' + Math.round(v/1e3) + 'K';
+  return '$' + Math.round(v);
+}
+
+function cgaRender() {
+  const capital = parseFloat(document.getElementById('cga-capital').value) || 1000000;
+  const clientRate = parseFloat(document.getElementById('cga-client-return').value) || 8;
+  const years = parseInt(document.getElementById('cga-period').value) || 5;
+  const mgmtPct = parseFloat(document.getElementById('cga-mgmt-fee').value) || 1.5;
+  const perfPct = parseFloat(document.getElementById('cga-perf-fee').value) || 20;
+
+  const db = typeof HARPIAN_PERF_DB !== 'undefined' ? HARPIAN_PERF_DB : [];
+  const hpc11Asset = db.find(a => a.id === 'HPC11');
+  const hpc22Asset = db.find(a => a.id === 'HPC22');
+
+  function getCagr(asset, yrs) {
+    if (!asset) return 13;
+    const m = asset.metrics;
+    if (yrs <= 1) return m.cagr_1y || m.cagr || 13;
+    if (yrs <= 3) return m.cagr_3y || m.cagr || 13;
+    if (yrs <= 5) return m.cagr_5y || m.cagr || 13;
+    if (yrs <= 10) return m.cagr_10y || m.cagr || 13;
+    return m.cagr || 13;
+  }
+
+  const hpc11Cagr = getCagr(hpc11Asset, years);
+  const hpc22Cagr = getCagr(hpc22Asset, years);
+
+  const currentFinal = capital * Math.pow(1 + clientRate/100, years);
+  const hpc11Final = capital * Math.pow(1 + hpc11Cagr/100, years);
+  const hpc22Final = capital * Math.pow(1 + hpc22Cagr/100, years);
+
+  const hpc11Gain = hpc11Final - currentFinal;
+  const hpc22Gain = hpc22Final - currentFinal;
+  const hpc11OutPct = ((hpc11Final / currentFinal) - 1) * 100;
+  const hpc22OutPct = ((hpc22Final / currentFinal) - 1) * 100;
+
+  const hpc11MgmtFee = hpc11Gain * mgmtPct / 100;
+  const hpc22MgmtFee = hpc22Gain * mgmtPct / 100;
+  const hpc11AnnualOut = (hpc11Final - currentFinal) / years;
+  const hpc22AnnualOut = (hpc22Final - currentFinal) / years;
+  const hpc11PerfFee = Math.max(0, hpc11AnnualOut) * perfPct / 100;
+  const hpc22PerfFee = Math.max(0, hpc22AnnualOut) * perfPct / 100;
+
+  const periodLabel = years === 1 ? '1 year' : years + ' years';
+
+  const set = function(id, v) { const el = document.getElementById(id); if (el) el.innerHTML = v; };
+
+  set('cga-current-val', cgaFmtAbs(currentFinal));
+  set('cga-current-meta', clientRate.toFixed(1) + '% CAGR · ' + periodLabel);
+
+  set('cga-hpc11-val', cgaFmtAbs(hpc11Final));
+  set('cga-hpc11-gain', (hpc11Gain >= 0 ? '+ ' : '- ') + cgaFmtAbs(Math.abs(hpc11Gain)) + ' advantage · ' + (hpc11OutPct >= 0 ? '+' : '') + hpc11OutPct.toFixed(1) + '% outperformance');
+  set('cga-hpc11-meta', hpc11Cagr.toFixed(1) + '% CAGR · ' + periodLabel);
+
+  set('cga-hpc22-val', cgaFmtAbs(hpc22Final));
+  set('cga-hpc22-gain', (hpc22Gain >= 0 ? '+ ' : '- ') + cgaFmtAbs(Math.abs(hpc22Gain)) + ' advantage · ' + (hpc22OutPct >= 0 ? '+' : '') + hpc22OutPct.toFixed(1) + '% outperformance');
+  set('cga-hpc22-meta', hpc22Cagr.toFixed(1) + '% CAGR · ' + periodLabel);
+
+  set('cga-hpc11-mgmt', cgaFmt(hpc11MgmtFee));
+  set('cga-hpc11-perf', cgaFmt(hpc11PerfFee));
+  set('cga-hpc11-total', cgaFmt(hpc11MgmtFee + hpc11PerfFee));
+
+  set('cga-hpc22-mgmt', cgaFmt(hpc22MgmtFee));
+  set('cga-hpc22-perf', cgaFmt(hpc22PerfFee));
+  set('cga-hpc22-total', cgaFmt(hpc22MgmtFee + hpc22PerfFee));
 }
 
 // ═══════════════ MARKET TREND GAUGE (CANVAS) ═══════════════
