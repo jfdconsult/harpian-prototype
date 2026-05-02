@@ -2134,59 +2134,90 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--g
 
 <!-- ══ PERFORMANCE ══ -->
 <div class="screen" id="screen-performance">
-  <div class="mb16"><div class="kicker">Analytics · Strategy Intelligence</div><div class="page-title">Performance Comparison</div><div class="page-sub">Dados reais AlphaDroid · HPC11 (11 estratégias) · HPC22 (22 sub-estratégias) · Compare vs S&amp;P 500</div></div>
-  <div style="display:flex;gap:12px;align-items:flex-start;">
-    <!-- Left: strategy selector -->
-    <div style="width:210px;flex-shrink:0;background:var(--panel);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;">
-      <!-- Tab toggle HPC11 / HPC22 — exclusivo (radio) -->
-      <div style="display:flex;border-bottom:2px solid var(--border);">
-        <button id="perf-tab-hpc11" onclick="perfSetTab('hpc11')" style="flex:1;padding:10px 4px;background:rgba(212,175,69,0.10);border:none;border-right:1px solid var(--border);border-bottom:2px solid var(--gold);margin-bottom:-2px;font-family:var(--mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);cursor:pointer;font-weight:700;">HPC11</button>
-        <button id="perf-tab-hpc22" onclick="perfSetTab('hpc22')" style="flex:1;padding:10px 4px;background:transparent;border:none;border-bottom:2px solid transparent;margin-bottom:-2px;font-family:var(--mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text4);cursor:pointer;">HPC22</button>
-      </div>
-      <div id="perf-strat-list" style="overflow-y:auto;max-height:460px;"></div>
+  <!-- Header -->
+  <div class="mb16" style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;">
+    <div>
+      <div class="kicker">Analytics · Conviction Engine</div>
+      <div class="page-title">Performance Comparison</div>
+      <div class="page-sub">Institutional risk-return analysis · HPC11 &amp; HPC22 vs global benchmarks · All returns CAGR · Data: AlphaDroid + public sources</div>
     </div>
-    <!-- Right: controls + chart + metrics + year table -->
-    <div style="flex:1;display:flex;flex-direction:column;gap:10px;min-width:0;">
-      <!-- Control bar -->
-      <div class="panel" style="padding:10px 14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-        <div style="display:flex;gap:4px;">
-          <button class="tb-btn" id="perf-tf-5y" onclick="perfSetTf('5y')">5A</button>
-          <button class="tb-btn" id="perf-tf-10y" onclick="perfSetTf('10y')">10A</button>
-          <button class="tb-btn au" id="perf-tf-all" onclick="perfSetTf('all')">Tudo</button>
-        </div>
-        <div style="margin-left:auto;display:flex;align-items:center;gap:8px;">
-          <span style="font-family:var(--mono);font-size:9px;color:var(--text4);">vs SPY</span>
-          <span id="perf-spy-badge" style="font-family:var(--mono);font-size:10px;color:var(--text3);">—</span>
-        </div>
-        <div style="font-family:var(--mono);font-size:9px;color:var(--text4);">Last: <span id="perf-last-trade" style="color:var(--text2);">—</span></div>
-        <div style="font-family:var(--mono);font-size:9px;color:var(--text4);">Score: <span id="perf-score-badge" style="color:var(--gold);">—</span></div>
-      </div>
-      <!-- Chart -->
-      <div class="panel" style="padding:0;overflow:hidden;">
-        <div style="padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-          <span id="perf-chart-title" style="font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text2);">—</span>
-          <div style="display:flex;gap:14px;margin-left:auto;font-family:var(--mono);font-size:9px;color:var(--text4);">
-            <span style="display:flex;align-items:center;gap:5px;"><span style="display:inline-block;width:16px;height:2px;background:var(--gold);"></span><span id="perf-selected-label">Strategy</span></span>
-            <span style="display:flex;align-items:center;gap:5px;"><span style="display:inline-block;width:16px;height:2px;background:rgba(255,255,255,0.25);border-top:2px dashed rgba(255,255,255,0.25);"></span>SPY</span>
-          </div>
-        </div>
-        <div style="padding:12px 14px 8px;">
-          <svg id="perf-chart-svg" viewBox="0 0 800 200" width="100%" height="200" preserveAspectRatio="none" style="display:block;"></svg>
-        </div>
-      </div>
-      <!-- Metrics row -->
-      <div class="panel" style="padding:12px 16px;">
-        <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:12px;margin-bottom:12px;" id="perf-metrics"></div>
-        <!-- Year-by-year table -->
-        <div style="border-top:1px solid var(--border);padding-top:12px;">
-          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text4);margin-bottom:8px;">Retorno por Ano vs S&amp;P 500</div>
-          <div id="perf-year-table" style="display:flex;flex-wrap:wrap;gap:4px;"></div>
-        </div>
-        <div style="margin-top:10px;font-family:var(--mono);font-size:9px;color:var(--text4);line-height:1.65;border-top:1px solid var(--border);padding-top:8px;">
-          Dados históricos refletem performance backtestada do AlphaDroid. Performance passada não garante resultados futuros. · Uso educacional e informativo apenas — não constitui recomendação de investimento.
-        </div>
+    <button onclick="pv2ToggleFails()" id="pv2-fails-btn" style="flex-shrink:0;margin-top:4px;padding:9px 16px;background:rgba(255,77,79,0.08);border:1px solid rgba(255,77,79,0.3);border-radius:5px;font-family:var(--mono);font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:#FF4D4F;cursor:pointer;">&#9888; Where Your Portfolio Fails</button>
+  </div>
+
+  <!-- Comparator selector -->
+  <div id="pv2-comparator" class="panel" style="margin-bottom:10px;padding:10px 14px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;"></div>
+
+  <!-- CAGR Strip -->
+  <div id="pv2-cagr-strip" style="display:flex;gap:8px;margin-bottom:10px;"></div>
+
+  <!-- Hero Chart -->
+  <div class="panel" style="margin-bottom:10px;padding:0;overflow:hidden;">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px 8px;border-bottom:1px solid var(--border);">
+      <div style="display:flex;gap:4px;" id="pv2-tf-btns"></div>
+      <div style="display:flex;gap:6px;align-items:center;">
+        <button onclick="pv2SetScale()" id="pv2-scale-btn" style="padding:4px 10px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:4px;font-family:var(--mono);font-size:9px;color:var(--text3);cursor:pointer;letter-spacing:0.08em;">LOG SCALE</button>
+        <button onclick="pv2SetMode()" id="pv2-mode-btn" style="padding:4px 10px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:4px;font-family:var(--mono);font-size:9px;color:var(--text3);cursor:pointer;letter-spacing:0.08em;">TOTAL GROWTH</button>
       </div>
     </div>
+    <div style="padding:4px 14px 10px;position:relative;">
+      <svg id="pv2-hero-svg" style="width:100%;display:block;" height="300"></svg>
+      <div id="pv2-tooltip" style="position:absolute;pointer-events:none;display:none;background:rgba(13,27,42,0.95);border:1px solid var(--border);border-radius:5px;padding:8px 10px;font-family:var(--mono);font-size:10px;color:var(--text2);min-width:160px;z-index:10;"></div>
+    </div>
+    <div id="pv2-legend" style="display:flex;gap:16px;flex-wrap:wrap;padding:6px 14px 10px;border-top:1px solid var(--border);"></div>
+  </div>
+
+  <!-- Middle row: Table + Scatter -->
+  <div style="display:flex;gap:10px;margin-bottom:10px;align-items:flex-start;">
+    <!-- Comparative Score Table -->
+    <div class="panel" style="flex:1.4;overflow:hidden;">
+      <div class="ph" style="display:flex;align-items:center;justify-content:space-between;">
+        <div class="pt">Risk-Return Comparative Score</div>
+        <div style="font-family:var(--mono);font-size:9px;color:var(--text4);letter-spacing:0.08em;">SORT BY &#8597;</div>
+      </div>
+      <div id="pv2-table-wrap" style="overflow-x:auto;"></div>
+    </div>
+    <!-- Risk vs Return Scatter -->
+    <div class="panel" style="flex:1;overflow:hidden;">
+      <div class="ph"><div class="pt">Risk vs Return &mdash; Scatter</div></div>
+      <div style="padding:8px 10px 10px;">
+        <svg id="pv2-scatter-svg" style="width:100%;display:block;" height="220"></svg>
+        <div style="font-family:var(--mono);font-size:9px;color:var(--text4);margin-top:6px;text-align:center;letter-spacing:0.06em;">X = Max Drawdown (%) &middot; Y = CAGR (%)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Drawdown Chart -->
+  <div class="panel" style="margin-bottom:10px;overflow:hidden;">
+    <div class="ph" style="display:flex;align-items:center;justify-content:space-between;">
+      <div class="pt">Drawdown Analysis</div>
+      <div style="font-family:var(--mono);font-size:9px;color:var(--text4);font-style:italic;">Capital protection matters most when compounding is at risk.</div>
+    </div>
+    <div style="padding:4px 14px 10px;">
+      <svg id="pv2-dd-svg" style="width:100%;display:block;" height="180"></svg>
+    </div>
+  </div>
+
+  <!-- What If Simulation -->
+  <div class="panel" style="margin-bottom:10px;overflow:hidden;">
+    <div class="ph" style="cursor:pointer;" onclick="pv2ToggleSim()">
+      <div class="pt">&#8599; What If You Had Allocated to HARPIAN?</div>
+    </div>
+    <div id="pv2-sim-body" style="padding:14px;display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end;"></div>
+  </div>
+
+  <!-- "Where Your Portfolio Fails" Drawer -->
+  <div id="pv2-fails-drawer" style="display:none;margin-bottom:10px;">
+    <div class="panel" style="border:1px solid rgba(255,77,79,0.25);overflow:hidden;">
+      <div class="ph" style="border-bottom-color:rgba(255,77,79,0.2);">
+        <div class="pt" style="color:#FF4D4F;">&#9888; Portfolio Diagnostic &mdash; Where the Gap Widens</div>
+      </div>
+      <div id="pv2-fails-body" style="padding:14px;display:grid;grid-template-columns:repeat(5,1fr);gap:10px;"></div>
+    </div>
+  </div>
+
+  <!-- Compliance footer -->
+  <div style="margin-top:6px;font-family:var(--mono);font-size:9px;color:var(--text4);line-height:1.7;text-align:center;">
+    Past performance, whether live or simulated, does not guarantee future results. Metrics are shown for analytical and comparative purposes only. &middot; DISC-001 &middot; DISC-002
   </div>
 </div>
 
@@ -3497,124 +3528,527 @@ function perfBuildSeries(years, tf) {
   return {stratSeries, spySeries, labels: ['Start', ...filtered.map(String)]};
 }
 
+// ─── Performance V2 — State ───
+const PV2_SPY_YR  = {2004:10.9,2005:4.9,2006:15.8,2007:5.5,2008:-37.0,2009:26.5,2010:15.1,2011:2.1,2012:16.0,2013:32.4,2014:13.7,2015:1.4,2016:12.0,2017:21.8,2018:-4.4,2019:31.5,2020:18.4,2021:28.7,2022:-18.2,2023:26.3,2024:25.0};
+const PV2_QQQ_YR  = {2004:10.5,2005:2.7,2006:7.5,2007:19.2,2008:-41.7,2009:54.7,2010:19.9,2011:3.3,2012:18.1,2013:36.6,2014:19.7,2015:9.5,2016:7.1,2017:32.7,2018:-0.1,2019:39.0,2020:48.6,2021:27.3,2022:-32.6,2023:53.8,2024:24.8};
+const PV2_SCHD_YR = {2012:12.1,2013:31.4,2014:14.8,2015:-4.0,2016:19.1,2017:18.2,2018:-5.6,2019:28.6,2020:3.0,2021:31.6,2022:3.5,2023:5.8,2024:22.9};
+const PV2_TLT_YR  = {2004:7.2,2005:6.8,2006:0.1,2007:9.5,2008:33.7,2009:-21.8,2010:9.3,2011:33.5,2012:2.6,2013:-13.3,2014:27.0,2015:-1.7,2016:1.1,2017:8.8,2018:1.7,2019:14.1,2020:18.0,2021:-4.6,2022:-31.2,2023:-4.7,2024:-8.1};
+const PV2_GLD_YR  = {2004:5.2,2005:10.2,2006:24.0,2007:31.6,2008:4.3,2009:27.3,2010:29.8,2011:8.6,2012:6.6,2013:-28.2,2014:-1.7,2015:-10.5,2016:8.6,2017:13.7,2018:-2.1,2019:18.4,2020:24.8,2021:-3.6,2022:-0.3,2023:13.1,2024:26.4};
+
+// BENCHMARK CATALOG
+const PV2_BENCHMARKS = {
+  'HPC11': { label:'HPC11', fullName:'HARPIAN Core Level 11', type:'Systematic ETF Rotation', color:'#C9A84C', lineWidth:3, locked:true,
+    cagr:{1:6.2, 3:20.4, 5:9.6, 10:15.8, 20:18.3}, maxdd:-24, vol:14, sharpe:0.88, sortino:1.20, risk:26, description:'Defensive multi-asset rotation' },
+  'HPC22': { label:'HPC22', fullName:'HARPIAN Core Level 22', type:'Systematic ETF Rotation', color:'#E8B84B', lineWidth:3, locked:true,
+    cagr:{1:null, 3:null, 5:39.0, 10:null, 20:17.0}, maxdd:-45, vol:22, sharpe:0.93, sortino:1.40, risk:39, description:'Aggressive sector rotation' },
+  'SPY':  { label:'S&P 500', fullName:'SPDR S&P 500 ETF Trust', type:'Passive Index ETF', color:'#6B7280', lineWidth:2, locked:true,
+    cagr:{1:17.6, 3:18.2, 5:14.4, 10:14.0, 20:10.1}, maxdd:-55, vol:18, sharpe:0.65, sortino:0.82, risk:55, annual:PV2_SPY_YR },
+  'QQQ':  { label:'QQQ', fullName:'Invesco NASDAQ-100 ETF', type:'Passive Index ETF', color:'#60A5FA', lineWidth:1.5, locked:false,
+    cagr:{1:null, 3:null, 5:19.9, 10:18.3, 20:null}, maxdd:-53, vol:22, sharpe:0.72, sortino:0.90, risk:53, annual:PV2_QQQ_YR },
+  'SCHD': { label:'SCHD', fullName:'Schwab US Dividend Equity ETF', type:'Dividend ETF', color:'#34D399', lineWidth:1.5, locked:false,
+    cagr:{1:17.9, 3:7.0, 5:10.0, 10:11.5, 20:null}, maxdd:-25, vol:14, sharpe:0.70, sortino:0.85, risk:25, annual:PV2_SCHD_YR },
+  'GLD':  { label:'Gold (GLD)', fullName:'SPDR Gold Shares', type:'Commodity ETF', color:'#FBBF24', lineWidth:1.5, locked:false,
+    cagr:{1:26.4, 3:null, 5:12.0, 10:null, 20:null}, maxdd:-20, vol:15, sharpe:0.45, sortino:0.58, risk:20, annual:PV2_GLD_YR },
+  'TLT':  { label:'TLT (20Y Bond)', fullName:'iShares 20Y Treasury Bond ETF', type:'Bond ETF', color:'#A78BFA', lineWidth:1.5, locked:false,
+    cagr:{1:-8.1, 3:null, 5:null, 10:1.7, 20:null}, maxdd:-47, vol:16, sharpe:-0.10, sortino:-0.12, risk:47, annual:PV2_TLT_YR },
+};
+
+let pv2Selected = ['HPC11','HPC22','SPY'];
+let pv2TF = 'all';
+let pv2Scale = 'log';
+let pv2Mode = 'growth';
+let pv2SimOpen = true;
+let pv2FailsOpen = false;
+
+// Helper: build cumulative series from annual returns map
+function pv2Cumulative(annualMap, startYear, endYear) {
+  const years = [];
+  const vals = [100];
+  let v = 100;
+  for (let y = startYear; y <= endYear; y++) {
+    years.push(y);
+    const r = annualMap[y];
+    if (r != null) v *= (1 + r / 100);
+    vals.push(+v.toFixed(2));
+  }
+  return { years: [startYear - 1, ...years], vals };
+}
+
+// Helper: build HPC average series from strategy array
+function pv2BuildHPCSeries(strategies, startYear, endYear) {
+  const years = [];
+  for (let y = startYear; y <= endYear; y++) years.push(y);
+  const result = [100];
+  let runVal = 100;
+  for (const yr of years) {
+    let sum = 0, cnt = 0;
+    for (const s of strategies) {
+      const d = s.years && (s.years[yr] || s.years[String(yr)]);
+      if (d && d.s != null) { sum += d.s; cnt++; }
+    }
+    if (cnt > 0) runVal *= (1 + (sum / cnt) / 100);
+    result.push(+runVal.toFixed(2));
+  }
+  return { years: [startYear - 1, ...years], vals: result };
+}
+
+// Helper: CAGR from cumulative series
+function pv2CAGR(startVal, endVal, years) {
+  return +(((endVal / startVal) ** (1 / years) - 1) * 100).toFixed(1);
+}
+
+// Helper: score function
+function pv2Score(b) {
+  const cagr = b.cagr[5] || b.cagr[10] || b.cagr[20] || 0;
+  const dd = Math.abs(b.maxdd);
+  const sh = b.sharpe || 0;
+  return Math.round(Math.min(100, Math.max(0, (cagr / 40) * 40 + (1 - dd / 60) * 30 + (sh / 1.5) * 30)));
+}
+
+// Helper: hex color to rgb components string
+function pv2HexRgb(hex) {
+  return hex.replace('#','').match(/.{2}/g).map(function(x){return parseInt(x,16);}).join(',');
+}
+
 function renderPerformance() {
-  const pool = perfCurrentTab === 'hpc11'
-    ? (typeof HPC11_STRATEGIES !== 'undefined' ? HPC11_STRATEGIES : [])
-    : (typeof HPC22_STRATEGIES !== 'undefined' ? HPC22_STRATEGIES : []);
+  // --- determine year range ---
+  const curYear = 2024;
+  let startYear = 2004;
+  if (pv2TF === '1y') startYear = 2024;
+  else if (pv2TF === '3y') startYear = 2022;
+  else if (pv2TF === '5y') startYear = 2020;
+  else if (pv2TF === '10y') startYear = 2015;
 
-  // ── Strategy list ──
-  const listEl = document.getElementById('perf-strat-list');
-  if(listEl && pool.length) {
-    listEl.innerHTML = pool.map(s => {
-      const isSel = s.id === perfSelectedId;
-      const cagrVal = parseFloat(s.cagr_all) || 0;
-      const cagrCol = cagrVal > 20 ? 'var(--green)' : cagrVal > 10 ? 'var(--yellow)' : 'var(--red)';
-      return `<div class="perf-strat-item perf-sector-item${isSel?' perf-sector-selected':''}" data-id="${s.id}" onclick="perfSelectStrat('${s.id}')">
-        <div style="flex:1;min-width:0;">
-          <div style="font-size:11px;color:${isSel?'var(--text)':'var(--text2)'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${s.label}</div>
-          <div style="font-family:var(--mono);font-size:9px;color:var(--text4);margin-top:1px;">${s.id}${s.category?' · '+s.category:s.sector?' · '+s.sector:''}</div>
-        </div>
-        <span style="font-family:var(--mono);font-size:11px;color:${cagrCol};flex-shrink:0;">${s.cagr_all ? s.cagr_all+'%' : '—'}</span>
-      </div>`;
+  // --- compute HPC series ---
+  const h11 = (typeof HPC11_STRATEGIES !== 'undefined') ? HPC11_STRATEGIES : [];
+  const h22 = (typeof HPC22_STRATEGIES !== 'undefined') ? HPC22_STRATEGIES : [];
+  const hpc11s = pv2BuildHPCSeries(h11, startYear, curYear);
+  const hpc22s = pv2BuildHPCSeries(h22, startYear, curYear);
+
+  // Attach dynamic computed CAGR to benchmarks
+  const yrs = curYear - startYear;
+  if (yrs > 0 && hpc11s.vals.length > 1) {
+    PV2_BENCHMARKS.HPC11.cagr['dynamic'] = pv2CAGR(100, hpc11s.vals[hpc11s.vals.length-1], yrs);
+  }
+  if (yrs > 0 && hpc22s.vals.length > 1) {
+    PV2_BENCHMARKS.HPC22.cagr['dynamic'] = pv2CAGR(100, hpc22s.vals[hpc22s.vals.length-1], yrs);
+  }
+
+  // --- Comparator selector ---
+  const compEl = document.getElementById('pv2-comparator');
+  if (compEl) {
+    const lbl = function(id, b) {
+      const on = pv2Selected.includes(id);
+      const locked = b.locked;
+      const bgColor = on ? 'rgba(' + pv2HexRgb(b.color) + ',0.12)' : 'rgba(255,255,255,0.03)';
+      const borderColor = on ? b.color + '55' : 'var(--border)';
+      const textColor = on ? b.color : 'var(--text4)';
+      const dotBg = on ? b.color : 'rgba(255,255,255,0.15)';
+      return '<button onclick="pv2ToggleComp(\'' + id + '\')" style="display:flex;align-items:center;gap:5px;padding:4px 10px;background:' + bgColor + ';border:1px solid ' + borderColor + ';border-radius:4px;font-family:var(--mono);font-size:9px;color:' + textColor + ';cursor:' + (locked ? 'not-allowed' : 'pointer') + ';letter-spacing:0.06em;transition:all 0.12s;">'
+        + '<span style="width:8px;height:8px;border-radius:50%;background:' + dotBg + ';flex-shrink:0;"></span>'
+        + b.label + (locked ? '<span style="font-size:7px;opacity:0.5;"> LOCK</span>' : '')
+        + '</button>';
+    };
+    compEl.innerHTML = '<span style="font-family:var(--mono);font-size:9px;color:var(--text4);letter-spacing:0.1em;text-transform:uppercase;margin-right:4px;flex-shrink:0;">Compare:</span>'
+      + Object.entries(PV2_BENCHMARKS).map(function(e){ return lbl(e[0], e[1]); }).join('')
+      + '<span style="margin-left:auto;font-family:var(--mono);font-size:9px;color:var(--text4);">' + pv2Selected.length + '/8 active</span>';
+  }
+
+  // --- Timeframe buttons ---
+  const tfEl = document.getElementById('pv2-tf-btns');
+  if (tfEl) {
+    tfEl.innerHTML = ['1y','3y','5y','10y','all'].map(function(t) {
+      const active = pv2TF === t;
+      return '<button onclick="pv2SetTF(\'' + t + '\')" style="padding:4px 9px;background:' + (active ? 'rgba(212,175,69,0.12)' : 'rgba(255,255,255,0.03)') + ';border:1px solid ' + (active ? 'var(--gold)' : 'var(--border)') + ';border-radius:4px;font-family:var(--mono);font-size:9px;color:' + (active ? 'var(--gold)' : 'var(--text4)') + ';cursor:pointer;letter-spacing:0.08em;">' + t.toUpperCase() + '</button>';
     }).join('');
   }
 
-  const strat = pool.find(s => s.id === perfSelectedId) || pool[0];
-  if(!strat) return;
-
-  // ── Header info ──
-  const titleEl = document.getElementById('perf-chart-title');
-  if(titleEl) titleEl.textContent = strat.id + ' — ' + strat.label;
-  const selLbl = document.getElementById('perf-selected-label');
-  if(selLbl) selLbl.textContent = strat.id;
-  const ltEl = document.getElementById('perf-last-trade');
-  if(ltEl) ltEl.textContent = strat.last_trade || '—';
-  const scEl = document.getElementById('perf-score-badge');
-  if(scEl) { const sc = parseFloat(strat.score)||0; scEl.textContent = sc ? sc.toFixed(1) : '—'; scEl.style.color = sc > 80 ? 'var(--green)' : sc > 40 ? 'var(--gold)' : 'var(--red)'; }
-  const spyBadge = document.getElementById('perf-spy-badge');
-  if(spyBadge) {
-    const diff = parseFloat(strat.cagr_all) - parseFloat(strat.spy_cagr_all);
-    if(!isNaN(diff)) { spyBadge.textContent = (diff>=0?'+':'')+diff.toFixed(1)+'% vs SPY (CAGR all)'; spyBadge.style.color = diff>=0?'var(--green)':'var(--red)'; }
-  }
-
-  // ── Chart from real year data ──
-  const svgEl = document.getElementById('perf-chart-svg');
-  if(svgEl && strat.years && Object.keys(strat.years).length > 0) {
-    const {stratSeries, spySeries, labels} = perfBuildSeries(strat.years, perfTimeframe);
-    const W = 800, H = 200;
-    const allVals = [...stratSeries, ...spySeries];
-    const minV = Math.min(...allVals), maxV = Math.max(...allVals);
-    const range = maxV - minV || 1;
-    const pad = {l:52, r:18, t:12, b:24};
-    const cw = W - pad.l - pad.r, ch = H - pad.t - pad.b;
-    const n = stratSeries.length - 1;
-    function toX(i) { return pad.l + (n > 0 ? (i/n)*cw : 0); }
-    function toY(v) { return pad.t + ch - ((v - minV) / range) * ch; }
-    function pathStr(arr) { return arr.map((v,i)=>(i===0?'M':'L')+toX(i).toFixed(1)+','+toY(v).toFixed(1)).join(' '); }
-
-    // Grid lines
-    const gVals = [0.25, 0.5, 0.75, 1.0].map(f => minV + range * f);
-    const grid = gVals.map(v => {
-      const y = toY(v).toFixed(1);
-      const lbl = ((v/100-1)*100).toFixed(0);
-      return `<line x1="${pad.l}" y1="${y}" x2="${W-pad.r}" y2="${y}" stroke="rgba(255,255,255,0.04)" stroke-dasharray="3,5"/><text x="${pad.l-4}" y="${parseFloat(y)+3}" font-family="DM Mono" font-size="8" fill="rgba(255,255,255,0.18)" text-anchor="end">${lbl}%</text>`;
+  // --- CAGR Strip ---
+  const stripEl = document.getElementById('pv2-cagr-strip');
+  if (stripEl) {
+    const cards = pv2Selected.slice(0,5).map(function(id) {
+      const b = PV2_BENCHMARKS[id];
+      const cagr = b.cagr['dynamic'] || b.cagr[5] || b.cagr[10] || b.cagr[20];
+      const cagrTxt = cagr != null ? (cagr>0?'+':'') + cagr.toFixed(1) + '%' : 'N/A';
+      const cagrColor = cagr > 0 ? 'var(--green)' : 'var(--red)';
+      const bw = (id === 'HPC11' || id === 'HPC22');
+      return '<div style="flex:1;min-width:120px;background:' + (bw ? 'rgba(212,175,69,0.05)' : 'rgba(255,255,255,0.02)') + ';border:1px solid ' + (bw ? 'rgba(212,175,69,0.2)' : 'var(--border)') + ';border-radius:6px;padding:12px 14px;">'
+        + '<div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">'
+        + '<span style="width:8px;height:8px;border-radius:50%;background:' + b.color + ';flex-shrink:0;"></span>'
+        + '<span style="font-family:var(--mono);font-size:9px;color:var(--text4);letter-spacing:0.1em;text-transform:uppercase;">' + b.label + '</span>'
+        + '</div>'
+        + '<div style="font-size:28px;font-weight:700;color:' + cagrColor + ';line-height:1;letter-spacing:-0.01em;">' + cagrTxt + '</div>'
+        + '<div style="font-family:var(--mono);font-size:9px;color:var(--text4);margin-top:4px;">CAGR &middot; ' + (pv2TF==='all' ? 'Since inception' : pv2TF.toUpperCase()) + '</div>'
+        + '<div style="font-family:var(--mono);font-size:9px;color:var(--text3);margin-top:3px;">MaxDD <span style="color:var(--red);">' + b.maxdd + '%</span></div>'
+        + '</div>';
     }).join('');
-
-    // X labels (first, mid, last year)
-    const xIdx = [0, Math.floor(n/2), n];
-    const xLbls = xIdx.map(i => `<text x="${toX(i).toFixed(1)}" y="${H-4}" font-family="DM Mono" font-size="8" fill="rgba(255,255,255,0.18)" text-anchor="middle">${labels[i]||''}</text>`).join('');
-
-    const areaPath = pathStr(stratSeries) + ' L'+toX(n).toFixed(1)+','+(H-pad.b)+' L'+toX(0).toFixed(1)+','+(H-pad.b)+' Z';
-    let svg = grid + xLbls;
-    svg += `<path d="${areaPath}" fill="var(--gold)" fill-opacity="0.04"/>`;
-    svg += `<path d="${pathStr(stratSeries)}" fill="none" stroke="var(--gold)" stroke-width="2.5"/>`;
-    svg += `<path d="${pathStr(spySeries)}" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="1.5" stroke-dasharray="5,3"/>`;
-    svgEl.innerHTML = svg;
+    stripEl.innerHTML = cards;
   }
 
-  // ── Metrics ──
-  const metricsEl = document.getElementById('perf-metrics');
-  if(metricsEl) {
-    const tf = perfTimeframe;
-    const cagrVal = tf==='5y' ? strat.cagr_5y : tf==='10y' ? strat.cagr_10y : strat.cagr_all;
-    const cagrF = parseFloat(cagrVal)||0;
-    const ddF = parseFloat(strat.maxdd)||0;
-    const shrpF = parseFloat(strat.sharpe)||0;
-    const sortF = parseFloat(strat.sortino)||0;
-    const volF = parseFloat(strat.vol)||0;
-    const cagrCol = cagrF>20?'var(--green)':cagrF>10?'var(--text)':'var(--red)';
-    const ddCol = ddF<15?'var(--green)':ddF<30?'var(--orange)':'var(--red)';
-    const shrpCol = shrpF>1.0?'var(--green)':shrpF>0.5?'var(--orange)':'var(--red)';
-    const tfLbl = tf==='5y'?'5Y':tf==='10y'?'10Y':'All';
-    metricsEl.innerHTML = [
-      {lbl:'CAGR '+tfLbl,    val:(cagrF>=0?'+':'')+cagrF.toFixed(1)+'%', col:cagrCol},
-      {lbl:'1Y',             val:(parseFloat(strat.cagr_1y)>=0?'+':'')+parseFloat(strat.cagr_1y||0).toFixed(1)+'%', col:parseFloat(strat.cagr_1y)>=0?'var(--green)':'var(--red)'},
-      {lbl:'3Y CAGR',        val:(parseFloat(strat.cagr_3y)>=0?'+':'')+parseFloat(strat.cagr_3y||0).toFixed(1)+'%', col:'var(--text2)'},
-      {lbl:'MAX DD',         val:'-'+ddF.toFixed(1)+'%', col:ddCol},
-      {lbl:'SHARPE',         val:shrpF.toFixed(2), col:shrpCol},
-      {lbl:'SORTINO',        val:sortF.toFixed(2), col:'var(--text2)'},
-      {lbl:'YTD',            val:(parseFloat(strat.ytd)>=0?'+':'')+parseFloat(strat.ytd||0).toFixed(1)+'%', col:parseFloat(strat.ytd)>=0?'var(--green)':'var(--red)'},
-    ].map(m=>`<div><div style="font-family:var(--mono);font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text4);margin-bottom:4px;">${m.lbl}</div><div style="font-family:var(--g);font-size:20px;font-weight:700;color:${m.col};line-height:1;">${m.val}</div></div>`).join('');
+  // --- Hero Chart ---
+  pv2DrawHero(hpc11s, hpc22s, startYear, curYear);
+
+  // --- Comparative Table ---
+  pv2DrawTable();
+
+  // --- Scatter ---
+  pv2DrawScatter();
+
+  // --- Drawdown ---
+  pv2DrawDD(hpc11s, hpc22s, startYear, curYear);
+
+  // --- Simulation ---
+  pv2DrawSim(hpc11s, hpc22s, startYear, curYear);
+
+  // --- Fails panel ---
+  pv2DrawFails();
+}
+
+function pv2SetTF(tf) { pv2TF = tf; renderPerformance(); }
+function pv2SetScale() { pv2Scale = pv2Scale==='log'?'linear':'log'; var btn=document.getElementById('pv2-scale-btn'); if(btn) btn.textContent=pv2Scale.toUpperCase()+' SCALE'; renderPerformance(); }
+function pv2SetMode() { pv2Mode = pv2Mode==='growth'?'norm':'growth'; var btn=document.getElementById('pv2-mode-btn'); if(btn) btn.textContent=pv2Mode==='growth'?'TOTAL GROWTH':'CAGR NORM'; renderPerformance(); }
+function pv2ToggleSim() { pv2SimOpen = !pv2SimOpen; var el=document.getElementById('pv2-sim-body'); if(el) el.style.display=pv2SimOpen?'flex':'none'; }
+function pv2ToggleFails() { pv2FailsOpen = !pv2FailsOpen; var el=document.getElementById('pv2-fails-drawer'); if(el) el.style.display=pv2FailsOpen?'block':'none'; }
+function pv2ToggleComp(id) {
+  var b = PV2_BENCHMARKS[id];
+  if (!b || b.locked) return;
+  if (pv2Selected.includes(id)) { pv2Selected = pv2Selected.filter(function(x){ return x !== id; }); }
+  else {
+    if (pv2Selected.length >= 7) { alert('Limit reached. Remove one comparator to keep the analysis readable.'); return; }
+    pv2Selected.push(id);
+  }
+  renderPerformance();
+}
+
+function pv2DrawHero(hpc11s, hpc22s, startYear, endYear) {
+  var svg = document.getElementById('pv2-hero-svg');
+  if (!svg) return;
+  var W = svg.clientWidth || 900, H = 300;
+  var pad = { t: 16, r: 20, b: 36, l: 52 };
+  var cW = W - pad.l - pad.r, cH = H - pad.t - pad.b;
+
+  // Build all series data
+  var allSeries = [];
+  if (pv2Selected.includes('HPC11')) allSeries.push({ id:'HPC11', data: hpc11s });
+  if (pv2Selected.includes('HPC22')) allSeries.push({ id:'HPC22', data: hpc22s });
+  for (var i = 0; i < pv2Selected.length; i++) {
+    var sid = pv2Selected[i];
+    if (sid === 'HPC11' || sid === 'HPC22') continue;
+    var sb = PV2_BENCHMARKS[sid];
+    if (sb && sb.annual) allSeries.push({ id: sid, data: pv2Cumulative(sb.annual, startYear, endYear) });
   }
 
-  // ── Year-by-year table ──
-  const yrEl = document.getElementById('perf-year-table');
-  if(yrEl && strat.years) {
-    const years = Object.keys(strat.years).map(Number).sort((a,b)=>b-a).slice(0,15);
-    yrEl.innerHTML = years.map(yr => {
-      const d = strat.years[yr] || strat.years[String(yr)];
-      if(!d) return '';
-      const s = d.s, spy = d.spy;
-      const sCol = s >= 0 ? 'var(--green)' : 'var(--red)';
-      const excess = s - spy;
-      const excCol = excess >= 0 ? 'var(--green)' : 'var(--red)';
-      return `<div style="background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:4px;padding:5px 8px;min-width:64px;">
-        <div style="font-family:var(--mono);font-size:8px;color:var(--text4);">${yr}</div>
-        <div style="font-family:var(--mono);font-size:11px;font-weight:600;color:${sCol};">${s>=0?'+':''}${s.toFixed(1)}%</div>
-        <div style="font-family:var(--mono);font-size:8px;color:${excCol};">${excess>=0?'+':''}${excess.toFixed(1)}</div>
-      </div>`;
+  if (!allSeries.length) { svg.innerHTML = ''; return; }
+
+  var allVals = [];
+  for (var j = 0; j < allSeries.length; j++) allVals = allVals.concat(allSeries[j].data.vals);
+  var yMin = Math.min.apply(null, allVals), yMax = Math.max.apply(null, allVals);
+  var totalYears = endYear - startYear;
+
+  var xScale = function(i) { return pad.l + (i / (totalYears + 1)) * cW; };
+  var yScaleFn = function(v) {
+    if (pv2Scale === 'log') {
+      var lMin = Math.log(Math.max(1, yMin)), lMax = Math.log(yMax);
+      return pad.t + cH - ((Math.log(Math.max(1, v)) - lMin) / (lMax - lMin)) * cH;
+    }
+    return pad.t + cH - ((v - yMin) / (yMax - yMin)) * cH;
+  };
+
+  var out = '<svg xmlns="http://www.w3.org/2000/svg" width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '">';
+
+  // Grid lines
+  var yTicks = 5;
+  for (var ti = 0; ti <= yTicks; ti++) {
+    var tv = yMin + (yMax - yMin) * (ti / yTicks);
+    var ty = yScaleFn(tv);
+    var tlbl = tv >= 1000 ? (tv/100).toFixed(0) + 'x' : tv.toFixed(0) + '%';
+    out += '<line x1="' + pad.l + '" y1="' + ty + '" x2="' + (W-pad.r) + '" y2="' + ty + '" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>';
+    out += '<text x="' + (pad.l-4) + '" y="' + (ty+4) + '" text-anchor="end" font-family="monospace" font-size="9" fill="rgba(255,255,255,0.3)">' + tlbl + '</text>';
+  }
+
+  // Year labels on x-axis
+  var step = totalYears <= 5 ? 1 : totalYears <= 10 ? 2 : 4;
+  for (var yi = 0; yi <= totalYears; yi++) {
+    var yr = startYear + yi;
+    if ((yr - startYear) % step === 0) {
+      var yx = xScale(yi + 0.5);
+      out += '<text x="' + yx + '" y="' + (H - pad.b + 14) + '" text-anchor="middle" font-family="monospace" font-size="9" fill="rgba(255,255,255,0.3)">' + yr + '</text>';
+    }
+  }
+
+  // Crisis zones
+  var crises = [{s:2008,e:2009,label:'GFC'},{s:2020,e:2020,label:'COVID'},{s:2022,e:2022,label:'2022'}];
+  for (var ci = 0; ci < crises.length; ci++) {
+    var c = crises[ci];
+    if (c.s < startYear || c.s > endYear) continue;
+    var cx1 = xScale(c.s - startYear), cx2 = xScale(c.e - startYear + 1);
+    out += '<rect x="' + cx1 + '" y="' + pad.t + '" width="' + (cx2-cx1) + '" height="' + cH + '" fill="rgba(255,77,79,0.04)" stroke="rgba(255,77,79,0.15)" stroke-width="0.5"/>';
+    out += '<text x="' + ((cx1+cx2)/2) + '" y="' + (pad.t+11) + '" text-anchor="middle" font-family="monospace" font-size="8" fill="rgba(255,77,79,0.5)">' + c.label + '</text>';
+  }
+
+  // Lines
+  for (var li = 0; li < allSeries.length; li++) {
+    var ls = allSeries[li];
+    var lb = PV2_BENCHMARKS[ls.id];
+    var pts = ls.data.vals.map(function(v, idx) { return xScale(idx).toFixed(1) + ',' + yScaleFn(v).toFixed(1); }).join(' ');
+    out += '<polyline points="' + pts + '" fill="none" stroke="' + lb.color + '" stroke-width="' + lb.lineWidth + '" stroke-linejoin="round" stroke-linecap="round" opacity="' + (lb.locked ? 1 : 0.8) + '"/>';
+    var lastX = xScale(ls.data.vals.length - 1), lastY = yScaleFn(ls.data.vals[ls.data.vals.length-1]);
+    out += '<circle cx="' + lastX + '" cy="' + lastY + '" r="3" fill="' + lb.color + '"/>';
+  }
+
+  out += '</svg>';
+  svg.outerHTML = out;
+
+  // Legend
+  var legEl = document.getElementById('pv2-legend');
+  if (legEl) {
+    legEl.innerHTML = allSeries.map(function(s) {
+      var b = PV2_BENCHMARKS[s.id];
+      var last = s.data.vals[s.data.vals.length-1];
+      var gain = last - 100;
+      return '<div style="display:flex;align-items:center;gap:5px;">'
+        + '<span style="width:16px;height:2.5px;background:' + b.color + ';display:inline-block;border-radius:2px;"></span>'
+        + '<span style="font-family:monospace;font-size:10px;color:' + b.color + ';font-weight:600;">' + b.label + '</span>'
+        + '<span style="font-family:monospace;font-size:9px;color:' + (gain>=0?'var(--green)':'var(--red)') + ';">' + (gain>=0?'+':'') + gain.toFixed(0) + '%</span>'
+        + '</div>';
     }).join('');
   }
+}
+
+function pv2DrawTable() {
+  var wrap = document.getElementById('pv2-table-wrap');
+  if (!wrap) return;
+  var rows = pv2Selected.map(function(id) {
+    var b = PV2_BENCHMARKS[id];
+    var cagr5 = b.cagr[5] != null ? (b.cagr[5]>0?'+':'') + b.cagr[5].toFixed(1) + '%' : '&mdash;';
+    var cagr10 = b.cagr[10] != null ? (b.cagr[10]>0?'+':'') + b.cagr[10].toFixed(1) + '%' : '&mdash;';
+    var cagr20 = b.cagr[20] != null ? (b.cagr[20]>0?'+':'') + b.cagr[20].toFixed(1) + '%' : '&mdash;';
+    var score = pv2Score(b);
+    var isBest = score >= 75;
+    var isHPC = id === 'HPC11' || id === 'HPC22';
+    var c5color = b.cagr[5] > 0 ? 'var(--green)' : b.cagr[5] < 0 ? 'var(--red)' : 'var(--text3)';
+    return '<tr style="border-bottom:1px solid rgba(255,255,255,0.04);' + (isHPC ? 'background:rgba(212,175,69,0.03);' : '') + '">'
+      + '<td style="padding:8px 12px;white-space:nowrap;">'
+      + '<span style="width:7px;height:7px;border-radius:50%;background:' + b.color + ';display:inline-block;margin-right:6px;vertical-align:middle;"></span>'
+      + '<span style="font-size:12px;color:var(--text2);font-weight:' + (isHPC ? '600' : '400') + ';">' + b.label + '</span>'
+      + (isBest ? '<span style="margin-left:6px;font-family:monospace;font-size:8px;color:var(--green);background:rgba(62,230,139,0.08);border:1px solid rgba(62,230,139,0.2);border-radius:3px;padding:1px 5px;">BEST RISK-ADJ</span>' : '')
+      + '</td>'
+      + '<td style="padding:8px 8px;font-family:monospace;font-size:11px;color:' + c5color + ';">' + cagr5 + '</td>'
+      + '<td style="padding:8px 8px;font-family:monospace;font-size:11px;color:var(--text3);">' + cagr10 + '</td>'
+      + '<td style="padding:8px 8px;font-family:monospace;font-size:11px;color:var(--text3);">' + cagr20 + '</td>'
+      + '<td style="padding:8px 8px;font-family:monospace;font-size:11px;color:var(--red);">' + b.maxdd + '%</td>'
+      + '<td style="padding:8px 8px;font-family:monospace;font-size:11px;color:var(--text3);">' + (b.vol != null ? b.vol : '&mdash;') + '%</td>'
+      + '<td style="padding:8px 8px;font-family:monospace;font-size:11px;color:var(--text3);">' + (b.sharpe != null ? b.sharpe.toFixed(2) : '&mdash;') + '</td>'
+      + '<td style="padding:8px 8px;font-family:monospace;font-size:11px;color:var(--text3);">' + (b.sortino != null ? b.sortino.toFixed(2) : '&mdash;') + '</td>'
+      + '<td style="padding:8px 12px;">'
+      + '<div style="display:flex;align-items:center;gap:5px;">'
+      + '<div style="width:40px;height:5px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden;">'
+      + '<div style="height:5px;width:' + score + '%;background:' + (score>=70?'var(--green)':score>=45?'var(--yellow)':'var(--red)') + ';border-radius:3px;"></div>'
+      + '</div>'
+      + '<span style="font-family:monospace;font-size:10px;color:var(--text3);">' + score + '</span>'
+      + '</div></td></tr>';
+  }).join('');
+
+  wrap.innerHTML = '<table style="width:100%;border-collapse:collapse;min-width:600px;">'
+    + '<thead><tr style="border-bottom:1px solid var(--border);">'
+    + '<th style="padding:7px 12px;text-align:left;font-family:monospace;font-size:9px;color:var(--text4);letter-spacing:0.1em;text-transform:uppercase;font-weight:400;">Strategy</th>'
+    + '<th style="padding:7px 8px;text-align:left;font-family:monospace;font-size:9px;color:var(--text4);letter-spacing:0.1em;text-transform:uppercase;font-weight:400;">5Y CAGR</th>'
+    + '<th style="padding:7px 8px;text-align:left;font-family:monospace;font-size:9px;color:var(--text4);letter-spacing:0.1em;text-transform:uppercase;font-weight:400;">10Y CAGR</th>'
+    + '<th style="padding:7px 8px;text-align:left;font-family:monospace;font-size:9px;color:var(--text4);letter-spacing:0.1em;text-transform:uppercase;font-weight:400;">20Y CAGR</th>'
+    + '<th style="padding:7px 8px;text-align:left;font-family:monospace;font-size:9px;color:var(--text4);letter-spacing:0.1em;text-transform:uppercase;font-weight:400;">Max DD</th>'
+    + '<th style="padding:7px 8px;text-align:left;font-family:monospace;font-size:9px;color:var(--text4);letter-spacing:0.1em;text-transform:uppercase;font-weight:400;">Vol</th>'
+    + '<th style="padding:7px 8px;text-align:left;font-family:monospace;font-size:9px;color:var(--text4);letter-spacing:0.1em;text-transform:uppercase;font-weight:400;">Sharpe</th>'
+    + '<th style="padding:7px 8px;text-align:left;font-family:monospace;font-size:9px;color:var(--text4);letter-spacing:0.1em;text-transform:uppercase;font-weight:400;">Sortino</th>'
+    + '<th style="padding:7px 12px;text-align:left;font-family:monospace;font-size:9px;color:var(--text4);letter-spacing:0.1em;text-transform:uppercase;font-weight:400;">RA Score</th>'
+    + '</tr></thead><tbody>' + rows + '</tbody></table>';
+}
+
+function pv2DrawScatter() {
+  var svgEl = document.getElementById('pv2-scatter-svg');
+  if (!svgEl) return;
+  var W = svgEl.clientWidth || 400, H = 220;
+  var pad = { t: 20, r: 20, b: 30, l: 40 };
+
+  var pts = pv2Selected.map(function(id) {
+    var b = PV2_BENCHMARKS[id];
+    var cagr = b.cagr[5] || b.cagr[10] || b.cagr[20];
+    if (cagr == null) return null;
+    return { id: id, b: b, x: Math.abs(b.maxdd), y: cagr };
+  }).filter(Boolean);
+
+  if (!pts.length) { svgEl.outerHTML = '<svg id="pv2-scatter-svg" style="width:100%;display:block;" height="220"></svg>'; return; }
+
+  var xMin = 0, xMax = Math.max.apply(null, pts.map(function(p){return p.x;})) * 1.15;
+  var yMin = Math.min.apply(null, [0].concat(pts.map(function(p){return p.y;}))) - 2;
+  var yMax = Math.max.apply(null, pts.map(function(p){return p.y;})) * 1.15;
+
+  var xSc = function(x) { return pad.l + ((x - xMin) / (xMax - xMin)) * (W - pad.l - pad.r); };
+  var ySc = function(y) { return pad.t + ((yMax - y) / (yMax - yMin)) * (H - pad.t - pad.b); };
+
+  var out = '<svg xmlns="http://www.w3.org/2000/svg" width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '">';
+  out += '<line x1="' + pad.l + '" y1="' + pad.t + '" x2="' + pad.l + '" y2="' + (H-pad.b) + '" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>';
+  out += '<line x1="' + pad.l + '" y1="' + (H-pad.b) + '" x2="' + (W-pad.r) + '" y2="' + (H-pad.b) + '" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>';
+  out += '<text x="' + (pad.l+6) + '" y="' + (pad.t+14) + '" font-family="monospace" font-size="8" fill="rgba(62,230,139,0.5)">Higher Return / Lower Risk</text>';
+  for (var pi = 0; pi < pts.length; pi++) {
+    var p = pts[pi];
+    var cx = xSc(p.x), cy = ySc(p.y);
+    var isHPC = p.id==='HPC11'||p.id==='HPC22';
+    out += '<circle cx="' + cx + '" cy="' + cy + '" r="' + (isHPC?8:6) + '" fill="' + p.b.color + '" opacity="' + (isHPC?0.9:0.7) + '"/>';
+    out += '<text x="' + cx + '" y="' + (cy-10) + '" text-anchor="middle" font-family="monospace" font-size="9" fill="' + p.b.color + '" font-weight="' + (isHPC?700:400) + '">' + p.b.label + '</text>';
+  }
+  out += '<text x="' + (W/2) + '" y="' + (H-2) + '" text-anchor="middle" font-family="monospace" font-size="8" fill="rgba(255,255,255,0.3)">Max Drawdown (%)</text>';
+  out += '<text x="10" y="' + (H/2) + '" text-anchor="middle" font-family="monospace" font-size="8" fill="rgba(255,255,255,0.3)" transform="rotate(-90,10,' + (H/2) + ')">CAGR (%)</text>';
+  out += '</svg>';
+  svgEl.outerHTML = out;
+}
+
+function pv2DrawDD(hpc11s, hpc22s, startYear, endYear) {
+  var svgEl = document.getElementById('pv2-dd-svg');
+  if (!svgEl) return;
+  var W = svgEl.clientWidth || 900, H = 180;
+  var pad = { t: 20, r: 20, b: 30, l: 52 };
+  var cW = W - pad.l - pad.r, cH = H - pad.t - pad.b;
+
+  function toDDSeries(vals) {
+    var peak = vals[0], result = [0];
+    for (var i = 1; i < vals.length; i++) {
+      if (vals[i] > peak) peak = vals[i];
+      result.push(+((vals[i] - peak) / peak * 100).toFixed(2));
+    }
+    return result;
+  }
+
+  var series = [];
+  if (pv2Selected.includes('HPC11')) series.push({ id:'HPC11', dd: toDDSeries(hpc11s.vals) });
+  if (pv2Selected.includes('HPC22')) series.push({ id:'HPC22', dd: toDDSeries(hpc22s.vals) });
+  if (pv2Selected.includes('SPY')) {
+    var spySeries = pv2Cumulative(PV2_SPY_YR, startYear, endYear);
+    series.push({ id:'SPY', dd: toDDSeries(spySeries.vals) });
+  }
+
+  var n = hpc11s.vals.length;
+  var yMin = 0;
+  for (var si = 0; si < series.length; si++) {
+    for (var vi = 0; vi < series[si].dd.length; vi++) {
+      if (series[si].dd[vi] < yMin) yMin = series[si].dd[vi];
+    }
+  }
+  yMin = Math.min(yMin, -5);
+
+  var xSc = function(i) { return pad.l + (i / (n - 1)) * cW; };
+  var ySc = function(v) { return pad.t + ((0 - v) / (0 - yMin)) * cH; };
+
+  var out = '<svg xmlns="http://www.w3.org/2000/svg" width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '">';
+  out += '<line x1="' + pad.l + '" y1="' + pad.t + '" x2="' + (W-pad.r) + '" y2="' + pad.t + '" stroke="rgba(255,255,255,0.1)" stroke-width="1" stroke-dasharray="4,4"/>';
+
+  var yStep = Math.abs(yMin) / 4;
+  for (var gv = 0; gv >= yMin; gv -= yStep) {
+    var gy = ySc(gv);
+    out += '<text x="' + (pad.l-4) + '" y="' + (gy+4) + '" text-anchor="end" font-family="monospace" font-size="9" fill="rgba(255,255,255,0.3)">' + gv.toFixed(0) + '%</text>';
+    out += '<line x1="' + pad.l + '" y1="' + gy + '" x2="' + (W-pad.r) + '" y2="' + gy + '" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>';
+  }
+
+  var crises = [{s:2008,e:2009},{s:2020,e:2020},{s:2022,e:2022}];
+  for (var ci = 0; ci < crises.length; ci++) {
+    var cc = crises[ci];
+    if (cc.s < startYear) continue;
+    var i1 = cc.s - startYear, i2 = Math.min(cc.e - startYear + 1, n - 1);
+    out += '<rect x="' + xSc(i1) + '" y="' + pad.t + '" width="' + (xSc(i2)-xSc(i1)) + '" height="' + cH + '" fill="rgba(255,77,79,0.04)"/>';
+  }
+
+  for (var di = 0; di < series.length; di++) {
+    var ds = series[di];
+    var db = PV2_BENCHMARKS[ds.id];
+    var dpts = ds.dd.map(function(v, idx) { return xSc(idx).toFixed(1) + ',' + ySc(v).toFixed(1); }).join(' ');
+    var zero = ySc(0);
+    var areaBase = xSc(ds.dd.length-1) + ',' + zero + ' ' + xSc(0) + ',' + zero;
+    var rgb = pv2HexRgb(db.color);
+    out += '<polyline points="' + dpts + ' ' + areaBase + '" fill="rgba(' + rgb + ',0.08)" stroke="none"/>';
+    out += '<polyline points="' + dpts + '" fill="none" stroke="' + db.color + '" stroke-width="' + db.lineWidth + '" opacity="0.9"/>';
+  }
+
+  var totalYrs = endYear - startYear;
+  var xstep = totalYrs <= 5 ? 1 : 4;
+  for (var xi = 0; xi <= totalYrs; xi += xstep) {
+    out += '<text x="' + xSc(xi+0.5) + '" y="' + (H-pad.b+13) + '" text-anchor="middle" font-family="monospace" font-size="8" fill="rgba(255,255,255,0.25)">' + (startYear+xi) + '</text>';
+  }
+  out += '</svg>';
+  svgEl.outerHTML = out;
+}
+
+function pv2DrawSim(hpc11s, hpc22s, startYear, endYear) {
+  var el = document.getElementById('pv2-sim-body');
+  if (!el) return;
+  var initial = 1000000;
+  var yrs = endYear - startYear;
+
+  var spyFinal = pv2Cumulative(PV2_SPY_YR, startYear, endYear);
+  var spyMult = spyFinal.vals[spyFinal.vals.length-1] / 100;
+  var spyResult = initial * spyMult;
+
+  var h11Mult = hpc11s.vals[hpc11s.vals.length-1] / 100;
+  var h22Mult = hpc22s.vals[hpc22s.vals.length-1] / 100;
+
+  var alloc11 = 0.3, alloc22 = 0.3;
+  var blendMult = (1 - alloc11 - alloc22) * spyMult + alloc11 * h11Mult + alloc22 * h22Mult;
+  var blendResult = initial * blendMult;
+  var delta = blendResult - spyResult;
+
+  var fmt = function(v) { return '$' + (v/1e6).toFixed(2) + 'M'; };
+  var fmtD = function(v) { return (v >= 0 ? '+$' : '-$') + (Math.abs(v)/1e6).toFixed(2) + 'M'; };
+
+  el.innerHTML = '<div style="display:flex;gap:10px;flex-wrap:wrap;flex:1;">'
+    + '<div style="flex:1;min-width:160px;">'
+    + '<div style="font-family:monospace;font-size:9px;color:var(--text4);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px;">Period</div>'
+    + '<select onchange="renderPerformance()" style="width:100%;padding:7px 10px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:4px;color:var(--text2);font-family:monospace;font-size:11px;">'
+    + '<option value="all"' + (pv2TF==='all'?' selected':'') + '>Since Inception (~20Y)</option>'
+    + '<option value="10y"' + (pv2TF==='10y'?' selected':'') + '>Last 10 Years</option>'
+    + '<option value="5y"' + (pv2TF==='5y'?' selected':'') + '>Last 5 Years</option>'
+    + '</select></div>'
+    + '<div style="flex:1;min-width:160px;">'
+    + '<div style="font-family:monospace;font-size:9px;color:var(--text4);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px;">Initial Capital</div>'
+    + '<div style="padding:7px 10px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:4px;color:var(--text2);font-family:monospace;font-size:11px;">USD 1,000,000</div>'
+    + '</div></div>'
+    + '<div style="display:flex;gap:8px;flex-wrap:wrap;flex:2;">'
+    + '<div style="flex:1;min-width:130px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:5px;padding:10px 12px;">'
+    + '<div style="font-family:monospace;font-size:9px;color:var(--text4);margin-bottom:3px;">S&amp;P 500 Only</div>'
+    + '<div style="font-size:18px;font-weight:600;color:var(--text2);">' + fmt(spyResult) + '</div>'
+    + '<div style="font-family:monospace;font-size:9px;color:var(--text4);margin-top:2px;">' + yrs + 'Y growth</div>'
+    + '</div>'
+    + '<div style="flex:1;min-width:130px;background:rgba(212,175,69,0.05);border:1px solid rgba(212,175,69,0.2);border-radius:5px;padding:10px 12px;">'
+    + '<div style="font-family:monospace;font-size:9px;color:var(--gold);margin-bottom:3px;">30% HPC11 + 30% HPC22 + 40% SPY</div>'
+    + '<div style="font-size:18px;font-weight:600;color:var(--gold);">' + fmt(blendResult) + '</div>'
+    + '<div style="font-family:monospace;font-size:9px;color:var(--text4);margin-top:2px;">Blended portfolio</div>'
+    + '</div>'
+    + '<div style="flex:1;min-width:130px;background:rgba(62,230,139,0.05);border:1px solid rgba(62,230,139,0.2);border-radius:5px;padding:10px 12px;">'
+    + '<div style="font-family:monospace;font-size:9px;color:var(--green);margin-bottom:3px;">Additional Wealth</div>'
+    + '<div style="font-size:18px;font-weight:600;color:' + (delta>=0?'var(--green)':'var(--red)') + ';">' + fmtD(delta) + '</div>'
+    + '<div style="font-family:monospace;font-size:9px;color:var(--text4);margin-top:2px;">vs S&amp;P 500 only</div>'
+    + '</div></div>';
+}
+
+function pv2DrawFails() {
+  var el = document.getElementById('pv2-fails-body');
+  if (!el) return;
+  var ref = PV2_BENCHMARKS.SPY;
+  var h11 = PV2_BENCHMARKS.HPC11;
+  var h22 = PV2_BENCHMARKS.HPC22;
+
+  var gaps = [
+    { label:'CAGR Gap (20Y)', val: h22.cagr[20] - ref.cagr[20], unit:'%', note:'+' + (h22.cagr[20]-ref.cagr[20]).toFixed(1) + 'pp more compounding per year' },
+    { label:'Drawdown Gap', val: Math.abs(ref.maxdd) - Math.abs(h11.maxdd), unit:'%', note:(Math.abs(ref.maxdd)-Math.abs(h11.maxdd)) + 'pp less max drawdown in HPC11' },
+    { label:'Volatility Gap', val: ref.vol - h11.vol, unit:'%', note:(ref.vol - h11.vol) + 'pp lower measured volatility' },
+    { label:'Sharpe Advantage', val: h11.sharpe - ref.sharpe, unit:'', note:(h11.sharpe-ref.sharpe).toFixed(2) + ' higher risk-adjusted efficiency' },
+    { label:'Sortino Advantage', val: h11.sortino - ref.sortino, unit:'', note:(h11.sortino-ref.sortino).toFixed(2) + ' lower downside deviation impact' },
+  ];
+
+  el.innerHTML = gaps.map(function(g) {
+    return '<div style="background:rgba(255,77,79,0.04);border:1px solid rgba(255,77,79,0.12);border-radius:5px;padding:10px 12px;">'
+      + '<div style="font-family:monospace;font-size:9px;color:rgba(255,77,79,0.8);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:4px;">' + g.label + '</div>'
+      + '<div style="font-size:22px;font-weight:700;color:' + (g.val>=0?'var(--green)':'var(--red)') + ';">' + (g.val>=0?'+':'') + g.val.toFixed(1) + g.unit + '</div>'
+      + '<div style="font-family:monospace;font-size:9px;color:var(--text4);margin-top:4px;line-height:1.4;">' + g.note + '</div>'
+      + '</div>';
+  }).join('');
 }
 
 // ═══════════════ MARKET TREND GAUGE (CANVAS) ═══════════════
