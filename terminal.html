@@ -86,9 +86,9 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--g
 .perf-sector-item{display:flex;align-items:center;gap:8px;padding:9px 14px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.03);border-left:3px solid transparent;transition:background 0.15s,border-color 0.15s;}
 .perf-sector-item:hover{background:rgba(255,255,255,0.02);}
 .perf-sector-item.perf-sector-selected{background:rgba(212,175,69,0.05);border-left-color:var(--gold);}
-.sm-urow{display:flex;align-items:center;gap:10px;padding:6px 14px;border-bottom:1px solid rgba(255,255,255,0.025);}
+.sm-urow{display:flex;align-items:center;gap:9px;padding:5px 12px;border-bottom:1px solid rgba(255,255,255,0.025);}
 .sm-urow:last-child{border-bottom:none;}
-.sm-usec-hdr{padding:6px 14px 5px;background:rgba(255,255,255,0.015);border-bottom:1px solid var(--border);border-top:1px solid var(--border);}
+.sm-usec-hdr{padding:5px 12px 4px;background:rgba(255,255,255,0.015);border-bottom:1px solid var(--border);border-top:1px solid var(--border);}
 .sm-badge{font-family:var(--mono);font-size:9px;padding:2px 6px;border-radius:3px;border:1px solid;width:52px;text-align:center;flex-shrink:0;}
 .screen.active{display:block;}
 
@@ -1871,7 +1871,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--g
     <div>
       <div class="kicker">Strategies · Market Intelligence</div>
       <div class="page-title">Sector Momentum</div>
-      <div class="page-sub">Relative strength across sectors, ETFs, commodities, fixed income and macro · Updated post-market daily</div>
+      <div class="page-sub">Relative strength across sectors, ETFs, commodities and fixed income · Updated post-market daily</div>
     </div>
     <button onclick="alert('JIM Insight — Available in v1.2')" style="flex-shrink:0;margin-top:4px;padding:8px 14px;background:rgba(212,175,69,0.08);border:1px solid rgba(212,175,69,0.25);border-radius:5px;font-family:var(--mono);font-size:10px;letter-spacing:0.10em;text-transform:uppercase;color:var(--gold);cursor:pointer;">⬛ Ask JIM for Insight</button>
   </div>
@@ -3252,14 +3252,20 @@ function renderSectorMomentum() {
     return `<div class="sm-usec-hdr"><span style="font-family:var(--mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text4);">${title}</span><span style="font-family:var(--mono);font-size:9px;color:var(--text4);margin-left:8px;opacity:0.6;">${items.length}</span></div>${sorted.map(smUnifiedRow).join('')}`;
   }
 
+  const COMMODITIES_SM = COMMODITIES.filter(c => ['GLD','SLV','USO'].includes(c.ticker));
+
   const el = document.getElementById('sm-unified');
   if(!el) return;
-  el.innerHTML =
-    smSection('Equity Sectors', SECTORS) +
-    smSection('Core Market ETFs', CORE_ETFS_SM) +
-    smSection('Commodities', COMMODITIES.slice(0,5)) +
-    smSection('Fixed Income', FIXED_INCOME_SM) +
-    smSection('FX · Macro', FX_MACRO_SM);
+  el.innerHTML = `<div style="display:flex;gap:0;align-items:flex-start;">
+    <div style="flex:1.1;border-right:1px solid var(--border);">
+      ${smSection('Equity Sectors', SECTORS)}
+    </div>
+    <div style="flex:1;">
+      ${smSection('Core Market ETFs', CORE_ETFS_SM)}
+      ${smSection('Commodities', COMMODITIES_SM)}
+      ${smSection('Fixed Income', FIXED_INCOME_SM)}
+    </div>
+  </div>`;
 }
 
 function renderRPM() {
