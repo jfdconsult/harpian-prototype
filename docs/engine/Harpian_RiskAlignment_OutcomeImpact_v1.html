@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Harpian · Outcome Impact Layer · HRD-002-OI</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap');
+
+  :root {
+    --bg:     #090E14;
+    --s1:     #0F1820;
+    --s2:     #162130;
+    --s3:     #1C2D40;
+    --gold:   #B8972A; --gold-l: #D4AF45;
+    --text:   #C8D8E8; --dim: #6A8AA8; --bright: #EBF1F7;
+    --bsub:   rgba(235,241,247,0.06);
+    --bgold:  rgba(184,151,42,0.14);
+    --green:  #1A7A4A; --green-l: #3DBE78; --green-bg: rgba(26,122,74,0.08);
+    --amber:  #D4860A; --amber-l: #F0A830; --amber-bg: rgba(212,134,10,0.08);
+    --red:    #C0392B; --red-l:   #E87060; --red-bg:   rgba(192,57,43,0.08);
+    --blue:   #2D7AC0; --blue-l:  #5BA8E8; --blue-bg:  rgba(45,122,192,0.08);
+    --purple: #7B3FA0; --purple-l:#B07AE0;
+  }
+
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;line-height:1.6;}
+  .page{max-width:1160px;margin:0 auto;padding:0 40px 120px;}
+
+  /* COVER */
+  .cover{padding:60px 0 46px;border-bottom:1px solid var(--bgold);margin-bottom:56px;display:grid;grid-template-columns:1fr auto;align-items:end;gap:40px;}
+  .badge{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.14em;color:var(--gold);background:var(--bgold);border:1px solid rgba(184,151,42,.25);padding:4px 10px;display:inline-block;margin-bottom:16px;text-transform:uppercase;}
+  .cover h1{font-family:'Syne',sans-serif;font-size:36px;font-weight:800;color:var(--bright);line-height:1.08;letter-spacing:-.025em;}
+  .cover h1 em{color:var(--gold);font-style:normal;}
+  .cover-sub{font-family:'DM Mono',monospace;font-size:9.5px;color:var(--dim);margin-top:12px;letter-spacing:.06em;line-height:1.9;}
+  .cover-meta{font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);line-height:2.2;letter-spacing:.06em;text-align:right;}
+  .cover-meta strong{color:var(--gold);display:block;font-size:12px;margin-bottom:4px;}
+
+  /* BLOCKS */
+  .blk{margin-top:76px;padding-top:36px;border-top:1px solid var(--bgold);margin-bottom:12px;}
+  .blk-head{display:flex;align-items:center;gap:16px;margin-bottom:36px;}
+  .blk-id{font-family:'DM Mono',monospace;font-size:10px;color:var(--gold);background:var(--bgold);border:1px solid rgba(184,151,42,.25);padding:5px 11px;letter-spacing:.1em;flex-shrink:0;}
+  .blk-title{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--bright);letter-spacing:-.02em;}
+  .blk-note{font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);letter-spacing:.06em;margin-left:auto;text-align:right;max-width:200px;}
+
+  /* SECTIONS */
+  .section{margin-bottom:52px;}
+  .sh{display:flex;align-items:center;gap:12px;margin-bottom:22px;padding-bottom:12px;border-bottom:1px solid var(--bsub);}
+  .sn{font-family:'DM Mono',monospace;font-size:9px;color:var(--gold);background:var(--bgold);border:1px solid rgba(184,151,42,.2);padding:3px 8px;letter-spacing:.1em;flex-shrink:0;}
+  .st{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--bright);letter-spacing:-.01em;}
+  .sub{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.14em;color:var(--gold);text-transform:uppercase;margin:22px 0 10px;}
+
+  /* CARDS */
+  .card{background:var(--s1);border:1px solid var(--bsub);padding:20px 24px;}
+  .card+.card{margin-top:10px;}
+  .card.gl{border-left:3px solid var(--gold);}
+  .card.gg{border-left:3px solid var(--green);}
+  .card.gr{border-left:3px solid var(--red);}
+  .card.gb{border-left:3px solid var(--blue);}
+  .card.ga{border-left:3px solid var(--amber);}
+
+  /* GRIDS */
+  .g2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+  .g4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;}
+
+  /* TAGS */
+  .tag{display:inline-block;font-family:'DM Mono',monospace;font-size:8px;padding:2px 7px;letter-spacing:.08em;text-transform:uppercase;}
+  .tg{background:var(--green-bg);color:var(--green-l);border:1px solid rgba(26,122,74,.3);}
+  .ta{background:var(--amber-bg);color:var(--amber-l);border:1px solid rgba(212,134,10,.3);}
+  .tr{background:var(--red-bg);color:var(--red-l);border:1px solid rgba(192,57,43,.3);}
+  .tb{background:var(--blue-bg);color:var(--blue-l);border:1px solid rgba(45,122,192,.3);}
+  .tgd{background:var(--bgold);color:var(--gold);border:1px solid rgba(184,151,42,.3);}
+
+  /* NOTE */
+  .note{font-family:'DM Mono',monospace;font-size:9.5px;color:var(--dim);padding:8px 12px;border-left:2px solid var(--bsub);margin-top:8px;line-height:1.6;}
+
+  /* ── BEFORE / AFTER COMPARISON ── */
+  .ba-grid{display:grid;grid-template-columns:1fr 48px 1fr;gap:0;border:1px solid var(--bsub);overflow:hidden;margin:14px 0;}
+  .ba-col{padding:22px 24px;}
+  .ba-col.before{background:var(--s2);}
+  .ba-col.after{background:rgba(26,122,74,0.04);border-left:3px solid var(--green);}
+  .ba-mid{display:flex;align-items:center;justify-content:center;background:var(--s3);border-left:1px solid var(--bsub);border-right:1px solid var(--bsub);}
+  .ba-arrow{font-size:20px;color:var(--gold);}
+  .ba-label{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:16px;}
+  .ba-metric{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--bsub);}
+  .ba-metric:last-child{border-bottom:none;}
+  .ba-metric-name{font-size:11.5px;color:var(--text);}
+  .ba-metric-val{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;}
+  .ba-metric-sub{font-family:'DM Mono',monospace;font-size:8.5px;color:var(--dim);margin-top:1px;}
+  .ba-delta{font-family:'DM Mono',monospace;font-size:9px;padding:2px 6px;border-radius:2px;margin-left:6px;}
+  .delta-up{background:rgba(26,122,74,0.15);color:var(--green-l);}
+  .delta-down{background:rgba(192,57,43,0.12);color:var(--red-l);}
+  .delta-good{background:rgba(26,122,74,0.15);color:var(--green-l);}
+
+  /* ── TRAJECTORY CHART ── */
+  .chart-container{background:var(--s2);border:1px solid var(--bsub);padding:24px 28px;margin:14px 0;position:relative;}
+  .chart-title{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.12em;color:var(--gold);text-transform:uppercase;margin-bottom:20px;}
+  .chart-area{position:relative;height:220px;border-left:1px solid rgba(235,241,247,0.1);border-bottom:1px solid rgba(235,241,247,0.1);}
+  .chart-svg{width:100%;height:100%;overflow:visible;}
+  .chart-legend{display:flex;gap:24px;margin-top:14px;flex-wrap:wrap;}
+  .chart-legend-item{display:flex;align-items:center;gap:8px;font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);}
+  .chart-legend-line{width:24px;height:2px;border-radius:1px;}
+  .chart-legend-line.dashed{background:repeating-linear-gradient(90deg,currentColor 0,currentColor 4px,transparent 4px,transparent 8px);}
+  .chart-y-label{position:absolute;left:-36px;top:50%;transform:rotate(-90deg) translateX(50%);font-family:'DM Mono',monospace;font-size:8px;color:var(--dim);letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;}
+  .chart-x-label{position:absolute;bottom:-20px;right:0;font-family:'DM Mono',monospace;font-size:8px;color:var(--dim);letter-spacing:.08em;text-transform:uppercase;}
+  .chart-annotation{position:absolute;font-family:'DM Mono',monospace;font-size:8px;color:var(--dim);white-space:nowrap;letter-spacing:.04em;}
+
+  /* ── COST OF INACTION ── */
+  .coi-banner{background:rgba(192,57,43,0.06);border:1px solid rgba(192,57,43,0.25);border-left:3px solid var(--red);padding:18px 22px;margin:14px 0;}
+  .coi-headline{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--red-l);margin-bottom:6px;}
+  .coi-body{font-size:11.5px;color:var(--text);line-height:1.7;}
+  .coi-stat{font-family:'DM Mono',monospace;font-size:11px;color:var(--red-l);}
+
+  .coi-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px;margin:14px 0;}
+  .coi-cell{background:var(--s2);border:1px solid var(--bsub);padding:16px 18px;}
+  .coi-cell-label{font-family:'DM Mono',monospace;font-size:8px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;}
+  .coi-cell-val{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;color:var(--red-l);margin-bottom:4px;}
+  .coi-cell-desc{font-size:11px;color:var(--text);}
+
+  /* ── FEASIBILITY ENGINE ── */
+  .feas-widget{border:1px solid var(--bsub);overflow:hidden;margin:14px 0;}
+  .feas-header{background:var(--s3);padding:14px 20px;border-bottom:1px solid var(--bsub);display:flex;align-items:center;justify-content:space-between;}
+  .feas-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--bright);}
+  .feas-body{padding:20px;}
+  .feas-row{display:grid;grid-template-columns:160px 1fr 120px 100px;gap:0;padding:9px 0;border-bottom:1px solid var(--bsub);align-items:center;}
+  .feas-row:last-child{border-bottom:none;}
+  .feas-var{font-size:11.5px;color:var(--text);}
+  .feas-bar{height:4px;background:var(--s3);border-radius:2px;overflow:hidden;margin:0 16px;}
+  .feas-fill{height:100%;border-radius:2px;}
+  .feas-val{font-family:'DM Mono',monospace;font-size:11px;color:var(--dim);text-align:right;}
+  .feas-status{text-align:right;}
+
+  .feas-verdict{margin-top:16px;padding:14px 18px;border:1px solid;font-size:11.5px;line-height:1.7;}
+  .feas-verdict.feasible{background:var(--green-bg);border-color:rgba(26,122,74,.3);color:var(--green-l);}
+  .feas-verdict.border{background:var(--amber-bg);border-color:rgba(212,134,10,.3);color:var(--amber-l);}
+  .feas-verdict.infeasible{background:var(--red-bg);border-color:rgba(192,57,43,.3);color:var(--red-l);}
+
+  .levers{display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px;margin-top:10px;}
+  .lever{background:var(--s2);border:1px solid var(--bsub);padding:12px 16px;text-align:center;}
+  .lever-icon{font-size:18px;margin-bottom:6px;}
+  .lever-label{font-family:'DM Mono',monospace;font-size:8px;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px;}
+  .lever-action{font-size:11px;color:var(--text);}
+  .lever-impact{font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);margin-top:4px;}
+
+  /* ── TRADEOFF PANEL ── */
+  .tradeoff-panel{background:var(--s2);border:1px solid var(--bsub);overflow:hidden;margin:14px 0;}
+  .tp-header{background:var(--s3);padding:12px 20px;border-bottom:1px solid var(--bsub);font-family:'DM Mono',monospace;font-size:8px;color:var(--gold);letter-spacing:.12em;text-transform:uppercase;}
+  .tp-row{display:grid;grid-template-columns:200px 28px 1fr 28px 1fr;gap:0;border-bottom:1px solid var(--bsub);align-items:stretch;}
+  .tp-row:last-child{border-bottom:none;}
+  .tp-goal{padding:12px 18px;background:var(--s2);border-right:1px solid var(--bsub);display:flex;align-items:center;}
+  .tp-goal-text{font-size:11.5px;color:var(--bright);font-weight:500;}
+  .tp-arrow-cell{display:flex;align-items:center;justify-content:center;background:var(--s3);color:var(--gold);font-size:14px;}
+  .tp-cost{padding:12px 18px;border-left:1px solid var(--bsub);border-right:1px solid var(--bsub);display:flex;flex-direction:column;justify-content:center;}
+  .tp-alt{padding:12px 18px;display:flex;flex-direction:column;justify-content:center;}
+  .tp-cost-label{font-family:'DM Mono',monospace;font-size:7.5px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px;}
+  .tp-cost-val{font-size:11.5px;}
+
+  /* ── DELTA IMPACT CARDS ── */
+  .delta-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0;}
+  .delta-card{background:var(--s2);border:1px solid var(--bsub);padding:16px 14px;text-align:center;position:relative;overflow:hidden;}
+  .delta-card::before{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;}
+  .delta-card.positive::before{background:var(--green);}
+  .delta-card.negative::before{background:var(--red);}
+  .delta-card.neutral::before{background:var(--amber);}
+  .delta-metric-name{font-family:'DM Mono',monospace;font-size:8px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;}
+  .delta-change{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;margin-bottom:4px;line-height:1;}
+  .delta-direction{font-family:'DM Mono',monospace;font-size:9px;margin-bottom:6px;}
+  .delta-context{font-size:10.5px;color:var(--dim);}
+
+  /* ── CONFIDENCE LAYER ── */
+  .conf-matrix{display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px;margin:14px 0;}
+  .conf-cell{padding:20px 18px;}
+  .conf-cell.high{background:var(--green-bg);border:1px solid rgba(26,122,74,.3);}
+  .conf-cell.med{background:var(--amber-bg);border:1px solid rgba(212,134,10,.3);}
+  .conf-cell.low{background:var(--red-bg);border:1px solid rgba(192,57,43,.3);}
+  .conf-level{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:6px;}
+  .conf-trigger{font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);margin-bottom:10px;line-height:1.6;}
+  .conf-message{font-size:11.5px;color:var(--text);line-height:1.6;font-style:italic;}
+
+  /* ── FINAL DECISION BLOCK ── */
+  .final-block{border:1px solid var(--bgold);overflow:hidden;margin-top:14px;}
+  .final-header{background:var(--s3);padding:22px 28px;border-bottom:1px solid var(--bsub);}
+  .final-title{font-family:'DM Mono',monospace;font-size:8px;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px;}
+  .final-verdict{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--bright);letter-spacing:-.02em;line-height:1.1;}
+  .final-body{padding:28px;display:grid;grid-template-columns:1fr 1px 1fr 1px 200px;gap:24px;}
+  .final-divider{background:var(--bsub);}
+  .final-col-label{font-family:'DM Mono',monospace;font-size:7.5px;color:var(--gold);text-transform:uppercase;letter-spacing:.14em;margin-bottom:14px;}
+  .final-metric{display:flex;justify-content:space-between;align-items:baseline;padding:7px 0;border-bottom:1px solid var(--bsub);}
+  .final-metric:last-child{border-bottom:none;}
+  .fml{font-size:11.5px;color:var(--dim);}
+  .fmv{font-family:'DM Mono',monospace;font-size:11px;color:var(--bright);}
+  .fmv.pos{color:var(--green-l);}
+  .fmv.warn{color:var(--amber-l);}
+
+  .alloc-display{display:flex;gap:8px;margin-bottom:12px;}
+  .alloc-box{flex:1;background:var(--s2);border:1px solid var(--bsub);padding:12px;text-align:center;}
+  .alloc-box-label{font-family:'DM Mono',monospace;font-size:7.5px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px;}
+  .alloc-box-val{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--gold);}
+  .alloc-box-range{font-family:'DM Mono',monospace;font-size:8px;color:var(--dim);margin-top:2px;}
+
+  .status-row{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--bsub);}
+  .status-row:last-child{border-bottom:none;}
+  .status-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+  .status-label{font-size:11px;color:var(--dim);}
+  .status-val{margin-left:auto;font-family:'DM Mono',monospace;font-size:10px;}
+
+  .cta-primary{background:var(--gold);color:#090E14;padding:16px 24px;font-family:'Syne',sans-serif;font-size:14px;font-weight:800;text-align:center;letter-spacing:.02em;cursor:pointer;margin-top:16px;width:100%;display:block;}
+  .cta-secondary{background:var(--s3);color:var(--text);padding:10px 16px;font-family:'DM Mono',monospace;font-size:9px;text-align:center;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;border:1px solid var(--bsub);margin-top:6px;width:100%;display:block;}
+
+  /* DATA TABLE */
+  table.dt{width:100%;border-collapse:collapse;}
+  table.dt th{background:var(--s3);padding:9px 14px;font-family:'DM Mono',monospace;font-size:8px;color:var(--gold);text-align:left;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--bsub);}
+  table.dt td{padding:9px 14px;font-size:11.5px;color:var(--text);border:1px solid var(--bsub);background:var(--s1);vertical-align:middle;}
+
+  ::-webkit-scrollbar{width:4px;}
+  ::-webkit-scrollbar-thumb{background:rgba(184,151,42,.2);}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- ══════════ COVER ══════════ -->
+<div class="cover">
+  <div>
+    <div class="badge">Outcome Impact Layer · HRD-002-OI · v1.0</div>
+    <h1>Outcome Impact.<br><em>What Changes If You Act.</em><br><em>What It Costs If You Don't.</em></h1>
+    <div class="cover-sub">
+      Fourth document in the series · Zero repetition from prior three<br>
+      New concepts: Before/After · Trajectory · Cost of Inaction · Feasibility Engine · Tradeoffs · Delta Cards · Final Output
+    </div>
+  </div>
+  <div class="cover-meta">
+    <strong>HARPIAN LLC</strong>
+    MODULE: HRD-002-OI<br>
+    SERIES: 4 OF 4<br>
+    PRECEDED BY: SPEC · ENGINE · DECISION<br>
+    STATUS: DRAFT
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     BLOCK A — OUTCOME IMPACT LAYER
+══════════════════════════════════════════════════════════ -->
+<div class="blk">
+  <div class="blk-head">
+    <span class="blk-id">BLOCK A</span>
+    <span class="blk-title">Outcome Impact Layer</span>
+    <div class="blk-note">Before vs After.<br>Delta cards.<br>Confidence.</div>
+  </div>
+</div>
+
+<!-- A·01 — BEFORE VS AFTER -->
+<div class="section">
+  <div class="sh"><span class="sn">A·01</span><span class="st">Before vs After — Impact of Recommendation</span></div>
+
+  <div style="font-size:12px;color:var(--text);line-height:1.8;margin-bottom:16px;">
+    Every recommendation must show its consequence in two columns. No number without a before. No improvement without a reference. <strong style="color:var(--bright)">The delta IS the recommendation.</strong>
+  </div>
+
+  <div class="ba-grid">
+    <div class="ba-col before">
+      <div class="ba-label">Current Portfolio — No Action</div>
+      <div class="ba-metric">
+        <div><div class="ba-metric-name">Expected Return</div><div class="ba-metric-sub">annual · blended</div></div>
+        <div class="ba-metric-val" style="color:var(--amber-l);">6 – 9%</div>
+      </div>
+      <div class="ba-metric">
+        <div><div class="ba-metric-name">Expected Drawdown</div><div class="ba-metric-sub">max · stress scenario</div></div>
+        <div class="ba-metric-val" style="color:var(--amber-l);">−8%</div>
+      </div>
+      <div class="ba-metric">
+        <div><div class="ba-metric-name">Success Probability</div><div class="ba-metric-sub">P(Goal) · within horizon</div></div>
+        <div class="ba-metric-val" style="color:var(--red-l);">52%</div>
+      </div>
+      <div class="ba-metric">
+        <div><div class="ba-metric-name">Time to Target</div><div class="ba-metric-sub">estimated years at current pace</div></div>
+        <div class="ba-metric-val" style="color:var(--red-l);">11 yrs</div>
+      </div>
+      <div class="ba-metric">
+        <div><div class="ba-metric-name">Risk Number</div><div class="ba-metric-sub">current blended RN</div></div>
+        <div class="ba-metric-val" style="color:var(--blue-l);">20</div>
+      </div>
+      <div class="ba-metric">
+        <div><div class="ba-metric-name">Alignment Status</div><div class="ba-metric-sub">zone classification</div></div>
+        <div class="ba-metric-val" style="font-size:12px;"><span class="tag tb">Under-Risk</span></div>
+      </div>
+    </div>
+    <div class="ba-mid"><div class="ba-arrow">→</div></div>
+    <div class="ba-col after">
+      <div class="ba-label">After Adjustment — C11: 18% + C22: 11%</div>
+      <div class="ba-metric">
+        <div><div class="ba-metric-name">Expected Return</div><div class="ba-metric-sub">annual · blended post-allocation</div></div>
+        <div class="ba-metric-val" style="color:var(--green-l);">9 – 13% <span class="ba-delta delta-up">+4%</span></div>
+      </div>
+      <div class="ba-metric">
+        <div><div class="ba-metric-name">Expected Drawdown</div><div class="ba-metric-sub">max · stress scenario</div></div>
+        <div class="ba-metric-val" style="color:var(--amber-l);">−14% <span class="ba-delta delta-down">−6%</span></div>
+      </div>
+      <div class="ba-metric">
+        <div><div class="ba-metric-name">Success Probability</div><div class="ba-metric-sub">P(Goal) · within horizon</div></div>
+        <div class="ba-metric-val" style="color:var(--green-l);">74% <span class="ba-delta delta-up">+22%</span></div>
+      </div>
+      <div class="ba-metric">
+        <div><div class="ba-metric-name">Time to Target</div><div class="ba-metric-sub">estimated years at adjusted pace</div></div>
+        <div class="ba-metric-val" style="color:var(--green-l);">7 yrs <span class="ba-delta delta-up">−4y</span></div>
+      </div>
+      <div class="ba-metric">
+        <div><div class="ba-metric-name">Risk Number</div><div class="ba-metric-sub">blended RN after allocation</div></div>
+        <div class="ba-metric-val" style="color:var(--green-l);">29 <span class="ba-delta delta-up">+9</span></div>
+      </div>
+      <div class="ba-metric">
+        <div><div class="ba-metric-name">Alignment Status</div><div class="ba-metric-sub">zone classification</div></div>
+        <div class="ba-metric-val" style="font-size:12px;"><span class="tag tg">Optimal</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="note">Drawdown increase (−6%) is intentional — it's the price of the return improvement. System must show this cost explicitly. Never hide it. The ratio: +22% success probability for −6% more drawdown exposure is the core trade. User decides — engine informs.</div>
+
+  <div class="sub" style="margin-top:24px;">Before/After — Display Rules for Developer</div>
+  <table class="dt">
+    <thead><tr><th>Metric</th><th>Current Column</th><th>After Column</th><th>Delta Badge</th><th>When Delta Is Good</th></tr></thead>
+    <tbody>
+      <tr><td>Expected Return</td><td style="color:var(--amber-l);">Amber if below requirement</td><td style="color:var(--green-l);">Green if improves</td><td>+X% in green</td><td>Always — more return is positive</td></tr>
+      <tr><td>Expected Drawdown</td><td>Amber if within tolerance</td><td>Color by new severity</td><td>−X% in red (worse) or green (better)</td><td>Only when drawdown decreases</td></tr>
+      <tr><td>Success Probability</td><td style="color:var(--red-l);">Red if &lt;60%</td><td style="color:var(--green-l);">Green if ≥70%</td><td>+X% always shown</td><td>When probability increases</td></tr>
+      <tr><td>Time to Target</td><td style="color:var(--red-l);">Red if &gt;horizon</td><td style="color:var(--green-l);">Green if shortens</td><td>−Ny in green</td><td>When time decreases</td></tr>
+      <tr><td>Risk Number</td><td style="color:var(--blue-l);">Blue if under-risked</td><td>Color by zone</td><td>+N if moving toward optimal</td><td>When moving toward optimal zone</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- A·02 — DELTA IMPACT CARDS -->
+<div class="section">
+  <div class="sh"><span class="sn">A·02</span><span class="st">Delta Impact Cards — Instant Feedback Per Slider Move</span></div>
+
+  <div style="font-size:12px;color:var(--text);line-height:1.8;margin-bottom:14px;">
+    Four cards always visible during simulation. Update in &lt;100ms. Show the <strong style="color:var(--bright)">marginal change</strong> from the last slider position — not from zero. User sees cost and benefit of each incremental decision.
+  </div>
+
+  <div class="delta-row">
+    <div class="delta-card positive">
+      <div class="delta-metric-name">Return</div>
+      <div class="delta-change" style="color:var(--green-l);">+3.2%</div>
+      <div class="delta-direction" style="color:var(--green-l);">↑ Improving</div>
+      <div class="delta-context">Annual expected return gain from last slider position</div>
+    </div>
+    <div class="delta-card neutral">
+      <div class="delta-metric-name">Risk Number</div>
+      <div class="delta-change" style="color:var(--amber-l);">+6</div>
+      <div class="delta-direction" style="color:var(--amber-l);">↑ Consuming budget</div>
+      <div class="delta-context">6 RN pts used · 4 remaining in budget</div>
+    </div>
+    <div class="delta-card negative">
+      <div class="delta-metric-name">Drawdown</div>
+      <div class="delta-change" style="color:var(--red-l);">+5%</div>
+      <div class="delta-direction" style="color:var(--red-l);">↑ Cost of return</div>
+      <div class="delta-context">Expected max loss increases to −14%</div>
+    </div>
+    <div class="delta-card positive">
+      <div class="delta-metric-name">Probability</div>
+      <div class="delta-change" style="color:var(--green-l);">+18%</div>
+      <div class="delta-direction" style="color:var(--green-l);">↑ Goal closing</div>
+      <div class="delta-context">P(Goal) moves from 56% to 74%</div>
+    </div>
+  </div>
+
+  <div class="note">Cards show MARGINAL delta — not cumulative from zero. If user moves C22 slider from 10% to 15%, cards show what that 5% increment adds, not what the full 15% does. This trains the user to feel each decision unit's cost.</div>
+
+  <div class="sub" style="margin-top:24px;">Delta Card Color Logic</div>
+  <div class="g4">
+    <div class="card gg" style="padding:14px 16px;">
+      <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--green-l);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;">Green bottom bar</div>
+      <div style="font-size:11px;color:var(--text);">Metric moves in favorable direction with no concern</div>
+    </div>
+    <div class="card ga" style="padding:14px 16px;">
+      <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--amber-l);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;">Amber bottom bar</div>
+      <div style="font-size:11px;color:var(--text);">Metric moves in mixed direction — trade-off active</div>
+    </div>
+    <div class="card gr" style="padding:14px 16px;">
+      <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--red-l);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;">Red bottom bar</div>
+      <div style="font-size:11px;color:var(--text);">Metric is the cost of the benefit — must be shown honestly</div>
+    </div>
+    <div class="card gl" style="padding:14px 16px;">
+      <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;">Gold bottom bar</div>
+      <div style="font-size:11px;color:var(--text);">Metric at exactly optimal — no further improvement available</div>
+    </div>
+  </div>
+</div>
+
+<!-- A·03 — CONFIDENCE LAYER -->
+<div class="section">
+  <div class="sh"><span class="sn">A·03</span><span class="st">Confidence Layer — Outcome Reliability Classification</span></div>
+
+  <div class="conf-matrix">
+    <div class="conf-cell high">
+      <div class="conf-level" style="color:var(--green-l);">High Confidence</div>
+      <div class="conf-trigger">P_goal ≥ 75% · Budget margin &gt; 5 · Correlation regime stable · Full portfolio data</div>
+      <div class="conf-message">"This scenario is robust. Outcome is stable across moderate market variation."</div>
+    </div>
+    <div class="conf-cell med">
+      <div class="conf-level" style="color:var(--amber-l);">Medium Confidence</div>
+      <div class="conf-trigger">P_goal 55–74% · Budget margin 2–5 · One stress flag active · Partial data</div>
+      <div class="conf-message">"This scenario achieves the target but is sensitive to return sequencing and volatility spikes."</div>
+    </div>
+    <div class="conf-cell low">
+      <div class="conf-level" style="color:var(--red-l);">Low Confidence</div>
+      <div class="conf-trigger">P_goal &lt;55% · Budget margin &lt;2 · Correlation elevated · Incomplete data</div>
+      <div class="conf-message">"This scenario is fragile. A single adverse year may place the goal out of reach within the horizon."</div>
+    </div>
+  </div>
+
+  <div class="sub">What Confidence Affects in the UI</div>
+  <table class="dt">
+    <thead><tr><th>Confidence</th><th>Recommendation tone</th><th>Range width</th><th>CTA label variant</th></tr></thead>
+    <tbody>
+      <tr><td><span class="tag tg">High</span></td><td>"Apply this allocation strategy."</td><td>Narrow ±3%</td><td>Apply Allocation Strategy</td></tr>
+      <tr><td><span class="tag ta">Medium</span></td><td>"This allocation improves your position. Monitor quarterly."</td><td>Medium ±6%</td><td>Apply with Review Schedule</td></tr>
+      <tr><td><span class="tag tr">Low</span></td><td>"This allocation partially improves your position. Structural review recommended."</td><td>Wide ±10%</td><td>Proceed with Caution</td></tr>
+    </tbody>
+  </table>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     BLOCK B — TRAJECTORY & PROJECTION LAYER
+══════════════════════════════════════════════════════════ -->
+<div class="blk">
+  <div class="blk-head">
+    <span class="blk-id">BLOCK B</span>
+    <span class="blk-title">Trajectory & Projection Layer</span>
+    <div class="blk-note">Wealth path.<br>Three curves.<br>User sees the gap.</div>
+  </div>
+</div>
+
+<!-- B·01 — WEALTH PATH PROJECTION -->
+<div class="section">
+  <div class="sh"><span class="sn">B·01</span><span class="st">Wealth Path Projection — Three Curves</span></div>
+
+  <div style="font-size:12px;color:var(--text);line-height:1.8;margin-bottom:14px;">
+    The gap between curves IS the decision. The distance between "Current" and "Adjusted" at year T is the quantified value of acting now.
+  </div>
+
+  <div class="chart-container">
+    <div class="chart-title">Wealth Trajectory · 3 Scenarios · $1M Base Capital · 12-Year Horizon</div>
+    <div class="chart-area">
+      <div class="chart-y-label">Portfolio Value ($)</div>
+      <div class="chart-x-label">Years →</div>
+      <!-- SVG chart -->
+      <svg class="chart-svg" viewBox="0 0 900 220" preserveAspectRatio="none">
+        <!-- Grid lines -->
+        <line x1="0" y1="55" x2="900" y2="55" stroke="rgba(235,241,247,0.05)" stroke-width="1"/>
+        <line x1="0" y1="110" x2="900" y2="110" stroke="rgba(235,241,247,0.05)" stroke-width="1"/>
+        <line x1="0" y1="165" x2="900" y2="165" stroke="rgba(235,241,247,0.05)" stroke-width="1"/>
+        <!-- Year marks -->
+        <line x1="225" y1="0" x2="225" y2="220" stroke="rgba(235,241,247,0.04)" stroke-width="1"/>
+        <line x1="450" y1="0" x2="450" y2="220" stroke="rgba(235,241,247,0.04)" stroke-width="1"/>
+        <line x1="675" y1="0" x2="675" y2="220" stroke="rgba(235,241,247,0.04)" stroke-width="1"/>
+        <line x1="900" y1="0" x2="900" y2="220" stroke="rgba(235,241,247,0.04)" stroke-width="1"/>
+
+        <!-- TARGET LINE -->
+        <line x1="0" y1="30" x2="900" y2="30" stroke="rgba(184,151,42,0.3)" stroke-width="1" stroke-dasharray="6,4"/>
+
+        <!-- SHADED BAND — adjusted scenario range -->
+        <path d="M0,195 C150,185 300,150 450,105 C600,62 750,35 900,15 L900,25 C750,45 600,75 450,118 C300,162 150,196 0,205 Z"
+              fill="rgba(26,122,74,0.08)"/>
+
+        <!-- CONSERVATIVE PATH (dashed blue) -->
+        <path d="M0,200 C150,196 300,188 450,175 C600,160 750,140 900,115"
+              fill="none" stroke="var(--blue)" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.7"/>
+
+        <!-- CURRENT PORTFOLIO PATH (amber solid) -->
+        <path d="M0,200 C150,193 300,178 450,158 C600,135 750,108 900,78"
+              fill="none" stroke="var(--amber)" stroke-width="2"/>
+
+        <!-- ADJUSTED PATH (green solid, brighter) -->
+        <path d="M0,200 C150,188 300,163 450,128 C600,90 750,55 900,22"
+              fill="none" stroke="var(--green-l)" stroke-width="2.5"/>
+
+        <!-- Labels end of lines -->
+        <text x="905" y="19" fill="var(--green-l)" font-family="'DM Mono',monospace" font-size="9" dominant-baseline="middle">Adjusted</text>
+        <text x="905" y="32" fill="rgba(184,151,42,0.7)" font-family="'DM Mono',monospace" font-size="9" dominant-baseline="middle">Target</text>
+        <text x="905" y="80" fill="var(--amber)" font-family="'DM Mono',monospace" font-size="9" dominant-baseline="middle">Current</text>
+        <text x="905" y="116" fill="var(--blue-l)" font-family="'DM Mono',monospace" font-size="9" dominant-baseline="middle">Conservative</text>
+
+        <!-- Year labels -->
+        <text x="220" y="215" fill="var(--dim)" font-family="'DM Mono',monospace" font-size="8" text-anchor="middle">Y3</text>
+        <text x="445" y="215" fill="var(--dim)" font-family="'DM Mono',monospace" font-size="8" text-anchor="middle">Y6</text>
+        <text x="670" y="215" fill="var(--dim)" font-family="'DM Mono',monospace" font-size="8" text-anchor="middle">Y9</text>
+        <text x="895" y="215" fill="var(--dim)" font-family="'DM Mono',monospace" font-size="8" text-anchor="middle">Y12</text>
+
+        <!-- Value labels left axis -->
+        <text x="-4" y="31" fill="rgba(184,151,42,0.6)" font-family="'DM Mono',monospace" font-size="8" text-anchor="end">Target</text>
+        <text x="-4" y="111" fill="var(--dim)" font-family="'DM Mono',monospace" font-size="8" text-anchor="end">$3M</text>
+        <text x="-4" y="166" fill="var(--dim)" font-family="'DM Mono',monospace" font-size="8" text-anchor="end">$2M</text>
+        <text x="-4" y="200" fill="var(--dim)" font-family="'DM Mono',monospace" font-size="8" text-anchor="end">$1M</text>
+
+        <!-- Gap annotation at Y12 -->
+        <line x1="900" y1="22" x2="900" y2="78" stroke="rgba(255,255,255,0.15)" stroke-width="1" stroke-dasharray="2,2"/>
+        <text x="840" y="52" fill="var(--dim)" font-family="'DM Mono',monospace" font-size="8" text-anchor="middle">Gap: +$1.4M</text>
+      </svg>
+    </div>
+    <div class="chart-legend">
+      <div class="chart-legend-item">
+        <div class="chart-legend-line" style="background:var(--green-l);height:3px;"></div>
+        Adjusted portfolio (C11+C22 allocation applied)
+      </div>
+      <div class="chart-legend-item">
+        <div class="chart-legend-line" style="background:var(--amber);"></div>
+        Current portfolio (no change)
+      </div>
+      <div class="chart-legend-item">
+        <div class="chart-legend-line dashed" style="color:var(--blue-l);"></div>
+        Conservative path (risk-free scenario)
+      </div>
+      <div class="chart-legend-item">
+        <div class="chart-legend-line dashed" style="color:rgba(184,151,42,0.6);"></div>
+        Target capital line
+      </div>
+    </div>
+  </div>
+
+  <div class="sub">Three Curves — What Each Represents</div>
+  <div class="g3">
+    <div class="card gb" style="padding:16px 18px;">
+      <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--blue-l);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;">Conservative path</div>
+      <div style="font-size:11.5px;color:var(--text);line-height:1.7;">RN at minimum viable level. Low drawdown, low return. Shows the cost of playing it too safe: target almost certainly missed. This is the floor.</div>
+    </div>
+    <div class="card ga" style="padding:16px 18px;">
+      <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--amber-l);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;">Current portfolio path</div>
+      <div style="font-size:11.5px;color:var(--text);line-height:1.7;">Exact current state — no change. This is the decision the client is making by doing nothing. Visible explicitly so inaction has a shape and a number.</div>
+    </div>
+    <div class="card gg" style="padding:16px 18px;">
+      <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--green-l);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;">Adjusted portfolio path</div>
+      <div style="font-size:11.5px;color:var(--text);line-height:1.7;">Post-allocation (C11+C22 applied). The shaded band represents the outcome range (P10–P90). Morphs in real-time as sliders move.</div>
+    </div>
+  </div>
+
+  <div class="sub" style="margin-top:24px;">Chart Behavior — Developer Spec</div>
+  <table class="dt">
+    <thead><tr><th>Trigger</th><th>What Updates</th><th>Animation</th></tr></thead>
+    <tbody>
+      <tr><td>Slider drag (C11 or C22)</td><td>Green "adjusted" curve redraws. Shaded band resizes. Gap annotation updates.</td><td>Smooth SVG path transition · 300ms ease</td></tr>
+      <tr><td>Time horizon input change</td><td>All three curves rescale on X axis. Target line repositions.</td><td>X-axis rescale animation · 400ms</td></tr>
+      <tr><td>Capital input change</td><td>Y-axis rescales. Target line repositions. All curves redraw.</td><td>Full redraw · 300ms</td></tr>
+      <tr><td>State = Danger</td><td>Current curve turns red. Amber curve hidden. Warning overlay appears.</td><td>Color transition · 200ms</td></tr>
+      <tr><td>Target line crossed by adjusted curve</td><td>Intersection point highlighted with dot. "Target reached at year N" label appears.</td><td>Dot pulse animation</td></tr>
+    </tbody>
+  </table>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     BLOCK C — DECISION PRESSURE LAYER
+══════════════════════════════════════════════════════════ -->
+<div class="blk">
+  <div class="blk-head">
+    <span class="blk-id">BLOCK C</span>
+    <span class="blk-title">Decision Pressure Layer</span>
+    <div class="blk-note">Cost of inaction.<br>Feasibility engine.<br>Tradeoff panel.</div>
+  </div>
+</div>
+
+<!-- C·01 — COST OF INACTION -->
+<div class="section">
+  <div class="sh"><span class="sn">C·01</span><span class="st">Cost of Inaction — What Staying Still Actually Means</span></div>
+
+  <div class="coi-banner">
+    <div class="coi-headline">Inaction is also a decision. This is its cost.</div>
+    <div class="coi-body">
+      By not adjusting your allocation, you are currently sacrificing
+      <span class="coi-stat"> ~22 percentage points of goal success probability</span> and
+      <span class="coi-stat"> ~4 additional years of required time horizon</span>.
+      This is not a projection — it is the measured difference between your current path and the recommended one.
+    </div>
+  </div>
+
+  <div class="coi-grid">
+    <div class="coi-cell">
+      <div class="coi-cell-label">Probability sacrificed</div>
+      <div class="coi-cell-val">−22%</div>
+      <div class="coi-cell-desc">P(Goal) at current allocation vs adjusted: 52% vs 74%. Each year of delay compounds this gap as compounding opportunities are foregone.</div>
+    </div>
+    <div class="coi-cell">
+      <div class="coi-cell-label">Additional time required</div>
+      <div class="coi-cell-val">+4 yrs</div>
+      <div class="coi-cell-desc">At current pace, target is reached in year 11. Adjusted allocation reaches it in year 7. The 4-year gap is the cost of inaction in time units.</div>
+    </div>
+    <div class="coi-cell">
+      <div class="coi-cell-label">Expected shortfall (P50)</div>
+      <div class="coi-cell-val">−$840K</div>
+      <div class="coi-cell-desc">Median terminal wealth at year 12 with current allocation vs adjusted. The gap is not statistical abstraction — it is deferred capital.</div>
+    </div>
+  </div>
+
+  <div class="note">Cost of Inaction is computed as: (P_goal_adjusted − P_goal_current) and (Time_adjusted − Time_current) and (Terminal_wealth_adjusted_P50 − Terminal_wealth_current_P50). Never framed as a threat — framed as a measurement. The numbers do the work.</div>
+</div>
+
+<!-- C·02 — GOAL FEASIBILITY ENGINE -->
+<div class="section">
+  <div class="sh"><span class="sn">C·02</span><span class="st">Goal Feasibility Engine — Three Verdicts</span></div>
+
+  <div class="feas-widget">
+    <div class="feas-header">
+      <div class="feas-title">Feasibility Assessment</div>
+      <span class="tag ta">Borderline — action closes the gap</span>
+    </div>
+    <div class="feas-body">
+      <div class="feas-row">
+        <div class="feas-var">Current capital</div>
+        <div class="feas-bar"><div class="feas-fill" style="width:60%;background:var(--blue);"></div></div>
+        <div class="feas-val">$1,000,000</div>
+        <div class="feas-status"><span class="tag tb">Defined</span></div>
+      </div>
+      <div class="feas-row">
+        <div class="feas-var">Target capital</div>
+        <div class="feas-bar"><div class="feas-fill" style="width:100%;background:var(--gold);"></div></div>
+        <div class="feas-val">$3,500,000</div>
+        <div class="feas-status"><span class="tag tgd">3.5× required</span></div>
+      </div>
+      <div class="feas-row">
+        <div class="feas-var">Time horizon</div>
+        <div class="feas-bar"><div class="feas-fill" style="width:75%;background:var(--amber);"></div></div>
+        <div class="feas-val">12 years</div>
+        <div class="feas-status"><span class="tag ta">Tight</span></div>
+      </div>
+      <div class="feas-row">
+        <div class="feas-var">Risk tolerance (RN appetite)</div>
+        <div class="feas-bar"><div class="feas-fill" style="width:30%;background:var(--blue);"></div></div>
+        <div class="feas-val">RN 30</div>
+        <div class="feas-status"><span class="tag tb">Conservative</span></div>
+      </div>
+      <div class="feas-row">
+        <div class="feas-var">Required return (derived)</div>
+        <div class="feas-bar"><div class="feas-fill" style="width:55%;background:var(--amber);"></div></div>
+        <div class="feas-val">11.6% / yr</div>
+        <div class="feas-status"><span class="tag ta">Reachable with adjustment</span></div>
+      </div>
+      <div class="feas-verdict border">
+        <strong>Borderline feasibility.</strong> Your goal requires an 11.6% annual return over 12 years. At RN 30 with the suggested allocation (C11 + C22), expected return range is 9–13% — the upper half of that range achieves the target. P(Goal) = 74% with recommended allocation. Feasible, but not with current structure alone.
+      </div>
+    </div>
+  </div>
+
+  <div class="sub" style="margin-top:24px;">Three Feasibility Verdicts — System Logic</div>
+  <table class="dt" style="margin-bottom:14px;">
+    <thead><tr><th>Verdict</th><th>Condition</th><th>System Shows</th><th>Available Actions</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="tag tg">Feasible</span></td>
+        <td>P_goal ≥ 75% at current or suggested allocation AND within RN_appetite</td>
+        <td>"Your goal is achievable within stated parameters."</td>
+        <td>Apply · Refine · Export</td>
+      </tr>
+      <tr>
+        <td><span class="tag ta">Borderline</span></td>
+        <td>P_goal 50–74% with suggested allocation. Gap closable by adjusting one variable.</td>
+        <td>"Your goal is achievable but requires portfolio adjustment."</td>
+        <td>Apply adjustment · Extend horizon · Reduce target</td>
+      </tr>
+      <tr>
+        <td><span class="tag tr">Unrealistic</span></td>
+        <td>P_goal &lt;50% even at max RN_appetite. No allocation solves this.</td>
+        <td>"Your goal cannot be reached within current constraints."</td>
+        <td>Increase risk · Extend time · Reduce target (all three shown)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="sub">Unrealistic State — Three Levers Always Shown Simultaneously</div>
+  <div class="levers">
+    <div class="lever">
+      <div class="lever-icon">⬆</div>
+      <div class="lever-label">Increase Risk</div>
+      <div class="lever-action">Raise RN appetite to 42 → P_goal reaches 68%</div>
+      <div class="lever-impact">Requires accepting drawdown up to −18%</div>
+    </div>
+    <div class="lever">
+      <div class="lever-icon">⏱</div>
+      <div class="lever-label">Extend Horizon</div>
+      <div class="lever-action">Add 4 years (12 → 16) → P_goal reaches 74%</div>
+      <div class="lever-impact">At current risk tolerance and allocation</div>
+    </div>
+    <div class="lever">
+      <div class="lever-icon">⬇</div>
+      <div class="lever-label">Reduce Target</div>
+      <div class="lever-action">Lower target from $3.5M to $2.8M → P_goal reaches 78%</div>
+      <div class="lever-impact">Within 12 years at current risk profile</div>
+    </div>
+  </div>
+  <div class="note">All three levers shown with exact numbers — never abstract. "Increase risk" → shows the specific RN required and its drawdown consequence. "Extend time" → shows exact years needed. "Reduce target" → shows the exact new target amount. User chooses armed with data.</div>
+</div>
+
+<!-- C·03 — TRADEOFF PANEL -->
+<div class="section">
+  <div class="sh"><span class="sn">C·03</span><span class="st">Engineering Tradeoff Panel — Every Gain Has a Cost</span></div>
+
+  <div style="font-size:12px;color:var(--text);line-height:1.8;margin-bottom:14px;">
+    No free optimization. Every improvement in one dimension requires accepting a cost in another. This panel makes the physics of risk-return explicit — in the language of engineering constraints, not financial advice.
+  </div>
+
+  <div class="tradeoff-panel">
+    <div class="tp-header">If you want → you must accept → or alternatively</div>
+    <div class="tp-row">
+      <div class="tp-goal"><div class="tp-goal-text">↑ Higher return</div></div>
+      <div class="tp-arrow-cell">→</div>
+      <div class="tp-cost">
+        <div class="tp-cost-label">Primary cost</div>
+        <div class="tp-cost-val" style="color:var(--red-l);">Accept ↑ drawdown (+4–8% max loss)</div>
+      </div>
+      <div class="tp-arrow-cell" style="color:var(--dim);">or</div>
+      <div class="tp-alt">
+        <div class="tp-cost-label">Alternative</div>
+        <div class="tp-cost-val" style="color:var(--dim);">Accept ↑ volatility (return variance widens)</div>
+      </div>
+    </div>
+    <div class="tp-row">
+      <div class="tp-goal"><div class="tp-goal-text">↓ Lower drawdown</div></div>
+      <div class="tp-arrow-cell">→</div>
+      <div class="tp-cost">
+        <div class="tp-cost-label">Primary cost</div>
+        <div class="tp-cost-val" style="color:var(--amber-l);">Accept ↓ return (−2–4% expected)</div>
+      </div>
+      <div class="tp-arrow-cell" style="color:var(--dim);">or</div>
+      <div class="tp-alt">
+        <div class="tp-cost-label">Alternative</div>
+        <div class="tp-cost-val" style="color:var(--dim);">Extend horizon (+2–4 years) to compensate</div>
+      </div>
+    </div>
+    <div class="tp-row">
+      <div class="tp-goal"><div class="tp-goal-text">↑ Shorter time to target</div></div>
+      <div class="tp-arrow-cell">→</div>
+      <div class="tp-cost">
+        <div class="tp-cost-label">Primary cost</div>
+        <div class="tp-cost-val" style="color:var(--red-l);">Accept ↑ risk (RN +8–14 pts)</div>
+      </div>
+      <div class="tp-arrow-cell" style="color:var(--dim);">or</div>
+      <div class="tp-alt">
+        <div class="tp-cost-label">Alternative</div>
+        <div class="tp-cost-val" style="color:var(--dim);">Accept ↑ drawdown tolerance up to −22%</div>
+      </div>
+    </div>
+    <div class="tp-row">
+      <div class="tp-goal"><div class="tp-goal-text">↑ Higher probability of goal</div></div>
+      <div class="tp-arrow-cell">→</div>
+      <div class="tp-cost">
+        <div class="tp-cost-label">Primary cost</div>
+        <div class="tp-cost-val" style="color:var(--amber-l);">Accept ↑ risk (consuming budget)</div>
+      </div>
+      <div class="tp-arrow-cell" style="color:var(--dim);">or</div>
+      <div class="tp-alt">
+        <div class="tp-cost-label">Alternative</div>
+        <div class="tp-cost-val" style="color:var(--dim);">Accept longer horizon or lower target</div>
+      </div>
+    </div>
+    <div class="tp-row">
+      <div class="tp-goal"><div class="tp-goal-text">↓ Lower overall risk (RN)</div></div>
+      <div class="tp-arrow-cell">→</div>
+      <div class="tp-cost">
+        <div class="tp-cost-label">Primary cost</div>
+        <div class="tp-cost-val" style="color:var(--amber-l);">Accept ↓ return & ↓ P_goal</div>
+      </div>
+      <div class="tp-arrow-cell" style="color:var(--dim);">or</div>
+      <div class="tp-alt">
+        <div class="tp-cost-label">Alternative</div>
+        <div class="tp-cost-val" style="color:var(--dim);">Revisit target (lower capital goal required)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="note">This panel does not appear as a table to the user. It appears as the reason behind each slider constraint — as tooltip copy or as an inline explanation when a slider hits its limit. "You cannot increase return further without exceeding your drawdown tolerance" is the output, not the table.</div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     BLOCK D — FINAL DECISION EXPERIENCE
+══════════════════════════════════════════════════════════ -->
+<div class="blk">
+  <div class="blk-head">
+    <span class="blk-id">BLOCK D</span>
+    <span class="blk-title">Final Decision Experience</span>
+    <div class="blk-note">The closing screen.<br>One action. No ambiguity.</div>
+  </div>
+</div>
+
+<!-- D·01 — FINAL OUTPUT BLOCK -->
+<div class="section">
+  <div class="sh"><span class="sn">D·01</span><span class="st">Final Output Block — What the User Sees Last</span></div>
+
+  <div class="final-block">
+    <div class="final-header">
+      <div class="final-title">Final Output · Allocation Strategy Assessment</div>
+      <div class="final-verdict">You are under-risked relative to your goal.<br>A targeted adjustment brings this into alignment.</div>
+    </div>
+    <div class="final-body">
+
+      <!-- COL 1: Allocation -->
+      <div>
+        <div class="final-col-label">Recommended Allocation</div>
+        <div class="alloc-display">
+          <div class="alloc-box">
+            <div class="alloc-box-label">Core 11</div>
+            <div class="alloc-box-val">18%</div>
+            <div class="alloc-box-range">Range: 15–22%</div>
+          </div>
+          <div class="alloc-box">
+            <div class="alloc-box-label">Core 22</div>
+            <div class="alloc-box-val">11%</div>
+            <div class="alloc-box-range">Range: 8–14%</div>
+          </div>
+        </div>
+        <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);margin-bottom:14px;">Combined Harpian: 29% · Existing: 71% · Within Risk Budget</div>
+        <div class="final-col-label">Expected Outcome</div>
+        <div class="final-metric"><span class="fml">Return (annual)</span><span class="fmv pos">9 – 13%</span></div>
+        <div class="final-metric"><span class="fml">Drawdown (max)</span><span class="fmv warn">−11 – −16%</span></div>
+        <div class="final-metric"><span class="fml">Time to Target</span><span class="fmv pos">~7 years</span></div>
+        <div class="final-metric"><span class="fml">Before → After</span><span class="fmv pos">52% → 74% P(Goal)</span></div>
+      </div>
+
+      <div class="final-divider"></div>
+
+      <!-- COL 2: Status Summary -->
+      <div>
+        <div class="final-col-label">System Status Summary</div>
+        <div class="status-row">
+          <div class="status-dot" style="background:var(--green);"></div>
+          <div class="status-label">Risk Status</div>
+          <div class="status-val" style="color:var(--green-l);">Optimal after adjustment</div>
+        </div>
+        <div class="status-row">
+          <div class="status-dot" style="background:var(--amber);"></div>
+          <div class="status-label">Goal Feasibility</div>
+          <div class="status-val" style="color:var(--amber-l);">Borderline → Feasible</div>
+        </div>
+        <div class="status-row">
+          <div class="status-dot" style="background:var(--green);"></div>
+          <div class="status-label">Risk Budget</div>
+          <div class="status-val" style="color:var(--green-l);">+1 pt remaining</div>
+        </div>
+        <div class="status-row">
+          <div class="status-dot" style="background:var(--green);"></div>
+          <div class="status-label">FO Compliance</div>
+          <div class="status-val" style="color:var(--green-l);">Within mandate</div>
+        </div>
+        <div class="status-row">
+          <div class="status-dot" style="background:var(--green);"></div>
+          <div class="status-label">Confidence Level</div>
+          <div class="status-val" style="color:var(--green-l);">Medium → High</div>
+        </div>
+        <div class="status-row">
+          <div class="status-dot" style="background:var(--amber);"></div>
+          <div class="status-label">Risk Stress Index</div>
+          <div class="status-val" style="color:var(--amber-l);">Low — monitor</div>
+        </div>
+        <div class="status-row">
+          <div class="status-dot" style="background:var(--red);"></div>
+          <div class="status-label">Cost of Inaction</div>
+          <div class="status-val" style="color:var(--red-l);">−22% P(goal) · +4 yrs</div>
+        </div>
+      </div>
+
+      <div class="final-divider"></div>
+
+      <!-- COL 3: Action -->
+      <div>
+        <div class="final-col-label">Action</div>
+        <div class="cta-primary">Apply Allocation Strategy</div>
+        <div class="cta-secondary">Adjust Strategy</div>
+        <div class="cta-secondary">Export to PDF</div>
+        <div style="margin-top:16px;padding:12px 14px;background:var(--green-bg);border:1px solid rgba(26,122,74,.2);font-family:'DM Mono',monospace;font-size:9px;color:var(--green-l);line-height:1.6;">
+          "You are well positioned to reach your target with this adjustment. Monitor quarterly and rebalance if RN drifts &gt;5 pts from optimal zone."
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- D·02 — SYSTEM LANGUAGE PRINCIPLES -->
+<div class="section">
+  <div class="sh"><span class="sn">D·02</span><span class="st">System Language — Institutional Tone with Logical Urgency</span></div>
+
+  <div style="font-size:12px;color:var(--text);line-height:1.8;margin-bottom:16px;">
+    The system creates urgency through logic — not emotion. The numbers do the work. The language is precise, concise, never hyperbolic, never retail.
+  </div>
+
+  <table class="dt">
+    <thead><tr><th>Instead of</th><th>The system says</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr>
+        <td style="color:var(--red-l);">❌ "Your portfolio is at risk!"</td>
+        <td style="color:var(--green-l);">✓ "Your portfolio exceeds your risk tolerance by 13 points."</td>
+        <td>Numbers create fact. Exclamation marks create noise.</td>
+      </tr>
+      <tr>
+        <td style="color:var(--red-l);">❌ "Don't miss this opportunity!"</td>
+        <td style="color:var(--green-l);">✓ "Inaction currently costs ~22% of goal success probability."</td>
+        <td>Measured cost creates genuine urgency.</td>
+      </tr>
+      <tr>
+        <td style="color:var(--red-l);">❌ "Maximize your returns!"</td>
+        <td style="color:var(--green-l);">✓ "This adjustment improves expected return from 6–9% to 9–13% annually."</td>
+        <td>Specificity replaces persuasion.</td>
+      </tr>
+      <tr>
+        <td style="color:var(--red-l);">❌ "Smart investors choose Core 22."</td>
+        <td style="color:var(--green-l);">✓ "Core 22 is indicated when portfolio is under-risked and Risk Budget is available."</td>
+        <td>Logic replaces appeal to identity.</td>
+      </tr>
+      <tr>
+        <td style="color:var(--red-l);">❌ "Act now before it's too late."</td>
+        <td style="color:var(--green-l);">✓ "Each year of delay at current pace extends time to target by approximately 0.4 years."</td>
+        <td>Compounding math creates its own urgency.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- D·03 — COMPLETE SYSTEM SUMMARY -->
+<div class="section">
+  <div class="sh"><span class="sn">D·03</span><span class="st">Complete System — Four-Document Summary</span></div>
+
+  <table class="dt">
+    <thead><tr><th>Document</th><th>What It Defines</th><th>Primary Output</th></tr></thead>
+    <tbody>
+      <tr>
+        <td style="color:var(--gold);font-weight:500;">Visual Spec v1</td>
+        <td>UI architecture: screens, components, visualizations, risk dimensions, 8 alignment states</td>
+        <td>Screen blueprints · Viz library · Risk taxonomy</td>
+      </tr>
+      <tr>
+        <td style="color:var(--gold);font-weight:500;">Engine Layer v1</td>
+        <td>Mathematical structure: RN formulas, blended portfolio, non-linear effects, slider calc chain, time dimension</td>
+        <td>Formulas · Calc chain · Numerical simulations</td>
+      </tr>
+      <tr>
+        <td style="color:var(--gold);font-weight:500;">Decision Layer v1</td>
+        <td>Decision logic: Risk Budget, zones, Core 11 vs 22 roles, confidence indicators, emotional messages, action buttons</td>
+        <td>Decision states · Action labels · Microcopy rules</td>
+      </tr>
+      <tr>
+        <td style="color:var(--gold);font-weight:500;">Outcome Impact v1 ★</td>
+        <td>Impact mechanics: Before/After, trajectory curves, cost of inaction, feasibility engine, tradeoffs, delta cards, final output</td>
+        <td>This document</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div style="margin-top:20px;padding:20px 24px;background:var(--s3);border:1px solid var(--bgold);display:grid;grid-template-columns:repeat(4,1fr);gap:16px;text-align:center;">
+    <div>
+      <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;">User understands in</div>
+      <div style="font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--gold);">5s</div>
+    </div>
+    <div>
+      <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;">User reviews in</div>
+      <div style="font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--gold);">15s</div>
+    </div>
+    <div>
+      <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;">User acts in</div>
+      <div style="font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--gold);">30s</div>
+    </div>
+    <div>
+      <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;">Dead ends</div>
+      <div style="font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--green-l);">0</div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div style="border-top:1px solid var(--bsub);padding:28px 0;display:flex;justify-content:space-between;align-items:center;margin-top:40px;">
+  <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);letter-spacing:.1em;line-height:2;">
+    HARPIAN LLC · OUTCOME IMPACT LAYER · HRD-002-OI · v1.0<br>
+    FOUR-DOCUMENT SERIES COMPLETE: SPEC · ENGINE · DECISION · OUTCOME
+  </div>
+  <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);letter-spacing:.1em;text-align:right;line-height:2;">
+    INTERNAL · DEVELOPMENT USE<br>
+    NOT FOR CLIENT DISTRIBUTION
+  </div>
+</div>
+
+</div>
+</body>
+</html>

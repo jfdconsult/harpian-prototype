@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Harpian · Risk Alignment Engine Layer · v1</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap');
+
+  :root {
+    --navy: #1B3A5C;
+    --gold: #B8972A;
+    --gold-light: #D4AF45;
+    --bg: #090E14;
+    --surface: #0F1820;
+    --surface2: #162130;
+    --surface3: #1C2D40;
+    --border: rgba(184,151,42,0.15);
+    --border-sub: rgba(235,241,247,0.06);
+    --text: #C8D8E8;
+    --dim: #6A8AA8;
+    --bright: #EBF1F7;
+    --green: #1A7A4A;
+    --green-l: #3DBE78;
+    --amber: #D4860A;
+    --red: #C0392B;
+    --red-l: #E87060;
+    --blue: #2D7AC0;
+    --blue-l: #5BA8E8;
+    --purple: #7B3FA0;
+    --purple-l: #B07AE0;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 13px; line-height: 1.6; }
+  .page { max-width: 1160px; margin: 0 auto; padding: 0 40px 120px; }
+
+  /* COVER */
+  .cover { padding: 64px 0 52px; border-bottom: 1px solid var(--border); margin-bottom: 60px; display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 40px; }
+  .badge { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.14em; color: var(--gold); background: rgba(184,151,42,0.08); border: 1px solid rgba(184,151,42,0.2); padding: 4px 10px; display: inline-block; margin-bottom: 18px; text-transform: uppercase; }
+  .cover h1 { font-family: 'Syne', sans-serif; font-size: 36px; font-weight: 800; color: var(--bright); line-height: 1.1; letter-spacing: -0.02em; }
+  .cover h1 em { color: var(--gold); font-style: normal; }
+  .cover-meta { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--dim); line-height: 2.2; letter-spacing: 0.06em; text-align: right; }
+  .cover-meta strong { color: var(--gold); display: block; font-size: 12px; margin-bottom: 4px; }
+
+  /* SECTION */
+  .section { margin-bottom: 64px; }
+  .sh { display: flex; align-items: center; gap: 14px; margin-bottom: 28px; padding-bottom: 14px; border-bottom: 1px solid var(--border-sub); }
+  .sn { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--gold); background: rgba(184,151,42,0.08); border: 1px solid rgba(184,151,42,0.2); padding: 4px 8px; letter-spacing: 0.1em; flex-shrink: 0; }
+  .st { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; color: var(--bright); letter-spacing: -0.01em; }
+  .sub { font-family: 'DM Mono', monospace; font-size: 8.5px; letter-spacing: 0.12em; color: var(--gold); text-transform: uppercase; margin: 24px 0 10px; }
+
+  /* FORMULA BLOCKS */
+  .formula {
+    background: var(--surface2);
+    border: 1px solid rgba(184,151,42,0.25);
+    border-left: 3px solid var(--gold);
+    padding: 18px 22px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--bright);
+    line-height: 2;
+    margin: 12px 0;
+  }
+  .formula .comment { color: var(--dim); font-size: 10px; }
+  .formula .var { color: var(--gold-light); }
+  .formula .op { color: var(--blue-l); }
+  .formula .result { color: var(--green-l); }
+
+  /* CARDS */
+  .card { background: var(--surface); border: 1px solid var(--border-sub); padding: 20px 24px; }
+  .card.gold-l { border-left: 3px solid var(--gold); }
+  .card.green-l { border-left: 3px solid var(--green); }
+  .card.red-l { border-left: 3px solid var(--red); }
+  .card.blue-l { border-left: 3px solid var(--blue); }
+  .card.purple-l { border-left: 3px solid var(--purple); }
+  .card + .card { margin-top: 10px; }
+
+  /* GRIDS */
+  .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+  .g4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; }
+
+  /* FLOW ARROW */
+  .flow-h { display: flex; align-items: stretch; gap: 0; margin: 16px 0; }
+  .fh-block { background: var(--surface); border: 1px solid var(--border-sub); padding: 14px 18px; flex: 1; }
+  .fh-arrow { display: flex; align-items: center; justify-content: center; width: 36px; background: var(--surface2); color: var(--gold); font-size: 16px; flex-shrink: 0; }
+  .fh-label { font-family: 'DM Mono', monospace; font-size: 8px; color: var(--gold); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 8px; }
+  .fh-block ul { list-style: none; }
+  .fh-block ul li { font-size: 11.5px; color: var(--text); padding: 3px 0; border-bottom: 1px solid var(--border-sub); display: flex; align-items: center; gap: 6px; }
+  .fh-block ul li::before { content: '·'; color: var(--gold); font-size: 14px; flex-shrink: 0; }
+  .fh-block ul li:last-child { border-bottom: none; }
+
+  /* ZONE BARS */
+  .zone-track { height: 28px; background: var(--surface3); position: relative; border: 1px solid var(--border-sub); margin: 14px 0; overflow: visible; }
+  .zone-fill { height: 100%; position: absolute; display: flex; align-items: center; padding: 0 10px; font-family: 'DM Mono', monospace; font-size: 9px; font-weight: 500; letter-spacing: 0.06em; }
+  .zone-label { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--dim); margin-bottom: 4px; letter-spacing: 0.06em; }
+  .zone-tick { position: absolute; top: -4px; width: 2px; background: var(--bright); height: 36px; }
+  .tick-label { position: absolute; top: -18px; font-family: 'DM Mono', monospace; font-size: 8px; color: var(--bright); transform: translateX(-50%); white-space: nowrap; }
+
+  /* DECISION MATRIX */
+  .dm-row { display: grid; grid-template-columns: 220px 28px 1fr; gap: 0; align-items: stretch; margin-bottom: 2px; }
+  .dm-condition { background: var(--surface2); border: 1px solid var(--border-sub); padding: 10px 14px; font-family: 'DM Mono', monospace; font-size: 10.5px; color: var(--blue-l); }
+  .dm-arrow { background: var(--surface3); display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 14px; border-top: 1px solid var(--border-sub); border-bottom: 1px solid var(--border-sub); }
+  .dm-action { background: var(--surface); border: 1px solid var(--border-sub); padding: 10px 14px; font-size: 11.5px; color: var(--text); }
+  .dm-action strong { color: var(--bright); font-weight: 500; }
+  .dm-action .alt { color: var(--dim); font-size: 10.5px; font-family: 'DM Mono', monospace; }
+
+  /* TAGS */
+  .tag { display: inline-block; font-family: 'DM Mono', monospace; font-size: 8px; padding: 2px 7px; letter-spacing: 0.08em; text-transform: uppercase; }
+  .tg { background: rgba(26,122,74,0.1); color: var(--green-l); border: 1px solid rgba(26,122,74,0.25); }
+  .ta { background: rgba(212,134,10,0.1); color: var(--amber); border: 1px solid rgba(212,134,10,0.25); }
+  .tr { background: rgba(192,57,43,0.1); color: var(--red-l); border: 1px solid rgba(192,57,43,0.25); }
+  .tb { background: rgba(45,122,192,0.1); color: var(--blue-l); border: 1px solid rgba(45,122,192,0.25); }
+  .tp { background: rgba(123,63,160,0.1); color: var(--purple-l); border: 1px solid rgba(123,63,160,0.25); }
+  .tgd { background: rgba(184,151,42,0.1); color: var(--gold); border: 1px solid rgba(184,151,42,0.25); }
+
+  /* EXAMPLE SIMULATIONS */
+  .sim { background: var(--surface); border: 1px solid var(--border-sub); overflow: hidden; }
+  .sim-head { background: var(--surface3); padding: 12px 20px; border-bottom: 1px solid var(--border-sub); display: flex; justify-content: space-between; align-items: center; }
+  .sim-id { font-family: 'DM Mono', monospace; font-size: 8.5px; color: var(--dim); letter-spacing: 0.1em; text-transform: uppercase; }
+  .sim-title { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 600; color: var(--bright); }
+  .sim-body { padding: 20px; }
+  .sim-row { display: grid; grid-template-columns: 160px 1fr 80px 80px 80px; gap: 0; align-items: center; padding: 7px 0; border-bottom: 1px solid var(--border-sub); }
+  .sim-row.header { }
+  .sim-row:last-child { border-bottom: none; }
+  .sim-metric { font-size: 11.5px; color: var(--text); }
+  .sim-bar { height: 4px; background: var(--surface3); border-radius: 2px; position: relative; overflow: hidden; }
+  .sim-bar-fill { height: 100%; border-radius: 2px; transition: width 0.3s ease; }
+  .sim-val { font-family: 'DM Mono', monospace; font-size: 11px; text-align: center; }
+  .sim-col-label { font-family: 'DM Mono', monospace; font-size: 8px; color: var(--dim); text-transform: uppercase; letter-spacing: 0.08em; text-align: center; margin-bottom: 8px; }
+
+  /* NON-LINEAR TABLE */
+  .nl-table { width: 100%; border-collapse: collapse; }
+  .nl-table th { background: var(--surface3); padding: 9px 14px; font-family: 'DM Mono', monospace; font-size: 8.5px; color: var(--gold); text-align: left; letter-spacing: 0.1em; text-transform: uppercase; border: 1px solid var(--border-sub); }
+  .nl-table td { padding: 9px 14px; font-size: 11.5px; color: var(--text); border: 1px solid var(--border-sub); background: var(--surface); vertical-align: top; }
+  .nl-table tr:hover td { background: var(--surface2); }
+
+  /* TIME DIMENSION */
+  .time-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 2px; margin: 14px 0; }
+  .time-col { background: var(--surface2); border: 1px solid var(--border-sub); padding: 14px 10px; text-align: center; }
+  .time-year { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+  .time-prob { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+  .time-rn { font-family: 'DM Mono', monospace; font-size: 8.5px; color: var(--dim); }
+
+  /* FIFA MODEL */
+  .attr-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .attr-card { background: var(--surface); border: 1px solid var(--border-sub); padding: 16px 14px; text-align: center; }
+  .attr-name { font-family: 'DM Mono', monospace; font-size: 8px; color: var(--dim); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
+  .attr-val { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; margin-bottom: 8px; }
+  .attr-bar-track { height: 3px; background: var(--surface3); border-radius: 2px; overflow: hidden; }
+  .attr-bar-fill { height: 100%; border-radius: 2px; }
+  .attr-delta { font-family: 'DM Mono', monospace; font-size: 9px; margin-top: 6px; }
+
+  /* OUTPUT PANEL */
+  .output-panel { background: var(--surface); border: 1px solid rgba(184,151,42,0.3); padding: 28px; display: grid; grid-template-columns: 1fr 1px 1fr 1px 1fr; gap: 24px; }
+  .op-divider { background: var(--border-sub); }
+  .op-section-label { font-family: 'DM Mono', monospace; font-size: 8px; color: var(--gold); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 14px; }
+  .op-status { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+  .op-alloc { display: flex; gap: 16px; margin-bottom: 12px; }
+  .op-alloc-item { background: var(--surface2); border: 1px solid var(--border-sub); padding: 12px 16px; flex: 1; text-align: center; }
+  .op-alloc-label { font-family: 'DM Mono', monospace; font-size: 8px; color: var(--dim); text-transform: uppercase; margin-bottom: 4px; }
+  .op-alloc-val { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 700; color: var(--gold); }
+  .op-metric { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid var(--border-sub); font-size: 11.5px; }
+  .op-metric:last-child { border-bottom: none; }
+  .op-metric-label { color: var(--dim); }
+  .op-metric-val { color: var(--bright); font-family: 'DM Mono', monospace; font-size: 11px; }
+
+  /* NOTE */
+  .note { font-family: 'DM Mono', monospace; font-size: 9.5px; color: var(--dim); padding: 8px 12px; border-left: 2px solid var(--border); margin-top: 8px; line-height: 1.6; }
+
+  /* DIVIDER */
+  .blk { border-top: 1px solid var(--border); margin-top: 72px; padding-top: 40px; margin-bottom: 24px; }
+  .blk-label { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; color: var(--bright); letter-spacing: -0.02em; display: flex; align-items: center; gap: 16px; margin-bottom: 40px; }
+  .blk-id { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 400; color: var(--gold); background: rgba(184,151,42,0.08); border: 1px solid rgba(184,151,42,0.2); padding: 5px 10px; letter-spacing: 0.1em; }
+
+  code { font-family: 'DM Mono', monospace; font-size: 10px; background: rgba(255,255,255,0.04); padding: 1px 5px; color: var(--gold-light); border: 1px solid var(--border-sub); }
+
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-thumb { background: var(--border); }
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- COVER -->
+<div class="cover">
+  <div>
+    <div class="badge">Engine Layer · Upgrade Spec · HRD-002-EL</div>
+    <h1>Risk Alignment Engine<br><em>How It Actually Works</em></h1>
+    <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--dim);margin-top:14px;letter-spacing:0.06em;">
+      Companion to: Visual Spec v1.0 · This document = engine internals only · No UI repetition
+    </div>
+  </div>
+  <div class="cover-meta">
+    <strong>HARPIAN LLC</strong>
+    MODULE: HRD-002-EL<br>
+    TYPE: ENGINE SPECIFICATION<br>
+    AUDIENCE: DEVELOPER + QUANT<br>
+    STATUS: DRAFT
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     1. CORE ENGINE LOGIC
+════════════════════════════════════════════════════════════ -->
+<div class="blk">
+  <div class="blk-label"><span class="blk-id">ENGINE 01</span>Portfolio Risk Number — How RN Is Computed</div>
+</div>
+
+<div class="section">
+  <div class="sub">Step 1 — Base Risk Score Per Position</div>
+  <div class="formula">
+    <span class="var">RN_i</span> <span class="op">=</span> f( <span class="var">vol_i</span>, <span class="var">liquidity_i</span>, <span class="var">country_score_i</span>, <span class="var">instrument_class_i</span> )<br>
+    <span class="comment">→ Each position gets its own risk score (0–99) based on asset type, volatility, and jurisdiction</span>
+  </div>
+
+  <div class="sub">Step 2 — Weight-Adjusted Aggregation</div>
+  <div class="formula">
+    <span class="var">RN_raw</span> <span class="op">=</span> Σ ( <span class="var">w_i</span> × <span class="var">RN_i</span> )<br>
+    <span class="comment">→ Simple weighted sum — linear component. Portfolio weight × position risk score, summed.</span>
+  </div>
+
+  <div class="sub">Step 3 — Structural Adjustments (Non-Linear Layer)</div>
+  <div class="formula">
+    <span class="var">RN_portfolio</span> <span class="op">=</span> <span class="var">RN_raw</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="op">+</span> <span class="var">Δ_concentration</span> &nbsp;&nbsp;&nbsp;<span class="comment">← penalty: any single position >20%</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="op">+</span> <span class="var">Δ_correlation</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">← penalty: assets move together in crisis</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="op">−</span> <span class="var">Δ_diversification</span> &nbsp;<span class="comment">← discount: uncorrelated buckets reduce total risk</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="op">+</span> <span class="var">Δ_liquidity</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">← penalty: illiquid assets increase realized drawdown risk</span><br>
+    <br>
+    <span class="result">Result: RN_portfolio ∈ [0, 99]</span>
+  </div>
+
+  <div class="g2" style="margin-top: 14px;">
+    <div class="card gold-l">
+      <div class="sub" style="margin-top:0">Concentration Penalty — Δ_concentration</div>
+      <div style="font-size:11.5px;line-height:1.8;">
+        · If max single position weight &gt; 20% → add up to <strong style="color:var(--amber)">+8 pts</strong><br>
+        · If top-3 positions &gt; 50% → add up to <strong style="color:var(--amber)">+5 pts</strong><br>
+        · Scales linearly with over-concentration severity
+      </div>
+    </div>
+    <div class="card gold-l">
+      <div class="sub" style="margin-top:0">Correlation Penalty — Δ_correlation</div>
+      <div style="font-size:11.5px;line-height:1.8;">
+        · High avg pairwise correlation (>0.7) → add up to <strong style="color:var(--amber)">+10 pts</strong><br>
+        · "All positions move together in a crisis" = no real diversification<br>
+        · Evaluated across 6-month trailing window
+      </div>
+    </div>
+    <div class="card gold-l">
+      <div class="sub" style="margin-top:0">Diversification Discount — Δ_diversification</div>
+      <div style="font-size:11.5px;line-height:1.8;">
+        · Low average correlation (&lt;0.3) across asset classes → subtract up to <strong style="color:var(--green-l)">−8 pts</strong><br>
+        · Genuine geographic + asset class diversification rewarded<br>
+        · Cannot reduce total RN below 60% of RN_raw
+      </div>
+    </div>
+    <div class="card gold-l">
+      <div class="sub" style="margin-top:0">Liquidity Penalty — Δ_liquidity</div>
+      <div style="font-size:11.5px;line-height:1.8;">
+        · Assets with T+30 or longer settlement → add <strong style="color:var(--amber)">+3 pts</strong> per 10% allocation<br>
+        · Private equity, real estate, locked structures → add <strong style="color:var(--red-l)">+6 pts</strong> flat<br>
+        · Because illiquid positions amplify drawdown in a forced sell scenario
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     2. BLENDED PORTFOLIO
+════════════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="sh"><span class="sn">ENGINE 02</span><span class="st">Blended Portfolio — Adding Core 11 & Core 22</span></div>
+
+  <div class="sub">New Portfolio Composition</div>
+  <div class="formula">
+    <span class="var">New_Portfolio</span> <span class="op">=</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;( <span class="op">1 − X − Y</span> ) &nbsp;×&nbsp; <span class="var">Current_Portfolio</span> &nbsp;&nbsp;<span class="comment">← existing holdings, compressed proportionally</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="op">+ X</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;×&nbsp; <span class="var">Core_11</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">← X = slider value, Core 11 product allocation</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="op">+ Y</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;×&nbsp; <span class="var">Core_22</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">← Y = slider value, Core 22 product allocation</span><br>
+    <br>
+    <span class="comment">Constraint:  X + Y ≤ 1.0  |  X ≥ 0  |  Y ≥ 0</span>
+  </div>
+
+  <div class="sub">Blended RN — Linear Component</div>
+  <div class="formula">
+    <span class="var">RN_blend_linear</span> <span class="op">=</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;( <span class="op">1 − X − Y</span> ) × <span class="var">RN_portfolio</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="op">+ X</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;× <span class="var">RN_C11</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="op">+ Y</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;× <span class="var">RN_C22</span><br>
+    <span class="comment">→ Proportional weighted average. Foundation — then adjusted for non-linear effects below.</span>
+  </div>
+
+  <div class="sub">Blended RN — With Non-Linear Corrections</div>
+  <div class="formula">
+    <span class="var">RN_blend</span> <span class="op">=</span> <span class="var">RN_blend_linear</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="op">−</span> <span class="var">Δ_corr_benefit</span> &nbsp;&nbsp;&nbsp;<span class="comment">← if C11/C22 has low correlation to existing portfolio: discount</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="op">+</span> <span class="var">Δ_vol_interaction</span>&nbsp;<span class="comment">← if volatility regimes overlap: partial additive effect</span><br>
+    <br>
+    <span class="result">Final: RN_blend ∈ [0, 99] — always within bounds</span>
+  </div>
+  <div class="note">Correlation between Core 11 and typical LatAm/BRL portfolios is low by design. This means adding Core 11 tends to produce a diversification discount — blended RN drops more than simple weighting would suggest.</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     3. NON-LINEAR EFFECTS
+════════════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="sh"><span class="sn">ENGINE 03</span><span class="st">Non-Linear Effects — Why Risk Is Not Additive</span></div>
+
+  <table class="nl-table">
+    <thead>
+      <tr>
+        <th>Scenario</th>
+        <th>Linear Expectation</th>
+        <th>Actual Behavior</th>
+        <th>Why</th>
+        <th>Implication</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong style="color:var(--bright)">Add 20% Core 11<br>to concentrated portfolio</strong></td>
+        <td>RN drops by 20% of (RN_portfolio − RN_C11)</td>
+        <td style="color:var(--green-l)">RN drops MORE than expected<br>(diversification bonus)</td>
+        <td>Core 11 has low correlation to typical LatAm equity + real estate mix → correlation discount activates</td>
+        <td><span class="tag tg">Better than expected risk reduction</span></td>
+      </tr>
+      <tr>
+        <td><strong style="color:var(--bright)">Add 40% Core 22<br>to already-volatile portfolio</strong></td>
+        <td>RN increases linearly</td>
+        <td style="color:var(--red-l)">Drawdown risk increases disproportionately<br>in stress periods</td>
+        <td>Two high-vol exposures in same regime → correlation spikes in crisis → diversification discount evaporates</td>
+        <td><span class="tag tr">Drawdown worse than RN number suggests</span></td>
+      </tr>
+      <tr>
+        <td><strong style="color:var(--bright)">Equal split:<br>50% Core 11 + 50% existing</strong></td>
+        <td>RN = midpoint of both</td>
+        <td style="color:var(--green-l)">Return improves more than risk increases<br>(efficient frontier shift)</td>
+        <td>Core 11's trend-following mechanism adds return during trending markets without proportional volatility cost</td>
+        <td><span class="tag tg">Return/risk ratio improves (better Sharpe)</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="g2" style="margin-top: 14px;">
+    <div class="card blue-l">
+      <div class="sub" style="margin-top:0;">Correlation Rule</div>
+      <div style="font-size:11.5px;line-height:1.8;">
+        When two assets have correlation &lt;0.3:<br>
+        → Combined volatility &lt; weighted average volatility<br>
+        → Risk discount appears: total portfolio risk &lt; sum of parts<br>
+        <span style="color:var(--dim);font-size:10.5px;font-family:'DM Mono',monospace;margin-top:6px;display:block;">σ_blend = √(w1²σ1² + w2²σ2² + 2·w1·w2·ρ·σ1·σ2)</span>
+      </div>
+    </div>
+    <div class="card red-l">
+      <div class="sub" style="margin-top:0;">Crisis Correlation Spike</div>
+      <div style="font-size:11.5px;line-height:1.8;">
+        In market stress events, correlations converge toward 1.0<br>
+        → Diversification discount disappears exactly when most needed<br>
+        → System uses stress-period correlation (not trailing normal) for drawdown estimation only<br>
+        <span style="color:var(--dim);font-size:10.5px;font-family:'DM Mono',monospace;margin-top:6px;display:block;">ρ_stress ≈ 0.75–0.95 for most equity-linked assets</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     4. SLIDER BEHAVIOR
+════════════════════════════════════════════════════════════ -->
+<div class="blk">
+  <div class="blk-label"><span class="blk-id">ENGINE 04</span>Slider Behavior — Real-Time Calculation Chain</div>
+</div>
+
+<div class="section">
+  <div class="flow-h">
+    <div class="fh-block" style="background: var(--surface2); border-color: rgba(184,151,42,0.25);">
+      <div class="fh-label">Input Event</div>
+      <ul>
+        <li>User drags Core 11 slider</li>
+        <li>User drags Core 22 slider</li>
+        <li>Fires on every <code>onInput</code></li>
+      </ul>
+    </div>
+    <div class="fh-arrow">→</div>
+    <div class="fh-block">
+      <div class="fh-label">Calc Chain (ordered)</div>
+      <ul>
+        <li><strong>1.</strong> Recompute w_existing, w_C11, w_C22</li>
+        <li><strong>2.</strong> Compute RN_blend_linear</li>
+        <li><strong>3.</strong> Apply correlation correction</li>
+        <li><strong>4.</strong> Compute blended return</li>
+        <li><strong>5.</strong> Compute blended volatility</li>
+        <li><strong>6.</strong> Compute expected max drawdown</li>
+        <li><strong>7.</strong> Run goal probability model</li>
+        <li><strong>8.</strong> Evaluate alignment state</li>
+      </ul>
+    </div>
+    <div class="fh-arrow">→</div>
+    <div class="fh-block">
+      <div class="fh-label">Visual Update (all simultaneous)</div>
+      <ul>
+        <li>RN dial / rail dot moves</li>
+        <li>Hexagon morphs (300ms ease)</li>
+        <li>Return value counts up/down</li>
+        <li>Drawdown bar adjusts width</li>
+        <li>Probability % updates</li>
+        <li>Before/After deltas recalculate</li>
+        <li>Status banner recolors</li>
+        <li>Recommendation text updates</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sub">Secondary Derived Metrics — How They're Computed</div>
+  <div class="g2">
+    <div class="formula" style="margin:0;">
+      <span class="comment">Blended Expected Return</span><br>
+      <span class="var">R_blend</span> <span class="op">=</span> (1−X−Y)·<span class="var">R_portfolio</span> + X·<span class="var">R_C11</span> + Y·<span class="var">R_C22</span><br>
+      <span class="comment">← Simple weighted average (returns are linear)</span>
+    </div>
+    <div class="formula" style="margin:0;">
+      <span class="comment">Blended Volatility (non-linear)</span><br>
+      <span class="var">σ_blend</span> <span class="op">=</span> √( Σ <span class="var">w_i²·σ_i²</span> + Σ<sub>i≠j</sub> 2·<span class="var">w_i·w_j·ρ_ij·σ_i·σ_j</span> )<br>
+      <span class="comment">← Full covariance matrix — inputs: 3 blocks (existing, C11, C22)</span>
+    </div>
+    <div class="formula" style="margin:0;">
+      <span class="comment">Expected Max Drawdown</span><br>
+      <span class="var">DD_max</span> <span class="op">≈</span> <span class="var">σ_blend</span> × <span class="var">k_stress</span><br>
+      <span class="comment">← k_stress uses stress-period correlation (ρ_stress ≈ 0.85)</span><br>
+      <span class="comment">← k varies by regime history of each product</span>
+    </div>
+    <div class="formula" style="margin:0;">
+      <span class="comment">Probability of Achieving Target</span><br>
+      <span class="var">P_goal</span> <span class="op">=</span> Φ( ( <span class="var">R_blend·T</span> − <span class="var">Gap</span> ) / ( <span class="var">σ_blend·√T</span> ) )<br>
+      <span class="comment">← Log-normal model. T = years. Φ = normal CDF.</span><br>
+      <span class="comment">← Gap = log(Target / Current_AUM)</span>
+    </div>
+  </div>
+  <div class="note">All 4 formulas run sequentially in &lt;10ms (pure arithmetic). Visual animation adds 100ms delay. Target: user perceives instant response — never sees calculation.</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     5. ALLOCATION BOUNDARIES
+════════════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="sh"><span class="sn">ENGINE 05</span><span class="st">Allocation Boundaries — Zones & Limits</span></div>
+
+  <div class="sub">Zone Definition on the 0–100% Allocation Axis</div>
+
+  <div class="zone-label">Core 11 + Core 22 combined allocation % →</div>
+  <div class="zone-track">
+    <div class="zone-fill" style="left:0; width:15%; background:rgba(45,122,192,0.25); color:var(--blue-l);">Under</div>
+    <div class="zone-fill" style="left:15%; width:35%; background:rgba(26,122,74,0.25); color:var(--green-l);">Optimal Zone</div>
+    <div class="zone-fill" style="left:50%; width:20%; background:rgba(212,134,10,0.2); color:var(--amber);">Caution</div>
+    <div class="zone-fill" style="left:70%; width:30%; background:rgba(192,57,43,0.2); color:var(--red-l);">Over-Risk</div>
+    <div class="zone-tick" style="left:15%;"><div class="tick-label">Min eff.</div></div>
+    <div class="zone-tick" style="left:50%;"><div class="tick-label">RN_appetite</div></div>
+    <div class="zone-tick" style="left:70%;"><div class="tick-label">RN_capacity</div></div>
+  </div>
+
+  <div class="g3" style="margin-top: 14px;">
+    <div class="card green-l">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+        <div style="width:10px;height:10px;background:var(--green);border-radius:50%;"></div>
+        <strong style="color:var(--green-l);font-size:12px;">Optimal Zone</strong>
+      </div>
+      <div style="font-size:11px;line-height:1.8;color:var(--text);">
+        · RN_blend ∈ [RN_appetite − 5, RN_requirement + 5]<br>
+        · Return trajectory achieves goal within horizon<br>
+        · Drawdown within behavioral tolerance<br>
+        · Both behavioral + capacity constraints satisfied
+      </div>
+      <div style="margin-top:10px;"><span class="tag tg">Maintain or refine</span></div>
+    </div>
+    <div class="card" style="border-left: 3px solid var(--amber);">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+        <div style="width:10px;height:10px;background:var(--amber);border-radius:50%;"></div>
+        <strong style="color:var(--amber);font-size:12px;">Caution Zone</strong>
+      </div>
+      <div style="font-size:11px;line-height:1.8;color:var(--text);">
+        · RN_blend within 10 pts above RN_appetite<br>
+        · Goal feasible but risk tolerance mildly exceeded<br>
+        · Drawdown still within 130% of stated tolerance<br>
+        · FO mandate not yet breached
+      </div>
+      <div style="margin-top:10px;"><span class="tag ta">Monitor — advise reduction</span></div>
+    </div>
+    <div class="card red-l">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+        <div style="width:10px;height:10px;background:var(--red);border-radius:50%;"></div>
+        <strong style="color:var(--red-l);font-size:12px;">Danger Zones</strong>
+      </div>
+      <div style="font-size:11px;line-height:1.8;color:var(--text);">
+        · <strong style="color:var(--red-l)">Over-risk:</strong> RN_blend &gt; RN_capacity or &gt; RN_appetite + 15<br>
+        · <strong style="color:var(--blue-l)">Under-target:</strong> P_goal &lt; 50% at current allocation<br>
+        · <strong style="color:var(--purple-l)">Conflict:</strong> RN_appetite &lt; RN_requirement (unresolvable by allocation alone)
+      </div>
+      <div style="margin-top:10px;"><span class="tag tr">Action required</span></div>
+    </div>
+  </div>
+
+  <div class="sub">Maximum Allocation — How It's Determined</div>
+  <div class="formula">
+    <span class="var">MAX_harpian_%</span> <span class="op">=</span> min(<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="var">w_max_from_appetite</span>, &nbsp;&nbsp;<span class="comment">← % at which RN_blend = RN_appetite</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="var">w_max_from_capacity</span>, &nbsp;<span class="comment">← % at which RN_blend = RN_capacity</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="var">w_max_from_FO</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">← % at which RN_blend = RN_FO ceiling</span><br>
+    )<br>
+    <span class="comment">→ System takes the most restrictive constraint. Hard cap. Cannot be overridden by user.</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     6. DECISION ENGINE
+════════════════════════════════════════════════════════════ -->
+<div class="blk">
+  <div class="blk-label"><span class="blk-id">ENGINE 06</span>Decision Engine — The Brain</div>
+</div>
+
+<div class="section">
+  <div class="sub">Primary Condition Tree (evaluated in order)</div>
+
+  <div class="dm-row">
+    <div class="dm-condition">RN_portfolio &gt; RN_appetite + 15</div>
+    <div class="dm-arrow">→</div>
+    <div class="dm-action"><strong>OVER-RISKED: Reduce exposure</strong><br><span class="alt">Add Core 11 to dilute RN. Max Core 11 = w that brings RN_blend to RN_appetite.</span></div>
+  </div>
+  <div class="dm-row">
+    <div class="dm-condition">RN_portfolio &lt; RN_requirement − 10</div>
+    <div class="dm-arrow">→</div>
+    <div class="dm-action"><strong>UNDER-RISKED: Add targeted exposure</strong><br><span class="alt">Suggest Core 22 to lift RN. If Core 22 max hits RN_appetite ceiling → flag goal gap.</span></div>
+  </div>
+  <div class="dm-row">
+    <div class="dm-condition">RN_appetite &lt; RN_requirement</div>
+    <div class="dm-arrow">→</div>
+    <div class="dm-action"><strong>STRUCTURAL CONFLICT — allocation cannot resolve this</strong><br><span class="alt">Options (present all three): 1) Extend horizon  2) Accept higher drawdown  3) Reduce target capital</span></div>
+  </div>
+  <div class="dm-row">
+    <div class="dm-condition">P_goal &lt; 60% at RN_appetite max</div>
+    <div class="dm-arrow">→</div>
+    <div class="dm-action"><strong>FLAG: Goal unrealistic at tolerance</strong><br><span class="alt">Show required horizon extension to reach P_goal ≥ 80%. Show required capital increase as alternative.</span></div>
+  </div>
+  <div class="dm-row">
+    <div class="dm-condition">RN_blend &gt; RN_FO</div>
+    <div class="dm-arrow">→</div>
+    <div class="dm-action"><strong>HARD STOP: FO mandate breach</strong><br><span class="alt">Slider hard-blocked at FO ceiling. User cannot proceed without FO mandate revision.</span></div>
+  </div>
+  <div class="dm-row">
+    <div class="dm-condition">All conditions within bounds AND P_goal ≥ 80%</div>
+    <div class="dm-arrow">→</div>
+    <div class="dm-action"><strong style="color:var(--green-l);">FULLY ALIGNED — no action required</strong><br><span class="alt">Confirm current structure. Optional: show return enhancement opportunity if additional headroom exists.</span></div>
+  </div>
+
+  <div class="sub">Recommendation Generation — Output Logic</div>
+  <div class="g2">
+    <div class="card gold-l">
+      <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--gold);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px;">Suggested % — How Computed</div>
+      <div style="font-size:11.5px;line-height:1.8;">
+        1. Solve for <code>X, Y</code> that minimizes gap to RN_appetite while maximizing P_goal<br>
+        2. Subject to: <code>X + Y ≤ MAX_harpian_%</code><br>
+        3. Priority: C11 fills behavioral gap first. C22 fills return gap second.<br>
+        4. Output: <code>C11_suggested%</code> + <code>C22_suggested%</code> + confidence band [min, optimal, max]
+      </div>
+    </div>
+    <div class="card gold-l">
+      <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--gold);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px;">Confidence Band — What It Means</div>
+      <div style="font-size:11.5px;line-height:1.8;">
+        · <strong style="color:var(--green-l)">Min</strong>: allocation that achieves alignment with P_goal ≥ 60%<br>
+        · <strong style="color:var(--gold)">Optimal</strong>: allocation that maximizes P_goal within RN_appetite<br>
+        · <strong style="color:var(--amber)">Max</strong>: allocation at RN_appetite ceiling (full tolerance usage)<br>
+        · Band shown as shaded range on slider — user always sees where "optimal" is
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     7. GOAL + TIME DIMENSION
+════════════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="sh"><span class="sn">ENGINE 07</span><span class="st">Goal + Time — How Horizon Changes Everything</span></div>
+
+  <div class="g2">
+    <div>
+      <div class="sub">Required Return — From Goal to RN</div>
+      <div class="formula">
+        <span class="var">R_required</span> <span class="op">=</span> ( <span class="var">Target_AUM</span> / <span class="var">Current_AUM</span> )<sup>1/T</sup> − 1<br>
+        <span class="comment">← Geometric annual return needed to reach target in T years</span>
+        <br><br>
+        <span class="var">RN_requirement</span> <span class="op">=</span> g( <span class="var">R_required</span>, <span class="var">asset_class_universe</span> )<br>
+        <span class="comment">← Maps required return to the minimum RN needed to plausibly achieve it</span><br>
+        <span class="comment">← Based on historical return/RN relationship of Harpian product universe</span>
+      </div>
+    </div>
+    <div>
+      <div class="sub">How T Affects All Outputs</div>
+      <div class="card" style="height: calc(100% - 32px);">
+        <div style="font-size:11.5px;line-height:2;">
+          ↑ T (longer) → ↓ R_required → ↓ RN_requirement → ↑ P_goal<br>
+          ↓ T (shorter) → ↑ R_required → ↑ RN_requirement → ↓ P_goal<br>
+          <br>
+          <span style="color:var(--dim);">Key insight: </span>the same portfolio can be "over-risked" at 3 years and "under-risked" at 15 years. RN_requirement is not fixed — it is a function of time.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub">Probability of Goal — Sensitivity to Horizon (example: conservative client, RN 30)</div>
+
+  <div class="time-grid">
+    <div class="time-col">
+      <div class="time-year">3 Years</div>
+      <div class="time-prob" style="color:var(--red-l);">28%</div>
+      <div class="time-rn">Req RN: 72</div>
+      <div style="margin-top:6px;"><span class="tag tr">Infeasible</span></div>
+    </div>
+    <div class="time-col">
+      <div class="time-year">5 Years</div>
+      <div class="time-prob" style="color:var(--amber);">44%</div>
+      <div class="time-rn">Req RN: 58</div>
+      <div style="margin-top:6px;"><span class="tag ta">Marginal</span></div>
+    </div>
+    <div class="time-col" style="border-color: rgba(184,151,42,0.3); background: rgba(184,151,42,0.04);">
+      <div class="time-year">8 Years</div>
+      <div class="time-prob" style="color:var(--green-l);">67%</div>
+      <div class="time-rn">Req RN: 40</div>
+      <div style="margin-top:6px;"><span class="tag tg">Viable</span></div>
+    </div>
+    <div class="time-col" style="border-color: rgba(184,151,42,0.3); background: rgba(184,151,42,0.05);">
+      <div class="time-year">12 Years</div>
+      <div class="time-prob" style="color:var(--green-l);">84%</div>
+      <div class="time-rn">Req RN: 28</div>
+      <div style="margin-top:6px;"><span class="tag tg">Aligned</span></div>
+    </div>
+    <div class="time-col">
+      <div class="time-year">20 Years</div>
+      <div class="time-prob" style="color:var(--green-l);">96%</div>
+      <div class="time-rn">Req RN: 18</div>
+      <div style="margin-top:6px;"><span class="tag tg">Strong</span></div>
+    </div>
+  </div>
+
+  <div class="note">Same client, same RN 30, same target — only T changes. At 8 years, Harpian allocation is viable. At 3 years, no Harpian allocation can solve it. System must show this as: "Your goal is not allocation-solvable. Extend horizon to 8+ years or revise target."</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     8. FIFA MODEL
+════════════════════════════════════════════════════════════ -->
+<div class="blk">
+  <div class="blk-label"><span class="blk-id">ENGINE 08</span>FIFA-Like Interaction Model — Portfolio as a Build</div>
+</div>
+
+<div class="section">
+  <div style="font-size:13px;color:var(--text);margin-bottom:20px;line-height:1.8;">
+    The user is not "investing" in Harpian products.<br>
+    The user is <strong style="color:var(--bright)">tuning system attributes</strong> — each slider move changes the portfolio's performance profile.<br>
+    Every metric is an attribute. Every allocation is a build decision. The <strong style="color:var(--gold)">Core 11 + Core 22 sliders are attribute dials</strong>.
+  </div>
+
+  <div class="sub">Before adjustment — example baseline (Moderate client, portfolio RN 45)</div>
+  <div class="attr-grid">
+    <div class="attr-card">
+      <div class="attr-name">Return</div>
+      <div class="attr-val" style="color:var(--amber);">62</div>
+      <div class="attr-bar-track"><div class="attr-bar-fill" style="width:62%;background:var(--amber);"></div></div>
+      <div class="attr-delta" style="color:var(--dim);">12.4% annual</div>
+    </div>
+    <div class="attr-card">
+      <div class="attr-name">Volatility</div>
+      <div class="attr-val" style="color:var(--amber);">58</div>
+      <div class="attr-bar-track"><div class="attr-bar-fill" style="width:58%;background:var(--amber);"></div></div>
+      <div class="attr-delta" style="color:var(--dim);">14.2% annual</div>
+    </div>
+    <div class="attr-card">
+      <div class="attr-name">Drawdown</div>
+      <div class="attr-val" style="color:var(--red-l);">72</div>
+      <div class="attr-bar-track"><div class="attr-bar-fill" style="width:72%;background:var(--red);"></div></div>
+      <div class="attr-delta" style="color:var(--dim);">−21.4% max</div>
+    </div>
+    <div class="attr-card">
+      <div class="attr-name">P(Goal)</div>
+      <div class="attr-val" style="color:var(--amber);">54</div>
+      <div class="attr-bar-track"><div class="attr-bar-fill" style="width:54%;background:var(--amber);"></div></div>
+      <div class="attr-delta" style="color:var(--dim);">54% probability</div>
+    </div>
+  </div>
+
+  <div class="sub" style="margin-top:24px;">After: Core 11 = 20%, Core 22 = 15% — attributes shift</div>
+  <div class="attr-grid">
+    <div class="attr-card" style="border-color: rgba(26,122,74,0.3);">
+      <div class="attr-name">Return</div>
+      <div class="attr-val" style="color:var(--green-l);">68</div>
+      <div class="attr-bar-track"><div class="attr-bar-fill" style="width:68%;background:var(--green);"></div></div>
+      <div class="attr-delta" style="color:var(--green-l);">↑ 14.8% annual (+2.4%)</div>
+    </div>
+    <div class="attr-card" style="border-color: rgba(26,122,74,0.3);">
+      <div class="attr-name">Volatility</div>
+      <div class="attr-val" style="color:var(--green-l);">48</div>
+      <div class="attr-bar-track"><div class="attr-bar-fill" style="width:48%;background:var(--green);"></div></div>
+      <div class="attr-delta" style="color:var(--green-l);">↓ 11.6% annual (−2.6%)</div>
+    </div>
+    <div class="attr-card" style="border-color: rgba(26,122,74,0.3);">
+      <div class="attr-name">Drawdown</div>
+      <div class="attr-val" style="color:var(--green-l);">52</div>
+      <div class="attr-bar-track"><div class="attr-bar-fill" style="width:52%;background:var(--green);"></div></div>
+      <div class="attr-delta" style="color:var(--green-l);">↓ −14.1% max (−7.3%)</div>
+    </div>
+    <div class="attr-card" style="border-color: rgba(26,122,74,0.3);">
+      <div class="attr-name">P(Goal)</div>
+      <div class="attr-val" style="color:var(--green-l);">78</div>
+      <div class="attr-bar-track"><div class="attr-bar-fill" style="width:78%;background:var(--green);"></div></div>
+      <div class="attr-delta" style="color:var(--green-l);">↑ 78% probability (+24%)</div>
+    </div>
+  </div>
+
+  <div class="sub" style="margin-top:24px;">Tradeoff Map — What Each Slider Does</div>
+  <table class="nl-table">
+    <thead>
+      <tr><th>Slider Move</th><th>Return</th><th>Volatility</th><th>Drawdown</th><th>P(Goal)</th><th>Best Use Case</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong style="color:var(--bright)">↑ Core 11 %</strong></td>
+        <td style="color:var(--green-l);">↑ moderate</td>
+        <td style="color:var(--green-l);">↓ significant</td>
+        <td style="color:var(--green-l);">↓ significant</td>
+        <td style="color:var(--green-l);">↑ if under-risked</td>
+        <td>Over-risked portfolio. Behavioral alignment. Drawdown reduction.</td>
+      </tr>
+      <tr>
+        <td><strong style="color:var(--bright)">↑ Core 22 %</strong></td>
+        <td style="color:var(--green-l);">↑ strong</td>
+        <td style="color:var(--amber);">↑ moderate</td>
+        <td style="color:var(--amber);">↑ moderate</td>
+        <td style="color:var(--green-l);">↑ strong</td>
+        <td>Under-risked portfolio. Goal gap. Extend return trajectory.</td>
+      </tr>
+      <tr>
+        <td><strong style="color:var(--bright)">C11 + C22 combined ↑</strong></td>
+        <td style="color:var(--green-l);">↑ blended</td>
+        <td style="color:var(--green-l);">↓ via correlation</td>
+        <td style="color:var(--green-l);">↓ net</td>
+        <td style="color:var(--green-l);">↑ strongest</td>
+        <td>Full optimization. Both behavioral alignment AND goal improvement.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     9. NUMERICAL SIMULATIONS
+════════════════════════════════════════════════════════════ -->
+<div class="blk">
+  <div class="blk-label"><span class="blk-id">ENGINE 09</span>Numerical Simulations — 2 Concrete Examples</div>
+</div>
+
+<div class="section">
+
+  <!-- SIM 1 -->
+  <div class="sim" style="margin-bottom: 16px;">
+    <div class="sim-head">
+      <div>
+        <div class="sim-id">Simulation · 01</div>
+        <div class="sim-title">Conservative client (RN 30) / Portfolio too conservative (RN 20) / Moderate goal</div>
+      </div>
+      <span class="tag tb">Under-Risked</span>
+    </div>
+    <div class="sim-body">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+        <div>
+          <div style="font-family:'DM Mono',monospace;font-size:8.5px;color:var(--gold);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:12px;">Given</div>
+          <div style="font-size:11.5px;line-height:2;color:var(--text);">
+            RN_individual = <strong style="color:var(--bright);">30</strong> &nbsp;(behavioral ceiling)<br>
+            RN_portfolio = <strong style="color:var(--blue-l);">20</strong> &nbsp;(current — very conservative)<br>
+            RN_requirement = <strong style="color:var(--amber);">32</strong> &nbsp;(goal-based minimum)<br>
+            RN_C11 = <strong style="color:var(--gold);">42</strong> &nbsp;|&nbsp; RN_C22 = <strong style="color:var(--gold);">58</strong><br>
+            Corr(portfolio, C11) ≈ 0.2 → diversification bonus active
+          </div>
+        </div>
+        <div>
+          <div style="font-family:'DM Mono',monospace;font-size:8.5px;color:var(--gold);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:12px;">Step-by-step</div>
+          <div style="font-size:11.5px;line-height:2;color:var(--text);">
+            Scenario A: Add <strong style="color:var(--bright);">25% Core 11</strong><br>
+            &nbsp;&nbsp;RN_blend_linear = 0.75×20 + 0.25×42 = <strong>25.5</strong><br>
+            &nbsp;&nbsp;Corr discount (−2 pts) → <strong style="color:var(--green-l);">RN_blend ≈ 23.5</strong><br>
+            &nbsp;&nbsp;→ Still below RN_requirement (32). Under-target.<br><br>
+            Scenario B: Add <strong style="color:var(--bright);">25% C11 + 15% C22</strong><br>
+            &nbsp;&nbsp;RN_blend_linear = 0.60×20 + 0.25×42 + 0.15×58 = <strong>31.7</strong><br>
+            &nbsp;&nbsp;Corr discount (−1.5 pts) → <strong style="color:var(--green-l);">RN_blend ≈ 30.2</strong><br>
+            &nbsp;&nbsp;→ Within 0.2 of RN_individual (30). <span class="tag tg">Aligned</span>
+          </div>
+        </div>
+      </div>
+      <div style="background:var(--surface2);border:1px solid rgba(26,122,74,0.25);padding:12px 16px;margin-top:16px;font-size:11.5px;color:var(--text);">
+        <strong style="color:var(--green-l);">Verdict:</strong> Scenario B achieves alignment. Blended RN 30.2 just within behavioral ceiling. Return improves from 7% → 11.4% annualized. Drawdown goes from −10% to −12.8% (acceptable for this profile). P_goal rises from 38% → 71%.
+      </div>
+    </div>
+  </div>
+
+  <!-- SIM 2 -->
+  <div class="sim">
+    <div class="sim-head">
+      <div>
+        <div class="sim-id">Simulation · 02</div>
+        <div class="sim-title">Moderate client (RN 55) / Portfolio already at risk (RN 68) / Goal requires return</div>
+      </div>
+      <span class="tag tr">Over-Risked</span>
+    </div>
+    <div class="sim-body">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+        <div>
+          <div style="font-family:'DM Mono',monospace;font-size:8.5px;color:var(--gold);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:12px;">Given</div>
+          <div style="font-size:11.5px;line-height:2;color:var(--text);">
+            RN_individual = <strong style="color:var(--bright);">55</strong> &nbsp;(behavioral ceiling)<br>
+            RN_portfolio = <strong style="color:var(--red-l);">68</strong> &nbsp;(over behavioral limit by 13pts)<br>
+            RN_requirement = <strong style="color:var(--amber);">50</strong> &nbsp;(goal-based minimum)<br>
+            RN_C11 = <strong style="color:var(--gold);">42</strong> &nbsp;|&nbsp; RN_C22 = <strong style="color:var(--gold);">58</strong><br>
+            Key: adding Core 11 (RN 42) dilutes high-risk portfolio
+          </div>
+        </div>
+        <div>
+          <div style="font-family:'DM Mono',monospace;font-size:8.5px;color:var(--gold);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:12px;">Step-by-step</div>
+          <div style="font-size:11.5px;line-height:2;color:var(--text);">
+            Scenario A: Add <strong style="color:var(--bright);">40% Core 22</strong> → wrong direction<br>
+            &nbsp;&nbsp;RN_blend = 0.60×68 + 0.40×58 = <strong style="color:var(--red-l);">63.8</strong><br>
+            &nbsp;&nbsp;Still above RN_appetite (55). <span class="tag tr">Worsens alignment</span><br><br>
+            Scenario B: Add <strong style="color:var(--bright);">35% Core 11</strong> only<br>
+            &nbsp;&nbsp;RN_blend = 0.65×68 + 0.35×42 = <strong>58.9</strong><br>
+            &nbsp;&nbsp;Near ceiling. Corr discount (−2) → <strong style="color:var(--amber);">56.9</strong><br>
+            &nbsp;&nbsp;→ Within 2 pts of appetite. <span class="tag ta">Caution zone</span><br><br>
+            Scenario C: <strong style="color:var(--bright);">45% Core 11</strong> (optimal)<br>
+            &nbsp;&nbsp;RN_blend = 0.55×68 + 0.45×42 = <strong>56.3</strong><br>
+            &nbsp;&nbsp;Corr discount → <strong style="color:var(--green-l);">54.2</strong>. <span class="tag tg">Aligned</span>
+          </div>
+        </div>
+      </div>
+      <div style="background:var(--surface2);border:1px solid rgba(184,151,42,0.2);padding:12px 16px;margin-top:16px;font-size:11.5px;color:var(--text);">
+        <strong style="color:var(--gold);">Verdict:</strong> Core 22 makes it worse (already over-risked). Core 11 is the right tool here — dilutes risk, improves alignment. At 45% Core 11: RN drops from 68 to 54.2. Return barely changes (−0.8%). Drawdown improves from −24% to −16%. P_goal improves from 61% to 77%.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     10. FINAL OUTPUT EXPERIENCE
+════════════════════════════════════════════════════════════ -->
+<div class="blk">
+  <div class="blk-label"><span class="blk-id">ENGINE 10</span>Final Output Experience — What the User Sees Last</div>
+</div>
+
+<div class="section">
+  <div class="output-panel">
+    <!-- STATUS -->
+    <div>
+      <div class="op-section-label">01 · Alignment verdict</div>
+      <div class="op-status" style="color:var(--green-l);">You are aligned.</div>
+      <div style="font-size:11.5px;color:var(--text);margin-bottom:12px;line-height:1.6;">Your portfolio risk profile is within behavioral tolerance and your goal is achievable within the stated horizon.</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;">
+        <span class="tag tg">RN within appetite</span>
+        <span class="tag tg">Goal feasible</span>
+        <span class="tag tg">FO compliant</span>
+      </div>
+    </div>
+    <div class="op-divider"></div>
+    <!-- ALLOCATION -->
+    <div>
+      <div class="op-section-label">02 · Suggested allocation</div>
+      <div class="op-alloc">
+        <div class="op-alloc-item">
+          <div class="op-alloc-label">Core 11</div>
+          <div class="op-alloc-val">22%</div>
+          <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--dim);margin-top:3px;">Range: 15–28%</div>
+        </div>
+        <div class="op-alloc-item">
+          <div class="op-alloc-label">Core 22</div>
+          <div class="op-alloc-val">16%</div>
+          <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--dim);margin-top:3px;">Range: 10–22%</div>
+        </div>
+      </div>
+      <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);margin-top:4px;">Combined Harpian: 38% · Existing: 62%</div>
+    </div>
+    <div class="op-divider"></div>
+    <!-- EXPECTED OUTCOME -->
+    <div>
+      <div class="op-section-label">03 · Expected outcome</div>
+      <div class="op-metric"><span class="op-metric-label">Return (annual)</span><span class="op-metric-val" style="color:var(--green-l);">14.2% – 18.6%</span></div>
+      <div class="op-metric"><span class="op-metric-label">Volatility (annual)</span><span class="op-metric-val">9.8% – 12.4%</span></div>
+      <div class="op-metric"><span class="op-metric-label">Max drawdown</span><span class="op-metric-val" style="color:var(--amber);">−11.2% – −16.8%</span></div>
+      <div class="op-metric"><span class="op-metric-label">P(Goal) in 8 yrs</span><span class="op-metric-val" style="color:var(--green-l);">78%</span></div>
+      <div class="op-metric"><span class="op-metric-label">Confidence band</span><span class="op-metric-val" style="color:var(--gold);">Moderate–High</span></div>
+    </div>
+  </div>
+
+  <div class="note" style="margin-top:16px;">
+    Confidence level is categorical: Low / Moderate / High. Derived from: P_goal level + RN_blend margin within appetite + data completeness of portfolio upload. Never shown as a false-precision percentage. Output page must be exportable as: (a) client PDF one-pager, (b) advisor full report, (c) structured JSON for IPS integration.
+  </div>
+
+  <div class="sub" style="margin-top:28px;">Not Aligned — What the Final Screen Shows Instead</div>
+  <div class="g3">
+    <div class="card red-l">
+      <div style="font-family:'DM Mono',monospace;font-size:8.5px;color:var(--red-l);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.1em;">Over-risked state</div>
+      <div style="font-size:11.5px;color:var(--text);line-height:1.8;">
+        · Status: <strong style="color:var(--red-l)">Action required</strong><br>
+        · Excess RN: +13 pts above appetite<br>
+        · Suggested: 45% Core 11 to correct<br>
+        · Expected correction: RN 68 → 54
+      </div>
+    </div>
+    <div class="card purple-l">
+      <div style="font-family:'DM Mono',monospace;font-size:8.5px;color:var(--purple-l);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.1em;">Structural conflict</div>
+      <div style="font-size:11.5px;color:var(--text);line-height:1.8;">
+        · Status: <strong style="color:var(--purple-l)">Cannot be solved by allocation</strong><br>
+        · Three options presented with outcome per option<br>
+        · No suggestion for C11/C22 — misleading to show<br>
+        · Advisor escalation recommended
+      </div>
+    </div>
+    <div class="card" style="border-left: 3px solid var(--blue);">
+      <div style="font-family:'DM Mono',monospace;font-size:8.5px;color:var(--blue-l);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.1em;">Goal infeasible</div>
+      <div style="font-size:11.5px;color:var(--text);line-height:1.8;">
+        · Status: <strong style="color:var(--blue-l)">Horizon extension required</strong><br>
+        · Shows: "To reach P_goal ≥ 80%, extend horizon to [T+N] years"<br>
+        · Or: "Reduce target from $X to $Y"<br>
+        · Or: "Increase initial capital by $Z"
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div style="border-top:1px solid var(--border-sub);padding:28px 0;display:flex;justify-content:space-between;align-items:center;margin-top:40px;">
+  <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);letter-spacing:0.1em;">
+    HARPIAN LLC · HRD ENGINE LAYER · v1.0<br>
+    MODULE: HRD-002-EL · COMPANION TO VISUAL SPEC v1.0
+  </div>
+  <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);letter-spacing:0.1em;text-align:right;">
+    NO CODE · NO UI REPETITION<br>
+    ENGINE INTERNALS ONLY
+  </div>
+</div>
+
+</div>
+</body>
+</html>

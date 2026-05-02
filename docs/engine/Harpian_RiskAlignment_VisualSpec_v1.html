@@ -1,0 +1,2086 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Harpian · Risk Alignment Engine · Visual Spec v1</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap');
+
+  :root {
+    --navy: #1B3A5C;
+    --gold: #B8972A;
+    --gold-light: #D4AF45;
+    --lblue: #EBF1F7;
+    --green: #1A5C3A;
+    --green-light: #22754A;
+    --bg: #090E14;
+    --surface: #0F1820;
+    --surface2: #162130;
+    --surface3: #1C2D40;
+    --border: rgba(184,151,42,0.15);
+    --border-subtle: rgba(235,241,247,0.06);
+    --text: #C8D8E8;
+    --text-dim: #6A8AA8;
+    --text-bright: #EBF1F7;
+    --red: #C0392B;
+    --amber: #D4860A;
+    --emerald: #1A7A4A;
+    --blue-accent: #2D7AC0;
+
+    /* Risk state colors */
+    --aligned: #1A7A4A;
+    --moderate: #D4860A;
+    --over: #C0392B;
+    --under: #2D7AC0;
+    --infeasible: #7B3FA0;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13.5px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── LAYOUT ── */
+  .page { max-width: 1200px; margin: 0 auto; padding: 0 40px 120px; }
+
+  /* ── COVER ── */
+  .cover {
+    border-bottom: 1px solid var(--border);
+    padding: 72px 0 56px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 40px;
+    margin-bottom: 64px;
+  }
+  .cover-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--gold);
+    text-transform: uppercase;
+    background: rgba(184,151,42,0.08);
+    border: 1px solid rgba(184,151,42,0.2);
+    padding: 4px 10px;
+    display: inline-block;
+    margin-bottom: 20px;
+  }
+  .cover h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: 40px;
+    font-weight: 800;
+    color: var(--text-bright);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+  .cover h1 span { color: var(--gold); }
+  .cover-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-top: 16px;
+    letter-spacing: 0.06em;
+  }
+  .cover-meta {
+    text-align: right;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    line-height: 2;
+    letter-spacing: 0.06em;
+  }
+  .cover-meta strong { color: var(--gold); display: block; font-size: 13px; margin-bottom: 4px; }
+
+  /* ── TOC ── */
+  .toc {
+    background: var(--surface);
+    border: 1px solid var(--border-subtle);
+    border-left: 3px solid var(--gold);
+    padding: 28px 32px;
+    margin-bottom: 72px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 48px;
+  }
+  .toc-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    grid-column: 1 / -1;
+  }
+  .toc-item {
+    font-family: 'DM Mono', monospace;
+    font-size: 10.5px;
+    color: var(--text-dim);
+    padding: 3px 0;
+    border-bottom: 1px solid var(--border-subtle);
+    display: flex;
+    gap: 12px;
+    align-items: baseline;
+  }
+  .toc-item .num { color: var(--gold); min-width: 20px; }
+  .toc-item .label { color: var(--text); }
+
+  /* ── SECTION ── */
+  .section { margin-bottom: 72px; }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .section-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--gold);
+    background: rgba(184,151,42,0.08);
+    border: 1px solid rgba(184,151,42,0.2);
+    padding: 4px 8px;
+    letter-spacing: 0.1em;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-bright);
+    letter-spacing: -0.01em;
+  }
+
+  /* ── SUBSECTION ── */
+  .sub-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin: 32px 0 14px;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border-subtle);
+    padding: 24px 28px;
+  }
+  .card + .card { margin-top: 12px; }
+  .card.accent { border-left: 3px solid var(--gold); }
+  .card.green { border-left: 3px solid var(--green-light); }
+  .card.blue { border-left: 3px solid var(--blue-accent); }
+  .card.red { border-left: 3px solid var(--red); }
+
+  /* ── GRID SYSTEMS ── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; }
+
+  /* ── IO FLOW ── */
+  .io-flow {
+    display: grid;
+    grid-template-columns: 1fr 48px 1fr 48px 1fr;
+    gap: 0;
+    align-items: stretch;
+    margin: 24px 0;
+  }
+  .io-block {
+    background: var(--surface2);
+    border: 1px solid var(--border-subtle);
+    padding: 24px 20px;
+  }
+  .io-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gold);
+    font-size: 20px;
+    background: var(--surface);
+  }
+  .io-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.14em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .io-items { list-style: none; }
+  .io-items li {
+    font-size: 11.5px;
+    color: var(--text);
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border-subtle);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .io-items li::before {
+    content: '·';
+    color: var(--gold);
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .io-items li:last-child { border-bottom: none; }
+
+  /* ── RN TABLE ── */
+  .rn-grid {
+    display: grid;
+    gap: 2px;
+  }
+  .rn-row {
+    display: grid;
+    grid-template-columns: 160px 1fr 140px 100px;
+    gap: 0;
+    background: var(--surface);
+    border: 1px solid var(--border-subtle);
+    overflow: hidden;
+  }
+  .rn-row.header {
+    background: var(--surface3);
+    border-color: var(--border);
+  }
+  .rn-cell {
+    padding: 10px 14px;
+    font-size: 11.5px;
+    border-right: 1px solid var(--border-subtle);
+  }
+  .rn-cell:last-child { border-right: none; }
+  .rn-row.header .rn-cell {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+  .rn-name {
+    font-weight: 500;
+    color: var(--text-bright);
+  }
+  .rn-desc { color: var(--text-dim); }
+  .rn-source { color: var(--text-dim); font-family: 'DM Mono', monospace; font-size: 10px; }
+  .tag {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 8.5px;
+    padding: 2px 7px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: 2px;
+  }
+  .tag.fixed { background: rgba(184,151,42,0.1); color: var(--gold); border: 1px solid rgba(184,151,42,0.25); }
+  .tag.calculated { background: rgba(26,92,58,0.15); color: #3DBE78; border: 1px solid rgba(26,92,58,0.3); }
+  .tag.dynamic { background: rgba(45,122,192,0.12); color: #5BA8E8; border: 1px solid rgba(45,122,192,0.25); }
+  .tag.input { background: rgba(192,57,43,0.1); color: #E87060; border: 1px solid rgba(192,57,43,0.25); }
+
+  /* ── FLOW STEPS ── */
+  .flow {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+    margin: 24px 0;
+  }
+  .flow-step {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 0;
+    align-items: stretch;
+  }
+  .flow-num {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .flow-circle {
+    width: 32px;
+    height: 32px;
+    background: var(--surface3);
+    border: 1.5px solid var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--gold);
+    font-weight: 500;
+    flex-shrink: 0;
+    margin-top: 10px;
+  }
+  .flow-line {
+    width: 1px;
+    flex: 1;
+    background: var(--border);
+    margin: 4px auto;
+    min-height: 20px;
+  }
+  .flow-step:last-child .flow-line { display: none; }
+  .flow-content {
+    background: var(--surface);
+    border: 1px solid var(--border-subtle);
+    padding: 12px 18px;
+    margin: 4px 0 2px;
+  }
+  .flow-content.highlight { border-color: rgba(184,151,42,0.3); background: var(--surface2); }
+  .flow-content strong { color: var(--text-bright); font-weight: 500; display: block; margin-bottom: 4px; }
+  .flow-content span { color: var(--text-dim); font-size: 11.5px; }
+  .flow-content .tags { margin-top: 8px; display: flex; gap: 6px; flex-wrap: wrap; }
+
+  /* ── SCREENS ── */
+  .screen-card {
+    background: var(--surface);
+    border: 1px solid var(--border-subtle);
+    padding: 0;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  .screen-header {
+    background: var(--surface3);
+    padding: 14px 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .screen-id {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--gold);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .screen-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-bright);
+    margin-top: 2px;
+  }
+  .screen-purpose {
+    font-size: 11px;
+    color: var(--text-dim);
+    font-family: 'DM Mono', monospace;
+  }
+  .screen-body {
+    padding: 22px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+  }
+  .screen-col-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 8.5px;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .screen-col ul { list-style: none; }
+  .screen-col ul li {
+    font-size: 11.5px;
+    color: var(--text);
+    padding: 3px 0;
+    padding-left: 12px;
+    position: relative;
+  }
+  .screen-col ul li::before {
+    content: '›';
+    position: absolute;
+    left: 0;
+    color: var(--gold);
+  }
+  .screen-realtime {
+    background: rgba(184,151,42,0.04);
+    border: 1px solid rgba(184,151,42,0.12);
+    padding: 6px 10px;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--gold);
+    margin-top: 8px;
+  }
+
+  /* ── VIZ LIBRARY ── */
+  .viz-card {
+    background: var(--surface);
+    border: 1px solid var(--border-subtle);
+    padding: 20px 22px;
+  }
+  .viz-card + .viz-card { margin-top: 10px; }
+  .viz-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+  }
+  .viz-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-bright);
+  }
+  .viz-use-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 8.5px;
+    padding: 3px 8px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .use-diag { background: rgba(26,92,58,0.1); color: #3DBE78; border: 1px solid rgba(26,92,58,0.25); }
+  .use-sim { background: rgba(45,122,192,0.1); color: #5BA8E8; border: 1px solid rgba(45,122,192,0.25); }
+  .use-rec { background: rgba(184,151,42,0.1); color: var(--gold); border: 1px solid rgba(184,151,42,0.25); }
+  .use-all { background: rgba(123,63,160,0.1); color: #B07AE0; border: 1px solid rgba(123,63,160,0.25); }
+  .viz-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    font-size: 11px;
+  }
+  .viz-meta { }
+  .viz-meta-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 4px;
+  }
+  .viz-meta-value { color: var(--text); font-size: 11.5px; }
+
+  /* ── RISK DIMS ── */
+  .dim-family {
+    background: var(--surface);
+    border: 1px solid var(--border-subtle);
+    overflow: hidden;
+  }
+  .dim-family-header {
+    background: var(--surface3);
+    padding: 10px 18px;
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-bright);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .dim-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .dim-items { padding: 12px 18px; }
+  .dim-item {
+    font-size: 11.5px;
+    color: var(--text);
+    padding: 5px 0;
+    border-bottom: 1px solid var(--border-subtle);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .dim-item:last-child { border-bottom: none; }
+  .dim-item-name { color: var(--text-bright); }
+  .dim-item-desc { color: var(--text-dim); font-size: 10.5px; max-width: 200px; text-align: right; }
+
+  /* ── SIMULATOR ── */
+  .sim-block {
+    background: var(--surface);
+    border: 1px solid var(--border-subtle);
+    padding: 22px 26px;
+    margin-bottom: 10px;
+  }
+  .sim-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--gold);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .sim-row {
+    display: grid;
+    grid-template-columns: 200px 1fr 120px;
+    gap: 12px;
+    align-items: center;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .sim-row:last-child { border-bottom: none; }
+  .sim-metric { font-size: 11.5px; color: var(--text); }
+  .sim-bar-track {
+    height: 4px;
+    background: var(--surface3);
+    border-radius: 2px;
+    position: relative;
+    overflow: hidden;
+  }
+  .sim-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+  }
+  .sim-value {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    text-align: right;
+  }
+
+  /* ── STATE MATRIX ── */
+  .state-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+  .state-card {
+    border: 1px solid;
+    padding: 16px;
+  }
+  .state-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+  }
+  .state-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-bright);
+    margin-bottom: 6px;
+  }
+  .state-desc { font-size: 10.5px; color: var(--text-dim); line-height: 1.4; margin-bottom: 8px; }
+  .state-action { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.06em; }
+
+  /* ── MICROCOPY ── */
+  .microcopy-list { display: flex; flex-direction: column; gap: 8px; }
+  .microcopy-item {
+    background: var(--surface2);
+    border: 1px solid var(--border-subtle);
+    border-left: 3px solid;
+    padding: 10px 16px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text-bright);
+    line-height: 1.5;
+  }
+
+  /* ── PROFILE EXAMPLES ── */
+  .profile-card {
+    background: var(--surface);
+    border: 1px solid var(--border-subtle);
+    overflow: hidden;
+  }
+  .profile-header {
+    background: var(--surface3);
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border-subtle);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .profile-id {
+    font-family: 'DM Mono', monospace;
+    font-size: 8.5px;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .profile-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-bright);
+  }
+  .profile-body { padding: 20px; }
+  .rn-compare {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .rn-box {
+    background: var(--surface2);
+    border: 1px solid var(--border-subtle);
+    padding: 12px 10px;
+    text-align: center;
+  }
+  .rn-box-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 6px;
+  }
+  .rn-box-value {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .profile-outcome {
+    background: var(--surface2);
+    border: 1px solid var(--border-subtle);
+    padding: 10px 14px;
+    font-size: 11.5px;
+    color: var(--text);
+  }
+  .profile-outcome strong { color: var(--text-bright); }
+
+  /* ── STATIC TABLE ── */
+  .data-table { width: 100%; border-collapse: collapse; }
+  .data-table th {
+    background: var(--surface3);
+    padding: 9px 14px;
+    font-family: 'DM Mono', monospace;
+    font-size: 8.5px;
+    color: var(--gold);
+    text-align: left;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: 1px solid var(--border-subtle);
+  }
+  .data-table td {
+    padding: 9px 14px;
+    font-size: 11.5px;
+    color: var(--text);
+    border: 1px solid var(--border-subtle);
+    background: var(--surface);
+    vertical-align: top;
+  }
+  .data-table tr:hover td { background: var(--surface2); }
+
+  /* ── DEV PRIORITIES ── */
+  .dev-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .dev-item {
+    background: var(--surface);
+    border: 1px solid var(--border-subtle);
+    padding: 14px 18px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .dev-icon {
+    width: 28px;
+    height: 28px;
+    background: rgba(184,151,42,0.08);
+    border: 1px solid rgba(184,151,42,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 13px;
+  }
+  .dev-text strong {
+    display: block;
+    font-size: 12px;
+    color: var(--text-bright);
+    font-weight: 500;
+    margin-bottom: 3px;
+  }
+  .dev-text span { font-size: 11px; color: var(--text-dim); }
+
+  /* ── BLOCK LABELS ── */
+  .block-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--text-bright);
+    letter-spacing: -0.02em;
+    padding: 48px 0 24px;
+    border-top: 1px solid var(--border);
+    margin-top: 80px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .block-label .block-id {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--gold);
+    background: rgba(184,151,42,0.08);
+    border: 1px solid rgba(184,151,42,0.2);
+    padding: 6px 12px;
+    letter-spacing: 0.1em;
+  }
+
+  /* ── SEPARATOR ── */
+  .sep { height: 1px; background: var(--border-subtle); margin: 40px 0; }
+
+  /* ── INLINE MONO ── */
+  code {
+    font-family: 'DM Mono', monospace;
+    font-size: 10.5px;
+    background: rgba(255,255,255,0.04);
+    padding: 2px 6px;
+    color: var(--gold-light);
+    border: 1px solid var(--border-subtle);
+  }
+
+  /* ── ANNOTATION ── */
+  .note {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    font-style: italic;
+    margin-top: 8px;
+    padding-left: 12px;
+    border-left: 2px solid var(--border);
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--surface); }
+  ::-webkit-scrollbar-thumb { background: var(--border); }
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- ══════════════════════════════════════ COVER ══════════════════════════════════════ -->
+<div class="cover">
+  <div>
+    <div class="cover-badge">Product Spec · Visual Blueprint</div>
+    <h1>Risk Alignment <span>&</span><br>HRD Engine Expansion</h1>
+    <div class="cover-sub">MODULE · HRD-002 &nbsp;·&nbsp; HARPIAN INSTITUTIONAL PLATFORM &nbsp;·&nbsp; v1.0</div>
+  </div>
+  <div class="cover-meta">
+    <strong>HARPIAN LLC</strong>
+    STATUS: DRAFT FOR DEVELOPMENT<br>
+    AUDIENCE: PROGRAMMER + DESIGNER<br>
+    FORMAT: VISUAL SPEC / UX BLUEPRINT<br>
+    LANGUAGE: INSTITUTIONAL ENGLISH
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ TOC ══════════════════════════════════════ -->
+<div class="toc">
+  <div class="toc-title">— Contents</div>
+  <div class="toc-item"><span class="num">A</span><span class="label">Executive Visual Concept</span></div>
+  <div class="toc-item"><span class="num">01</span><span class="label">System Overview — Input → Engine → Output</span></div>
+  <div class="toc-item"><span class="num">B</span><span class="label">Suggested Screens</span></div>
+  <div class="toc-item"><span class="num">02</span><span class="label">Risk Numbers Taxonomy</span></div>
+  <div class="toc-item"><span class="num">C</span><span class="label">Visualization Library</span></div>
+  <div class="toc-item"><span class="num">03</span><span class="label">Alignment Logic — Step-by-Step Flow</span></div>
+  <div class="toc-item"><span class="num">D</span><span class="label">Interaction & Simulator Logic</span></div>
+  <div class="toc-item"><span class="num">04</span><span class="label">Risk Dimensions — 4 Families</span></div>
+  <div class="toc-item"><span class="num">·</span><span class="label">Alignment States Matrix</span></div>
+  <div class="toc-item"><span class="num">·</span><span class="label">AI Recommendation Layer</span></div>
+  <div class="toc-item"><span class="num">·</span><span class="label">3 Client Profiles — Examples</span></div>
+  <div class="toc-item"><span class="num">·</span><span class="label">Fixed vs Dynamic Data Map</span></div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════════════════
+     BLOCK A — EXECUTIVE VISUAL CONCEPT
+═══════════════════════════════════════════════════════════════════════════════════════ -->
+<div class="block-label">
+  <span class="block-id">BLOCK A</span>
+  Executive Visual Concept
+</div>
+
+<!-- SECTION 01 — SYSTEM OVERVIEW -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <span class="section-title">System Overview — Input · Engine · Output</span>
+  </div>
+
+  <div class="io-flow">
+    <div class="io-block">
+      <div class="io-label">↓ Input</div>
+      <ul class="io-items">
+        <li>Client behavioral questionnaire</li>
+        <li>Family Office questionnaire (optional)</li>
+        <li>Current portfolio upload (Excel / PDF / HTML)</li>
+        <li>Investment objective &amp; time horizon</li>
+        <li>Target capital amount</li>
+        <li>Liquidity &amp; constraint preferences</li>
+      </ul>
+    </div>
+    <div class="io-arrow">→</div>
+    <div class="io-block" style="border-color: rgba(184,151,42,0.3); background: var(--surface3);">
+      <div class="io-label">⚙ Engine</div>
+      <ul class="io-items">
+        <li>Parse &amp; classify portfolio by asset class</li>
+        <li>Calculate RN Portfolio Current</li>
+        <li>Calculate RN Requirement (goal-based)</li>
+        <li>Identify RN gaps across all dimensions</li>
+        <li>Run optimization for Core 11 / Core 22 mix</li>
+        <li>Score alignment status per dimension</li>
+        <li>Generate recommendation with constraints</li>
+      </ul>
+    </div>
+    <div class="io-arrow">→</div>
+    <div class="io-block">
+      <div class="io-label">↑ Output</div>
+      <ul class="io-items">
+        <li>Risk Alignment Dashboard</li>
+        <li>Gap analysis per RN dimension</li>
+        <li>Recommended % Core 11 allocation</li>
+        <li>Recommended % Core 22 allocation</li>
+        <li>Blended RN after allocation</li>
+        <li>Expected return / drawdown / volatility</li>
+        <li>Alignment status label + alert</li>
+        <li>AI recommendation card</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="note">Engine is deterministic — same inputs always produce same outputs. AI layer generates natural-language microcopy from structured data.</div>
+</div>
+
+<!-- SECTION 02 — RISK NUMBERS -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <span class="section-title">Risk Numbers Taxonomy</span>
+  </div>
+
+  <div class="rn-grid">
+    <div class="rn-row header">
+      <div class="rn-cell">Identifier</div>
+      <div class="rn-cell">What it represents</div>
+      <div class="rn-cell">Source</div>
+      <div class="rn-cell">Nature</div>
+    </div>
+    <div class="rn-row">
+      <div class="rn-cell rn-name">RN Individual<br><span style="font-size:9px;color:var(--text-dim);font-family:'DM Mono',monospace">Appetite</span></div>
+      <div class="rn-cell rn-desc">Behavioral risk tolerance of the client — how much volatility they can emotionally sustain</div>
+      <div class="rn-cell rn-source">Questionnaire (scored)</div>
+      <div class="rn-cell"><span class="tag input">Input</span></div>
+    </div>
+    <div class="rn-row">
+      <div class="rn-cell rn-name">RN Family Office<br><span style="font-size:9px;color:var(--text-dim);font-family:'DM Mono',monospace">Institutional Floor</span></div>
+      <div class="rn-cell rn-desc">Institutional mandate risk ceiling set by the FO governance policy</div>
+      <div class="rn-cell rn-source">FO questionnaire or manual</div>
+      <div class="rn-cell"><span class="tag input">Input</span></div>
+    </div>
+    <div class="rn-row">
+      <div class="rn-cell rn-name">RN Portfolio<br><span style="font-size:9px;color:var(--text-dim);font-family:'DM Mono',monospace">Current State</span></div>
+      <div class="rn-cell rn-desc">Blended risk score of the actual portfolio at the moment of analysis</div>
+      <div class="rn-cell rn-source">Portfolio upload → engine</div>
+      <div class="rn-cell"><span class="tag calculated">Calculated</span></div>
+    </div>
+    <div class="rn-row">
+      <div class="rn-cell rn-name">RN Requirement<br><span style="font-size:9px;color:var(--text-dim);font-family:'DM Mono',monospace">Goal-Based</span></div>
+      <div class="rn-cell rn-desc">Minimum risk needed to realistically achieve the stated objective within the time horizon</div>
+      <div class="rn-cell rn-source">Objective + horizon + capital</div>
+      <div class="rn-cell"><span class="tag calculated">Calculated</span></div>
+    </div>
+    <div class="rn-row">
+      <div class="rn-cell rn-name">RN Capacity<br><span style="font-size:9px;color:var(--text-dim);font-family:'DM Mono',monospace">Financial Floor</span></div>
+      <div class="rn-cell rn-desc">Maximum risk the client's financial situation (assets, liabilities, income) can structurally absorb</div>
+      <div class="rn-cell rn-source">Financial profile</div>
+      <div class="rn-cell"><span class="tag calculated">Calculated</span></div>
+    </div>
+    <div class="rn-row">
+      <div class="rn-cell rn-name">RN Core 11<br><span style="font-size:9px;color:var(--text-dim);font-family:'DM Mono',monospace">Eleven (ETP)</span></div>
+      <div class="rn-cell rn-desc">Fixed risk profile of Core 11 — lower volatility, drawdown-protected, sector rotation</div>
+      <div class="rn-cell rn-source">Harpian product spec</div>
+      <div class="rn-cell"><span class="tag fixed">Fixed</span></div>
+    </div>
+    <div class="rn-row">
+      <div class="rn-cell rn-name">RN Core 22<br><span style="font-size:9px;color:var(--text-dim);font-family:'DM Mono',monospace">Twenty-Two (ETP)</span></div>
+      <div class="rn-cell rn-desc">Fixed risk profile of Core 22 — higher return potential, higher volatility envelope</div>
+      <div class="rn-cell rn-source">Harpian product spec</div>
+      <div class="rn-cell"><span class="tag fixed">Fixed</span></div>
+    </div>
+    <div class="rn-row" style="border-color: rgba(184,151,42,0.25); background: rgba(184,151,42,0.03);">
+      <div class="rn-cell rn-name">RN Suggested Mix<br><span style="font-size:9px;color:var(--text-dim);font-family:'DM Mono',monospace">Blended Output</span></div>
+      <div class="rn-cell rn-desc">Blended RN resulting from (portfolio existing % × RN current) + (C11% × RN C11) + (C22% × RN C22)</div>
+      <div class="rn-cell rn-source">Simulator engine</div>
+      <div class="rn-cell"><span class="tag dynamic">Dynamic</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 03 — ALIGNMENT LOGIC -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <span class="section-title">Alignment Logic — How It Works</span>
+  </div>
+
+  <div class="flow">
+    <div class="flow-step">
+      <div class="flow-num"><div class="flow-circle">01</div><div class="flow-line"></div></div>
+      <div class="flow-content">
+        <strong>Client completes Risk Intake questionnaire</strong>
+        <span>20–30 behavioral questions → scored → outputs RN Individual (0–99). Covers loss aversion, time horizon sensitivity, volatility comfort, wealth dependency.</span>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num"><div class="flow-circle">02</div><div class="flow-line"></div></div>
+      <div class="flow-content">
+        <strong>Family Office intake (conditional)</strong>
+        <span>If FO exists → FO completes separate governance questionnaire → outputs RN Family Office. If no FO → system defaults to individual mandate only.</span>
+        <div class="tags"><span class="tag input">Optional</span><span class="tag calculated">Creates institutional floor</span></div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num"><div class="flow-circle">03</div><div class="flow-line"></div></div>
+      <div class="flow-content">
+        <strong>Portfolio upload + parsing</strong>
+        <span>Client uploads current portfolio (Excel, PDF, HTML). Engine parses: asset class, country, currency, liquidity bucket, % allocation per position.</span>
+        <div class="tags"><span class="tag input">Formats: .xlsx / .pdf / .html</span></div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num"><div class="flow-circle">04</div><div class="flow-line"></div></div>
+      <div class="flow-content">
+        <strong>Engine calculates RN Portfolio Current</strong>
+        <span>Weighted sum of risk scores by position × allocation weight. Applies dimension multipliers: volatility, concentration, country, liquidity, correlation.</span>
+        <div class="tags"><span class="tag calculated">Blended RN = Σ(weight_i × RN_i)</span></div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num"><div class="flow-circle">05</div><div class="flow-line"></div></div>
+      <div class="flow-content">
+        <strong>Engine calculates RN Requirement</strong>
+        <span>Based on: target capital, current capital, time horizon → backwards-solved return rate needed → translated to minimum RN required.</span>
+        <div class="tags"><span class="tag calculated">Reverse-engineers required risk from goal</span></div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num"><div class="flow-circle">06</div><div class="flow-line"></div></div>
+      <div class="flow-content highlight">
+        <strong>Gap analysis — 4 comparisons run simultaneously</strong>
+        <span>
+          · RN Portfolio vs RN Individual (behavioral alignment)<br>
+          · RN Portfolio vs RN Requirement (goal feasibility gap)<br>
+          · RN Individual vs RN Capacity (financial vs behavioral gap)<br>
+          · RN Portfolio vs RN FO (institutional compliance)
+        </span>
+        <div class="tags"><span class="tag dynamic">All 4 gaps displayed as signed deltas</span></div>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num"><div class="flow-circle">07</div><div class="flow-line"></div></div>
+      <div class="flow-content">
+        <strong>Engine runs allocation optimizer</strong>
+        <span>Finds optimal Core 11 % + Core 22 % to close the gap with minimum added risk. Subject to: RN constraint, max allocation rules, client tolerance.</span>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num"><div class="flow-circle">08</div><div class="flow-line"></div></div>
+      <div class="flow-content highlight">
+        <strong>Output: Dashboard + Recommendation + Simulator</strong>
+        <span>All RNs displayed simultaneously. Alignment state labeled. Recommendation card shows % suggestion. Simulator available for manual override and what-if testing.</span>
+        <div class="tags"><span class="tag dynamic">Real-time recalculation on slider move</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════════════════════════════
+     BLOCK B — SUGGESTED SCREENS
+═══════════════════════════════════════════════════════════════════════════════════════ -->
+<div class="block-label">
+  <span class="block-id">BLOCK B</span>
+  Suggested Screens
+</div>
+
+<!-- SCREEN 1 -->
+<div class="screen-card">
+  <div class="screen-header">
+    <div>
+      <div class="screen-id">Screen · S01</div>
+      <div class="screen-name">Risk Intake</div>
+    </div>
+    <div class="screen-purpose">First contact — behavioral profiling</div>
+  </div>
+  <div class="screen-body">
+    <div class="screen-col">
+      <div class="screen-col-title">Input Elements</div>
+      <ul>
+        <li>Behavioral questionnaire (individual)</li>
+        <li>FO governance form (conditional)</li>
+        <li>Investment objective selector</li>
+        <li>Time horizon slider (years)</li>
+        <li>Target capital input</li>
+        <li>Liquidity constraint toggle</li>
+      </ul>
+    </div>
+    <div class="screen-col">
+      <div class="screen-col-title">UI Components</div>
+      <ul>
+        <li>Stepped card questionnaire (no long scroll)</li>
+        <li>Progress bar per section</li>
+        <li>RN preview badge (updates per answer)</li>
+        <li>Goal feasibility indicator (live)</li>
+        <li>FO section shown/hidden conditionally</li>
+      </ul>
+    </div>
+    <div class="screen-col">
+      <div class="screen-col-title">Outputs</div>
+      <ul>
+        <li>RN Individual (0–99)</li>
+        <li>RN Family Office (0–99) if applicable</li>
+        <li>RN Requirement (calculated)</li>
+        <li>RN Capacity (calculated)</li>
+      </ul>
+      <div class="screen-realtime">⚡ RN score updates live as user answers each question</div>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN 2 -->
+<div class="screen-card">
+  <div class="screen-header">
+    <div>
+      <div class="screen-id">Screen · S02</div>
+      <div class="screen-name">Portfolio Upload & Parsing</div>
+    </div>
+    <div class="screen-purpose">Data ingestion — current state mapping</div>
+  </div>
+  <div class="screen-body">
+    <div class="screen-col">
+      <div class="screen-col-title">Input Elements</div>
+      <ul>
+        <li>Drag-and-drop upload zone</li>
+        <li>Accepted: .xlsx, .pdf, .html, .csv</li>
+        <li>Manual position entry (fallback)</li>
+        <li>Currency selector for normalization</li>
+      </ul>
+    </div>
+    <div class="screen-col">
+      <div class="screen-col-title">Parsed Dimensions</div>
+      <ul>
+        <li>Asset class classification (auto)</li>
+        <li>Country / domicile</li>
+        <li>Currency / FX exposure</li>
+        <li>Liquidity bucket (T+0 to T+90+)</li>
+        <li>Concentration score per position</li>
+        <li>Instrument type mapping</li>
+      </ul>
+    </div>
+    <div class="screen-col">
+      <div class="screen-col-title">Outputs</div>
+      <ul>
+        <li>Portfolio treemap (weight × risk)</li>
+        <li>Asset class donut breakdown</li>
+        <li>Country heatmap</li>
+        <li>Liquidity waterfall</li>
+        <li>Concentration ranking table</li>
+      </ul>
+      <div class="screen-realtime">⚡ Preview renders within 2s of upload</div>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN 3 -->
+<div class="screen-card">
+  <div class="screen-header">
+    <div>
+      <div class="screen-id">Screen · S03</div>
+      <div class="screen-name">Portfolio Risk Map</div>
+    </div>
+    <div class="screen-purpose">Diagnostic — what the portfolio looks like now</div>
+  </div>
+  <div class="screen-body">
+    <div class="screen-col">
+      <div class="screen-col-title">Primary Visuals</div>
+      <ul>
+        <li>Hexagon radar — 6 risk dimensions</li>
+        <li>Overall RN badge (large, centered)</li>
+        <li>Profile label (e.g. "Moderate Aggressive")</li>
+        <li>Dimension breakdown bars (sidebar)</li>
+      </ul>
+    </div>
+    <div class="screen-col">
+      <div class="screen-col-title">6 Radar Dimensions</div>
+      <ul>
+        <li>Volatility exposure</li>
+        <li>Country risk</li>
+        <li>Liquidity risk</li>
+        <li>Concentration</li>
+        <li>Correlation risk</li>
+        <li>Drawdown tolerance</li>
+      </ul>
+    </div>
+    <div class="screen-col">
+      <div class="screen-col-title">Detail Panel</div>
+      <ul>
+        <li>Each dimension: score + 1-line description</li>
+        <li>Color gradient: green → amber → red by severity</li>
+        <li>Benchmark overlay (optional)</li>
+        <li>Click dimension → drill-down view</li>
+      </ul>
+      <div class="screen-realtime">⚡ Hexagon morphs on slider changes in S05</div>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN 4 -->
+<div class="screen-card">
+  <div class="screen-header">
+    <div>
+      <div class="screen-id">Screen · S04</div>
+      <div class="screen-name">Risk Alignment Dashboard</div>
+    </div>
+    <div class="screen-purpose">Comparison — all RNs simultaneously</div>
+  </div>
+  <div class="screen-body">
+    <div class="screen-col">
+      <div class="screen-col-title">Visual Components</div>
+      <ul>
+        <li>Horizontal RN comparison rails (all 7)</li>
+        <li>Target zone shading (green band)</li>
+        <li>Gap analysis cards (4 deltas)</li>
+        <li>Alignment status label (banner)</li>
+        <li>AI recommendation card (always visible)</li>
+      </ul>
+    </div>
+    <div class="screen-col">
+      <div class="screen-col-title">Gap Cards Shown</div>
+      <ul>
+        <li>Portfolio vs Appetite (±delta)</li>
+        <li>Portfolio vs Requirement (±delta)</li>
+        <li>Appetite vs Capacity (±delta)</li>
+        <li>Portfolio vs FO floor (±delta)</li>
+        <li>Required Harpian % (sum)</li>
+      </ul>
+    </div>
+    <div class="screen-col">
+      <div class="screen-col-title">Status Layer</div>
+      <ul>
+        <li>Banner: Fully Aligned / Moderate Mismatch / etc.</li>
+        <li>Color-coded (green/amber/red)</li>
+        <li>CTA: "Open Simulator →"</li>
+        <li>Core 11 RN and Core 22 RN shown as reference</li>
+      </ul>
+      <div class="screen-realtime">⚡ Refreshes when S05 simulator changes</div>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN 5 -->
+<div class="screen-card">
+  <div class="screen-header">
+    <div>
+      <div class="screen-id">Screen · S05</div>
+      <div class="screen-name">Allocation Simulator</div>
+    </div>
+    <div class="screen-purpose">What-if engine — adjust and see impact instantly</div>
+  </div>
+  <div class="screen-body">
+    <div class="screen-col">
+      <div class="screen-col-title">Controls</div>
+      <ul>
+        <li>Slider: Core 11 allocation % (0–100)</li>
+        <li>Slider: Core 22 allocation % (0–100)</li>
+        <li>Constraint: C11 + C22 ≤ 100%</li>
+        <li>Lock toggle per slider</li>
+        <li>Reset to suggested button</li>
+        <li>Compare: current vs simulated toggle</li>
+      </ul>
+    </div>
+    <div class="screen-col">
+      <div class="screen-col-title">Live Recalculation (on slider move)</div>
+      <ul>
+        <li>Blended RN new value</li>
+        <li>Expected return (annualized)</li>
+        <li>Expected volatility (annualized)</li>
+        <li>Expected max drawdown</li>
+        <li>Distance to objective (years)</li>
+        <li>Alignment status update</li>
+      </ul>
+    </div>
+    <div class="screen-col">
+      <div class="screen-col-title">Before / After Panel</div>
+      <ul>
+        <li>Split view: current state vs simulated state</li>
+        <li>Delta badges (↑↓ per metric)</li>
+        <li>Hexagon morphs in real-time</li>
+        <li>RN rail: current dot vs simulated dot</li>
+        <li>Status label updates immediately</li>
+      </ul>
+      <div class="screen-realtime">⚡ All values update in &lt;100ms on slider drag</div>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN 6 -->
+<div class="screen-card">
+  <div class="screen-header">
+    <div>
+      <div class="screen-id">Screen · S06</div>
+      <div class="screen-name">Recommendation Summary</div>
+    </div>
+    <div class="screen-purpose">Output — final recommendation for advisor & client</div>
+  </div>
+  <div class="screen-body">
+    <div class="screen-col">
+      <div class="screen-col-title">Key Components</div>
+      <ul>
+        <li>Recommendation card (AI-generated text)</li>
+        <li>Suggested allocation: Core 11 % + Core 22 %</li>
+        <li>Ideal range (min / optimal / max)</li>
+        <li>Before vs after: all 5 metrics</li>
+        <li>Alignment state: final verdict</li>
+      </ul>
+    </div>
+    <div class="screen-col">
+      <div class="screen-col-title">Alert Conditions</div>
+      <ul>
+        <li>Goal infeasible within horizon → red alert</li>
+        <li>High appetite / low capacity conflict → amber</li>
+        <li>FO ceiling breach → amber alert</li>
+        <li>Over-risked vs behavioral tolerance → red</li>
+        <li>Under-risked vs requirement → blue alert</li>
+      </ul>
+    </div>
+    <div class="screen-col">
+      <div class="screen-col-title">Export Options</div>
+      <ul>
+        <li>PDF one-pager for client</li>
+        <li>Advisor-format report (full)</li>
+        <li>JSON/API handoff for IPS integration</li>
+        <li>Printable allocation card</li>
+      </ul>
+      <div class="screen-realtime">⚡ Recommendation regenerates if client adjusts any input</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════════════════════════════
+     BLOCK C — VISUALIZATION LIBRARY
+═══════════════════════════════════════════════════════════════════════════════════════ -->
+<div class="block-label">
+  <span class="block-id">BLOCK C</span>
+  Visualization Library
+</div>
+
+<!-- VIZ 01 -->
+<div class="viz-card">
+  <div class="viz-header">
+    <div class="viz-name">01 · Hexagon Radar Chart — Risk Profile</div>
+    <span class="viz-use-badge use-all">Diagnosis + Simulation</span>
+  </div>
+  <div class="viz-grid">
+    <div class="viz-meta">
+      <div class="viz-meta-label">What it shows</div>
+      <div class="viz-meta-value">6 risk dimensions simultaneously on a hexagonal axis. Shape = portfolio personality.</div>
+    </div>
+    <div class="viz-meta">
+      <div class="viz-meta-label">Variables</div>
+      <div class="viz-meta-value">Volatility, Country, Liquidity, Concentration, Correlation, Drawdown (each 0–99)</div>
+    </div>
+    <div class="viz-meta">
+      <div class="viz-meta-label">Key Insight</div>
+      <div class="viz-meta-value">Immediate gestalt — "this portfolio is spiky on country and correlation risk."</div>
+    </div>
+    <div class="viz-meta">
+      <div class="viz-meta-label">Best For</div>
+      <div class="viz-meta-value">Diagnostic overview + before/after overlay when allocating Core 11/22</div>
+    </div>
+  </div>
+  <div class="note">Overlay two hexagons (current vs simulated) with opacity when simulator runs. Color: current = amber, simulated = gold fill with 20% opacity.</div>
+</div>
+
+<!-- VIZ 02 -->
+<div class="viz-card">
+  <div class="viz-header">
+    <div class="viz-name">02 · Horizontal Risk Rails — RN Comparison</div>
+    <span class="viz-use-badge use-diag">Diagnosis</span>
+  </div>
+  <div class="viz-grid">
+    <div class="viz-meta">
+      <div class="viz-meta-label">What it shows</div>
+      <div class="viz-meta-value">All 7 Risk Numbers on parallel horizontal tracks. See position of each RN at a glance.</div>
+    </div>
+    <div class="viz-meta">
+      <div class="viz-meta-label">Variables</div>
+      <div class="viz-meta-value">RN Individual, FO, Portfolio, Requirement, Capacity, Core 11, Core 22 (0–99 axis)</div>
+    </div>
+    <div class="viz-meta">
+      <div class="viz-meta-label">Key Insight</div>
+      <div class="viz-meta-value">Instantly shows who's out of range and by how much. Target zone shaded in green band.</div>
+    </div>
+    <div class="viz-meta">
+      <div class="viz-meta-label">Best For</div>
+      <div class="viz-meta-value">Main alignment dashboard (S04). Permanent fixture — always visible.</div>
+    </div>
+  </div>
+  <div class="note">Animated dot slides along rail when simulator updates. Target zone = shaded band between RN Individual and RN Requirement. Portfolio dot outside zone → red glow.</div>
+</div>
+
+<!-- VIZ 03 -->
+<div class="viz-card">
+  <div class="viz-header">
+    <div class="viz-name">03 · Gap Analysis Cards — Signed Delta</div>
+    <span class="viz-use-badge use-diag">Diagnosis</span>
+  </div>
+  <div class="viz-grid">
+    <div class="viz-meta">
+      <div class="viz-meta-label">What it shows</div>
+      <div class="viz-meta-value">4 numeric deltas — each gap between two RNs with sign (+/-) and severity color.</div>
+    </div>
+    <div class="viz-meta">
+      <div class="viz-meta-label">Variables</div>
+      <div class="viz-meta-value">Portfolio↔Appetite, Portfolio↔Requirement, Appetite↔Capacity, Portfolio↔FO</div>
+    </div>
+    <div class="viz-meta">
+      <div class="viz-meta-label">Key Insight</div>
+      <div class="viz-meta-value">Translates abstract numbers into a clear problem statement: "+15 → overrisked by 15 points."</div>
+    </div>
+    <div class="viz-meta">
+      <div class="viz-meta-label">Best For</div>
+      <div class="viz-meta-value">Sidebar of S04 dashboard. Small cards, large delta number. Color = severity.</div>
+    </div>
+  </div>
+</div>
+
+<!-- VIZ 04 -->
+<div class="viz-card">
+  <div class="viz-header">
+    <div class="viz-name">04 · Allocation Sliders with Live RN Preview</div>
+    <span class="viz-use-badge use-sim">Simulation</span>
+  </div>
+  <div class="viz-grid">
+    <div class="viz-meta">
+      <div class="viz-meta-label">What it shows</div>
+      <div class="viz-meta-value">Dual sliders for Core 11 and Core 22 %. Blended RN updates live on every drag.</div>
+    </div>
+    <div class="viz-meta">
+      <div class="viz-meta-label">Variables</div>
+      <div class="viz-meta-value">%Core11, %Core22, remaining portfolio %. Constraint: sum ≤ 100%.</div>
+    </div>
+    <div class="viz-meta">
+      <div class="viz-meta-label">Key Insight</div>
+      <div class="viz-meta-value">Makes abstract portfolio math tactile — client "builds" their allocation like adjusting character attributes.</div>
+    </div>
+    <div class="viz-meta">
+      <div class="viz-meta-label">Best For</div>
+      <div class="viz-meta-value">S05 simulator. Central component. Must respond in &lt;100ms.</div>
+    </div>
+  </div>
+  <div class="note">Suggested range highlighted in gold on slider track. Outside range → amber shading. Exceeds max → red warning strip appears.</div>
+</div>
+
+<!-- VIZ 05 -->
+<div class="viz-card">
+  <div class="viz-header">
+    <div class="viz-name">05 · Before vs After — Metric Comparison Panel</div>
+    <span class="viz-use-badge use-sim">Simulation</span>
+  </div>
+  <div class="viz-grid">
+    <div class="viz-meta">
+      <div class="viz-meta-label">What it shows</div>
+      <div class="viz-meta-value">Side-by-side columns: Current portfolio metrics vs simulated (post-allocation) metrics.</div>
+    </div>
+    <div class="viz-meta">
+      <div class="viz-meta-label">Variables</div>
+      <div class="viz-meta-value">RN, Return, Volatility, Max Drawdown, Objective Distance, Alignment Status</div>
+    </div>
+    <div class="viz-meta">
+      <div class="viz-meta-label">Key Insight</div>
+      <div class="viz-meta-value">Delta badges (↑↓ %) make improvement vs cost immediately legible. No calculations needed by user.</div>
+    </div>
+    <div class="viz-meta">
+      <div class="viz-meta-label">Best For</div>
+      <div class="viz-meta-value">Right panel of S05. Always visible. Primary decision-making surface.</div>
+    </div>
+  </div>
+</div>
+
+<!-- VIZ 06 -->
+<div class="viz-card">
+  <div class="viz-header">
+    <div class="viz-name">06 · Target Zone / Safe Zone — RN Band Visual</div>
+    <span class="viz-use-badge use-rec">Recommendation</span>
+  </div>
+  <div class="viz-grid">
+    <div class="viz-meta">
+      <div class="viz-meta-label">What it shows</div>
+      <div class="viz-meta-value">Green band on 0–99 axis = "alignment zone." Portfolio dot shown relative to this zone.</div>
+    </div>
+    <div class="viz-meta">
+      <div class="viz-meta-label">Variables</div>
+      <div class="viz-meta-value">Zone lower bound = min(RN Appetite, RN Capacity). Zone upper = RN Requirement × 1.1 ceiling.</div>
+    </div>
+    <div class="viz-meta">
+      <div class="viz-meta-label">Key Insight</div>
+      <div class="viz-meta-value">Single visual answer to "am I in the right risk range?" Red outside zone, green inside.</div>
+    </div>
+    <div class="viz-meta">
+      <div class="viz-meta-label">Best For</div>
+      <div class="viz-meta-value">Header of S04 and S06. Summary diagnostic.</div>
+    </div>
+  </div>
+</div>
+
+<!-- VIZ 07 -->
+<div class="viz-card">
+  <div class="viz-header">
+    <div class="viz-name">07 · Return vs Drawdown Tradeoff Chart</div>
+    <span class="viz-use-badge use-sim">Simulation</span>
+  </div>
+  <div class="viz-grid">
+    <div class="viz-meta">
+      <div class="viz-meta-label">What it shows</div>
+      <div class="viz-meta-value">Scatter / curve: X = max drawdown, Y = expected return. Portfolio dot moves as allocation changes.</div>
+    </div>
+    <div class="viz-meta">
+      <div class="viz-meta-label">Variables</div>
+      <div class="viz-meta-value">Return%, DrawdownMax%, RN (color/size), Core 11 dot, Core 22 dot, blend trajectory</div>
+    </div>
+    <div class="viz-meta">
+      <div class="viz-meta-label">Key Insight</div>
+      <div class="viz-meta-value">Shows the efficiency tradeoff — "by adding 20% Core 11, you move from this dot to this dot."</div>
+    </div>
+    <div class="viz-meta">
+      <div class="viz-meta-label">Best For</div>
+      <div class="viz-meta-value">S05 secondary panel. Sophisticated clients immediately understand it.</div>
+    </div>
+  </div>
+  <div class="note">Plot the "blend path" — line from current portfolio dot toward Core 11 and Core 22 as slider moves. Quadrant shading: top-left = efficient, bottom-right = inefficient.</div>
+</div>
+
+<!-- VIZ 08 -->
+<div class="viz-card">
+  <div class="viz-header">
+    <div class="viz-name">08 · Horizon Sensitivity Graph</div>
+    <span class="viz-use-badge use-rec">Recommendation</span>
+  </div>
+  <div class="viz-grid">
+    <div class="viz-meta">
+      <div class="viz-meta-label">What it shows</div>
+      <div class="viz-meta-value">Probability of reaching objective over time. Two curves: current allocation vs recommended.</div>
+    </div>
+    <div class="viz-meta">
+      <div class="viz-meta-label">Variables</div>
+      <div class="viz-meta-value">Years (X), Probability% (Y), current curve (amber), simulated curve (gold), 80% threshold line</div>
+    </div>
+    <div class="viz-meta">
+      <div class="viz-meta-label">Key Insight</div>
+      <div class="viz-meta-value">Shows that adding Core 11/22 may shorten the time to reach 80% probability by N years.</div>
+    </div>
+    <div class="viz-meta">
+      <div class="viz-meta-label">Best For</div>
+      <div class="viz-meta-value">S06 Recommendation Summary. Powerful for client conversations.</div>
+    </div>
+  </div>
+</div>
+
+<!-- VIZ 09 -->
+<div class="viz-card">
+  <div class="viz-header">
+    <div class="viz-name">09 · Risk Bucket Composition Map</div>
+    <span class="viz-use-badge use-diag">Diagnosis</span>
+  </div>
+  <div class="viz-grid">
+    <div class="viz-meta">
+      <div class="viz-meta-label">What it shows</div>
+      <div class="viz-meta-value">Stacked bars or waterfall: portfolio split by risk family (Market, Allocation, Liquidity, Goal)</div>
+    </div>
+    <div class="viz-meta">
+      <div class="viz-meta-label">Variables</div>
+      <div class="viz-meta-value">4 risk family scores × % weight = contribution to overall RN</div>
+    </div>
+    <div class="viz-meta">
+      <div class="viz-meta-label">Key Insight</div>
+      <div class="viz-meta-value">"Your RN of 68 is driven mostly by Market Structure Risk (38 pts contribution)." Pinpoints the problem.</div>
+    </div>
+    <div class="viz-meta">
+      <div class="viz-meta-label">Best For</div>
+      <div class="viz-meta-value">S03 Portfolio Risk Map — "What's making my RN high?" drill-down.</div>
+    </div>
+  </div>
+</div>
+
+<!-- VIZ 10 -->
+<div class="viz-card">
+  <div class="viz-header">
+    <div class="viz-name">10 · Portfolio Treemap (Weight × Risk)</div>
+    <span class="viz-use-badge use-diag">Diagnosis</span>
+  </div>
+  <div class="viz-grid">
+    <div class="viz-meta">
+      <div class="viz-meta-label">What it shows</div>
+      <div class="viz-meta-value">Each position as a rectangle: size = % weight, color = risk score (green→red scale)</div>
+    </div>
+    <div class="viz-meta">
+      <div class="viz-meta-label">Variables</div>
+      <div class="viz-meta-value">Position name, allocation %, individual RN, asset class grouping</div>
+    </div>
+    <div class="viz-meta">
+      <div class="viz-meta-label">Key Insight</div>
+      <div class="viz-meta-value">Instantly reveals: large red rectangles = high-risk / high-weight positions = main problem drivers.</div>
+    </div>
+    <div class="viz-meta">
+      <div class="viz-meta-label">Best For</div>
+      <div class="viz-meta-value">S02/S03 — portfolio parsing and first-look diagnosis.</div>
+    </div>
+  </div>
+</div>
+
+<!-- RISK DIMENSIONS -->
+<div class="section" style="margin-top: 40px;">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <span class="section-title">Risk Dimensions — 4 Visual Families</span>
+  </div>
+
+  <div class="grid-2">
+    <!-- Family 1 -->
+    <div class="dim-family">
+      <div class="dim-family-header">
+        <div class="dim-dot" style="background:#C0392B;"></div>
+        Market Structure Risk
+      </div>
+      <div class="dim-items">
+        <div class="dim-item"><span class="dim-item-name">Volatility exposure</span><span class="dim-item-desc">Historical price variance weighted by allocation</span></div>
+        <div class="dim-item"><span class="dim-item-name">Correlation risk</span><span class="dim-item-desc">Diversification failure in crisis — tail risk</span></div>
+        <div class="dim-item"><span class="dim-item-name">Duration / interest rate sensitivity</span><span class="dim-item-desc">Fixed income rate change exposure</span></div>
+        <div class="dim-item"><span class="dim-item-name">Tail risk</span><span class="dim-item-desc">Catastrophic loss probability (fat tail)</span></div>
+      </div>
+    </div>
+    <!-- Family 2 -->
+    <div class="dim-family">
+      <div class="dim-family-header">
+        <div class="dim-dot" style="background:#D4860A;"></div>
+        Allocation Risk
+      </div>
+      <div class="dim-items">
+        <div class="dim-item"><span class="dim-item-name">Concentration risk</span><span class="dim-item-desc">Single position / sector exposure</span></div>
+        <div class="dim-item"><span class="dim-item-name">Asset class mix</span><span class="dim-item-desc">Equity / FI / Commodity / Crypto / Cash balance</span></div>
+        <div class="dim-item"><span class="dim-item-name">Geography concentration</span><span class="dim-item-desc">Country / region over-exposure</span></div>
+        <div class="dim-item"><span class="dim-item-name">Currency / FX exposure</span><span class="dim-item-desc">Unhedged multi-currency position</span></div>
+        <div class="dim-item"><span class="dim-item-name">Country risk</span><span class="dim-item-desc">Sovereign, currency, institutional fragility</span></div>
+      </div>
+    </div>
+    <!-- Family 3 -->
+    <div class="dim-family">
+      <div class="dim-family-header">
+        <div class="dim-dot" style="background:#2D7AC0;"></div>
+        Liquidity & Concentration
+      </div>
+      <div class="dim-items">
+        <div class="dim-item"><span class="dim-item-name">Liquidity risk</span><span class="dim-item-desc">Time to liquidate without material loss</span></div>
+        <div class="dim-item"><span class="dim-item-name">Drawdown tolerance</span><span class="dim-item-desc">Expected max loss over 6-month period</span></div>
+        <div class="dim-item"><span class="dim-item-name">Fixed income exposure</span><span class="dim-item-desc">% in credit / bonds vs total</span></div>
+        <div class="dim-item"><span class="dim-item-name">Equity exposure</span><span class="dim-item-desc">% gross equity incl. leveraged products</span></div>
+        <div class="dim-item"><span class="dim-item-name">Commodity / Crypto exposure</span><span class="dim-item-desc">High-vol alternative asset weight</span></div>
+      </div>
+    </div>
+    <!-- Family 4 -->
+    <div class="dim-family">
+      <div class="dim-family-header">
+        <div class="dim-dot" style="background:#1A7A4A;"></div>
+        Goal Alignment
+      </div>
+      <div class="dim-items">
+        <div class="dim-item"><span class="dim-item-name">Return vs requirement gap</span><span class="dim-item-desc">Expected return minus required return</span></div>
+        <div class="dim-item"><span class="dim-item-name">Objective feasibility</span><span class="dim-item-desc">Probability of reaching target within horizon</span></div>
+        <div class="dim-item"><span class="dim-item-name">Behavioral alignment</span><span class="dim-item-desc">RN Portfolio vs RN Individual gap</span></div>
+        <div class="dim-item"><span class="dim-item-name">Institutional compliance</span><span class="dim-item-desc">RN Portfolio vs RN Family Office</span></div>
+        <div class="dim-item"><span class="dim-item-name">Time sensitivity</span><span class="dim-item-desc">Horizon flexibility if assumptions shift</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════════════════════════════
+     BLOCK D — INTERACTION LOGIC
+═══════════════════════════════════════════════════════════════════════════════════════ -->
+<div class="block-label">
+  <span class="block-id">BLOCK D</span>
+  Interaction & Simulator Logic
+</div>
+
+<!-- SIMULATOR MECHANICS -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <span class="section-title">Simulator — What Changes When Slider Moves</span>
+  </div>
+
+  <div class="sub-title">Core Formula — Blended RN</div>
+  <div class="card accent" style="font-family:'DM Mono',monospace; font-size:12px; color:var(--text-bright); line-height:2;">
+    RN_blend = (w_existing × RN_portfolio) + (w_C11 × RN_C11) + (w_C22 × RN_C22)<br>
+    <span style="color:var(--text-dim);font-size:10px;">where: w_existing + w_C11 + w_C22 = 1.0 &nbsp;|&nbsp; each w ∈ [0, 1]</span>
+  </div>
+
+  <div class="sub-title" style="margin-top:24px;">Example: C11 slider 0% → 20%, C22 slider 0% → 35%</div>
+
+  <div class="sim-block">
+    <div class="sim-title">Inputs (before)</div>
+    <div class="sim-row">
+      <div class="sim-metric">RN Portfolio (current)</div>
+      <div class="sim-bar-track"><div class="sim-bar-fill" style="width:68%;background:#D4860A;"></div></div>
+      <div class="sim-value" style="color:#D4860A;">68</div>
+    </div>
+    <div class="sim-row">
+      <div class="sim-metric">Core 11 allocation</div>
+      <div class="sim-bar-track"><div class="sim-bar-fill" style="width:0%;background:var(--gold);"></div></div>
+      <div class="sim-value" style="color:var(--text-dim);">0%</div>
+    </div>
+    <div class="sim-row">
+      <div class="sim-metric">Core 22 allocation</div>
+      <div class="sim-bar-track"><div class="sim-bar-fill" style="width:0%;background:var(--gold);"></div></div>
+      <div class="sim-value" style="color:var(--text-dim);">0%</div>
+    </div>
+  </div>
+
+  <div class="sim-block" style="border-color: rgba(184,151,42,0.25);">
+    <div class="sim-title">Outputs (after — live recalculation)</div>
+    <div class="sim-row">
+      <div class="sim-metric">RN Blended (new)</div>
+      <div class="sim-bar-track"><div class="sim-bar-fill" style="width:53%;background:#1A7A4A;"></div></div>
+      <div class="sim-value" style="color:#3DBE78;">53 <span style="font-size:9px;color:var(--green-light)">↓15</span></div>
+    </div>
+    <div class="sim-row">
+      <div class="sim-metric">Expected Return (annualized)</div>
+      <div class="sim-bar-track"><div class="sim-bar-fill" style="width:62%;background:var(--gold);"></div></div>
+      <div class="sim-value" style="color:var(--gold);">18.4% <span style="font-size:9px;color:#3DBE78">↑3.1%</span></div>
+    </div>
+    <div class="sim-row">
+      <div class="sim-metric">Expected Volatility</div>
+      <div class="sim-bar-track"><div class="sim-bar-fill" style="width:44%;background:#5BA8E8;"></div></div>
+      <div class="sim-value" style="color:#5BA8E8;">11.2% <span style="font-size:9px;color:#3DBE78">↓2.8%</span></div>
+    </div>
+    <div class="sim-row">
+      <div class="sim-metric">Expected Max Drawdown</div>
+      <div class="sim-bar-track"><div class="sim-bar-fill" style="width:29%;background:#E87060;"></div></div>
+      <div class="sim-value" style="color:#E87060;">-14.5% <span style="font-size:9px;color:#3DBE78">↓6.3%</span></div>
+    </div>
+    <div class="sim-row">
+      <div class="sim-metric">Distance to Objective</div>
+      <div class="sim-bar-track"><div class="sim-bar-fill" style="width:55%;background:#B07AE0;"></div></div>
+      <div class="sim-value" style="color:#B07AE0;">7.2 yrs <span style="font-size:9px;color:#3DBE78">↓1.4 yrs</span></div>
+    </div>
+    <div class="sim-row">
+      <div class="sim-metric">Behavioral Alignment</div>
+      <div class="sim-bar-track"><div class="sim-bar-fill" style="width:100%;background:#1A7A4A;"></div></div>
+      <div class="sim-value" style="color:#3DBE78;">✓ Aligned</div>
+    </div>
+    <div class="sim-row">
+      <div class="sim-metric">FO Compliance</div>
+      <div class="sim-bar-track"><div class="sim-bar-fill" style="width:100%;background:#1A7A4A;"></div></div>
+      <div class="sim-value" style="color:#3DBE78;">✓ Within mandate</div>
+    </div>
+  </div>
+
+  <div class="note">All output fields must update in &lt;100ms from slider release. Animation: values count up/down (like a speedometer), not instant swap. Hexagon morphs with easing (300ms transition).</div>
+</div>
+
+<!-- ALIGNMENT STATES -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">06</span>
+    <span class="section-title">Alignment States Matrix</span>
+  </div>
+
+  <div class="state-grid">
+    <div class="state-card" style="border-color: rgba(26,122,74,0.4); background: rgba(26,122,74,0.05);">
+      <div class="state-indicator" style="background:#1A7A4A;"></div>
+      <div class="state-name">Fully Aligned</div>
+      <div class="state-desc">Portfolio RN within target zone. All gaps within ±5 pts. Goal feasibility ≥80%.</div>
+      <div class="state-action" style="color:#3DBE78;">→ Maintain current structure</div>
+    </div>
+    <div class="state-card" style="border-color: rgba(212,134,10,0.4); background: rgba(212,134,10,0.05);">
+      <div class="state-indicator" style="background:#D4860A;"></div>
+      <div class="state-name">Moderate Mismatch</div>
+      <div class="state-desc">Portfolio RN within 5–15 pts of target zone boundary. Some gaps outside tolerance.</div>
+      <div class="state-action" style="color:#D4860A;">→ Suggest rebalancing to Harpian products</div>
+    </div>
+    <div class="state-card" style="border-color: rgba(192,57,43,0.4); background: rgba(192,57,43,0.05);">
+      <div class="state-indicator" style="background:#C0392B;"></div>
+      <div class="state-name">Over-Risked</div>
+      <div class="state-desc">RN Portfolio &gt; RN Individual + 15 pts. Behavioral tolerance breach. Action required.</div>
+      <div class="state-action" style="color:#E87060;">→ Reduce equity/concentration. Add Core 11.</div>
+    </div>
+    <div class="state-card" style="border-color: rgba(45,122,192,0.4); background: rgba(45,122,192,0.05);">
+      <div class="state-indicator" style="background:#2D7AC0;"></div>
+      <div class="state-name">Under-Risked</div>
+      <div class="state-desc">RN Portfolio &lt; RN Requirement − 10 pts. Goal infeasible at current risk level.</div>
+      <div class="state-action" style="color:#5BA8E8;">→ Add Core 22. Extend horizon. Revise target.</div>
+    </div>
+    <div class="state-card" style="border-color: rgba(192,57,43,0.6); background: rgba(192,57,43,0.08);">
+      <div class="state-indicator" style="background:#8B1A0E;"></div>
+      <div class="state-name">Goal Infeasible</div>
+      <div class="state-desc">Even at max tolerance RN, return requirement cannot be met within stated horizon.</div>
+      <div class="state-action" style="color:#E87060;">→ Revise target, extend horizon, or increase capital</div>
+    </div>
+    <div class="state-card" style="border-color: rgba(184,151,42,0.4); background: rgba(184,151,42,0.05);">
+      <div class="state-indicator" style="background:#B8972A;"></div>
+      <div class="state-name">High Appetite / Low Capacity</div>
+      <div class="state-desc">Client wants more risk than their financial situation can absorb. Structural conflict.</div>
+      <div class="state-action" style="color:var(--gold);">→ Cap at RN Capacity. Document conflict.</div>
+    </div>
+    <div class="state-card" style="border-color: rgba(123,63,160,0.4); background: rgba(123,63,160,0.05);">
+      <div class="state-indicator" style="background:#7B3FA0;"></div>
+      <div class="state-name">Low Appetite / High Requirement</div>
+      <div class="state-desc">Goal requires more risk than client is behaviorally willing to accept.</div>
+      <div class="state-action" style="color:#B07AE0;">→ Educate on risk-return. Revise goal or horizon.</div>
+    </div>
+    <div class="state-card" style="border-color: rgba(192,57,43,0.4); background: rgba(192,57,43,0.04);">
+      <div class="state-indicator" style="background:#C0392B;"></div>
+      <div class="state-name">FO Ceiling Breach</div>
+      <div class="state-desc">Simulated or current RN exceeds Family Office institutional mandate ceiling.</div>
+      <div class="state-action" style="color:#E87060;">→ Hard cap at RN FO. Alert advisor.</div>
+    </div>
+  </div>
+</div>
+
+<!-- AI RECOMMENDATION LAYER -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">07</span>
+    <span class="section-title">AI Recommendation Layer — Microcopy</span>
+  </div>
+
+  <div class="sub-title">Examples by state</div>
+  <div class="microcopy-list">
+    <div class="microcopy-item" style="border-left-color: #C0392B;">
+      "Your portfolio carries 15 points of excess risk relative to your behavioral tolerance. We recommend allocating up to 18% in Core 11 to bring the profile within alignment."
+    </div>
+    <div class="microcopy-item" style="border-left-color: #2D7AC0;">
+      "At the current risk level, your target capital is achievable in approximately 9.2 years. Adding selective exposure to Core 22 may reduce this to 7.4 years."
+    </div>
+    <div class="microcopy-item" style="border-left-color: #1A7A4A;">
+      "Your portfolio is structurally aligned with your behavioral profile and institutional mandate. No rebalancing is recommended at this time."
+    </div>
+    <div class="microcopy-item" style="border-left-color: #D4860A;">
+      "Your concentration in BRL-denominated assets introduces a country risk premium of +12 pts. Consider diversifying with global exposure or a currency-hedged overlay."
+    </div>
+    <div class="microcopy-item" style="border-left-color: #7B3FA0;">
+      "Your stated objective requires a minimum Risk Number of 52. Your current tolerance supports a maximum of 45. An alignment bridge requires either revising the target or extending the time horizon."
+    </div>
+    <div class="microcopy-item" style="border-left-color: #B8972A;">
+      "Core 11 + Core 22 at the current suggested mix reduces your expected drawdown from −22% to −14% while maintaining a return trajectory above your requirement threshold."
+    </div>
+    <div class="microcopy-item" style="border-left-color: #C0392B;">
+      "Your Family Office mandate caps exposure at Risk Number 55. The simulated allocation exceeds this ceiling by 8 points. Adjust Core 22 downward to comply."
+    </div>
+  </div>
+
+  <div class="sub-title" style="margin-top:28px;">Recommendation Card — UI Spec</div>
+  <div class="card accent">
+    <div style="display:grid; grid-template-columns: 1fr 180px; gap: 24px; align-items: center;">
+      <div>
+        <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--gold);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:8px;">○ AI Recommendation</div>
+        <div style="font-size:12px;color:var(--text);line-height:1.6;">[Microcopy generated from structured data — 1–3 sentences. Never marketing language. Always factual with deltas and thresholds.]</div>
+      </div>
+      <div style="text-align:center; border-left: 1px solid var(--border-subtle); padding-left: 20px;">
+        <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--text-dim);text-transform:uppercase;margin-bottom:4px;">Required Harpian %</div>
+        <div style="font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:var(--gold);">38%</div>
+        <div style="font-size:10px;color:var(--text-dim);margin-top:2px;">C11: 18% + C22: 20%</div>
+      </div>
+    </div>
+  </div>
+  <div class="note">This card must always be visible in S04 and S05 — it is the primary decision output. Never hidden behind a scroll.</div>
+</div>
+
+<!-- 3 PROFILES -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">08</span>
+    <span class="section-title">3 Client Profiles — Concrete Examples</span>
+  </div>
+
+  <!-- PROFILE 1 -->
+  <div class="profile-card" style="margin-bottom:14px;">
+    <div class="profile-header">
+      <div>
+        <div class="profile-id">PROFILE · 01</div>
+        <div class="profile-name">Conservative client / Conservative portfolio / Realistic goal</div>
+      </div>
+      <span class="tag fixed">Fully Aligned</span>
+    </div>
+    <div class="profile-body">
+      <div class="rn-compare">
+        <div class="rn-box">
+          <div class="rn-box-label">RN Individual</div>
+          <div class="rn-box-value" style="color:#5BA8E8;">30</div>
+        </div>
+        <div class="rn-box">
+          <div class="rn-box-label">RN Portfolio</div>
+          <div class="rn-box-value" style="color:#5BA8E8;">28</div>
+        </div>
+        <div class="rn-box">
+          <div class="rn-box-label">RN Requirement</div>
+          <div class="rn-box-value" style="color:#1A7A4A;">25</div>
+        </div>
+        <div class="rn-box">
+          <div class="rn-box-label">RN Core 11</div>
+          <div class="rn-box-value" style="color:var(--gold);">42</div>
+        </div>
+        <div class="rn-box">
+          <div class="rn-box-label">RN Core 22</div>
+          <div class="rn-box-value" style="color:var(--gold);">58</div>
+        </div>
+      </div>
+      <div class="profile-outcome">
+        <strong>Recommendation:</strong> Portfolio already aligned. Minimal rebalancing needed. May optionally add 8–12% Core 11 as a return enhancer while maintaining conservative profile.<br>
+        <strong>State:</strong> <span style="color:#3DBE78;">Fully Aligned</span> — Goal achievable within stated horizon.
+      </div>
+    </div>
+  </div>
+
+  <!-- PROFILE 2 -->
+  <div class="profile-card" style="margin-bottom:14px;">
+    <div class="profile-header">
+      <div>
+        <div class="profile-id">PROFILE · 02</div>
+        <div class="profile-name">Moderate client / Very conservative portfolio / Ambitious goal</div>
+      </div>
+      <span class="tag dynamic">Under-Risked + Goal Gap</span>
+    </div>
+    <div class="profile-body">
+      <div class="rn-compare">
+        <div class="rn-box">
+          <div class="rn-box-label">RN Individual</div>
+          <div class="rn-box-value" style="color:#D4860A;">55</div>
+        </div>
+        <div class="rn-box">
+          <div class="rn-box-label">RN Portfolio</div>
+          <div class="rn-box-value" style="color:#2D7AC0;">28</div>
+        </div>
+        <div class="rn-box">
+          <div class="rn-box-label">RN Requirement</div>
+          <div class="rn-box-value" style="color:#C0392B;">60</div>
+        </div>
+        <div class="rn-box">
+          <div class="rn-box-label">RN Core 11</div>
+          <div class="rn-box-value" style="color:var(--gold);">42</div>
+        </div>
+        <div class="rn-box">
+          <div class="rn-box-label">RN Core 22</div>
+          <div class="rn-box-value" style="color:var(--gold);">58</div>
+        </div>
+      </div>
+      <div class="profile-outcome">
+        <strong>Recommendation:</strong> Portfolio severely under-risked. Allocate 20% Core 11 + 25% Core 22 → blended RN moves from 28 to 47. Behavioral ceiling is 55 — safe to move further if client confirms. Goal at RN 60 requires either extending horizon or accepting more risk than current tolerance.<br>
+        <strong>State:</strong> <span style="color:#D4860A;">Moderate Mismatch → requires action</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROFILE 3 -->
+  <div class="profile-card">
+    <div class="profile-header">
+      <div>
+        <div class="profile-id">PROFILE · 03</div>
+        <div class="profile-name">Aggressive client / Already high-risk portfolio / Goal still requires more return</div>
+      </div>
+      <span class="tag input">Low Appetite/High Req</span>
+    </div>
+    <div class="profile-body">
+      <div class="rn-compare">
+        <div class="rn-box">
+          <div class="rn-box-label">RN Individual</div>
+          <div class="rn-box-value" style="color:#C0392B;">78</div>
+        </div>
+        <div class="rn-box">
+          <div class="rn-box-label">RN Portfolio</div>
+          <div class="rn-box-value" style="color:#C0392B;">72</div>
+        </div>
+        <div class="rn-box">
+          <div class="rn-box-label">RN Requirement</div>
+          <div class="rn-box-value" style="color:#C0392B;">80</div>
+        </div>
+        <div class="rn-box">
+          <div class="rn-box-label">RN Core 11</div>
+          <div class="rn-box-value" style="color:var(--gold);">42</div>
+        </div>
+        <div class="rn-box">
+          <div class="rn-box-label">RN Core 22</div>
+          <div class="rn-box-value" style="color:var(--gold);">58</div>
+        </div>
+      </div>
+      <div class="profile-outcome">
+        <strong>Recommendation:</strong> Portfolio already aggressive. Adding Core 22 would dilute RN toward 68 — moving further from the 80 requirement. Core 11 adds no value here. Primary recommendation: revisit asset selection within existing portfolio for higher return efficiency, or extend time horizon by 2 years to reduce required RN threshold.<br>
+        <strong>State:</strong> <span style="color:#7B3FA0;">Goal gap — structural, not allocation-solvable</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FIXED VS DYNAMIC -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">09</span>
+    <span class="section-title">Fixed vs Dynamic — Data Map</span>
+  </div>
+
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Category</th>
+        <th>Elements</th>
+        <th>Nature</th>
+        <th>Update Trigger</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="color:var(--gold);font-weight:500;">Fixed (Product Spec)</td>
+        <td>RN Core 11, RN Core 22, risk factor methodology, scoring weights per dimension</td>
+        <td><span class="tag fixed">Fixed</span></td>
+        <td>Version release only</td>
+      </tr>
+      <tr>
+        <td style="color:#E87060;font-weight:500;">From User Input</td>
+        <td>RN Individual, RN Family Office, investment objective, target capital, time horizon, portfolio upload, liquidity preferences</td>
+        <td><span class="tag input">Input</span></td>
+        <td>On form submission / upload</td>
+      </tr>
+      <tr>
+        <td style="color:#3DBE78;font-weight:500;">Calculated (Static)</td>
+        <td>RN Portfolio Current, RN Requirement, RN Capacity, gap deltas (4), alignment state, portfolio dimension scores (6)</td>
+        <td><span class="tag calculated">Calculated</span></td>
+        <td>On portfolio upload or input change</td>
+      </tr>
+      <tr>
+        <td style="color:#5BA8E8;font-weight:500;">Dynamic (Simulator)</td>
+        <td>RN Blended, expected return, expected volatility, expected drawdown, objective distance, alignment status, recommendation text, % suggestion</td>
+        <td><span class="tag dynamic">Dynamic</span></td>
+        <td>On every slider drag (&lt;100ms)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- DEVELOPER VISUAL PRIORITIES -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-num">10</span>
+    <span class="section-title">Developer Visual Priorities</span>
+  </div>
+
+  <div class="dev-grid">
+    <div class="dev-item">
+      <div class="dev-icon">⚡</div>
+      <div class="dev-text">
+        <strong>5-second legibility rule</strong>
+        <span>User must understand alignment status in 5 seconds without reading any text. Status color, hexagon shape, and banner label carry this.</span>
+      </div>
+    </div>
+    <div class="dev-item">
+      <div class="dev-icon">⟷</div>
+      <div class="dev-text">
+        <strong>Sliders → instant update</strong>
+        <span>All 7 output metrics recalculate and animate in &lt;100ms from slider release. No loading states. This is the product's core interaction.</span>
+      </div>
+    </div>
+    <div class="dev-item">
+      <div class="dev-icon">◈</div>
+      <div class="dev-text">
+        <strong>Hexagon = portfolio identity</strong>
+        <span>The radar chart shape is the visual fingerprint of a portfolio. It must morph with CSS/SVG transition on change. Not a chart — it's an attribute profile.</span>
+      </div>
+    </div>
+    <div class="dev-item">
+      <div class="dev-icon">◫</div>
+      <div class="dev-text">
+        <strong>Recommendation card always visible</strong>
+        <span>The AI recommendation card must not be hidden behind scroll or collapsed by default. It is the primary output. Sticky if needed.</span>
+      </div>
+    </div>
+    <div class="dev-item">
+      <div class="dev-icon">◱</div>
+      <div class="dev-text">
+        <strong>Before vs After must be unmissable</strong>
+        <span>The current vs simulated comparison cannot be subtle. High contrast, delta badges in ↑ green / ↓ red, large numbers. Zero ambiguity.</span>
+      </div>
+    </div>
+    <div class="dev-item">
+      <div class="dev-icon">≡</div>
+      <div class="dev-text">
+        <strong>No long text anywhere in the UI</strong>
+        <span>Every insight must be expressed in ≤15 words or a number. Long explanations are for the PDF export — not the interface.</span>
+      </div>
+    </div>
+    <div class="dev-item">
+      <div class="dev-icon">◙</div>
+      <div class="dev-text">
+        <strong>Institutional dark premium — not gamified</strong>
+        <span>Colors: Navy, Gold, White. Fonts: geometric sans + mono. No gradients, no neon. Engineering dashboard feel. Think Bloomberg terminal with better UX.</span>
+      </div>
+    </div>
+    <div class="dev-item">
+      <div class="dev-icon">⬡</div>
+      <div class="dev-text">
+        <strong>Hexagon vs bar — deliberate usage</strong>
+        <span>Hexagon = portfolio personality (6D). Bars = relative magnitude comparison (RN rails). Never mix the semantics. Each visualization has a single job.</span>
+      </div>
+    </div>
+    <div class="dev-item">
+      <div class="dev-icon">▣</div>
+      <div class="dev-text">
+        <strong>Color = signal, not decoration</strong>
+        <span>Green = aligned. Amber = warning. Red = action required. Blue = under-risked. Purple = structural conflict. Gold = Harpian product. Every color has a fixed meaning.</span>
+      </div>
+    </div>
+    <div class="dev-item">
+      <div class="dev-icon">⊞</div>
+      <div class="dev-text">
+        <strong>Grid precision</strong>
+        <span>All spacing, card sizing, and alignment on an 8px grid. No visual entropy. The interface communicates precision because it is precise.</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top: 32px;">
+    <div class="sub-title">Color System Reference</div>
+    <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px;">
+      <div style="background: rgba(26,122,74,0.15); border: 1px solid rgba(26,122,74,0.4); padding: 10px 12px;">
+        <div style="font-family:'DM Mono',monospace;font-size:8px;color:#3DBE78;text-transform:uppercase;letter-spacing:0.1em;">Aligned</div>
+        <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text);margin-top:4px;">#1A7A4A</div>
+      </div>
+      <div style="background: rgba(212,134,10,0.15); border: 1px solid rgba(212,134,10,0.4); padding: 10px 12px;">
+        <div style="font-family:'DM Mono',monospace;font-size:8px;color:#D4860A;text-transform:uppercase;letter-spacing:0.1em;">Warning</div>
+        <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text);margin-top:4px;">#D4860A</div>
+      </div>
+      <div style="background: rgba(192,57,43,0.15); border: 1px solid rgba(192,57,43,0.4); padding: 10px 12px;">
+        <div style="font-family:'DM Mono',monospace;font-size:8px;color:#E87060;text-transform:uppercase;letter-spacing:0.1em;">Action / Over</div>
+        <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text);margin-top:4px;">#C0392B</div>
+      </div>
+      <div style="background: rgba(45,122,192,0.15); border: 1px solid rgba(45,122,192,0.4); padding: 10px 12px;">
+        <div style="font-family:'DM Mono',monospace;font-size:8px;color:#5BA8E8;text-transform:uppercase;letter-spacing:0.1em;">Under-risked</div>
+        <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text);margin-top:4px;">#2D7AC0</div>
+      </div>
+      <div style="background: rgba(184,151,42,0.15); border: 1px solid rgba(184,151,42,0.4); padding: 10px 12px;">
+        <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--gold);text-transform:uppercase;letter-spacing:0.1em;">Harpian</div>
+        <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text);margin-top:4px;">#B8972A</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div style="border-top: 1px solid var(--border-subtle); padding: 32px 0; display:flex; justify-content:space-between; align-items:center; margin-top: 40px;">
+  <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--text-dim);letter-spacing:0.1em;">
+    HARPIAN LLC · RISK ALIGNMENT ENGINE · VISUAL SPEC v1.0<br>
+    MODULE: HRD-002 · FOR INTERNAL USE — DEVELOPMENT TEAM
+  </div>
+  <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--text-dim);letter-spacing:0.1em;text-align:right;">
+    STATUS: DRAFT<br>
+    DO NOT DISTRIBUTE
+  </div>
+</div>
+
+</div>
+</body>
+</html>

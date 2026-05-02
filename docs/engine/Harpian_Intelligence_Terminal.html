@@ -1,0 +1,1744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Harpian Intelligence Terminal</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap');
+
+:root {
+  --bg:#090E14; --s1:#0F1820; --s2:#162130; --s3:#1C2D40; --s4:#223348;
+  --gold:#B8972A; --gold-l:#D4AF45; --gold-bg:rgba(184,151,42,0.10);
+  --text:#C8D8E8; --dim:#6A8AA8; --bright:#EBF1F7;
+  --bsub:rgba(235,241,247,0.06); --bgold:rgba(184,151,42,0.14);
+  --green:#1A7A4A; --green-l:#3DBE78; --green-bg:rgba(26,122,74,0.10);
+  --amber:#D4860A; --amber-l:#F0A830; --amber-bg:rgba(212,134,10,0.10);
+  --red:#C0392B; --red-l:#E87060; --red-bg:rgba(192,57,43,0.10);
+  --blue:#2D7AC0; --blue-l:#5BA8E8; --blue-bg:rgba(45,122,192,0.10);
+  --sidebar-w:220px; --topbar-h:48px;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overflow:hidden;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:12.5px;line-height:1.5;}
+
+/* ══════════ TOPBAR ══════════ */
+.topbar{position:fixed;top:0;left:0;right:0;height:var(--topbar-h);background:var(--s1);border-bottom:1px solid var(--bsub);z-index:100;display:flex;align-items:center;padding:0 20px 0 0;}
+.topbar-logo{width:var(--sidebar-w);padding:0 20px;display:flex;align-items:center;gap:10px;border-right:1px solid var(--bsub);height:100%;flex-shrink:0;}
+.logo-mark{width:28px;height:28px;background:var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:12px;font-weight:800;color:#090E14;}
+.logo-text{font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:var(--bright);letter-spacing:-.01em;}
+.logo-sub{font-family:'DM Mono',monospace;font-size:7px;color:var(--dim);letter-spacing:.14em;text-transform:uppercase;}
+.topbar-center{flex:1;display:flex;align-items:center;gap:24px;padding:0 24px;}
+.topbar-ticker{display:flex;align-items:center;gap:20px;overflow:hidden;}
+.ticker-item{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.ticker-name{font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:.08em;}
+.ticker-val{font-family:'DM Mono',monospace;font-size:10.5px;color:var(--bright);}
+.ticker-chg{font-family:'DM Mono',monospace;font-size:9px;}
+.tick-sep{width:1px;height:16px;background:var(--bsub);}
+.topbar-right{display:flex;align-items:center;gap:12px;padding-left:16px;border-left:1px solid var(--bsub);}
+.storm-pill{display:flex;align-items:center;gap:6px;padding:4px 10px;background:var(--green-bg);border:1px solid rgba(26,122,74,0.3);font-family:'DM Mono',monospace;font-size:8.5px;color:var(--green-l);text-transform:uppercase;letter-spacing:.1em;}
+.storm-dot{width:6px;height:6px;border-radius:50%;background:var(--green-l);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
+.topbar-time{font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);letter-spacing:.06em;}
+.topbar-user{display:flex;align-items:center;gap:8px;cursor:pointer;}
+.user-avatar{width:28px;height:28px;background:var(--s3);border:1px solid var(--bgold);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--gold);}
+.user-name{font-family:'DM Mono',monospace;font-size:9px;color:var(--text);}
+
+/* ══════════ SIDEBAR ══════════ */
+.sidebar{position:fixed;top:var(--topbar-h);left:0;bottom:0;width:var(--sidebar-w);background:var(--s1);border-right:1px solid var(--bsub);overflow-y:auto;z-index:90;}
+.sidebar::-webkit-scrollbar{width:3px;}
+.sidebar::-webkit-scrollbar-thumb{background:var(--bsub);}
+.nav-section{padding:16px 12px 4px;}
+.nav-section-label{font-family:'DM Mono',monospace;font-size:7.5px;color:var(--dim);text-transform:uppercase;letter-spacing:.14em;padding:0 8px 8px;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:8px 10px;cursor:pointer;transition:background .15s;border-left:2px solid transparent;margin-bottom:1px;}
+.nav-item:hover{background:rgba(235,241,247,0.04);}
+.nav-item.active{background:var(--gold-bg);border-left-color:var(--gold);}
+.nav-item.active .nav-label{color:var(--gold);}
+.nav-icon{width:16px;height:16px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;opacity:.6;}
+.nav-item.active .nav-icon{opacity:1;}
+.nav-label{font-family:'DM Mono',monospace;font-size:9.5px;color:var(--text);letter-spacing:.04em;}
+.nav-badge{margin-left:auto;font-family:'DM Mono',monospace;font-size:7.5px;padding:1px 5px;background:var(--gold-bg);color:var(--gold);border:1px solid rgba(184,151,42,.2);}
+.nav-badge.red{background:var(--red-bg);color:var(--red-l);border-color:rgba(192,57,43,.2);}
+.nav-sep{height:1px;background:var(--bsub);margin:8px 12px;}
+.sidebar-bottom{position:sticky;bottom:0;background:var(--s1);border-top:1px solid var(--bsub);padding:12px;}
+.fo-card{background:var(--s2);border:1px solid var(--bgold);padding:10px 12px;}
+.fo-label{font-family:'DM Mono',monospace;font-size:7px;color:var(--gold);text-transform:uppercase;letter-spacing:.12em;margin-bottom:4px;}
+.fo-name{font-family:'Syne',sans-serif;font-size:11px;font-weight:600;color:var(--bright);}
+.fo-sub{font-family:'DM Mono',monospace;font-size:8px;color:var(--dim);margin-top:2px;}
+
+/* ══════════ MAIN ══════════ */
+.main{position:fixed;top:var(--topbar-h);left:var(--sidebar-w);right:0;bottom:0;overflow-y:auto;background:var(--bg);}
+.main::-webkit-scrollbar{width:4px;}
+.main::-webkit-scrollbar-thumb{background:rgba(184,151,42,.15);}
+
+/* ══════════ PAGES ══════════ */
+.page{display:none;padding:20px 24px 40px;}
+.page.active{display:block;}
+.page-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--bsub);}
+.ph-left{}
+.page-overline{font-family:'DM Mono',monospace;font-size:8px;color:var(--gold);text-transform:uppercase;letter-spacing:.14em;margin-bottom:4px;}
+.page-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--bright);letter-spacing:-.02em;}
+.page-sub{font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);margin-top:4px;letter-spacing:.04em;}
+.ph-right{display:flex;align-items:center;gap:8px;}
+
+/* ══════════ SHARED COMPONENTS ══════════ */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+.g4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;}
+.g32{display:grid;grid-template-columns:2fr 1fr;gap:10px;}
+.g23{display:grid;grid-template-columns:1fr 2fr;gap:10px;}
+
+.card{background:var(--s1);border:1px solid var(--bsub);padding:16px 18px;}
+.card.gl{border-left:3px solid var(--gold);}
+.card.gg{border-left:3px solid var(--green);}
+.card.gr{border-left:3px solid var(--red);}
+.card.gb{border-left:3px solid var(--blue);}
+.card.ga{border-left:3px solid var(--amber);}
+
+.card-title{font-family:'DM Mono',monospace;font-size:8px;color:var(--gold);text-transform:uppercase;letter-spacing:.12em;margin-bottom:12px;}
+.card-val{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--bright);line-height:1;}
+.card-sub{font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);margin-top:4px;}
+
+.tag{display:inline-block;font-family:'DM Mono',monospace;font-size:7.5px;padding:2px 6px;letter-spacing:.08em;text-transform:uppercase;}
+.tg{background:var(--green-bg);color:var(--green-l);border:1px solid rgba(26,122,74,.3);}
+.ta{background:var(--amber-bg);color:var(--amber-l);border:1px solid rgba(212,134,10,.3);}
+.tr{background:var(--red-bg);color:var(--red-l);border:1px solid rgba(192,57,43,.3);}
+.tb{background:var(--blue-bg);color:var(--blue-l);border:1px solid rgba(45,122,192,.3);}
+.tgd{background:var(--gold-bg);color:var(--gold);border:1px solid rgba(184,151,42,.3);}
+
+.btn{font-family:'DM Mono',monospace;font-size:9px;padding:7px 14px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;border:none;}
+.btn-primary{background:var(--gold);color:#090E14;font-weight:600;}
+.btn-ghost{background:transparent;color:var(--text);border:1px solid var(--bsub);}
+.btn-ghost:hover{background:var(--s2);}
+
+.row{display:flex;align-items:center;gap:8px;}
+.spacer{flex:1;}
+
+.section-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--bright);letter-spacing:-.01em;margin:20px 0 10px;}
+.section-title:first-child{margin-top:0;}
+
+/* ══════ DATA TABLE ══════ */
+table.dt{width:100%;border-collapse:collapse;}
+table.dt th{background:var(--s3);padding:7px 12px;font-family:'DM Mono',monospace;font-size:7.5px;color:var(--gold);text-align:left;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--bsub);}
+table.dt td{padding:8px 12px;font-size:11.5px;color:var(--text);border:1px solid var(--bsub);background:var(--s1);}
+table.dt tr:hover td{background:var(--s2);cursor:pointer;}
+.mono{font-family:'DM Mono',monospace;font-size:10.5px;}
+
+/* ══════ RN BAR ══════ */
+.rn-bar-wrap{background:var(--s3);height:4px;border-radius:2px;overflow:hidden;margin-top:4px;}
+.rn-bar-fill{height:100%;border-radius:2px;}
+
+/* ══════ MINI RN CHIP ══════ */
+.rn-chip{display:inline-flex;align-items:center;gap:4px;}
+.rn-number{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;line-height:1;}
+
+/* ══════ STATUS INDICATOR ══════ */
+.status-dot{width:7px;height:7px;border-radius:50%;display:inline-block;flex-shrink:0;}
+
+/* ══════ PROGRESS RING (SVG) ══════ */
+.prog-ring{position:relative;display:inline-flex;align-items:center;justify-content:center;}
+.prog-ring svg{transform:rotate(-90deg);}
+.prog-ring-label{position:absolute;text-align:center;}
+
+/* ══════ NOTE ══════ */
+.note{font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);padding:7px 10px;border-left:2px solid var(--bsub);margin-top:8px;line-height:1.6;}
+
+/* ══════════════════════════════════════════
+   PAGE: OVERVIEW
+══════════════════════════════════════════ */
+.kpi-row{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:14px;}
+.kpi-card{background:var(--s1);border:1px solid var(--bsub);padding:14px 16px;position:relative;overflow:hidden;}
+.kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.kpi-card.gold::before{background:var(--gold);}
+.kpi-card.green::before{background:var(--green);}
+.kpi-card.amber::before{background:var(--amber);}
+.kpi-card.blue::before{background:var(--blue);}
+.kpi-card.red::before{background:var(--red);}
+.kpi-label{font-family:'DM Mono',monospace;font-size:7.5px;color:var(--dim);text-transform:uppercase;letter-spacing:.12em;margin-bottom:6px;}
+.kpi-val{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:var(--bright);line-height:1;margin-bottom:4px;}
+.kpi-sub{font-family:'DM Mono',monospace;font-size:8.5px;color:var(--dim);}
+.kpi-delta{font-family:'DM Mono',monospace;font-size:8.5px;margin-top:6px;}
+
+.overview-grid{display:grid;grid-template-columns:2fr 1fr;gap:10px;}
+.overview-left{display:flex;flex-direction:column;gap:10px;}
+.overview-right{display:flex;flex-direction:column;gap:10px;}
+
+/* Client activity list */
+.activity-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--bsub);}
+.activity-row:last-child{border-bottom:none;}
+.activity-avatar{width:28px;height:28px;background:var(--s3);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:10px;font-weight:700;color:var(--gold);flex-shrink:0;}
+.activity-name{font-size:11.5px;color:var(--bright);font-weight:500;}
+.activity-desc{font-family:'DM Mono',monospace;font-size:8.5px;color:var(--dim);}
+.activity-time{font-family:'DM Mono',monospace;font-size:8px;color:var(--dim);margin-left:auto;white-space:nowrap;}
+
+/* Alerts */
+.alert-item{display:flex;gap:10px;padding:9px 12px;margin-bottom:2px;border-left:3px solid;}
+.alert-item.alert-amber{background:var(--amber-bg);border-color:var(--amber);}
+.alert-item.alert-red{background:var(--red-bg);border-color:var(--red);}
+.alert-item.alert-blue{background:var(--blue-bg);border-color:var(--blue);}
+.alert-item.alert-green{background:var(--green-bg);border-color:var(--green);}
+.alert-text{font-size:11px;color:var(--text);line-height:1.4;}
+.alert-label{font-family:'DM Mono',monospace;font-size:7.5px;margin-bottom:3px;}
+
+/* ══════════════════════════════════════════
+   RISK COMPARISON RAIL
+══════════════════════════════════════════ */
+.rn-rail-wrap{margin:8px 0;}
+.rn-rail-label{font-family:'DM Mono',monospace;font-size:8px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px;display:flex;justify-content:space-between;}
+.rn-rail{height:24px;background:var(--s3);position:relative;overflow:visible;}
+.rn-zone{position:absolute;height:100%;top:0;}
+.rn-dot{position:absolute;top:50%;transform:translate(-50%,-50%);width:10px;height:10px;border-radius:50%;z-index:2;}
+.rn-dot-label{position:absolute;top:calc(100% + 4px);transform:translateX(-50%);font-family:'DM Mono',monospace;font-size:7.5px;white-space:nowrap;}
+.rn-axis{display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:7.5px;color:var(--dim);margin-top:18px;}
+
+/* ══════════════════════════════════════════
+   RISK ASSESSMENT
+══════════════════════════════════════════ */
+.rn-compare-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0;}
+.rn-box{background:var(--s2);border:1px solid var(--bsub);padding:14px;text-align:center;}
+.rn-box-label{font-family:'DM Mono',monospace;font-size:7.5px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;}
+.rn-box-val{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;line-height:1;margin-bottom:4px;}
+.rn-box-sub{font-family:'DM Mono',monospace;font-size:8px;color:var(--dim);}
+
+/* Hexagon radar (CSS-only approximation) */
+.hex-container{display:flex;gap:16px;align-items:flex-start;margin:12px 0;}
+.hex-chart{position:relative;width:180px;height:160px;flex-shrink:0;}
+.hex-chart svg{width:100%;height:100%;}
+.hex-legend{flex:1;}
+.hex-legend-item{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--bsub);}
+.hex-legend-item:last-child{border-bottom:none;}
+.hex-dim{font-size:11.5px;color:var(--text);}
+.hex-score{font-family:'DM Mono',monospace;font-size:10px;}
+.hex-bar-mini{width:80px;height:3px;background:var(--s3);border-radius:2px;overflow:hidden;}
+.hex-bar-fill{height:100%;border-radius:2px;}
+
+/* ══════════════════════════════════════════
+   SIMULATOR
+══════════════════════════════════════════ */
+.sim-layout{display:grid;grid-template-columns:280px 1fr;gap:16px;}
+.slider-section{}
+.slider-block{background:var(--s2);border:1px solid var(--bsub);padding:16px;margin-bottom:8px;}
+.slider-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.slider-name{font-family:'Syne',sans-serif;font-size:13px;font-weight:600;color:var(--bright);}
+.slider-pct{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--gold);}
+.slider-track{-webkit-appearance:none;width:100%;height:4px;background:var(--s3);outline:none;border-radius:2px;cursor:pointer;margin:8px 0;}
+.slider-track::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--gold);cursor:pointer;border:2px solid var(--bg);}
+.slider-range-label{display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:8px;color:var(--dim);}
+.sim-constraint{background:var(--amber-bg);border:1px solid rgba(212,134,10,.25);padding:8px 12px;font-family:'DM Mono',monospace;font-size:9px;color:var(--amber-l);margin-bottom:8px;}
+.sim-limit-bar{background:var(--s3);height:8px;border-radius:4px;overflow:hidden;margin:6px 0;}
+.sim-limit-fill{height:100%;border-radius:4px;transition:width .3s;}
+.sim-results{display:flex;flex-direction:column;gap:8px;}
+.sim-metric-row{background:var(--s1);border:1px solid var(--bsub);padding:12px 16px;display:grid;grid-template-columns:160px 1fr 80px 80px;gap:12px;align-items:center;}
+.sim-metric-label{font-size:11.5px;color:var(--text);}
+.sim-bar-track{height:4px;background:var(--s3);border-radius:2px;overflow:hidden;}
+.sim-bar-fill{height:100%;border-radius:2px;}
+.sim-before{font-family:'DM Mono',monospace;font-size:10px;color:var(--dim);text-align:right;}
+.sim-after{font-family:'DM Mono',monospace;font-size:10.5px;font-weight:500;text-align:right;}
+
+/* ══════════════════════════════════════════
+   INTELLIGENCE TERMINAL
+══════════════════════════════════════════ */
+.intel-layout{display:grid;grid-template-columns:1fr 1fr 300px;gap:10px;}
+.intel-col{display:flex;flex-direction:column;gap:10px;}
+
+/* Heatmap */
+.heatmap-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:2px;margin-top:8px;}
+.heat-cell{padding:8px 6px;text-align:center;font-family:'DM Mono',monospace;font-size:8px;cursor:default;}
+.heat-cell-name{font-size:7.5px;letter-spacing:.04em;margin-bottom:3px;}
+.heat-cell-val{font-size:11px;font-weight:500;}
+
+/* StormGuard */
+.sg-status{text-align:center;padding:16px;}
+.sg-indicator{width:80px;height:80px;border-radius:50%;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;}
+.sg-label{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:4px;}
+.sg-sub{font-family:'DM Mono',monospace;font-size:8.5px;color:var(--dim);}
+.sg-metrics{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:12px;}
+.sg-metric{background:var(--s2);padding:8px;text-align:center;}
+.sg-metric-label{font-family:'DM Mono',monospace;font-size:7.5px;color:var(--dim);text-transform:uppercase;margin-bottom:3px;}
+.sg-metric-val{font-family:'DM Mono',monospace;font-size:11px;}
+
+/* Don't Touch */
+.dtl-row{display:flex;align-items:center;justify-content:space-between;padding:7px 10px;background:var(--s2);border:1px solid var(--bsub);margin-bottom:2px;}
+.dtl-ticker{font-family:'DM Mono',monospace;font-size:10px;color:var(--bright);font-weight:500;min-width:60px;}
+.dtl-name{font-size:11px;color:var(--text);flex:1;padding:0 10px;}
+.dtl-score{font-family:'DM Mono',monospace;font-size:10px;color:var(--red-l);}
+.dtl-bar-mini{width:60px;height:3px;background:var(--s3);border-radius:2px;overflow:hidden;}
+.dtl-fill{height:100%;border-radius:2px;background:var(--red);}
+
+/* Momentum map */
+.mom-item{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--bsub);}
+.mom-item:last-child{border-bottom:none;}
+.mom-sector{font-size:11.5px;color:var(--text);flex:1;}
+.mom-bar{width:100px;height:4px;background:var(--s3);border-radius:2px;overflow:hidden;}
+.mom-fill{height:100%;border-radius:2px;}
+.mom-val{font-family:'DM Mono',monospace;font-size:10px;min-width:36px;text-align:right;}
+
+/* Tactical note */
+.tactical-note{background:var(--s2);border:1px solid rgba(184,151,42,.2);border-left:3px solid var(--gold);padding:14px;font-family:'DM Mono',monospace;font-size:10px;color:var(--bright);line-height:1.7;}
+.tactical-date{font-size:8px;color:var(--dim);margin-bottom:8px;text-transform:uppercase;letter-spacing:.1em;}
+
+/* ══════════════════════════════════════════
+   CLIENT DETAIL PAGE
+══════════════════════════════════════════ */
+.client-header-card{background:var(--s1);border:1px solid var(--bsub);padding:18px 20px;margin-bottom:12px;display:grid;grid-template-columns:1fr auto;gap:20px;align-items:start;}
+.client-name-big{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--bright);margin-bottom:4px;}
+.client-meta{display:flex;gap:16px;flex-wrap:wrap;}
+.client-meta-item{font-family:'DM Mono',monospace;font-size:8.5px;color:var(--dim);}
+.client-meta-item strong{color:var(--text);}
+.timeline-item{display:flex;gap:12px;padding:8px 0;border-bottom:1px solid var(--bsub);}
+.timeline-item:last-child{border-bottom:none;}
+.tl-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px;}
+.tl-content{}
+.tl-action{font-size:11.5px;color:var(--bright);}
+.tl-time{font-family:'DM Mono',monospace;font-size:8px;color:var(--dim);margin-top:2px;}
+
+/* ══════ BEFORE/AFTER MINI ══════ */
+.ba-mini{display:grid;grid-template-columns:1fr 32px 1fr;gap:0;border:1px solid var(--bsub);overflow:hidden;}
+.ba-mini-col{padding:12px 14px;background:var(--s2);}
+.ba-mini-col.after{background:rgba(26,122,74,0.04);border-left:2px solid var(--green);}
+.ba-mini-arrow{display:flex;align-items:center;justify-content:center;background:var(--s3);color:var(--gold);font-size:14px;}
+.ba-metric-mini{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--bsub);font-size:11px;}
+.ba-metric-mini:last-child{border-bottom:none;}
+
+/* ══════ PORTFOLIO UPLOAD ══════ */
+.upload-zone{background:var(--s2);border:2px dashed var(--bsub);padding:32px;text-align:center;cursor:pointer;transition:border-color .2s;}
+.upload-zone:hover{border-color:rgba(184,151,42,.3);}
+.upload-icon{font-size:28px;margin-bottom:8px;opacity:.5;}
+.upload-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:600;color:var(--dim);margin-bottom:4px;}
+.upload-sub{font-family:'DM Mono',monospace;font-size:8.5px;color:var(--dim);}
+
+/* Allocation donut (CSS circle) */
+.donut-wrap{position:relative;width:100px;height:100px;margin:0 auto;}
+.donut-wrap svg{width:100%;height:100%;}
+.donut-label{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;}
+.donut-pct{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--bright);}
+.donut-name{font-family:'DM Mono',monospace;font-size:7px;color:var(--dim);text-transform:uppercase;}
+
+/* ══════ WATCHLIST ══════ */
+.watchlist-row{display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--s2);border:1px solid var(--bsub);margin-bottom:2px;}
+.wl-name{font-family:'DM Mono',monospace;font-size:10px;color:var(--bright);min-width:60px;}
+.wl-fullname{font-size:11px;color:var(--text);flex:1;}
+.wl-price{font-family:'DM Mono',monospace;font-size:10.5px;color:var(--bright);min-width:60px;text-align:right;}
+.wl-chg{font-family:'DM Mono',monospace;font-size:9.5px;min-width:50px;text-align:right;}
+.wl-sparkline{width:60px;height:18px;flex-shrink:0;}
+
+/* ══════ FEASIBILITY BADGE ══════ */
+.feas-badge{display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid;}
+.feas-badge.feasible{background:var(--green-bg);border-color:rgba(26,122,74,.3);}
+.feas-badge.borderline{background:var(--amber-bg);border-color:rgba(212,134,10,.3);}
+.feas-badge.infeasible{background:var(--red-bg);border-color:rgba(192,57,43,.3);}
+.feas-icon{font-size:14px;}
+.feas-text{font-family:'Syne',sans-serif;font-size:12px;font-weight:600;}
+.feas-desc{font-size:11px;color:var(--text);margin-left:auto;max-width:280px;text-align:right;}
+
+</style>
+</head>
+<body>
+
+<!-- ══════════ TOPBAR ══════════ -->
+<div class="topbar">
+  <div class="topbar-logo">
+    <div class="logo-mark">H</div>
+    <div>
+      <div class="logo-text">HARPIAN</div>
+      <div class="logo-sub">Intelligence Terminal</div>
+    </div>
+  </div>
+  <div class="topbar-center">
+    <div class="topbar-ticker">
+      <div class="ticker-item">
+        <span class="ticker-name">CORE 11</span>
+        <span class="ticker-val">142.84</span>
+        <span class="ticker-chg" style="color:var(--green-l)">+1.24%</span>
+      </div>
+      <div class="tick-sep"></div>
+      <div class="ticker-item">
+        <span class="ticker-name">CORE 22</span>
+        <span class="ticker-val">198.30</span>
+        <span class="ticker-chg" style="color:var(--green-l)">+2.18%</span>
+      </div>
+      <div class="tick-sep"></div>
+      <div class="ticker-item">
+        <span class="ticker-name">SPY</span>
+        <span class="ticker-val">568.42</span>
+        <span class="ticker-chg" style="color:var(--red-l)">−0.34%</span>
+      </div>
+      <div class="tick-sep"></div>
+      <div class="ticker-item">
+        <span class="ticker-name">QQQ</span>
+        <span class="ticker-val">481.67</span>
+        <span class="ticker-chg" style="color:var(--red-l)">−0.51%</span>
+      </div>
+      <div class="tick-sep"></div>
+      <div class="ticker-item">
+        <span class="ticker-name">GLD</span>
+        <span class="ticker-val">242.18</span>
+        <span class="ticker-chg" style="color:var(--amber-l)">+0.08%</span>
+      </div>
+      <div class="tick-sep"></div>
+      <div class="ticker-item">
+        <span class="ticker-name">USD/BRL</span>
+        <span class="ticker-val">5.682</span>
+        <span class="ticker-chg" style="color:var(--red-l)">+0.22%</span>
+      </div>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <div class="storm-pill">
+      <div class="storm-dot"></div>
+      SGA: RISK-ON
+    </div>
+    <div class="topbar-time" id="clock">16:42:08 EST</div>
+    <div class="topbar-user">
+      <div class="user-avatar">RS</div>
+      <div>
+        <div class="user-name">Ribeiro Silva FO</div>
+        <div style="font-family:'DM Mono',monospace;font-size:7.5px;color:var(--dim);">Admin · FO Manager</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ SIDEBAR ══════════ -->
+<div class="sidebar">
+  <div class="nav-section">
+    <div class="nav-section-label">Main</div>
+    <div class="nav-item active" onclick="showPage('overview',this)">
+      <div class="nav-icon">⬡</div>
+      <span class="nav-label">Overview</span>
+    </div>
+    <div class="nav-item" onclick="showPage('fo-profile',this)">
+      <div class="nav-icon">◈</div>
+      <span class="nav-label">Family Office</span>
+    </div>
+  </div>
+  <div class="nav-sep"></div>
+  <div class="nav-section">
+    <div class="nav-section-label">Clients</div>
+    <div class="nav-item" onclick="showPage('clients',this)">
+      <div class="nav-icon">◻</div>
+      <span class="nav-label">All Clients</span>
+      <span class="nav-badge">12</span>
+    </div>
+    <div class="nav-item" onclick="showPage('client-detail',this)">
+      <div class="nav-icon">◉</div>
+      <span class="nav-label">Client Profile</span>
+    </div>
+    <div class="nav-item" onclick="showPage('risk-assessment',this)">
+      <div class="nav-icon">◎</div>
+      <span class="nav-label">Risk Assessment</span>
+      <span class="nav-badge red">3</span>
+    </div>
+  </div>
+  <div class="nav-sep"></div>
+  <div class="nav-section">
+    <div class="nav-section-label">Portfolio</div>
+    <div class="nav-item" onclick="showPage('portfolio',this)">
+      <div class="nav-icon">▣</div>
+      <span class="nav-label">Portfolio Upload</span>
+    </div>
+    <div class="nav-item" onclick="showPage('simulator',this)">
+      <div class="nav-icon">⊞</div>
+      <span class="nav-label">Allocation Simulator</span>
+    </div>
+    <div class="nav-item" onclick="showPage('strategies',this)">
+      <div class="nav-icon">◆</div>
+      <span class="nav-label">Harpian Strategies</span>
+    </div>
+  </div>
+  <div class="nav-sep"></div>
+  <div class="nav-section">
+    <div class="nav-section-label">Intelligence</div>
+    <div class="nav-item" onclick="showPage('intel',this)">
+      <div class="nav-icon">▦</div>
+      <span class="nav-label">Market Intelligence</span>
+    </div>
+    <div class="nav-item" onclick="showPage('stormguard',this)">
+      <div class="nav-icon">⚡</div>
+      <span class="nav-label">StormGuard Monitor</span>
+    </div>
+    <div class="nav-item" onclick="showPage('dtl',this)">
+      <div class="nav-icon">⊗</div>
+      <span class="nav-label">Don't Touch List</span>
+      <span class="nav-badge red">7</span>
+    </div>
+  </div>
+  <div class="nav-sep"></div>
+  <div class="nav-section">
+    <div class="nav-section-label">System</div>
+    <div class="nav-item" onclick="showPage('reports',this)">
+      <div class="nav-icon">≡</div>
+      <span class="nav-label">Reports / Export</span>
+    </div>
+    <div class="nav-item" onclick="showPage('settings',this)">
+      <div class="nav-icon">◌</div>
+      <span class="nav-label">Settings</span>
+    </div>
+  </div>
+
+  <div class="sidebar-bottom">
+    <div class="fo-card">
+      <div class="fo-label">Active Family Office</div>
+      <div class="fo-name">Ribeiro Silva FO</div>
+      <div class="fo-sub">12 clients · AUM $142M · RN 48</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ MAIN CONTENT ══════════ -->
+<div class="main">
+
+<!-- ═══════════════════════ OVERVIEW ═══════════════════════ -->
+<div class="page active" id="page-overview">
+  <div class="page-header">
+    <div class="ph-left">
+      <div class="page-overline">Home · Ribeiro Silva Family Office</div>
+      <div class="page-title">Overview</div>
+      <div class="page-sub">Tuesday, March 31, 2026 &nbsp;·&nbsp; 12 clients &nbsp;·&nbsp; 3 pending assessments</div>
+    </div>
+    <div class="ph-right">
+      <button class="btn btn-ghost">+ New Client</button>
+      <button class="btn btn-primary">Export Report</button>
+    </div>
+  </div>
+
+  <!-- KPI ROW -->
+  <div class="kpi-row">
+    <div class="kpi-card gold">
+      <div class="kpi-label">Total Clients</div>
+      <div class="kpi-val">12</div>
+      <div class="kpi-sub">8 active · 3 pending · 1 draft</div>
+      <div class="kpi-delta" style="color:var(--green-l)">+2 this month</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-label">Aligned Clients</div>
+      <div class="kpi-val">7</div>
+      <div class="kpi-sub">58% alignment rate</div>
+      <div class="kpi-delta" style="color:var(--green-l)">+1 vs last week</div>
+    </div>
+    <div class="kpi-card amber">
+      <div class="kpi-label">Pending Actions</div>
+      <div class="kpi-val">5</div>
+      <div class="kpi-sub">3 assessments · 2 proposals</div>
+      <div class="kpi-delta" style="color:var(--amber-l)">Requires attention</div>
+    </div>
+    <div class="kpi-card blue">
+      <div class="kpi-label">FO Risk Number</div>
+      <div class="kpi-val">48</div>
+      <div class="kpi-sub">Moderate · Institutional mandate</div>
+      <div class="kpi-delta" style="color:var(--blue-l)">Stable</div>
+    </div>
+    <div class="kpi-card gold">
+      <div class="kpi-label">SGA Status</div>
+      <div class="kpi-val" style="font-size:18px;color:var(--green-l);">RISK-ON</div>
+      <div class="kpi-sub">No defensive overlay active</div>
+      <div class="kpi-delta" style="color:var(--green-l)">+14 days</div>
+    </div>
+  </div>
+
+  <div class="overview-grid">
+    <div class="overview-left">
+
+      <!-- CLIENT STATUS TABLE -->
+      <div class="card">
+        <div class="card-title">Client Status — Portfolio</div>
+        <table class="dt">
+          <thead><tr><th>Client</th><th>RN Client</th><th>RN Portfolio</th><th>RN Required</th><th>Gap</th><th>Status</th><th>Action</th></tr></thead>
+          <tbody>
+            <tr onclick="showPage('client-detail',document.querySelector('.nav-item:nth-child(8)'))">
+              <td><div style="font-weight:500;color:var(--bright)">Ana Beatriz Souza</div><div class="mono" style="font-size:9px;color:var(--dim)">FO Ref: ABS-001</div></td>
+              <td><span class="rn-number" style="color:var(--amber-l)">55</span></td>
+              <td><span class="rn-number" style="color:var(--red-l)">72</span></td>
+              <td><span class="rn-number" style="color:var(--gold)">50</span></td>
+              <td><span class="tag tr">+17 over</span></td>
+              <td><span class="tag tr">Over-risked</span></td>
+              <td><span class="tag ta">Review</span></td>
+            </tr>
+            <tr>
+              <td><div style="font-weight:500;color:var(--bright)">Carlos Mendes</div><div class="mono" style="font-size:9px;color:var(--dim)">FO Ref: CM-002</div></td>
+              <td><span class="rn-number" style="color:var(--green-l)">30</span></td>
+              <td><span class="rn-number" style="color:var(--blue-l)">22</span></td>
+              <td><span class="rn-number" style="color:var(--gold)">34</span></td>
+              <td><span class="tag tb">−12 under</span></td>
+              <td><span class="tag tb">Under-risked</span></td>
+              <td><span class="tag ta">Boost</span></td>
+            </tr>
+            <tr>
+              <td><div style="font-weight:500;color:var(--bright)">Família Rodrigues</div><div class="mono" style="font-size:9px;color:var(--dim)">FO Ref: FR-003</div></td>
+              <td><span class="rn-number" style="color:var(--green-l)">45</span></td>
+              <td><span class="rn-number" style="color:var(--green-l)">47</span></td>
+              <td><span class="rn-number" style="color:var(--gold)">44</span></td>
+              <td><span class="tag tg">+2 optimal</span></td>
+              <td><span class="tag tg">Aligned</span></td>
+              <td><span class="tag tg">Maintain</span></td>
+            </tr>
+            <tr>
+              <td><div style="font-weight:500;color:var(--bright)">Eduardo Lima</div><div class="mono" style="font-size:9px;color:var(--dim)">FO Ref: EL-004</div></td>
+              <td><span class="rn-number" style="color:var(--amber-l)">60</span></td>
+              <td><span class="rn-number" style="color:var(--amber-l)">58</span></td>
+              <td><span class="rn-number" style="color:var(--gold)">62</span></td>
+              <td><span class="tag ta">−4 limit</span></td>
+              <td><span class="tag ta">Limit zone</span></td>
+              <td><span class="tag ta">Monitor</span></td>
+            </tr>
+            <tr>
+              <td><div style="font-weight:500;color:var(--bright)">Mariana Fonseca</div><div class="mono" style="font-size:9px;color:var(--dim)">FO Ref: MF-005</div></td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td><span class="tag" style="background:rgba(123,63,160,.1);color:#B07AE0;border:1px solid rgba(123,63,160,.3)">Pending Q</span></td>
+              <td><span class="tag ta">Send Link</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="text-align:right;margin-top:8px;"><button class="btn btn-ghost" onclick="showPage('clients',document.querySelector('.nav-item:nth-child(6)'))">View All 12 →</button></div>
+      </div>
+
+      <!-- RISK COMPARISON RAIL -->
+      <div class="card">
+        <div class="card-title">Risk Numbers — Portfolio View</div>
+        <div class="rn-rail-wrap">
+          <div class="rn-rail-label"><span>0</span><span>25</span><span>50</span><span>75</span><span>99</span></div>
+          <div class="rn-rail" style="height:32px;background:var(--s3);">
+            <div class="rn-zone" style="left:0;width:25%;background:rgba(45,122,192,0.1);"></div>
+            <div class="rn-zone" style="left:35%;width:25%;background:rgba(26,122,74,0.15);"></div>
+            <div class="rn-zone" style="left:60%;width:15%;background:rgba(212,134,10,0.1);"></div>
+            <div class="rn-zone" style="left:75%;width:25%;background:rgba(192,57,43,0.1);"></div>
+            <!-- FO RN -->
+            <div class="rn-dot" style="left:48.5%;background:var(--gold);border:2px solid var(--bg);width:12px;height:12px;"></div>
+            <div class="rn-dot-label" style="left:48.5%;color:var(--gold);">FO:48</div>
+            <!-- Client avg -->
+            <div class="rn-dot" style="left:45.5%;background:var(--blue-l);border:2px solid var(--bg);"></div>
+            <div class="rn-dot-label" style="left:45.5%;color:var(--blue-l);top:calc(100% + 20px);">Avg:45</div>
+            <!-- Over-risk -->
+            <div class="rn-dot" style="left:72.7%;background:var(--red-l);border:2px solid var(--bg);"></div>
+            <div class="rn-dot-label" style="left:72.7%;color:var(--red-l);">ABS:72</div>
+          </div>
+          <div class="rn-axis" style="padding-top:36px;"><span>Under</span><span>Safe</span><span>Optimal</span><span>Limit</span><span>Danger</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="overview-right">
+
+      <!-- ALERTS -->
+      <div class="card">
+        <div class="card-title">Active Alerts</div>
+        <div class="alert-item alert-red">
+          <div>
+            <div class="alert-label" style="color:var(--red-l)">⚠ OVER-RISKED</div>
+            <div class="alert-text">Ana Beatriz Souza portfolio exceeds tolerance by 17 pts. Immediate review required.</div>
+          </div>
+        </div>
+        <div class="alert-item alert-amber">
+          <div>
+            <div class="alert-label" style="color:var(--amber-l)">PENDING</div>
+            <div class="alert-text">3 clients have not completed risk questionnaire. Follow-up overdue.</div>
+          </div>
+        </div>
+        <div class="alert-item alert-blue">
+          <div>
+            <div class="alert-label" style="color:var(--blue-l)">OPPORTUNITY</div>
+            <div class="alert-text">Carlos Mendes Risk Budget has +12 pts available. Core 22 allocation viable.</div>
+          </div>
+        </div>
+        <div class="alert-item alert-green">
+          <div>
+            <div class="alert-label" style="color:var(--green-l)">SGA UPDATE</div>
+            <div class="alert-text">StormGuard Armor remains Risk-On. No defensive rebalancing triggered for 14 days.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RECENT ACTIVITY -->
+      <div class="card">
+        <div class="card-title">Recent Activity</div>
+        <div class="activity-row">
+          <div class="activity-avatar">FR</div>
+          <div><div class="activity-name">Família Rodrigues</div><div class="activity-desc">Allocation updated · C11 18% applied</div></div>
+          <div class="activity-time">2h ago</div>
+        </div>
+        <div class="activity-row">
+          <div class="activity-avatar">EL</div>
+          <div><div class="activity-name">Eduardo Lima</div><div class="activity-desc">Risk questionnaire completed · RN 60</div></div>
+          <div class="activity-time">5h ago</div>
+        </div>
+        <div class="activity-row">
+          <div class="activity-avatar">CM</div>
+          <div><div class="activity-name">Carlos Mendes</div><div class="activity-desc">Portfolio uploaded · RN calculated: 22</div></div>
+          <div class="activity-time">Yesterday</div>
+        </div>
+        <div class="activity-row">
+          <div class="activity-avatar">AB</div>
+          <div><div class="activity-name">Ana B. Souza</div><div class="activity-desc">Over-risk alert triggered · Action pending</div></div>
+          <div class="activity-time">2d ago</div>
+        </div>
+      </div>
+
+      <!-- SGA MINI -->
+      <div class="card gl">
+        <div class="card-title">StormGuard Status</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px;">
+          <div style="text-align:center;padding:10px;background:var(--s2);">
+            <div style="font-family:'DM Mono',monospace;font-size:7.5px;color:var(--dim);margin-bottom:4px;text-transform:uppercase;">SGA Signal</div>
+            <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:var(--green-l)">POSITIVE</div>
+          </div>
+          <div style="text-align:center;padding:10px;background:var(--s2);">
+            <div style="font-family:'DM Mono',monospace;font-size:7.5px;color:var(--dim);margin-bottom:4px;text-transform:uppercase;">Regime</div>
+            <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:var(--green-l)">RISK-ON</div>
+          </div>
+          <div style="text-align:center;padding:10px;background:var(--s2);">
+            <div style="font-family:'DM Mono',monospace;font-size:7.5px;color:var(--dim);margin-bottom:4px;text-transform:uppercase;">Days Active</div>
+            <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:var(--bright)">14</div>
+          </div>
+          <div style="text-align:center;padding:10px;background:var(--s2);">
+            <div style="font-family:'DM Mono',monospace;font-size:7.5px;color:var(--dim);margin-bottom:4px;text-transform:uppercase;">C11 Position</div>
+            <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:var(--gold)">100%</div>
+          </div>
+        </div>
+        <button class="btn btn-ghost" style="width:100%;margin-top:8px;font-size:9px;" onclick="showPage('stormguard',document.querySelector('.nav-item:nth-child(14)'))">Open Monitor →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ FAMILY OFFICE ═══════════════════════ -->
+<div class="page" id="page-fo-profile">
+  <div class="page-header">
+    <div class="ph-left">
+      <div class="page-overline">Family Office · Configuration</div>
+      <div class="page-title">Family Office Profile</div>
+      <div class="page-sub">Institutional mandate · Risk philosophy · Governance</div>
+    </div>
+    <div class="ph-right">
+      <button class="btn btn-ghost">Edit Profile</button>
+    </div>
+  </div>
+
+  <div class="g2" style="margin-bottom:12px;">
+    <div class="card gl">
+      <div class="card-title">Identity</div>
+      <table style="width:100%;border-collapse:collapse;">
+        <tr><td style="padding:6px 0;color:var(--dim);font-family:'DM Mono',monospace;font-size:9px;width:140px;border-bottom:1px solid var(--bsub);">LEGAL NAME</td><td style="padding:6px 0;font-size:12px;color:var(--bright);border-bottom:1px solid var(--bsub);">Ribeiro Silva Gestora</td></tr>
+        <tr><td style="padding:6px 0;color:var(--dim);font-family:'DM Mono',monospace;font-size:9px;border-bottom:1px solid var(--bsub);">CNPJ</td><td style="padding:6px 0;font-size:12px;color:var(--bright);font-family:'DM Mono',monospace;border-bottom:1px solid var(--bsub);">12.345.678/0001-90</td></tr>
+        <tr><td style="padding:6px 0;color:var(--dim);font-family:'DM Mono',monospace;font-size:9px;border-bottom:1px solid var(--bsub);">REGULATOR</td><td style="padding:6px 0;font-size:12px;color:var(--bright);border-bottom:1px solid var(--bsub);">CVM · ANBIMA</td></tr>
+        <tr><td style="padding:6px 0;color:var(--dim);font-family:'DM Mono',monospace;font-size:9px;border-bottom:1px solid var(--bsub);">HARPIAN TIER</td><td style="padding:6px 0;border-bottom:1px solid var(--bsub);"><span class="tag tgd">Premier Partner</span></td></tr>
+        <tr><td style="padding:6px 0;color:var(--dim);font-family:'DM Mono',monospace;font-size:9px;">MEMBER SINCE</td><td style="padding:6px 0;font-size:12px;color:var(--bright);">January 2025</td></tr>
+      </table>
+    </div>
+    <div class="card gl">
+      <div class="card-title">Institutional Risk Profile</div>
+      <div class="rn-compare-grid" style="grid-template-columns:1fr 1fr;margin:0 0 12px;">
+        <div class="rn-box">
+          <div class="rn-box-label">FO Risk Number</div>
+          <div class="rn-box-val" style="color:var(--gold);">48</div>
+          <div class="rn-box-sub">Mandate ceiling</div>
+        </div>
+        <div class="rn-box">
+          <div class="rn-box-label">FO Capacity</div>
+          <div class="rn-box-val" style="color:var(--blue-l);">56</div>
+          <div class="rn-box-sub">Financial tolerance</div>
+        </div>
+      </div>
+      <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);margin-bottom:6px;text-transform:uppercase;letter-spacing:.1em;">Max Harpian Exposure</div>
+      <div style="background:var(--s3);height:8px;border-radius:4px;overflow:hidden;margin-bottom:4px;">
+        <div style="width:10%;height:100%;background:var(--gold);border-radius:4px;"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);">
+        <span>0%</span><span style="color:var(--gold)">10% ceiling</span><span>100%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:12px;">
+    <div class="card-title">Philosophy Statement</div>
+    <div style="font-family:'DM Mono',monospace;font-size:10.5px;color:var(--bright);line-height:1.8;padding:12px;background:var(--s2);border:1px solid var(--bsub);border-left:3px solid var(--gold);">
+      "Capital preservation is the first principle. Alpha generation must not compromise institutional credibility. Systematic, rules-based overlays — particularly those with structural crisis protection — are preferred over discretionary volatility management. We seek strategies that demonstrate drawdown awareness in addition to return generation."
+    </div>
+  </div>
+
+  <div class="g3">
+    <div class="card">
+      <div class="card-title">Risk Stance</div>
+      <div class="mom-item"><span class="mom-sector">Conservative bias</span><div class="mom-bar"><div class="mom-fill" style="width:40%;background:var(--blue);"></div></div><span class="mom-val" style="color:var(--blue-l);">40%</span></div>
+      <div class="mom-item"><span class="mom-sector">Moderate core</span><div class="mom-bar"><div class="mom-fill" style="width:45%;background:var(--green);"></div></div><span class="mom-val" style="color:var(--green-l);">45%</span></div>
+      <div class="mom-item"><span class="mom-sector">Tactical growth</span><div class="mom-bar"><div class="mom-fill" style="width:15%;background:var(--amber);"></div></div><span class="mom-val" style="color:var(--amber-l);">15%</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Questionnaire</div>
+      <div style="text-align:center;padding:8px 0;">
+        <div style="font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:var(--green-l);margin-bottom:4px;">100%</div>
+        <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);">Completed · Jan 14, 2025</div>
+        <div style="margin-top:10px;"><span class="tag tg">Validated</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">AUM Overview</div>
+      <div style="text-align:center;padding:8px 0;">
+        <div style="font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--bright);margin-bottom:4px;">$142M</div>
+        <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);">Total assets under advisory</div>
+        <div style="display:flex;justify-content:space-between;margin-top:10px;padding-top:10px;border-top:1px solid var(--bsub);">
+          <div style="text-align:center;"><div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--dim);">Clients</div><div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--bright)">12</div></div>
+          <div style="text-align:center;"><div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--dim);">Aligned</div><div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--green-l)">7</div></div>
+          <div style="text-align:center;"><div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--dim);">Pending</div><div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--amber-l)">5</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ ALL CLIENTS ═══════════════════════ -->
+<div class="page" id="page-clients">
+  <div class="page-header">
+    <div class="ph-left">
+      <div class="page-overline">Clients · Ribeiro Silva FO</div>
+      <div class="page-title">All Clients</div>
+      <div class="page-sub">12 registered · 7 aligned · 3 pending questionnaire</div>
+    </div>
+    <div class="ph-right">
+      <button class="btn btn-ghost">Filter</button>
+      <button class="btn btn-primary" onclick="showPage('client-detail',document.querySelector('.nav-item:nth-child(8)'))">+ New Client</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <table class="dt">
+      <thead><tr><th>#</th><th>Client Name</th><th>RN Client</th><th>RN Portfolio</th><th>RN Required</th><th>Budget</th><th>Harpian %</th><th>Feasibility</th><th>Last Action</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr onclick="showPage('client-detail',document.querySelector('[onclick*=client-detail]'))">
+          <td class="mono" style="color:var(--dim)">001</td>
+          <td><div style="font-weight:500;color:var(--bright)">Ana Beatriz Souza</div><div class="mono" style="font-size:8.5px;color:var(--dim)">ana@ribeirofamily.com.br</div></td>
+          <td><span class="rn-number" style="color:var(--amber-l);font-size:14px;font-family:'Syne',sans-serif;font-weight:700">55</span></td>
+          <td><span class="rn-number" style="color:var(--red-l);font-size:14px;font-family:'Syne',sans-serif;font-weight:700">72</span></td>
+          <td><span class="rn-number" style="color:var(--gold);font-size:14px;font-family:'Syne',sans-serif;font-weight:700">50</span></td>
+          <td><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--red-l)">−17</span></td>
+          <td><span class="mono">C11:0% C22:0%</span></td>
+          <td><span class="tag ta">Borderline</span></td>
+          <td class="mono" style="font-size:9px;color:var(--dim)">2d ago</td>
+          <td><span class="tag tr">Action needed</span></td>
+        </tr>
+        <tr>
+          <td class="mono" style="color:var(--dim)">002</td>
+          <td><div style="font-weight:500;color:var(--bright)">Carlos Mendes</div><div class="mono" style="font-size:8.5px;color:var(--dim)">carlos@mendesholding.com</div></td>
+          <td><span class="rn-number" style="color:var(--green-l);font-size:14px;font-family:'Syne',sans-serif;font-weight:700">30</span></td>
+          <td><span class="rn-number" style="color:var(--blue-l);font-size:14px;font-family:'Syne',sans-serif;font-weight:700">22</span></td>
+          <td><span class="rn-number" style="color:var(--gold);font-size:14px;font-family:'Syne',sans-serif;font-weight:700">34</span></td>
+          <td><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--blue-l)">+8</span></td>
+          <td><span class="mono">C11:0% C22:0%</span></td>
+          <td><span class="tag tb">Borderline</span></td>
+          <td class="mono" style="font-size:9px;color:var(--dim)">Yesterday</td>
+          <td><span class="tag tb">Boost needed</span></td>
+        </tr>
+        <tr>
+          <td class="mono" style="color:var(--dim)">003</td>
+          <td><div style="font-weight:500;color:var(--bright)">Família Rodrigues</div><div class="mono" style="font-size:8.5px;color:var(--dim)">gestao@rodriguesgroup.com</div></td>
+          <td><span class="rn-number" style="color:var(--green-l);font-size:14px;font-family:'Syne',sans-serif;font-weight:700">45</span></td>
+          <td><span class="rn-number" style="color:var(--green-l);font-size:14px;font-family:'Syne',sans-serif;font-weight:700">47</span></td>
+          <td><span class="rn-number" style="color:var(--gold);font-size:14px;font-family:'Syne',sans-serif;font-weight:700">44</span></td>
+          <td><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--green-l)">+1</span></td>
+          <td><span class="mono">C11:18% C22:11%</span></td>
+          <td><span class="tag tg">Feasible</span></td>
+          <td class="mono" style="font-size:9px;color:var(--dim)">2h ago</td>
+          <td><span class="tag tg">Aligned</span></td>
+        </tr>
+        <tr>
+          <td class="mono" style="color:var(--dim)">004</td>
+          <td><div style="font-weight:500;color:var(--bright)">Eduardo Lima</div><div class="mono" style="font-size:8.5px;color:var(--dim)">edu.lima@limapartners.com</div></td>
+          <td><span class="rn-number" style="color:var(--amber-l);font-size:14px;font-family:'Syne',sans-serif;font-weight:700">60</span></td>
+          <td><span class="rn-number" style="color:var(--amber-l);font-size:14px;font-family:'Syne',sans-serif;font-weight:700">58</span></td>
+          <td><span class="rn-number" style="color:var(--gold);font-size:14px;font-family:'Syne',sans-serif;font-weight:700">62</span></td>
+          <td><span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--amber-l)">+2</span></td>
+          <td><span class="mono">C11:8% C22:0%</span></td>
+          <td><span class="tag ta">Borderline</span></td>
+          <td class="mono" style="font-size:9px;color:var(--dim)">5h ago</td>
+          <td><span class="tag ta">Monitor</span></td>
+        </tr>
+        <tr>
+          <td class="mono" style="color:var(--dim)">005</td>
+          <td><div style="font-weight:500;color:var(--bright)">Mariana Fonseca</div><div class="mono" style="font-size:8.5px;color:var(--dim)">mariana@fonsecaassets.com</div></td>
+          <td style="color:var(--dim)">—</td>
+          <td style="color:var(--dim)">—</td>
+          <td style="color:var(--dim)">—</td>
+          <td style="color:var(--dim)">—</td>
+          <td style="color:var(--dim)">—</td>
+          <td style="color:var(--dim)">—</td>
+          <td class="mono" style="font-size:9px;color:var(--dim)">3d ago</td>
+          <td><span class="tag" style="background:rgba(123,63,160,.1);color:#B07AE0;border:1px solid rgba(123,63,160,.3)">Pending Q</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════ CLIENT DETAIL ═══════════════════════ -->
+<div class="page" id="page-client-detail">
+  <div class="page-header">
+    <div class="ph-left">
+      <div class="page-overline">Client Profile · ABS-001</div>
+      <div class="page-title">Ana Beatriz Souza</div>
+      <div class="page-sub">Family Office: Ribeiro Silva · Last updated: March 29, 2026</div>
+    </div>
+    <div class="ph-right">
+      <button class="btn btn-ghost" onclick="showPage('simulator',document.querySelector('.nav-item:nth-child(11)'))">Open Simulator</button>
+      <button class="btn btn-primary">Generate Report</button>
+    </div>
+  </div>
+
+  <div class="client-header-card">
+    <div>
+      <div class="client-name-big">Ana Beatriz Souza</div>
+      <div class="client-meta">
+        <div class="client-meta-item">EMAIL <strong>ana@ribeirofamily.com.br</strong></div>
+        <div class="client-meta-item">PROFILE <strong>Moderate-Aggressive</strong></div>
+        <div class="client-meta-item">AUM <strong>$8.4M</strong></div>
+        <div class="client-meta-item">HORIZON <strong>10 years</strong></div>
+        <div class="client-meta-item">TARGET <strong>$18M</strong></div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <div class="feas-badge borderline">
+        <div class="feas-icon">◎</div>
+        <div><div class="feas-text" style="color:var(--amber-l)">Borderline</div><div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--dim)">Action closes gap</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RN COMPARE -->
+  <div class="rn-compare-grid" style="margin-bottom:12px;">
+    <div class="rn-box">
+      <div class="rn-box-label">RN Individual</div>
+      <div class="rn-box-val" style="color:var(--amber-l)">55</div>
+      <div class="rn-box-sub">Behavioral ceiling</div>
+    </div>
+    <div class="rn-box" style="border-color:rgba(192,57,43,.3);">
+      <div class="rn-box-label">RN Portfolio</div>
+      <div class="rn-box-val" style="color:var(--red-l)">72</div>
+      <div class="rn-box-sub">+17 over tolerance</div>
+    </div>
+    <div class="rn-box">
+      <div class="rn-box-label">RN Required</div>
+      <div class="rn-box-val" style="color:var(--gold)">50</div>
+      <div class="rn-box-sub">Goal-based minimum</div>
+    </div>
+    <div class="rn-box">
+      <div class="rn-box-label">FO Ceiling</div>
+      <div class="rn-box-val" style="color:var(--blue-l)">48</div>
+      <div class="rn-box-sub">Institutional mandate</div>
+    </div>
+  </div>
+
+  <div class="g32" style="margin-bottom:12px;">
+    <!-- Portfolio Risk Profile -->
+    <div class="card">
+      <div class="card-title">Portfolio Risk Profile — Hexagon</div>
+      <div class="hex-container">
+        <div class="hex-chart">
+          <svg viewBox="0 0 180 160">
+            <defs>
+              <polygon id="hex" points="90,10 162,50 162,110 90,150 18,110 18,50" fill="none"/>
+            </defs>
+            <!-- BG hex rings -->
+            <polygon points="90,50 126,70 126,110 90,130 54,110 54,70" fill="none" stroke="rgba(235,241,247,0.07)" stroke-width="1"/>
+            <polygon points="90,30 140,60 140,100 90,140 40,100 40,60" fill="none" stroke="rgba(235,241,247,0.05)" stroke-width="1"/>
+            <polygon points="90,15 152,55 152,105 90,145 28,105 28,55" fill="none" stroke="rgba(235,241,247,0.04)" stroke-width="1"/>
+            <!-- Axis lines -->
+            <line x1="90" y1="80" x2="90" y2="15" stroke="rgba(235,241,247,0.1)" stroke-width="1"/>
+            <line x1="90" y1="80" x2="152" y2="55" stroke="rgba(235,241,247,0.1)" stroke-width="1"/>
+            <line x1="90" y1="80" x2="152" y2="105" stroke="rgba(235,241,247,0.1)" stroke-width="1"/>
+            <line x1="90" y1="80" x2="90" y2="145" stroke="rgba(235,241,247,0.1)" stroke-width="1"/>
+            <line x1="90" y1="80" x2="28" y2="105" stroke="rgba(235,241,247,0.1)" stroke-width="1"/>
+            <line x1="90" y1="80" x2="28" y2="55" stroke="rgba(235,241,247,0.1)" stroke-width="1"/>
+            <!-- Current polygon (high risk) -->
+            <polygon points="90,28 144,60 148,102 90,135 35,106 32,58" fill="rgba(192,57,43,0.15)" stroke="#E87060" stroke-width="1.5"/>
+            <!-- Axis labels -->
+            <text x="90" y="11" text-anchor="middle" fill="#6A8AA8" font-size="8" font-family="DM Mono">Vol</text>
+            <text x="158" y="54" fill="#6A8AA8" font-size="8" font-family="DM Mono">Country</text>
+            <text x="155" y="115" fill="#6A8AA8" font-size="8" font-family="DM Mono">Liquidity</text>
+            <text x="90" y="150" text-anchor="middle" fill="#6A8AA8" font-size="8" font-family="DM Mono">Conc.</text>
+            <text x="4" y="115" fill="#6A8AA8" font-size="8" font-family="DM Mono">Corr.</text>
+            <text x="8" y="54" fill="#6A8AA8" font-size="8" font-family="DM Mono">DD</text>
+            <!-- Center label -->
+            <text x="90" y="76" text-anchor="middle" fill="#D4AF45" font-size="12" font-weight="700" font-family="Syne">72</text>
+            <text x="90" y="87" text-anchor="middle" fill="#6A8AA8" font-size="7" font-family="DM Mono">RN</text>
+          </svg>
+        </div>
+        <div class="hex-legend">
+          <div class="hex-legend-item">
+            <span class="hex-dim">Volatility</span>
+            <div class="hex-bar-mini"><div class="hex-bar-fill" style="width:76%;background:var(--red)"></div></div>
+            <span class="hex-score" style="color:var(--red-l)">76</span>
+          </div>
+          <div class="hex-legend-item">
+            <span class="hex-dim">Country Risk</span>
+            <div class="hex-bar-mini"><div class="hex-bar-fill" style="width:82%;background:var(--red)"></div></div>
+            <span class="hex-score" style="color:var(--red-l)">82</span>
+          </div>
+          <div class="hex-legend-item">
+            <span class="hex-dim">Liquidity</span>
+            <div class="hex-bar-mini"><div class="hex-bar-fill" style="width:58%;background:var(--amber)"></div></div>
+            <span class="hex-score" style="color:var(--amber-l)">58</span>
+          </div>
+          <div class="hex-legend-item">
+            <span class="hex-dim">Concentration</span>
+            <div class="hex-bar-mini"><div class="hex-bar-fill" style="width:65%;background:var(--amber)"></div></div>
+            <span class="hex-score" style="color:var(--amber-l)">65</span>
+          </div>
+          <div class="hex-legend-item">
+            <span class="hex-dim">Correlation</span>
+            <div class="hex-bar-mini"><div class="hex-bar-fill" style="width:80%;background:var(--red)"></div></div>
+            <span class="hex-score" style="color:var(--red-l)">80</span>
+          </div>
+          <div class="hex-legend-item">
+            <span class="hex-dim">Drawdown Tol.</span>
+            <div class="hex-bar-mini"><div class="hex-bar-fill" style="width:55%;background:var(--amber)"></div></div>
+            <span class="hex-score" style="color:var(--amber-l)">55</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Timeline -->
+    <div class="card">
+      <div class="card-title">Activity Timeline</div>
+      <div class="timeline-item">
+        <div class="tl-dot" style="background:var(--red-l)"></div>
+        <div><div class="tl-action">Over-risk alert triggered · RN 72 vs tolerance 55</div><div class="tl-time">March 29 · 09:14 EST</div></div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-dot" style="background:var(--gold)"></div>
+        <div><div class="tl-action">Portfolio upload processed · 24 positions parsed</div><div class="tl-time">March 28 · 14:32 EST</div></div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-dot" style="background:var(--blue-l)"></div>
+        <div><div class="tl-action">Risk questionnaire completed · Score: 55</div><div class="tl-time">March 20 · 11:08 EST</div></div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-dot" style="background:var(--green-l)"></div>
+        <div><div class="tl-action">Client onboarded · Profile activated</div><div class="tl-time">March 15 · 10:00 EST</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BEFORE/AFTER MINI -->
+  <div class="card">
+    <div class="card-title">Suggested Allocation Impact — C11: 43% corrective</div>
+    <div class="ba-mini">
+      <div class="ba-mini-col">
+        <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--dim);text-transform:uppercase;margin-bottom:10px;">Current — No Action</div>
+        <div class="ba-metric-mini"><span style="color:var(--dim)">Return</span><span class="mono" style="color:var(--amber-l)">8–12%</span></div>
+        <div class="ba-metric-mini"><span style="color:var(--dim)">Drawdown</span><span class="mono" style="color:var(--red-l)">−24%</span></div>
+        <div class="ba-metric-mini"><span style="color:var(--dim)">P(Goal)</span><span class="mono" style="color:var(--red-l)">61%</span></div>
+        <div class="ba-metric-mini"><span style="color:var(--dim)">Time</span><span class="mono" style="color:var(--amber-l)">9 yrs</span></div>
+        <div class="ba-metric-mini"><span style="color:var(--dim)">Status</span><span class="tag tr">Danger</span></div>
+      </div>
+      <div class="ba-mini-arrow">→</div>
+      <div class="ba-mini-col after">
+        <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--green-l);text-transform:uppercase;margin-bottom:10px;">After · C11: 43%</div>
+        <div class="ba-metric-mini"><span style="color:var(--dim)">Return</span><span class="mono" style="color:var(--green-l)">9–14% <span style="font-size:8px;color:var(--green-l)">+1%</span></span></div>
+        <div class="ba-metric-mini"><span style="color:var(--dim)">Drawdown</span><span class="mono" style="color:var(--green-l)">−16% <span style="font-size:8px;">↓8%</span></span></div>
+        <div class="ba-metric-mini"><span style="color:var(--dim)">P(Goal)</span><span class="mono" style="color:var(--green-l)">77% <span style="font-size:8px;">+16%</span></span></div>
+        <div class="ba-metric-mini"><span style="color:var(--dim)">Time</span><span class="mono" style="color:var(--green-l)">7 yrs <span style="font-size:8px;">−2y</span></span></div>
+        <div class="ba-metric-mini"><span style="color:var(--dim)">Status</span><span class="tag tg">Optimal</span></div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:12px;">
+      <button class="btn btn-primary" onclick="showPage('simulator',document.querySelector('.nav-item:nth-child(11)'))">Open in Simulator →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ RISK ASSESSMENT ═══════════════════════ -->
+<div class="page" id="page-risk-assessment">
+  <div class="page-header">
+    <div class="ph-left">
+      <div class="page-overline">Risk Management · Assessments</div>
+      <div class="page-title">Risk Assessment</div>
+      <div class="page-sub">Questionnaire status · Risk Number comparison · Gap analysis</div>
+    </div>
+    <div class="ph-right">
+      <button class="btn btn-primary">Send Questionnaire Link</button>
+    </div>
+  </div>
+
+  <div class="g3" style="margin-bottom:12px;">
+    <div class="kpi-card amber">
+      <div class="kpi-label">Pending Questionnaires</div>
+      <div class="kpi-val">3</div>
+      <div class="kpi-sub">Mariana, Paulo, Renata</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-label">Completed</div>
+      <div class="kpi-val">9</div>
+      <div class="kpi-sub">75% completion rate</div>
+    </div>
+    <div class="kpi-card red">
+      <div class="kpi-label">RN Conflicts</div>
+      <div class="kpi-val">2</div>
+      <div class="kpi-sub">Appetite vs capacity</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">All RN Comparisons</div>
+    <table class="dt">
+      <thead><tr><th>Client</th><th>RN Individual</th><th>RN FO</th><th>RN Portfolio</th><th>RN Required</th><th>Risk Budget</th><th>Zone</th><th>P(Goal)</th></tr></thead>
+      <tbody>
+        <tr><td style="font-weight:500;color:var(--bright)">Ana Beatriz Souza</td><td class="mono" style="color:var(--amber-l)">55</td><td class="mono" style="color:var(--gold)">48</td><td class="mono" style="color:var(--red-l)">72</td><td class="mono" style="color:var(--gold)">50</td><td class="mono" style="color:var(--red-l)">−17</td><td><span class="tag tr">Danger</span></td><td class="mono" style="color:var(--amber-l)">61%</td></tr>
+        <tr><td style="font-weight:500;color:var(--bright)">Carlos Mendes</td><td class="mono" style="color:var(--green-l)">30</td><td class="mono" style="color:var(--gold)">48</td><td class="mono" style="color:var(--blue-l)">22</td><td class="mono" style="color:var(--gold)">34</td><td class="mono" style="color:var(--blue-l)">+8</td><td><span class="tag tb">Under</span></td><td class="mono" style="color:var(--amber-l)">44%</td></tr>
+        <tr><td style="font-weight:500;color:var(--bright)">Família Rodrigues</td><td class="mono" style="color:var(--green-l)">45</td><td class="mono" style="color:var(--gold)">48</td><td class="mono" style="color:var(--green-l)">47</td><td class="mono" style="color:var(--gold)">44</td><td class="mono" style="color:var(--green-l)">+1</td><td><span class="tag tg">Optimal</span></td><td class="mono" style="color:var(--green-l)">78%</td></tr>
+        <tr><td style="font-weight:500;color:var(--bright)">Eduardo Lima</td><td class="mono" style="color:var(--amber-l)">60</td><td class="mono" style="color:var(--gold)">48</td><td class="mono" style="color:var(--amber-l)">58</td><td class="mono" style="color:var(--gold)">62</td><td class="mono" style="color:var(--amber-l)">+2</td><td><span class="tag ta">Limit</span></td><td class="mono" style="color:var(--amber-l)">67%</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════ PORTFOLIO ═══════════════════════ -->
+<div class="page" id="page-portfolio">
+  <div class="page-header">
+    <div class="ph-left">
+      <div class="page-overline">Portfolio Management</div>
+      <div class="page-title">Portfolio Upload & Analysis</div>
+      <div class="page-sub">Upload current client portfolio · Auto-parse · Calculate Risk Number</div>
+    </div>
+  </div>
+
+  <div class="g2" style="margin-bottom:12px;">
+    <div class="upload-zone">
+      <div class="upload-icon">📂</div>
+      <div class="upload-title">Upload Portfolio File</div>
+      <div class="upload-sub">Accepts: .xlsx · .pdf · .csv · .html</div>
+      <div style="margin-top:12px;"><button class="btn btn-primary">Select File</button></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Last Upload — Família Rodrigues · March 29</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px;">
+        <div style="background:var(--s2);padding:10px;text-align:center;border:1px solid var(--bsub);"><div class="mono" style="font-size:8px;color:var(--dim);margin-bottom:3px;">POSITIONS</div><div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--bright)">24</div></div>
+        <div style="background:var(--s2);padding:10px;text-align:center;border:1px solid var(--bsub);"><div class="mono" style="font-size:8px;color:var(--dim);margin-bottom:3px;">RN CALCULATED</div><div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--green-l)">47</div></div>
+        <div style="background:var(--s2);padding:10px;text-align:center;border:1px solid var(--bsub);"><div class="mono" style="font-size:8px;color:var(--dim);margin-bottom:3px;">EQUITY %</div><div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--amber-l)">58%</div></div>
+        <div style="background:var(--s2);padding:10px;text-align:center;border:1px solid var(--bsub);"><div class="mono" style="font-size:8px;color:var(--dim);margin-bottom:3px;">FX EXPOSURE</div><div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--blue-l)">34%</div></div>
+      </div>
+      <table class="dt" style="font-size:11px;">
+        <thead><tr><th>Asset</th><th>Class</th><th>Weight</th><th>RN_i</th><th>Country</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">IVVB11</td><td>Equity ETF</td><td class="mono" style="color:var(--amber-l)">22%</td><td class="mono" style="color:var(--amber-l)">62</td><td>US</td></tr>
+          <tr><td class="mono">BOVA11</td><td>Equity ETF</td><td class="mono" style="color:var(--amber-l)">18%</td><td class="mono" style="color:var(--red-l)">74</td><td>BR</td></tr>
+          <tr><td class="mono">IRFM11</td><td>Fixed Income</td><td class="mono" style="color:var(--green-l)">20%</td><td class="mono" style="color:var(--green-l)">22</td><td>BR</td></tr>
+          <tr><td class="mono">XS2998773373</td><td>Harpian C11</td><td class="mono" style="color:var(--gold)">18%</td><td class="mono" style="color:var(--gold)">42</td><td>IE/AT</td></tr>
+          <tr><td class="mono">Cash/FX</td><td>Liquidity</td><td class="mono" style="color:var(--blue-l)">22%</td><td class="mono" style="color:var(--green-l)">5</td><td>Multi</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ SIMULATOR ═══════════════════════ -->
+<div class="page" id="page-simulator">
+  <div class="page-header">
+    <div class="ph-left">
+      <div class="page-overline">Portfolio · Allocation Engine</div>
+      <div class="page-title">Allocation Simulator</div>
+      <div class="page-sub">Ana Beatriz Souza · RN 72 → target ≤55 · Adjust Core 11 + Core 22</div>
+    </div>
+    <div class="ph-right">
+      <button class="btn btn-ghost" id="btn-reset" onclick="resetSliders()">Reset</button>
+      <button class="btn btn-primary">Apply Strategy</button>
+    </div>
+  </div>
+
+  <div class="sim-layout">
+    <!-- SLIDERS -->
+    <div>
+      <!-- CONSTRAINT BANNER -->
+      <div class="sim-constraint">
+        ⚠ Max combined Harpian exposure: <strong>10%</strong> of total portfolio
+        <div style="margin-top:6px;font-size:8px;opacity:.8;">Current: <span id="combined-pct">0%</span> used · <span id="remaining-pct">10%</span> available</div>
+        <div class="sim-limit-bar">
+          <div class="sim-limit-fill" id="limit-bar" style="width:0%;background:var(--green);"></div>
+        </div>
+      </div>
+
+      <div class="slider-block">
+        <div class="slider-header">
+          <div>
+            <div class="slider-name">Core 11</div>
+            <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--dim)">Efficiency tool · RN: 42</div>
+          </div>
+          <div class="slider-pct" id="c11-pct">0%</div>
+        </div>
+        <input type="range" class="slider-track" id="c11-slider" min="0" max="10" value="0" step="1" oninput="updateSim()">
+        <div class="slider-range-label"><span>0%</span><span style="color:var(--gold)">5% optimal</span><span>10% max</span></div>
+        <div style="margin-top:8px;display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+          <div style="background:var(--s3);padding:8px;text-align:center;"><div class="mono" style="font-size:7.5px;color:var(--dim);margin-bottom:2px;">EFFECT ON RN</div><div class="mono" style="font-size:11px;" id="c11-rn-effect" style="color:var(--green-l)">—</div></div>
+          <div style="background:var(--s3);padding:8px;text-align:center;"><div class="mono" style="font-size:7.5px;color:var(--dim);margin-bottom:2px;">DD REDUCTION</div><div class="mono" style="font-size:11px;" id="c11-dd-effect">—</div></div>
+        </div>
+      </div>
+
+      <div class="slider-block">
+        <div class="slider-header">
+          <div>
+            <div class="slider-name">Core 22</div>
+            <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--dim)">Performance engine · RN: 58</div>
+          </div>
+          <div class="slider-pct" id="c22-pct">0%</div>
+        </div>
+        <input type="range" class="slider-track" id="c22-slider" min="0" max="10" value="0" step="1" oninput="updateSim()">
+        <div class="slider-range-label"><span>0%</span><span style="color:var(--gold)">3% optimal</span><span>10% max</span></div>
+        <div style="margin-top:8px;display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+          <div style="background:var(--s3);padding:8px;text-align:center;"><div class="mono" style="font-size:7.5px;color:var(--dim);margin-bottom:2px;">EFFECT ON RN</div><div class="mono" style="font-size:11px;" id="c22-rn-effect">—</div></div>
+          <div style="background:var(--s3);padding:8px;text-align:center;"><div class="mono" style="font-size:7.5px;color:var(--dim);margin-bottom:2px;">RETURN BOOST</div><div class="mono" style="font-size:11px;" id="c22-ret-effect">—</div></div>
+        </div>
+      </div>
+
+      <!-- Alignment verdict -->
+      <div id="verdict-box" style="background:var(--s2);border:1px solid var(--bsub);padding:14px;text-align:center;margin-top:8px;">
+        <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--dim);text-transform:uppercase;margin-bottom:6px;">Alignment Verdict</div>
+        <div id="verdict-text" style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--dim)">Adjust sliders to simulate</div>
+      </div>
+    </div>
+
+    <!-- METRICS -->
+    <div class="sim-results">
+      <div style="background:var(--s2);border:1px solid var(--bsub);padding:12px 16px;display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:2px;">
+        <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;">Metric</div>
+        <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;">Track</div>
+        <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--amber-l);text-transform:uppercase;letter-spacing:.1em;">Before</div>
+        <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--green-l);text-transform:uppercase;letter-spacing:.1em;">After</div>
+      </div>
+      <div class="sim-metric-row">
+        <div class="sim-metric-label">Risk Number (RN)</div>
+        <div class="sim-bar-track"><div class="sim-bar-fill" id="rn-bar" style="width:72%;background:var(--red);transition:width .3s,background .3s;"></div></div>
+        <div class="sim-before">72</div>
+        <div class="sim-after" id="rn-after" style="color:var(--red-l)">72</div>
+      </div>
+      <div class="sim-metric-row">
+        <div class="sim-metric-label">Expected Return</div>
+        <div class="sim-bar-track"><div class="sim-bar-fill" id="ret-bar" style="width:52%;background:var(--amber);transition:width .3s;"></div></div>
+        <div class="sim-before">10%</div>
+        <div class="sim-after" id="ret-after" style="color:var(--amber-l)">10%</div>
+      </div>
+      <div class="sim-metric-row">
+        <div class="sim-metric-label">Volatility</div>
+        <div class="sim-bar-track"><div class="sim-bar-fill" id="vol-bar" style="width:62%;background:var(--amber);transition:width .3s;"></div></div>
+        <div class="sim-before">16.4%</div>
+        <div class="sim-after" id="vol-after" style="color:var(--amber-l)">16.4%</div>
+      </div>
+      <div class="sim-metric-row">
+        <div class="sim-metric-label">Expected Drawdown</div>
+        <div class="sim-bar-track"><div class="sim-bar-fill" id="dd-bar" style="width:72%;background:var(--red);transition:width .3s;"></div></div>
+        <div class="sim-before">−24%</div>
+        <div class="sim-after" id="dd-after" style="color:var(--red-l)">−24%</div>
+      </div>
+      <div class="sim-metric-row">
+        <div class="sim-metric-label">P(Goal)</div>
+        <div class="sim-bar-track"><div class="sim-bar-fill" id="pg-bar" style="width:61%;background:var(--amber);transition:width .3s;"></div></div>
+        <div class="sim-before">61%</div>
+        <div class="sim-after" id="pg-after" style="color:var(--amber-l)">61%</div>
+      </div>
+      <div class="sim-metric-row">
+        <div class="sim-metric-label">Time to Target</div>
+        <div class="sim-bar-track"><div class="sim-bar-fill" id="time-bar" style="width:75%;background:var(--blue);transition:width .3s;"></div></div>
+        <div class="sim-before">9 yrs</div>
+        <div class="sim-after" id="time-after" style="color:var(--blue-l)">9 yrs</div>
+      </div>
+
+      <!-- Delta cards -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:4px;">
+        <div style="background:var(--s2);border:1px solid var(--bsub);padding:10px;text-align:center;border-bottom:2px solid var(--green);">
+          <div class="mono" style="font-size:7.5px;color:var(--dim);margin-bottom:4px;">RETURN Δ</div>
+          <div id="delta-ret" style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--dim)">—</div>
+        </div>
+        <div style="background:var(--s2);border:1px solid var(--bsub);padding:10px;text-align:center;border-bottom:2px solid var(--amber);">
+          <div class="mono" style="font-size:7.5px;color:var(--dim);margin-bottom:4px;">RN Δ</div>
+          <div id="delta-rn" style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--dim)">—</div>
+        </div>
+        <div style="background:var(--s2);border:1px solid var(--bsub);padding:10px;text-align:center;border-bottom:2px solid var(--red);">
+          <div class="mono" style="font-size:7.5px;color:var(--dim);margin-bottom:4px;">DRAWDOWN Δ</div>
+          <div id="delta-dd" style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--dim)">—</div>
+        </div>
+        <div style="background:var(--s2);border:1px solid var(--bsub);padding:10px;text-align:center;border-bottom:2px solid var(--green);">
+          <div class="mono" style="font-size:7.5px;color:var(--dim);margin-bottom:4px;">P(GOAL) Δ</div>
+          <div id="delta-pg" style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--dim)">—</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ STRATEGIES ═══════════════════════ -->
+<div class="page" id="page-strategies">
+  <div class="page-header">
+    <div class="ph-left">
+      <div class="page-overline">Products · Harpian ETP</div>
+      <div class="page-title">Harpian Strategies</div>
+      <div class="page-sub">Core 11 · Core 22 · ISIN XS2998773373 · Listed VSE · Euroclear</div>
+    </div>
+  </div>
+  <div class="g2">
+    <div class="card gg">
+      <div class="card-title">Core 11 — Efficiency Tool</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px;">
+        <div style="background:var(--s2);padding:10px;text-align:center;"><div class="mono" style="font-size:8px;color:var(--dim);margin-bottom:3px;">RISK NUMBER</div><div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--green-l)">42</div></div>
+        <div style="background:var(--s2);padding:10px;text-align:center;"><div class="mono" style="font-size:8px;color:var(--dim);margin-bottom:3px;">NAV TODAY</div><div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--bright)">142.84</div></div>
+        <div style="background:var(--s2);padding:10px;text-align:center;"><div class="mono" style="font-size:8px;color:var(--dim);margin-bottom:3px;">YTD RETURN</div><div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--green-l)">+8.4%</div></div>
+        <div style="background:var(--s2);padding:10px;text-align:center;"><div class="mono" style="font-size:8px;color:var(--dim);margin-bottom:3px;">MAX DD</div><div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--amber-l)">−11%</div></div>
+      </div>
+      <div class="mom-item"><span class="mom-sector">Volatility</span><div class="mom-bar"><div class="mom-fill" style="width:38%;background:var(--green);"></div></div><span class="mom-val" style="color:var(--green-l)">Low</span></div>
+      <div class="mom-item"><span class="mom-sector">Return potential</span><div class="mom-bar"><div class="mom-fill" style="width:55%;background:var(--amber);"></div></div><span class="mom-val" style="color:var(--amber-l)">Moderate</span></div>
+      <div class="mom-item"><span class="mom-sector">Drawdown protect.</span><div class="mom-bar"><div class="mom-fill" style="width:85%;background:var(--green);"></div></div><span class="mom-val" style="color:var(--green-l)">High</span></div>
+      <div style="margin-top:10px;font-family:'DM Mono',monospace;font-size:8.5px;color:var(--dim);line-height:1.7;padding:10px;background:var(--s2);border:1px solid var(--bsub)">ISIN: XS2998773373 · Issuer: Lseries DAC · Admin: Lynk Capital Markets · Settlement: Euroclear · Custody: IB + BofA</div>
+    </div>
+    <div class="card ga">
+      <div class="card-title">Core 22 — Performance Engine</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px;">
+        <div style="background:var(--s2);padding:10px;text-align:center;"><div class="mono" style="font-size:8px;color:var(--dim);margin-bottom:3px;">RISK NUMBER</div><div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--amber-l)">58</div></div>
+        <div style="background:var(--s2);padding:10px;text-align:center;"><div class="mono" style="font-size:8px;color:var(--dim);margin-bottom:3px;">NAV TODAY</div><div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--bright)">198.30</div></div>
+        <div style="background:var(--s2);padding:10px;text-align:center;"><div class="mono" style="font-size:8px;color:var(--dim);margin-bottom:3px;">YTD RETURN</div><div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--green-l)">+14.2%</div></div>
+        <div style="background:var(--s2);padding:10px;text-align:center;"><div class="mono" style="font-size:8px;color:var(--dim);margin-bottom:3px;">MAX DD</div><div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--amber-l)">−16%</div></div>
+      </div>
+      <div class="mom-item"><span class="mom-sector">Volatility</span><div class="mom-bar"><div class="mom-fill" style="width:58%;background:var(--amber);"></div></div><span class="mom-val" style="color:var(--amber-l)">Moderate</span></div>
+      <div class="mom-item"><span class="mom-sector">Return potential</span><div class="mom-bar"><div class="mom-fill" style="width:82%;background:var(--green);"></div></div><span class="mom-val" style="color:var(--green-l)">High</span></div>
+      <div class="mom-item"><span class="mom-sector">Goal acceleration</span><div class="mom-bar"><div class="mom-fill" style="width:78%;background:var(--green);"></div></div><span class="mom-val" style="color:var(--green-l)">Strong</span></div>
+      <div style="margin-top:10px;font-family:'DM Mono',monospace;font-size:8.5px;color:var(--dim);line-height:1.7;padding:10px;background:var(--s2);border:1px solid var(--bsub)">AlphaDroid Framework · SumGrowth Strategies · Scott Juds · Systematic rules-based · 22 ETF universe · Monthly rebalance</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ INTELLIGENCE ═══════════════════════ -->
+<div class="page" id="page-intel">
+  <div class="page-header">
+    <div class="ph-left">
+      <div class="page-overline">Terminal · Market Intelligence</div>
+      <div class="page-title">Market Intelligence</div>
+      <div class="page-sub">Live signals · Momentum map · Sector pulse · Watchlists</div>
+    </div>
+    <div class="ph-right">
+      <div class="storm-pill"><div class="storm-dot"></div>SGA: RISK-ON</div>
+    </div>
+  </div>
+
+  <div class="intel-layout">
+    <!-- COL 1 -->
+    <div class="intel-col">
+      <!-- Sector Heatmap -->
+      <div class="card">
+        <div class="card-title">Sector Momentum Heatmap</div>
+        <div class="heatmap-grid">
+          <div class="heat-cell" style="background:rgba(26,122,74,0.3)"><div class="heat-cell-name">TECH</div><div class="heat-cell-val" style="color:var(--green-l)">+4.2%</div></div>
+          <div class="heat-cell" style="background:rgba(26,122,74,0.2)"><div class="heat-cell-name">HLTH</div><div class="heat-cell-val" style="color:var(--green-l)">+2.8%</div></div>
+          <div class="heat-cell" style="background:rgba(26,122,74,0.1)"><div class="heat-cell-name">FIN</div><div class="heat-cell-val" style="color:var(--green-l)">+1.4%</div></div>
+          <div class="heat-cell" style="background:rgba(212,134,10,0.1)"><div class="heat-cell-name">IND</div><div class="heat-cell-val" style="color:var(--amber-l)">+0.6%</div></div>
+          <div class="heat-cell" style="background:rgba(192,57,43,0.1)"><div class="heat-cell-name">ENRG</div><div class="heat-cell-val" style="color:var(--red-l)">−0.8%</div></div>
+          <div class="heat-cell" style="background:rgba(192,57,43,0.2)"><div class="heat-cell-name">UTIL</div><div class="heat-cell-val" style="color:var(--red-l)">−1.6%</div></div>
+          <div class="heat-cell" style="background:rgba(26,122,74,0.15)"><div class="heat-cell-name">CONS</div><div class="heat-cell-val" style="color:var(--green-l)">+1.8%</div></div>
+          <div class="heat-cell" style="background:rgba(192,57,43,0.15)"><div class="heat-cell-name">REAL</div><div class="heat-cell-val" style="color:var(--red-l)">−1.2%</div></div>
+          <div class="heat-cell" style="background:rgba(26,122,74,0.08)"><div class="heat-cell-name">MATS</div><div class="heat-cell-val" style="color:var(--dim)">+0.3%</div></div>
+          <div class="heat-cell" style="background:rgba(192,57,43,0.3)"><div class="heat-cell-name">COMM</div><div class="heat-cell-val" style="color:var(--red-l)">−2.8%</div></div>
+          <div class="heat-cell" style="background:rgba(212,134,10,0.15)"><div class="heat-cell-name">SEMI</div><div class="heat-cell-val" style="color:var(--amber-l)">+0.9%</div></div>
+          <div class="heat-cell" style="background:rgba(26,122,74,0.25)"><div class="heat-cell-name">BIOT</div><div class="heat-cell-val" style="color:var(--green-l)">+3.1%</div></div>
+        </div>
+      </div>
+
+      <!-- Momentum by sector -->
+      <div class="card">
+        <div class="card-title">Relative Momentum Map — 20-Day</div>
+        <div class="mom-item"><span class="mom-sector">Technology</span><div class="mom-bar" style="width:120px"><div class="mom-fill" style="width:88%;background:var(--green)"></div></div><span class="mom-val" style="color:var(--green-l)">88</span></div>
+        <div class="mom-item"><span class="mom-sector">Healthcare</span><div class="mom-bar" style="width:120px"><div class="mom-fill" style="width:72%;background:var(--green)"></div></div><span class="mom-val" style="color:var(--green-l)">72</span></div>
+        <div class="mom-item"><span class="mom-sector">Financials</span><div class="mom-bar" style="width:120px"><div class="mom-fill" style="width:64%;background:var(--amber)"></div></div><span class="mom-val" style="color:var(--amber-l)">64</span></div>
+        <div class="mom-item"><span class="mom-sector">Industrials</span><div class="mom-bar" style="width:120px"><div class="mom-fill" style="width:56%;background:var(--amber)"></div></div><span class="mom-val" style="color:var(--amber-l)">56</span></div>
+        <div class="mom-item"><span class="mom-sector">Energy</span><div class="mom-bar" style="width:120px"><div class="mom-fill" style="width:38%;background:var(--red)"></div></div><span class="mom-val" style="color:var(--red-l)">38</span></div>
+        <div class="mom-item"><span class="mom-sector">Utilities</span><div class="mom-bar" style="width:120px"><div class="mom-fill" style="width:28%;background:var(--red)"></div></div><span class="mom-val" style="color:var(--red-l)">28</span></div>
+        <div class="mom-item"><span class="mom-sector">Real Estate</span><div class="mom-bar" style="width:120px"><div class="mom-fill" style="width:24%;background:var(--red)"></div></div><span class="mom-val" style="color:var(--red-l)">24</span></div>
+      </div>
+    </div>
+
+    <!-- COL 2 -->
+    <div class="intel-col">
+      <!-- Watchlist -->
+      <div class="card">
+        <div class="card-title">Harpian Watchlist — ETF Universe</div>
+        <div class="watchlist-row"><span class="wl-name">QQQ</span><span class="wl-fullname">Invesco QQQ Trust</span><span class="wl-price">481.67</span><span class="wl-chg" style="color:var(--red-l)">−0.51%</span></div>
+        <div class="watchlist-row"><span class="wl-name">SPY</span><span class="wl-fullname">SPDR S&P 500</span><span class="wl-price">568.42</span><span class="wl-chg" style="color:var(--red-l)">−0.34%</span></div>
+        <div class="watchlist-row"><span class="wl-name">XLK</span><span class="wl-fullname">Technology Select SPDR</span><span class="wl-price">228.14</span><span class="wl-chg" style="color:var(--green-l)">+1.42%</span></div>
+        <div class="watchlist-row"><span class="wl-name">XLV</span><span class="wl-fullname">Health Care Select</span><span class="wl-price">148.82</span><span class="wl-chg" style="color:var(--green-l)">+0.88%</span></div>
+        <div class="watchlist-row"><span class="wl-name">GLD</span><span class="wl-fullname">SPDR Gold Shares</span><span class="wl-price">242.18</span><span class="wl-chg" style="color:var(--amber-l)">+0.08%</span></div>
+        <div class="watchlist-row"><span class="wl-name">AGG</span><span class="wl-fullname">iShares Core US Aggregate</span><span class="wl-price">97.44</span><span class="wl-chg" style="color:var(--green-l)">+0.12%</span></div>
+        <div class="watchlist-row"><span class="wl-name">XLE</span><span class="wl-fullname">Energy Select SPDR</span><span class="wl-price">88.21</span><span class="wl-chg" style="color:var(--red-l)">−1.24%</span></div>
+      </div>
+
+      <!-- Tactical note -->
+      <div class="card gl">
+        <div class="card-title">Tactical Note — Harpian Research</div>
+        <div class="tactical-note">
+          <div class="tactical-date">March 31, 2026 · Weekly Update</div>
+          Risk regime remains constructive. Technology and Healthcare sectors demonstrate above-average relative momentum. Energy and Utilities continue to lag on both absolute and relative terms. StormGuard Armor remains in Risk-On configuration — no defensive rebalancing triggered. Correlation matrix stable across major asset classes. Volatility regime: contained. No structural flags active.
+        </div>
+      </div>
+
+      <!-- Risk Regime -->
+      <div class="card">
+        <div class="card-title">Risk Regime Classification</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:4px;">
+          <div style="background:var(--green-bg);border:1px solid rgba(26,122,74,.3);padding:10px;text-align:center;">
+            <div class="mono" style="font-size:7.5px;color:var(--green-l);margin-bottom:4px;text-transform:uppercase">Risk Appetite</div>
+            <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--green-l)">Risk-On</div>
+          </div>
+          <div style="background:var(--s2);border:1px solid var(--bsub);padding:10px;text-align:center;">
+            <div class="mono" style="font-size:7.5px;color:var(--dim);margin-bottom:4px;text-transform:uppercase">Volatility</div>
+            <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--green-l)">Contained</div>
+          </div>
+          <div style="background:var(--s2);border:1px solid var(--bsub);padding:10px;text-align:center;">
+            <div class="mono" style="font-size:7.5px;color:var(--dim);margin-bottom:4px;text-transform:uppercase">Trend Str.</div>
+            <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--amber-l)">Moderate</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COL 3: RIGHT COLUMN -->
+    <div class="intel-col">
+      <!-- Don't Touch mini -->
+      <div class="card gr">
+        <div class="card-title" style="display:flex;justify-content:space-between;align-items:center">
+          <span>Don't Touch List</span>
+          <button class="btn btn-ghost" style="font-size:8px;padding:3px 8px;" onclick="showPage('dtl',document.querySelector('.nav-item:nth-child(15)'))">Full List →</button>
+        </div>
+        <div class="dtl-row"><span class="dtl-ticker">XLE</span><span class="dtl-name">Energy ETF</span><div class="dtl-bar-mini"><div class="dtl-fill" style="width:28%"></div></div><span class="dtl-score">28</span></div>
+        <div class="dtl-row"><span class="dtl-ticker">XLU</span><span class="dtl-name">Utilities ETF</span><div class="dtl-bar-mini"><div class="dtl-fill" style="width:24%"></div></div><span class="dtl-score">24</span></div>
+        <div class="dtl-row"><span class="dtl-ticker">COMM</span><span class="dtl-name">Comm. Services</span><div class="dtl-bar-mini"><div class="dtl-fill" style="width:32%"></div></div><span class="dtl-score">32</span></div>
+        <div class="dtl-row"><span class="dtl-ticker">IYR</span><span class="dtl-name">Real Estate ETF</span><div class="dtl-bar-mini"><div class="dtl-fill" style="width:26%"></div></div><span class="dtl-score">26</span></div>
+        <div class="dtl-row"><span class="dtl-ticker">EEM</span><span class="dtl-name">Emerging Mkts</span><div class="dtl-bar-mini"><div class="dtl-fill" style="width:35%"></div></div><span class="dtl-score">35</span></div>
+      </div>
+
+      <!-- Alerts mini -->
+      <div class="card">
+        <div class="card-title">Market Alerts</div>
+        <div class="alert-item alert-amber" style="margin-bottom:4px;"><div><div class="alert-label" style="color:var(--amber-l)">SECTOR PRESSURE</div><div class="alert-text">Energy sector 20-day momentum below 40. Avoid new exposure.</div></div></div>
+        <div class="alert-item alert-blue" style="margin-bottom:4px;"><div><div class="alert-label" style="color:var(--blue-l)">SIGNAL</div><div class="alert-text">Technology relative momentum above 85. Favorable environment for Core 11.</div></div></div>
+        <div class="alert-item alert-green"><div><div class="alert-label" style="color:var(--green-l)">SGA STATUS</div><div class="alert-text">StormGuard positive for 14 consecutive days. No exit conditions triggered.</div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ STORMGUARD ═══════════════════════ -->
+<div class="page" id="page-stormguard">
+  <div class="page-header">
+    <div class="ph-left">
+      <div class="page-overline">Intelligence · Crisis Monitor</div>
+      <div class="page-title">StormGuard Monitor</div>
+      <div class="page-sub">SGA Status · Regime detection · Defensive overlay · Rebalancing triggers</div>
+    </div>
+  </div>
+
+  <div class="g32" style="margin-bottom:12px;">
+    <div class="card gl" style="text-align:center;padding:28px;">
+      <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--gold);text-transform:uppercase;letter-spacing:.14em;margin-bottom:16px;">StormGuard Armor — Current State</div>
+      <div style="width:120px;height:120px;border-radius:50%;background:var(--green-bg);border:3px solid var(--green);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+        <div>
+          <div style="font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--green-l);line-height:1;">ON</div>
+          <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--green);margin-top:2px;">RISK-ON</div>
+        </div>
+      </div>
+      <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--green-l);margin-bottom:8px;">Fully Invested</div>
+      <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);">SGA signal: POSITIVE · No defensive trigger active</div>
+      <div class="sg-metrics">
+        <div class="sg-metric"><div class="sg-metric-label">Days in regime</div><div class="sg-metric-val" style="color:var(--green-l)">14</div></div>
+        <div class="sg-metric"><div class="sg-metric-label">C11 position</div><div class="sg-metric-val" style="color:var(--gold)">100%</div></div>
+        <div class="sg-metric"><div class="sg-metric-label">Cash %</div><div class="sg-metric-val" style="color:var(--green-l)">0%</div></div>
+        <div class="sg-metric"><div class="sg-metric-label">Signal value</div><div class="sg-metric-val" style="color:var(--green-l)">+4.2</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">SGA Protocol — How It Works</div>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <div style="background:var(--s2);border:1px solid var(--bsub);padding:12px;"><div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--gold);margin-bottom:4px;">SIGNAL TURNS NEGATIVE</div><div style="font-size:11.5px;color:var(--text);">Day of signal: 40% liquidated immediately. No delay.</div></div>
+        <div style="background:var(--s2);border:1px solid var(--bsub);padding:12px;"><div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--amber-l);margin-bottom:4px;">NEXT TRADING DAY</div><div style="font-size:11.5px;color:var(--text);">Remaining 60% sold on month-end rebalance trigger. Portfolio moves to 100% cash.</div></div>
+        <div style="background:var(--s2);border:1px solid var(--bsub);padding:12px;"><div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--blue-l);margin-bottom:4px;">RE-ENTRY CONDITION</div><div style="font-size:11.5px;color:var(--text);">SGA "slightly negative" = imminent re-entry signal. System monitors for positive flip.</div></div>
+        <div style="background:var(--green-bg);border:1px solid rgba(26,122,74,.3);padding:12px;"><div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--green-l);margin-bottom:4px;">CURRENT STATE</div><div style="font-size:11.5px;color:var(--text);">SGA positive for 14 days. All positions maintained. No defensive action required.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Historical SGA Events — 2025/2026</div>
+    <table class="dt">
+      <thead><tr><th>Date</th><th>Event</th><th>Signal Before</th><th>Signal After</th><th>Action Taken</th><th>Duration</th><th>Outcome</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">Aug 2025</td><td>SGA flip negative</td><td class="mono" style="color:var(--green-l)">+2.1</td><td class="mono" style="color:var(--red-l)">−1.4</td><td>100% cash triggered</td><td class="mono">12 days</td><td><span class="tag tg">Drawdown avoided −8%</span></td></tr>
+        <tr><td class="mono">Sep 2025</td><td>Re-entry signal</td><td class="mono" style="color:var(--amber-l)">−0.3</td><td class="mono" style="color:var(--green-l)">+1.8</td><td>Full re-entry executed</td><td class="mono">—</td><td><span class="tag tg">Rally captured +6.4%</span></td></tr>
+        <tr><td class="mono">Mar 2026</td><td>Current — Risk-On</td><td class="mono" style="color:var(--green-l)">+3.8</td><td class="mono" style="color:var(--green-l)">+4.2</div></td><td>No action</td><td class="mono">14d active</td><td><span class="tag tg">Fully invested</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════ DON'T TOUCH LIST ═══════════════════════ -->
+<div class="page" id="page-dtl">
+  <div class="page-header">
+    <div class="ph-left">
+      <div class="page-overline">Intelligence · Negative Signals</div>
+      <div class="page-title">Don't Touch List</div>
+      <div class="page-sub">Weak-momentum assets · Negative relative ranking · Sector pressure · Updated daily</div>
+    </div>
+    <div class="ph-right">
+      <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);">Last updated: March 31 · 16:00 EST</div>
+    </div>
+  </div>
+
+  <div class="alert-item alert-amber" style="margin-bottom:12px;">
+    <div>
+      <div class="alert-label" style="color:var(--amber-l)">METHODOLOGY NOTE</div>
+      <div class="alert-text">This list shows assets with weak momentum signals and negative relative ranking. These are NOT absolute worst performers — they are assets that show sufficient signal weakness to warrant caution. This is informational intelligence. It does not constitute investment advice.</div>
+    </div>
+  </div>
+
+  <div class="g2" style="margin-bottom:12px;">
+    <div class="card gr">
+      <div class="card-title">ETFs — Avoid List (7 signals)</div>
+      <div class="dtl-row" style="margin-bottom:0;"><span class="dtl-ticker" style="min-width:70px;">TICKER</span><span class="dtl-name">FULL NAME</span><span style="font-family:'DM Mono',monospace;font-size:8px;color:var(--dim);width:80px">MOMENTUM</span><span class="dtl-score" style="font-family:'DM Mono',monospace;font-size:8px;color:var(--dim);">SCORE</span></div>
+      <div style="height:1px;background:var(--bsub);margin:4px 0;"></div>
+      <div class="dtl-row"><span class="dtl-ticker">XLE</span><span class="dtl-name">Energy Select SPDR</span><div class="dtl-bar-mini"><div class="dtl-fill" style="width:28%"></div></div><span class="dtl-score">28</span></div>
+      <div class="dtl-row"><span class="dtl-ticker">XLU</span><span class="dtl-name">Utilities Select SPDR</span><div class="dtl-bar-mini"><div class="dtl-fill" style="width:24%"></div></div><span class="dtl-score">24</span></div>
+      <div class="dtl-row"><span class="dtl-ticker">IYR</span><span class="dtl-name">iShares US Real Estate</span><div class="dtl-bar-mini"><div class="dtl-fill" style="width:26%"></div></div><span class="dtl-score">26</span></div>
+      <div class="dtl-row"><span class="dtl-ticker">EEM</span><span class="dtl-name">iShares MSCI Emerg. Mkts</span><div class="dtl-bar-mini"><div class="dtl-fill" style="width:35%"></div></div><span class="dtl-score">35</span></div>
+      <div class="dtl-row"><span class="dtl-ticker">XLC</span><span class="dtl-name">Comm. Services Select</span><div class="dtl-bar-mini"><div class="dtl-fill" style="width:32%"></div></div><span class="dtl-score">32</span></div>
+      <div class="dtl-row"><span class="dtl-ticker">VNQ</span><span class="dtl-name">Vanguard Real Estate</span><div class="dtl-bar-mini"><div class="dtl-fill" style="width:30%"></div></div><span class="dtl-score">30</span></div>
+      <div class="dtl-row"><span class="dtl-ticker">OIH</span><span class="dtl-name">VanEck Oil Services</span><div class="dtl-bar-mini"><div class="dtl-fill" style="width:22%"></div></div><span class="dtl-score">22</span></div>
+    </div>
+
+    <div class="card gr">
+      <div class="card-title">Individual Equities — Sector Pressure</div>
+      <table class="dt">
+        <thead><tr><th>Ticker</th><th>Sector</th><th>Signal</th><th>Reason</th></tr></thead>
+        <tbody>
+          <tr><td class="mono" style="color:var(--red-l)">CVX</td><td>Energy</td><td><span class="tag tr">Weak</span></td><td style="font-size:11px;">Below 50d MA · Rel. mom negative 20d</td></tr>
+          <tr><td class="mono" style="color:var(--red-l)">NEE</td><td>Utilities</td><td><span class="tag tr">Weak</span></td><td style="font-size:11px;">Rate sensitivity · Dividend compression</td></tr>
+          <tr><td class="mono" style="color:var(--amber-l)">AMT</td><td>Real Estate</td><td><span class="tag ta">Caution</span></td><td style="font-size:11px;">Sector pressure · Rate headwind</td></tr>
+          <tr><td class="mono" style="color:var(--amber-l)">T</td><td>Comm. Svc.</td><td><span class="tag ta">Caution</span></td><td style="font-size:11px;">Momentum reversal · Below avg</td></tr>
+          <tr><td class="mono" style="color:var(--red-l)">HAL</td><td>Energy Svcs</td><td><span class="tag tr">Avoid</span></td><td style="font-size:11px;">Weakest rel. momentum in sector</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="note">The Don't Touch List is a proprietary Harpian signal layer. It identifies assets with below-threshold momentum scores relative to the full investable universe. Presence on this list does not mean the asset will fall — it means the signal-to-noise ratio does not support inclusion in systematic strategies at this time. This intelligence layer is designed to protect client portfolios from low-signal exposure.</div>
+</div>
+
+<!-- ═══════════════════════ REPORTS ═══════════════════════ -->
+<div class="page" id="page-reports">
+  <div class="page-header">
+    <div class="ph-left">
+      <div class="page-overline">System · Output</div>
+      <div class="page-title">Reports & Export</div>
+      <div class="page-sub">PDF generation · Institutional formats · Client-facing documents</div>
+    </div>
+  </div>
+  <div class="g3">
+    <div class="card gl" style="cursor:pointer;"><div class="card-title">Client Risk Report</div><div style="font-size:12px;color:var(--text);margin:8px 0;">Individual client risk assessment with RN comparison, alignment status, and Harpian proposal.</div><div style="margin-top:12px;"><button class="btn btn-primary">Generate PDF</button></div></div>
+    <div class="card gl" style="cursor:pointer;"><div class="card-title">Portfolio Overview</div><div style="font-size:12px;color:var(--text);margin:8px 0;">Full Family Office portfolio summary with all clients, statuses, and allocation recommendations.</div><div style="margin-top:12px;"><button class="btn btn-primary">Generate PDF</button></div></div>
+    <div class="card gl" style="cursor:pointer;"><div class="card-title">Allocation Proposal</div><div style="font-size:12px;color:var(--text);margin:8px 0;">Institutional-grade allocation proposal document for client presentation. Core 11 + Core 22 strategy.</div><div style="margin-top:12px;"><button class="btn btn-primary">Generate PDF</button></div></div>
+    <div class="card" style="cursor:pointer;"><div class="card-title">Market Intelligence Brief</div><div style="font-size:12px;color:var(--text);margin:8px 0;">Weekly market intelligence summary with SGA status, sector momentum, and Don't Touch List.</div><div style="margin-top:12px;"><button class="btn btn-ghost">Generate</button></div></div>
+    <div class="card" style="cursor:pointer;"><div class="card-title">Compliance Export</div><div style="font-size:12px;color:var(--text);margin:8px 0;">CVM/ANBIMA-ready documentation package for regulatory compliance and audit trail.</div><div style="margin-top:12px;"><button class="btn btn-ghost">Generate</button></div></div>
+    <div class="card" style="cursor:pointer;"><div class="card-title">JSON / API Handoff</div><div style="font-size:12px;color:var(--text);margin:8px 0;">Structured data export for IPS integration, CRM sync, or third-party platform handoff.</div><div style="margin-top:12px;"><button class="btn btn-ghost">Export JSON</button></div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ SETTINGS ═══════════════════════ -->
+<div class="page" id="page-settings">
+  <div class="page-header">
+    <div class="ph-left">
+      <div class="page-overline">System · Configuration</div>
+      <div class="page-title">Settings & Administration</div>
+    </div>
+  </div>
+  <div class="g2">
+    <div class="card">
+      <div class="card-title">Terminal Preferences</div>
+      <table style="width:100%;border-collapse:collapse;">
+        <tr><td style="padding:8px 0;color:var(--dim);font-family:'DM Mono',monospace;font-size:9px;border-bottom:1px solid var(--bsub);width:160px;">TIMEZONE</td><td style="padding:8px 0;font-size:12px;color:var(--bright);border-bottom:1px solid var(--bsub);">America/New_York (EST)</td></tr>
+        <tr><td style="padding:8px 0;color:var(--dim);font-family:'DM Mono',monospace;font-size:9px;border-bottom:1px solid var(--bsub);">CURRENCY BASE</td><td style="padding:8px 0;font-size:12px;color:var(--bright);border-bottom:1px solid var(--bsub);">USD</td></tr>
+        <tr><td style="padding:8px 0;color:var(--dim);font-family:'DM Mono',monospace;font-size:9px;border-bottom:1px solid var(--bsub);">MAX HARPIAN %</td><td style="padding:8px 0;font-size:12px;color:var(--gold);border-bottom:1px solid var(--bsub);">10% (FO Mandate)</td></tr>
+        <tr><td style="padding:8px 0;color:var(--dim);font-family:'DM Mono',monospace;font-size:9px;">ALERT FREQUENCY</td><td style="padding:8px 0;font-size:12px;color:var(--bright);">Real-time</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-title">Access & Permissions</div>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <div style="background:var(--s2);padding:10px 12px;border:1px solid var(--bsub);display:flex;justify-content:space-between;align-items:center;"><span style="font-size:11.5px;color:var(--bright)">Rodrigo Silva</span><span class="tag tgd">Admin · FO Manager</span></div>
+        <div style="background:var(--s2);padding:10px 12px;border:1px solid var(--bsub);display:flex;justify-content:space-between;align-items:center;"><span style="font-size:11.5px;color:var(--bright)">Patricia Mendes</span><span class="tag tg">Advisor</span></div>
+        <div style="background:var(--s2);padding:10px 12px;border:1px solid var(--bsub);display:flex;justify-content:space-between;align-items:center;"><span style="font-size:11.5px;color:var(--bright)">João Campos</span><span class="tag tb">Read-Only</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end main -->
+
+<script>
+// ══════════ NAVIGATION ══════════
+function showPage(pageId, navItem) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const page = document.getElementById('page-' + pageId);
+  if (page) page.classList.add('active');
+  if (navItem) navItem.classList.add('active');
+  document.querySelector('.main').scrollTop = 0;
+}
+
+// ══════════ CLOCK ══════════
+function updateClock() {
+  const now = new Date();
+  const h = now.getHours().toString().padStart(2,'0');
+  const m = now.getMinutes().toString().padStart(2,'0');
+  const s = now.getSeconds().toString().padStart(2,'0');
+  const el = document.getElementById('clock');
+  if(el) el.textContent = `${h}:${m}:${s} EST`;
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// ══════════ SIMULATOR ══════════
+const BASE_RN = 72, BASE_RET = 10, BASE_VOL = 16.4, BASE_DD = 24, BASE_PG = 61, BASE_TIME = 9;
+const RN_C11 = 42, RN_C22 = 58;
+
+function updateSim() {
+  const c11 = parseInt(document.getElementById('c11-slider').value);
+  const c22 = parseInt(document.getElementById('c22-slider').value);
+  const combined = c11 + c22;
+
+  // Enforce 10% max
+  if (combined > 10) {
+    if(document.activeElement === document.getElementById('c11-slider')) {
+      document.getElementById('c11-slider').value = 10 - c22;
+    } else {
+      document.getElementById('c22-slider').value = 10 - c11;
+    }
+    return updateSim();
+  }
+
+  document.getElementById('c11-pct').textContent = c11 + '%';
+  document.getElementById('c22-pct').textContent = c22 + '%';
+  document.getElementById('combined-pct').textContent = combined + '%';
+  document.getElementById('remaining-pct').textContent = (10 - combined) + '% available';
+
+  const limitBar = document.getElementById('limit-bar');
+  limitBar.style.width = (combined * 10) + '%';
+  limitBar.style.background = combined >= 9 ? 'var(--red)' : combined >= 7 ? 'var(--amber)' : 'var(--green)';
+
+  // Calculate new metrics
+  const w_exist = (100 - combined) / 100;
+  const w_c11 = c11 / 100;
+  const w_c22 = c22 / 100;
+
+  const newRN = Math.round(w_exist * BASE_RN + w_c11 * RN_C11 + w_c22 * RN_C22);
+  const corrDiscount = combined > 0 ? Math.round(combined * 0.15) : 0;
+  const adjRN = Math.max(newRN - corrDiscount, 10);
+
+  const retBoost = c22 * 0.4 + c11 * 0.2;
+  const newRet = (BASE_RET + retBoost).toFixed(1);
+  const newVol = (BASE_VOL - c11 * 0.28 + c22 * 0.1).toFixed(1);
+  const newDD = (BASE_DD - c11 * 0.8 + c22 * 0.2).toFixed(0);
+  const newPG = Math.min(Math.round(BASE_PG + c11 * 1.6 + c22 * 2.2), 95);
+  const newTime = Math.max((BASE_TIME - c11 * 0.2 - c22 * 0.4).toFixed(1), 4);
+
+  // Update displays
+  const rnColor = adjRN <= 55 ? 'var(--green-l)' : adjRN <= 65 ? 'var(--amber-l)' : 'var(--red-l)';
+  document.getElementById('rn-after').textContent = adjRN;
+  document.getElementById('rn-after').style.color = rnColor;
+  document.getElementById('rn-bar').style.width = adjRN + '%';
+  document.getElementById('rn-bar').style.background = adjRN <= 55 ? 'var(--green)' : adjRN <= 65 ? 'var(--amber)' : 'var(--red)';
+
+  document.getElementById('ret-after').textContent = newRet + '%';
+  document.getElementById('ret-after').style.color = 'var(--green-l)';
+  document.getElementById('ret-bar').style.width = Math.min(newRet * 5, 100) + '%';
+
+  document.getElementById('vol-after').textContent = newVol + '%';
+  document.getElementById('vol-after').style.color = newVol < 14 ? 'var(--green-l)' : 'var(--amber-l)';
+  document.getElementById('vol-bar').style.width = newVol * 5 + '%';
+
+  document.getElementById('dd-after').textContent = '−' + newDD + '%';
+  document.getElementById('dd-after').style.color = newDD < 18 ? 'var(--green-l)' : 'var(--amber-l)';
+  document.getElementById('dd-bar').style.width = newDD * 3 + '%';
+
+  document.getElementById('pg-after').textContent = newPG + '%';
+  document.getElementById('pg-after').style.color = newPG >= 75 ? 'var(--green-l)' : newPG >= 60 ? 'var(--amber-l)' : 'var(--red-l)';
+  document.getElementById('pg-bar').style.width = newPG + '%';
+  document.getElementById('pg-bar').style.background = newPG >= 75 ? 'var(--green)' : 'var(--amber)';
+
+  document.getElementById('time-after').textContent = '~' + newTime + ' yrs';
+  document.getElementById('time-after').style.color = newTime <= 7 ? 'var(--green-l)' : 'var(--amber-l)';
+
+  // Delta cards
+  if(combined > 0) {
+    const dRet = (newRet - BASE_RET).toFixed(1);
+    const dRN = adjRN - BASE_RN;
+    const dDD = parseFloat(newDD) - BASE_DD;
+    const dPG = newPG - BASE_PG;
+    document.getElementById('delta-ret').textContent = '+' + dRet + '%';
+    document.getElementById('delta-ret').style.color = 'var(--green-l)';
+    document.getElementById('delta-rn').textContent = (dRN >= 0 ? '+' : '') + dRN;
+    document.getElementById('delta-rn').style.color = dRN < 0 ? 'var(--green-l)' : 'var(--amber-l)';
+    document.getElementById('delta-dd').textContent = (dDD >= 0 ? '+' : '') + dDD.toFixed(0) + '%';
+    document.getElementById('delta-dd').style.color = dDD < 0 ? 'var(--green-l)' : 'var(--red-l)';
+    document.getElementById('delta-pg').textContent = '+' + dPG + '%';
+    document.getElementById('delta-pg').style.color = 'var(--green-l)';
+    document.getElementById('c11-rn-effect').textContent = c11 > 0 ? '−' + (c11 * 2.8).toFixed(0) + ' pts' : '—';
+    document.getElementById('c11-rn-effect').style.color = 'var(--green-l)';
+    document.getElementById('c11-dd-effect').textContent = c11 > 0 ? '−' + (c11 * 0.8).toFixed(1) + '%' : '—';
+    document.getElementById('c11-dd-effect').style.color = 'var(--green-l)';
+    document.getElementById('c22-rn-effect').textContent = c22 > 0 ? '+' + (c22 * 0.4).toFixed(1) + ' pts' : '—';
+    document.getElementById('c22-rn-effect').style.color = c22 > 0 ? 'var(--amber-l)' : 'var(--dim)';
+    document.getElementById('c22-ret-effect').textContent = c22 > 0 ? '+' + (c22 * 0.4).toFixed(1) + '%' : '—';
+    document.getElementById('c22-ret-effect').style.color = c22 > 0 ? 'var(--green-l)' : 'var(--dim)';
+  } else {
+    ['delta-ret','delta-rn','delta-dd','delta-pg'].forEach(id => {
+      document.getElementById(id).textContent = '—';
+      document.getElementById(id).style.color = 'var(--dim)';
+    });
+    ['c11-rn-effect','c11-dd-effect','c22-rn-effect','c22-ret-effect'].forEach(id => {
+      document.getElementById(id).textContent = '—';
+    });
+  }
+
+  // Verdict
+  const vb = document.getElementById('verdict-box');
+  const vt = document.getElementById('verdict-text');
+  if(combined === 0) {
+    vb.style.borderColor = 'var(--bsub)';
+    vt.textContent = 'Adjust sliders to simulate';
+    vt.style.color = 'var(--dim)';
+  } else if(adjRN <= 55) {
+    vb.style.borderColor = 'rgba(26,122,74,.4)';
+    vb.style.background = 'var(--green-bg)';
+    vt.textContent = '✓ Optimally Aligned — Apply this strategy';
+    vt.style.color = 'var(--green-l)';
+  } else if(adjRN <= 65) {
+    vb.style.borderColor = 'rgba(212,134,10,.3)';
+    vb.style.background = 'var(--amber-bg)';
+    vt.textContent = '◎ Limit Zone — Increase C11 to reduce RN further';
+    vt.style.color = 'var(--amber-l)';
+  } else {
+    vb.style.borderColor = 'rgba(192,57,43,.3)';
+    vb.style.background = 'var(--red-bg)';
+    vt.textContent = '⚠ Still Over-Risked — More C11 needed (try 8–10%)';
+    vt.style.color = 'var(--red-l)';
+  }
+}
+
+function resetSliders() {
+  document.getElementById('c11-slider').value = 0;
+  document.getElementById('c22-slider').value = 0;
+  updateSim();
+}
+
+// ══════════ TICKER ANIMATION ══════════
+function animateTickers() {
+  const changes = {SPY:568.42, QQQ:481.67, GLD:242.18};
+  // minor fluctuations for demo
+}
+</script>
+</body>
+</html>
