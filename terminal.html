@@ -3569,12 +3569,12 @@ function pfActiveSeries(id) {
   const a = pfGetAsset(id);
   if (!a) return null;
   const period = pfPeriod;
-  const now = '2024-12-31';
+  const now = '2025-12-31';
   let fromDate = '2003-12-31';
-  if (period === '1Y') fromDate = '2023-12-31';
-  else if (period === '3Y') fromDate = '2021-12-31';
-  else if (period === '5Y') fromDate = '2019-12-31';
-  else if (period === '10Y') fromDate = '2014-12-31';
+  if (period === '1Y') fromDate = '2024-12-31';
+  else if (period === '3Y') fromDate = '2022-12-31';
+  else if (period === '5Y') fromDate = '2020-12-31';
+  else if (period === '10Y') fromDate = '2015-12-31';
   const series = a.series.filter(p => p.date >= fromDate && p.date <= now);
   if (series.length < 2) return null;
   // Re-base to 100
@@ -3881,7 +3881,7 @@ function pfDrawSim(hpcSeries, spySeries) {
   const compFinal = pfComps.size > 0 ? finalValue(pfActiveSeries([...pfComps][0])) : null;
   const compId = pfComps.size > 0 ? [...pfComps][0] : null;
 
-  const periodLabel = pfPeriod === 'Max' ? '~20Y' : pfPeriod;
+  const periodLabel = pfPeriod === 'Max' ? '~21Y' : pfPeriod;
 
   let html = '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">'
     + '<span style="font-family:var(--mono);font-size:8px;color:var(--text4);letter-spacing:0.12em;text-transform:uppercase;">Investment Simulator</span>'
