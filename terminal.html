@@ -2138,10 +2138,10 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--g
   <div style="display:flex;gap:12px;align-items:flex-start;">
     <!-- Left: strategy selector -->
     <div style="width:210px;flex-shrink:0;background:var(--panel);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;">
-      <!-- Tab toggle HPC11 / HPC22 -->
-      <div style="display:flex;border-bottom:1px solid var(--border);">
-        <button id="perf-tab-hpc11" onclick="perfSetTab('hpc11')" style="flex:1;padding:8px 4px;background:rgba(212,175,69,0.08);border:none;border-right:1px solid var(--border);font-family:var(--mono);font-size:9px;letter-spacing:0.1em;color:var(--gold);cursor:pointer;">HPC11</button>
-        <button id="perf-tab-hpc22" onclick="perfSetTab('hpc22')" style="flex:1;padding:8px 4px;background:transparent;border:none;font-family:var(--mono);font-size:9px;letter-spacing:0.1em;color:var(--text4);cursor:pointer;">HPC22</button>
+      <!-- Tab toggle HPC11 / HPC22 — exclusivo (radio) -->
+      <div style="display:flex;border-bottom:2px solid var(--border);">
+        <button id="perf-tab-hpc11" onclick="perfSetTab('hpc11')" style="flex:1;padding:10px 4px;background:rgba(212,175,69,0.10);border:none;border-right:1px solid var(--border);border-bottom:2px solid var(--gold);margin-bottom:-2px;font-family:var(--mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);cursor:pointer;font-weight:700;">HPC11</button>
+        <button id="perf-tab-hpc22" onclick="perfSetTab('hpc22')" style="flex:1;padding:10px 4px;background:transparent;border:none;border-bottom:2px solid transparent;margin-bottom:-2px;font-family:var(--mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text4);cursor:pointer;">HPC22</button>
       </div>
       <div id="perf-strat-list" style="overflow-y:auto;max-height:460px;"></div>
     </div>
@@ -3444,8 +3444,8 @@ function perfSetTab(tab) {
   perfCurrentTab = tab;
   const t11 = document.getElementById('perf-tab-hpc11');
   const t22 = document.getElementById('perf-tab-hpc22');
-  if(t11) { t11.style.background = tab==='hpc11'?'rgba(212,175,69,0.08)':'transparent'; t11.style.color = tab==='hpc11'?'var(--gold)':'var(--text4)'; }
-  if(t22) { t22.style.background = tab==='hpc22'?'rgba(212,175,69,0.08)':'transparent'; t22.style.color = tab==='hpc22'?'var(--gold)':'var(--text4)'; }
+  if(t11) { t11.style.background = tab==='hpc11'?'rgba(212,175,69,0.10)':'transparent'; t11.style.color = tab==='hpc11'?'var(--gold)':'var(--text4)'; t11.style.borderBottom = tab==='hpc11'?'2px solid var(--gold)':'2px solid transparent'; t11.style.fontWeight = tab==='hpc11'?'700':'400'; }
+  if(t22) { t22.style.background = tab==='hpc22'?'rgba(212,175,69,0.10)':'transparent'; t22.style.color = tab==='hpc22'?'var(--gold)':'var(--text4)'; t22.style.borderBottom = tab==='hpc22'?'2px solid var(--gold)':'2px solid transparent'; t22.style.fontWeight = tab==='hpc22'?'700':'400'; }
   // default selection
   const pool = tab === 'hpc11' ? (typeof HPC11_STRATEGIES !== 'undefined' ? HPC11_STRATEGIES : []) : (typeof HPC22_STRATEGIES !== 'undefined' ? HPC22_STRATEGIES : []);
   if(pool.length) perfSelectedId = pool[0].id;
