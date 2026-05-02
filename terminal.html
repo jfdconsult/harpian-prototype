@@ -2179,12 +2179,17 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--g
         <input id="pf-search" type="text" placeholder="Search funds, ETFs..." oninput="pfFilterPanel()" style="width:100%;padding:5px 8px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:4px;color:var(--text2);font-family:var(--mono);font-size:10px;box-sizing:border-box;"/>
       </div>
       <!-- List -->
-      <div id="pf-comp-list" style="flex:1;overflow-y:auto;"></div>
+      <div style="flex:1;overflow-y:auto;position:relative;">
+        <div id="pf-comp-list"></div>
+        <div style="position:absolute;bottom:0;left:0;right:0;height:44px;background:linear-gradient(to bottom,transparent,rgba(13,18,28,0.95));pointer-events:none;display:flex;align-items:flex-end;justify-content:center;padding-bottom:6px;">
+          <span style="font-family:monospace;font-size:9px;color:rgba(255,255,255,0.25);">↓ more</span>
+        </div>
+      </div>
     </div>
   </div>
 
   <!-- BOTTOM ANALYTICS STRIP -->
-  <div style="height:220px;flex-shrink:0;border-top:1px solid var(--border);display:flex;overflow:hidden;">
+  <div style="height:310px;flex-shrink:0;border-top:1px solid var(--border);display:flex;overflow:hidden;">
 
     <!-- Drawdown Chart -->
     <div style="flex:1;border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;min-width:0;">
@@ -3531,8 +3536,8 @@ const PV2_SPY_YR  = {2004:10.9,2005:4.9,2006:15.8,2007:5.5,2008:-37.0,2009:26.5,
 
 // Colors per asset
 const PF_COLORS = {
-  HPC11:'#C9A84C', HPC22:'#E8B84B',
-  SPY:'#6B7280',
+  HPC11:'#22C55E', HPC22:'#3B82F6',
+  SPY:'#9CA3AF',
   QQQ:'#60A5FA', VUG:'#34D399', VGT:'#818CF8', SOXX:'#F472B6',
   IWM:'#FB923C', SCHD:'#4ADE80', GLD:'#FCD34D', TLT:'#A78BFA', AGG:'#94A3B8',
   TCI:'#F87171', WHALE:'#FB923C', MAVERICK:'#FBBF24', PERSHING:'#A3E635',
@@ -3767,7 +3772,7 @@ function pfDrawRightPanel() {
   let html = '';
   for (const [cat, list] of Object.entries(groups)) {
     if (!list.length) continue;
-    html += '<div style="padding:5px 10px 2px;font-family:monospace;font-size:8px;letter-spacing:0.15em;text-transform:uppercase;color:var(--text4);background:rgba(255,255,255,0.02);border-bottom:1px solid rgba(255,255,255,0.04);">' + cat + '</div>';
+    html += '<div style="padding:6px 12px 3px;font-family:monospace;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text4);background:rgba(255,255,255,0.02);border-bottom:1px solid rgba(255,255,255,0.04);">' + cat + '</div>';
     for (const a of list) {
       const on = pfComps.has(a.id);
       const color = pfColor(a.id);
@@ -3775,12 +3780,12 @@ function pfDrawRightPanel() {
       const cagr = m.cagr != null ? pfFmt(m.cagr) : '—';
       const dd = m.maxDrawdown != null ? m.maxDrawdown.toFixed(1)+'%' : '—';
       const rgb = pfHexRgb(color);
-      html += '<div onclick="pfToggleComp(\'' + a.id + '\')" style="padding:6px 10px;border-bottom:1px solid rgba(255,255,255,0.03);cursor:pointer;background:' + (on ? 'rgba(' + rgb + ',0.08)' : 'transparent') + ';border-left:2px solid ' + (on ? color : 'transparent') + ';transition:background 0.1s;">'
+      html += '<div onclick="pfToggleComp(\'' + a.id + '\')" style="padding:9px 12px;border-bottom:1px solid rgba(255,255,255,0.03);cursor:pointer;background:' + (on ? 'rgba(' + rgb + ',0.08)' : 'transparent') + ';border-left:2px solid ' + (on ? color : 'transparent') + ';transition:background 0.1s;">'
         + '<div style="display:flex;align-items:center;gap:5px;margin-bottom:2px;">'
         + '<span style="width:6px;height:6px;border-radius:50%;background:' + (on ? color : 'rgba(255,255,255,0.2)') + ';flex-shrink:0;transition:background 0.1s;"></span>'
-        + '<span style="font-family:monospace;font-size:10px;color:' + (on ? color : 'var(--text2)') + ';font-weight:' + (on ? '600' : '400') + ';white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + a.name + '</span>'
+        + '<span style="font-family:monospace;font-size:11px;color:' + (on ? color : 'var(--text2)') + ';font-weight:' + (on ? '600' : '400') + ';white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + a.name + '</span>'
         + '</div>'
-        + '<div style="font-family:monospace;font-size:9px;color:var(--text4);padding-left:11px;">CAGR ' + cagr + ' · DD ' + dd + (m.sharpe ? ' · Sh ' + m.sharpe.toFixed(2) : '') + '</div>'
+        + '<div style="font-family:monospace;font-size:9px;color:var(--text3);padding-left:11px;">CAGR ' + cagr + ' · DD ' + dd + (m.sharpe ? ' · Sh ' + m.sharpe.toFixed(2) : '') + '</div>'
         + '</div>';
     }
   }
@@ -3871,33 +3876,56 @@ function pfDrawSim(hpcSeries, spySeries) {
     return capital * series[series.length - 1].value / 100;
   }
 
-  const rows = [];
   const hpcFinal = finalValue(hpcSeries);
   const spyFinal = finalValue(spySeries);
-
-  if (hpcFinal != null) rows.push({ id: pfHPC, val: hpcFinal });
-  if (spyFinal != null) rows.push({ id: 'SPY', val: spyFinal });
-  for (const id of pfComps) {
-    const s = pfActiveSeries(id);
-    const f = finalValue(s);
-    if (f != null) rows.push({ id, val: f });
-  }
-
-  rows.sort(function(a, b) { return b.val - a.val; });
+  const compFinal = pfComps.size > 0 ? finalValue(pfActiveSeries([...pfComps][0])) : null;
+  const compId = pfComps.size > 0 ? [...pfComps][0] : null;
 
   const periodLabel = pfPeriod === 'Max' ? '~20Y' : pfPeriod;
-  let html = '<div style="font-family:monospace;font-size:9px;color:var(--text4);">If you invested ' + pfFmtUSD(capital) + ' · ' + periodLabel + '</div>';
-  for (const r of rows.slice(0, 6)) {
-    const color = pfColor(r.id);
-    const isHPC = r.id === pfHPC;
-    const diff = r.val - (spyFinal || r.val);
-    const diffStr = (r.id !== 'SPY' && spyFinal) ? '<span style="font-family:monospace;font-size:9px;color:' + (diff>=0?'var(--green)':'var(--red)') + ';">' + (diff>=0?'+':'') + pfFmtUSD(diff) + '</span>' : '';
-    html += '<div style="display:flex;align-items:baseline;gap:6px;' + (isHPC ? 'background:rgba(212,175,69,0.04);border-radius:3px;padding:1px 3px;' : '') + '">'
-      + '<span style="font-family:monospace;font-size:9px;color:' + color + ';width:72px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + r.id + '</span>'
-      + '<span style="font-family:monospace;font-size:13px;font-weight:' + (isHPC?'700':'400') + ';color:' + color + ';">' + pfFmtUSD(r.val) + '</span>'
-      + diffStr
+
+  let html = '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">'
+    + '<span style="font-family:var(--mono);font-size:8px;color:var(--text4);letter-spacing:0.12em;text-transform:uppercase;">Investment Simulator</span>'
+    + '<span style="font-family:var(--mono);font-size:8px;color:var(--text4);">If you invested ' + pfFmtUSD(capital) + ' · ' + periodLabel + '</span>'
+    + '</div>';
+
+  // HPC row — big number, highlight
+  if (hpcFinal != null) {
+    const diff = spyFinal ? hpcFinal - spyFinal : 0;
+    const outpct = spyFinal ? ((hpcFinal / spyFinal) - 1) * 100 : 0;
+    const diffColor = diff >= 0 ? 'var(--green)' : 'var(--red)';
+    const diffSign = diff >= 0 ? '+' : '';
+    const color = pfColor(pfHPC);
+    html += '<div style="background:rgba(255,255,255,0.03);border-left:3px solid ' + color + ';border-radius:3px;padding:8px 10px;margin-bottom:6px;">'
+      + '<div style="display:flex;align-items:baseline;gap:8px;">'
+      + '<span style="font-family:var(--mono);font-size:9px;color:' + color + ';font-weight:600;width:56px;">' + pfHPC + '</span>'
+      + '<span style="font-family:var(--mono);font-size:20px;font-weight:700;color:' + color + ';">' + pfFmtUSD(hpcFinal) + '</span>'
+      + '</div>'
+      + (spyFinal ? '<div style="margin-top:3px;font-family:var(--mono);font-size:10px;color:' + diffColor + ';font-weight:600;">' + diffSign + pfFmtUSD(diff) + ' &nbsp;·&nbsp; ' + diffSign + outpct.toFixed(1) + '% vs S&P 500</div>' : '')
       + '</div>';
   }
+
+  // SPY row
+  if (spyFinal != null) {
+    const color = pfColor('SPY');
+    html += '<div style="display:flex;align-items:baseline;gap:8px;padding:4px 10px;">'
+      + '<span style="font-family:var(--mono);font-size:9px;color:' + color + ';width:56px;">SPY</span>'
+      + '<span style="font-family:var(--mono);font-size:16px;font-weight:500;color:' + color + ';">' + pfFmtUSD(spyFinal) + '</span>'
+      + '</div>';
+  }
+
+  // Comparator row
+  if (compFinal != null && compId) {
+    const color = pfColor(compId);
+    const diff2 = spyFinal ? compFinal - spyFinal : 0;
+    const diffColor2 = diff2 >= 0 ? 'var(--green)' : 'var(--red)';
+    const diffSign2 = diff2 >= 0 ? '+' : '';
+    html += '<div style="display:flex;align-items:baseline;gap:8px;padding:4px 10px;">'
+      + '<span style="font-family:var(--mono);font-size:9px;color:' + color + ';width:56px;">' + compId + '</span>'
+      + '<span style="font-family:var(--mono);font-size:16px;font-weight:500;color:' + color + ';">' + pfFmtUSD(compFinal) + '</span>'
+      + (spyFinal ? '<span style="font-family:var(--mono);font-size:9px;color:' + diffColor2 + ';">' + diffSign2 + pfFmtUSD(diff2) + '</span>' : '')
+      + '</div>';
+  }
+
   el.innerHTML = html;
 }
 
@@ -3916,12 +3944,18 @@ function pfDrawMetrics(hpcSeries, spySeries) {
     return { id, a, cagr, totalRet };
   }).filter(Boolean);
 
-  const thStyle = 'padding:4px 6px;text-align:right;font-family:monospace;font-size:8px;color:var(--text4);letter-spacing:0.08em;text-transform:uppercase;font-weight:400;white-space:nowrap;';
-  function tdStyle(color, bold) { return 'padding:3px 6px;text-align:right;font-family:monospace;font-size:10px;color:' + color + ';font-weight:' + (bold?'600':'400') + ';white-space:nowrap;'; }
-  function tdNameStyle(color, bold) { return 'padding:3px 6px;font-family:monospace;font-size:9px;color:' + color + ';font-weight:' + (bold?'600':'400') + ';white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100px;'; }
+  // Compute best values for highlighting
+  const bestCAGR = Math.max(...rows.map(function(r) { return r.cagr != null ? r.cagr : -Infinity; }));
+  const bestTotalRet = Math.max(...rows.map(function(r) { return r.totalRet != null ? r.totalRet : -Infinity; }));
+  const bestDD = Math.max(...rows.map(function(r) { return r.a.metrics.maxDrawdown != null ? r.a.metrics.maxDrawdown : -Infinity; }));
+  const bestSharpe = Math.max(...rows.map(function(r) { return r.a.metrics.sharpe != null ? r.a.metrics.sharpe : -Infinity; }));
+
+  const thStyle = 'padding:5px 8px;text-align:right;font-family:monospace;font-size:8px;color:var(--text4);letter-spacing:0.08em;text-transform:uppercase;font-weight:400;white-space:nowrap;';
+  function tdStyle(color, bold, highlight) { return 'padding:5px 8px;text-align:right;font-family:monospace;font-size:11px;color:' + color + ';font-weight:' + (bold?'600':'400') + ';white-space:nowrap;' + (highlight ? 'background:rgba(34,197,94,0.12);border-radius:2px;' : ''); }
+  function tdNameStyle(color, bold) { return 'padding:5px 8px;font-family:monospace;font-size:9px;color:' + color + ';font-weight:' + (bold?'600':'400') + ';white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100px;'; }
 
   const headers = ['Asset','CAGR','Total Ret','Max DD','Vol','Sharpe','Worst Yr'];
-  let html = '<table style="width:100%;border-collapse:collapse;font-size:10px;">'
+  let html = '<table style="width:100%;border-collapse:collapse;font-size:11px;">'
     + '<thead><tr style="border-bottom:1px solid var(--border);">'
     + headers.map(function(h) { return '<th style="' + thStyle + '">' + h + '</th>'; }).join('')
     + '</tr></thead><tbody>';
@@ -3930,14 +3964,18 @@ function pfDrawMetrics(hpcSeries, spySeries) {
     const color = pfColor(id);
     const isHPC = id === pfHPC;
     const m = a.metrics;
+    const isBestCAGR = cagr != null && cagr === bestCAGR;
+    const isBestTotalRet = totalRet != null && totalRet === bestTotalRet;
+    const isBestDD = m.maxDrawdown != null && m.maxDrawdown === bestDD;
+    const isBestSharpe = m.sharpe != null && m.sharpe === bestSharpe;
     html += '<tr style="border-bottom:1px solid rgba(255,255,255,0.03);' + (isHPC ? 'background:rgba(212,175,69,0.04);' : '') + '">'
       + '<td style="' + tdNameStyle(color, isHPC) + '"><span style="width:6px;height:6px;border-radius:50%;background:' + color + ';display:inline-block;margin-right:4px;vertical-align:middle;"></span>' + id + '</td>'
-      + '<td style="' + tdStyle(cagr!=null&&cagr>=0?'var(--green)':'var(--red)',isHPC) + '">' + (cagr!=null?pfFmt(cagr):'—') + '</td>'
-      + '<td style="' + tdStyle(totalRet!=null&&totalRet>=0?'var(--green)':'var(--red)',false) + '">' + (totalRet!=null?pfFmt(totalRet):'—') + '</td>'
-      + '<td style="' + tdStyle('var(--red)',false) + '">' + (m.maxDrawdown!=null?m.maxDrawdown.toFixed(1)+'%':'—') + '</td>'
-      + '<td style="' + tdStyle('var(--text3)',false) + '">' + (m.volatility!=null?m.volatility+'%':'—') + '</td>'
-      + '<td style="' + tdStyle('var(--text3)',false) + '">' + (m.sharpe!=null?m.sharpe.toFixed(2):'—') + '</td>'
-      + '<td style="' + tdStyle('var(--red)',false) + '">' + (m.worstYear!=null?pfFmt(m.worstYear):'—') + '</td>'
+      + '<td style="' + tdStyle(cagr!=null&&cagr>=0?'var(--green)':'var(--red)',isHPC,isBestCAGR) + '">' + (cagr!=null?pfFmt(cagr):'—') + '</td>'
+      + '<td style="' + tdStyle(totalRet!=null&&totalRet>=0?'var(--green)':'var(--red)',false,isBestTotalRet) + '">' + (totalRet!=null?pfFmt(totalRet):'—') + '</td>'
+      + '<td style="' + tdStyle('var(--red)',false,isBestDD) + '">' + (m.maxDrawdown!=null?m.maxDrawdown.toFixed(1)+'%':'—') + '</td>'
+      + '<td style="' + tdStyle('var(--text3)',false,false) + '">' + (m.volatility!=null?m.volatility+'%':'—') + '</td>'
+      + '<td style="' + tdStyle('var(--text3)',false,isBestSharpe) + '">' + (m.sharpe!=null?m.sharpe.toFixed(2):'—') + '</td>'
+      + '<td style="' + tdStyle('var(--red)',false,false) + '">' + (m.worstYear!=null?pfFmt(m.worstYear):'—') + '</td>'
       + '</tr>';
   }
 
@@ -3949,8 +3987,7 @@ function pfDrawMetrics(hpcSeries, spySeries) {
 function pfSetHPC(hpc) { pfHPC = hpc; renderPerformance(); }
 function pfSetPeriod(p) { pfPeriod = p; renderPerformance(); }
 function pfToggleComp(id) {
-  if (pfComps.has(id)) pfComps.delete(id);
-  else { if (pfComps.size >= 6) { pfComps.delete(pfComps.values().next().value); } pfComps.add(id); }
+  if (pfComps.has(id)) { pfComps.clear(); } else { pfComps.clear(); pfComps.add(id); }
   renderPerformance();
 }
 function pfFilterPanel() { pfDrawRightPanel(); }
