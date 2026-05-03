@@ -1,0 +1,51 @@
+[
+  {
+    "file": "C:\\Users\\jfdco\\OneDrive\\Área de Trabalho\\HARPIAN\\JIM Biblioteca Estrutura all docs\\Q&A\\Documentação de produção e base de conhecimento do DMA.pdf",
+    "extracted": "C:\\Users\\jfdco\\OneDrive\\Área de Trabalho\\HARPIAN\\compliance_audit_extracted\\Documentação de produção e base de conhecimento do DMA.txt",
+    "chars": 34385,
+    "q_mark_count": 7,
+    "numbered_q_candidates": 35
+  },
+  {
+    "file": "C:\\Users\\jfdco\\OneDrive\\Área de Trabalho\\HARPIAN\\JIM Biblioteca Estrutura all docs\\Q&A\\Harpian_150_Questionnaire.docx",
+    "extracted": "C:\\Users\\jfdco\\OneDrive\\Área de Trabalho\\HARPIAN\\compliance_audit_extracted\\Harpian_150_Questionnaire.txt",
+    "chars": 130269,
+    "q_mark_count": 156,
+    "numbered_q_candidates": 150
+  },
+  {
+    "file": "C:\\Users\\jfdco\\OneDrive\\Área de Trabalho\\HARPIAN\\JIM Biblioteca Estrutura all docs\\Q&A\\Harpian_JIM_GM.docx",
+    "extracted": "C:\\Users\\jfdco\\OneDrive\\Área de Trabalho\\HARPIAN\\compliance_audit_extracted\\Harpian_JIM_GM.txt",
+    "chars": 80477,
+    "q_mark_count": 77,
+    "numbered_q_candidates": 0
+  },
+  {
+    "file": "C:\\Users\\jfdco\\OneDrive\\Área de Trabalho\\HARPIAN\\JIM Biblioteca Estrutura all docs\\Q&A\\Harpian_JIM_N.docx",
+    "extracted": "C:\\Users\\jfdco\\OneDrive\\Área de Trabalho\\HARPIAN\\compliance_audit_extracted\\Harpian_JIM_N.txt",
+    "chars": 42092,
+    "q_mark_count": 33,
+    "numbered_q_candidates": 0
+  },
+  {
+    "file": "C:\\Users\\jfdco\\OneDrive\\Área de Trabalho\\HARPIAN\\JIM Biblioteca Estrutura all docs\\Q&A\\Harpian_JIM_v2.docx",
+    "extracted": "C:\\Users\\jfdco\\OneDrive\\Área de Trabalho\\HARPIAN\\compliance_audit_extracted\\Harpian_JIM_v2.txt",
+    "chars": 64211,
+    "q_mark_count": 81,
+    "numbered_q_candidates": 0
+  },
+  {
+    "file": "C:\\Users\\jfdco\\OneDrive\\Área de Trabalho\\HARPIAN\\JIM Biblioteca Estrutura all docs\\Q&A\\Jim_AI_Architecture_v1.docx",
+    "extracted": "C:\\Users\\jfdco\\OneDrive\\Área de Trabalho\\HARPIAN\\compliance_audit_extracted\\Jim_AI_Architecture_v1.txt",
+    "chars": 35367,
+    "q_mark_count": 44,
+    "numbered_q_candidates": 38
+  },
+  {
+    "file": "C:\\Users\\jfdco\\OneDrive\\Área de Trabalho\\HARPIAN\\JIM Biblioteca Estrutura all docs\\Q&A\\JIM_Architecture_v2.docx",
+    "extracted": "C:\\Users\\jfdco\\OneDrive\\Área de Trabalho\\HARPIAN\\compliance_audit_extracted\\JIM_Architecture_v2.txt",
+    "chars": 39798,
+    "q_mark_count": 67,
+    "numbered_q_candidates": 49
+  }
+]

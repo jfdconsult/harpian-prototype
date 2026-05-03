@@ -1,0 +1,412 @@
+1.1 O que é o JIM
+O JIM (Harpian AI Intelligence Agent) é o agente de inteligência artificial proprietário integrado ao HARPIAN Portfolio Engineering Terminal e ao HARPIAN Lite. Não é um chatbot genérico. É um sistema de raciocínio restrito ao universo HARPIAN, projetado para operar dentro da plataforma, responder perguntas recorrentes com consumo mínimo de tokens, interpretar dados internos, explicar indicadores, diagnosticar desalinhamento de portfólio e orientar o usuário na navegação e na tomada de decisão analítica.
+1.2 Princípio Central de Comportamento
+1.3 Fundação Conceitual — TPT e MPT
+O JIM está ancorado no framework da Temporal Portfolio Theory (TPT), que representa uma evolução em relação à Modern Portfolio Theory (MPT). Enquanto a MPT otimiza portfólios em torno de diversificação estática por média-variância, a TPT propõe uma arquitetura de engenharia temporal: rotação de ativos baseada em momentum, filtragem de sinal-ruído, proteção estrutural contra bear markets (StormGuard Armor), gestão adaptativa de risco em função do regime de mercado, e alinhamento dinâmico entre Risk Number, Destination Risk e Journey Risk.
+2.1 Princípio de Deployment
+O JIM é executado exclusivamente via browser. Toda inferência, montagem de contexto, chamada a provedores de IA e formatação de resposta ocorre no backend HARPIAN Core. O browser apenas renderiza respostas. Não há modelo de IA no cliente, não há cache local de dados de portfólio, e o JIM não opera sem conexão ativa com o Core.
+2.2 Arquitetura de Camadas
+2.3 Regras de Indisponibilidade
+3.1 Fluxo de Processamento de Cada Pergunta
+3.2 Quick Mode — Formato
+3.3 Deep Mode — Três Níveis
+3.4 Loop Detection — Controle de Repetição
+4.1 Princípio de Eficiência
+O universo de perguntas do JIM é semi-finito. A maioria das perguntas reais de FAs, MFOs e usuários institucionais gira em torno de um conjunto previsível de temas (Risk Number, portfólio, HPC, StormGuard, ETP, estrutura, compliance). O JIM responde por intent, não por geração livre de texto.
+4.2 Exemplos de Normalização de Intent
+Perguntas aparentemente diferentes mapeiam para o mesmo intent:
+4.3 Budget de Contexto por Tier
+5.1 Grupo 1 — Risk Number
+5.2 Grupo 2 — Portfolio Alignment
+5.3 Grupo 3 — Simulação
+5.4 Grupo 4 — HPC Products
+5.5 Grupo 5 — StormGuard e Regime
+5.6 Grupo 6 — ETP e Estrutura
+5.7 Grupo 7 — Tipo de Investidor
+5.8 Grupo 8 — Governança e Fluxo de Dinheiro
+5.9 Grupo 9 — Módulos do Terminal
+6.1 Scores Obrigatórios
+6.2 Classificação de Scores
+6.3 Exemplo de Resposta com Score Visual
+7.1 Matriz de Permissões do JIM
+7.2 Mensagens de Bloqueio por Alçada
+8.1 Schema — Tabela question_memory
+8.2 Schema — Tabela answer_templates
+8.3 Comportamento para Perguntas Já Respondidas
+9.1 Indicadores de Risco
+9.2 Indicadores de Performance
+9.3 Indicadores de Mercado e Estratégia
+9.4 Estrutura ETP e Produto
+10.1 Componentes do Confidence Score
+10.2 Exibição ao Usuário
+Quando o Confidence Score é baixo (< 0.70), o JIM exibe:
+10.3 Checklist de Dados Faltantes
+Quando o JIM identifica dados faltantes que impactam a qualidade da resposta, exibe automaticamente:
+11.1 Fora do Escopo — Lista Completa
+11.2 Resposta Padrão de Redirecionamento
+12.1 Princípios de Linguagem
+12.2 Exemplos de Tom Correto vs Incorreto
+13.1 Fluxo de LLM Fallback
+13.2 Console Admin JIM — Funcionalidades
+14.1 Backend — Intent Classifier
+FR-IC-01: O classifier deve operar com precisão ≥ 0.85 nos 50 intents primários mapeados na Seção 5.
+FR-IC-02: Threshold de confiança: ≥ 0.85 → templated; 0.60–0.84 → block assembly; < 0.60 → LLM Fallback.
+FR-IC-03: O classifier deve normalizar a pergunta antes do matching (lowercase, remoção de stop words, lemmatização em pt-BR e en).
+FR-IC-04: O classifier deve funcionar offline do LLM — é um componente independente que não requer chamada a provedor externo.
+14.2 Context Assembly Engine (CAE)
+FR-CAE-01: O CAE deve montar o contexto conforme o tier do usuário e os limites de tokens definidos na Seção 4.3.
+FR-CAE-02: Dados com mais de 24h devem ser tagueados como stale no contexto. JIM deve informar staleness ao usuário quando relevante.
+FR-CAE-03: Se budget de tokens for excedido, cortar na ordem: social signals → news → DIME → HPC detail → client book.
+14.3 Prebuilt Answer Library
+FR-PAL-01: Banco de dados deve conter ao menos 120 respostas templateadas cobrindo todos os intents das Seções 5.1–5.9 em Quick Mode.
+FR-PAL-02: Cada intent deve ter ao menos 1 template em pt-BR e 1 em en.
+FR-PAL-03: Templates com variáveis de contexto ({{rn}}, {{client_name}}, {{alignment_score}}) devem ter fallback para quando o dado não está disponível.
+FR-PAL-04: Todas as respostas que referenciam scores de performance HPC devem incluir o disclaimer configurado em disclaimer_required=TRUE.
+14.4 Loop Detection
+FR-LD-01: O sistema deve rastrear frequência de intents por usuário por sessão.
+FR-LD-02: Ao atingir threshold 3, o JIM deve proativamente oferecer Deep Mode. Ao 5, sugerir advisor.
+FR-LD-03: Loop detection é por intent, não por texto literal — variações da mesma pergunta contam para o loop.
+14.5 Score Visual
+FR-SV-01: O cálculo dos 5 scores (Alignment, Risk Fit, Return Gap, Destination Risk, Confidence) deve ser executado no Core, não no frontend.
+FR-SV-02: Todos os scores devem ser exibidos com classificação (Aligned / Moderate / Material / Critical) e cor correspondente.
+FR-SV-03: O score de simulação pós-realinhamento deve ser claramente distinguido do score atual. Label: "Score estimado pós-simulação".
+14.6 Compliance e Auditoria
+FR-CO-01: Toda resposta que contenha valor de retorno histórico, projeção ou simulação deve incluir o disclaimer de performance (obrigatório por regulação).
+FR-CO-02: A palavra "recomendo" e variantes diretas devem ser filtradas no output — tanto em templates quanto em respostas LLM. Pipeline de output deve incluir compliance filter.
+FR-CO-03: Todos os eventos JIM devem gerar log com: session_id, user_id, role, intent_id, confidence_score, was_templated, tokens_used, provider_used.
+FR-CO-04: Logs são imutáveis e retidos por mínimo de 7 anos conforme exigência regulatória.
+[[TABLE 1]]
+JIM HARPIAN AI INTELLIGENCE AGENT Documentação Completa de Arquitetura, Comportamento e Engenharia HARPIAN Terminal | HARPIAN Portfolio Engineering Terminal | Versão 1.0
+[[TABLE 2]]
+Classificação Confidencial — Uso Interno | Status Pronto para Handoff de Engenharia | Escopo Terminal + Lite (FA/MFO/Admin)
+[[TABLE 3]]
+SEÇÃO 1 Definição do JIM e Princípio Central
+[[TABLE 4]]
+Definição Operacional do JIM O JIM é: (1) manual inteligente do Terminal; (2) explicador técnico dos indicadores; (3) tradutor dos dados quantitativos; (4) assistente de navegação; (5) interpretador de risco; (6) diagnosticador de desalinhamento; (7) simulador matemático de alinhamento; (8) sistema de suporte ao Family Office, Financial Advisor e usuário institucional. Ele não é um consultor financeiro autônomo. Ele não dá recomendação de investimento.
+[[TABLE 5]]
+REGRA CRÍTICA REGRA INVIOLÁVEL — O JIM nunca usa a palavra "recomendo", "sugiro que invista", "coloque em HPC11" ou equivalentes diretos de recomendação financeira. A linguagem correta é sempre: "A simulação matemática indica X%. Isso é um cálculo baseado nos parâmetros informados. Não constitui recomendação de investimento."
+[[TABLE 6]]
+O JIM PODE dizer | O JIM NUNCA pode dizer
+"Seu portfólio está desalinhado." | "Recomendo que você invista em HPC22."
+"Você declarou tolerância de risco maior do que o risco entregue pelo portfólio atual." | "Você deveria sair de renda fixa e entrar em HPC22."
+"Para alinhar matematicamente ao perfil declarado, a simulação indica 40% HPC22." | "O melhor produto para você é o HPC11."
+"O Return Gap estimado é de R$2,1M em 20 anos com o portfólio atual." | "Está perdendo dinheiro por não estar no HPC."
+"O StormGuard está positivo. O regime atual é Risk-On." | "Agora é o momento certo para entrar."
+"Isso é um cálculo matemático. Não constitui recomendação de investimento." | Qualquer afirmação de resultado futuro garantido
+[[TABLE 7]]
+Conceito MPT | Equivalente TPT / HARPIAN
+Diversificação estática por correlação | Rotação setorial baseada em momentum (AlphaDroid)
+Portfólio eficiente por média-variância | Risk Number como expressão do risco desejado pelo cliente
+Sem mecanismo de defesa estrutural | StormGuard Armor — proteção automática em regimes bear
+Horizonte temporal estático | Journey Risk (risco de percurso) vs Destination Risk (risco de destino)
+Retorno esperado como target fixo | RAF (Return Adequacy Factor) como diagnóstico de suficiência
+Volatilidade como proxy de risco total | Risk Number integrando múltiplos fatores de capacidade e tolerância
+[[TABLE 8]]
+SEÇÃO 2 Infraestrutura — Browser-Only, Zero Local, Zero Offline
+[[TABLE 9]]
+┌──────────────────────────────────────────────────────────────────┐ │ BROWSER (React / Mobile Web) │ │ JIM UI — renderiza mensagens, envia texto do usuário │ │ Zero lógica de IA. Zero dados locais. Apenas display. │ └──────────────────────┬───────────────────────────────────────────┘ │ HTTPS · JWT autenticado ┌──────────────────────▼───────────────────────────────────────────┐ │ HARPIAN CORE BACKEND │ │ ┌─────────────────────────────────────────────────────────┐ │ │ │ API Gateway — valida role token, roteia para JIM svc │ │ │ └───────────────────┬─────────────────────────────────────┘ │ │ ┌───────────────────▼─────────────────────────────────────┐ │ │ │ Intent Classifier — identifica intent da pergunta │ │ │ │ → Busca em Prebuilt Answer Library (80% dos casos) │ │ │ │ → Monta resposta por blocos (15% dos casos) │ │ │ │ → LLM Fallback via HAAL (5% dos casos) │ │ │ └───────────────────┬─────────────────────────────────────┘ │ │ ┌───────────────────▼─────────────────────────────────────┐ │ │ │ Context Assembly Engine (CAE) │ │ │ │ Lê: Client DB / Risk Engine / Portfolio / AlphaDroid │ │ │ │ DIME / News / StormGuard / HPC / Mandato FO │ │ │ └───────────────────┬─────────────────────────────────────┘ │ │ ┌───────────────────▼─────────────────────────────────────┐ │ │ │ HAAL (AI Abstraction Layer) — apenas para LLM Fallback │ │ │ │ Provedores: Claude / GPT-4o / Gemini (failover) │ │ │ └───────────────────┬─────────────────────────────────────┘ │ │ ┌───────────────────▼─────────────────────────────────────┐ │ │ │ Audit Logger — session_id, user_id, intent, provider │ │ │ │ confidence_score, tokens_used, was_templated │ │ │ └─────────────────────────────────────────────────────────┘ │ └──────────────────────────────────────────────────────────────────┘
+[[TABLE 10]]
+Estado | Mensagem e Comportamento
+JIM offline (Core indisponível) | Exibe: "O JIM está temporariamente indisponível. Tente novamente em instantes." Campo de input desabilitado.
+Browser sem rede | Exibe: "Sem conexão. O JIM requer internet." Input bloqueado.
+Timeout LLM > 8s | Exibe: "O JIM está processando. Aguarde…" Após 15s, fallback para resposta templateada ou erro.
+Todos os provedores LLM falham | Resposta templateada de fallback se intent identificado; caso contrário: "Não consegui processar. Reformule a pergunta."
+[[TABLE 11]]
+SEÇÃO 3 Sistema de Resposta — Quick Mode, Deep Mode e Loop Detection
+[[TABLE 12]]
+Pergunta do usuário └→ Normalização (lowercase, remoção de stop words, stemming) └→ Intent Classifier → identifica INTENT_ID └→ Busca em Prebuilt Answer Library ├→ ENCONTRADO + confiança ≥ 0.85 → Quick Mode response ├→ ENCONTRADO + confiança 0.60–0.84 → Block Assembly response └→ NÃO ENCONTRADO ou confiança < 0.60 → LLM Fallback (HAAL) └→ Injeção de contexto do cliente (se cliente ativo) └→ Renderização da resposta └→ "Isso responde? [Sim] [Quero aprofundar]" └→ Se "Quero aprofundar" → Deep Mode 1 → 2 → 3 → Manual/Advisor
+[[TABLE 13]]
+QUICK MODE — Template Obrigatório Resposta direta (1–3 linhas). Por que importa (1–2 linhas). Link Ver no Terminal (quando aplicável). Duração total: leitura < 10 segundos.
+[[TABLE 14]]
+[FA Free — Quick Mode] "O que é o Risk Number?" JIM: É uma pontuação de 0 a 99 que representa o nível de risco do portfólio ou do perfil declarado do cliente. Quanto maior o número, maior a exposição e a volatilidade esperada. [Por que importa] O Risk Number é o eixo central do diagnóstico HARPIAN — ele conecta o perfil declarado ao portfólio real. [Ver no Terminal] Risk Alignment →
+[[TABLE 15]]
+Nível | Conteúdo
+Deep Mode 1 | Explicação técnica acessível. Define os termos-chave, explica a lógica sem matemática pesada. Exemplo: "O Risk Number é calculado a partir de volatilidade histórica, correlação, drawdown máximo e perfil declarado. Ele combina Risk Capacity (capacidade financeira) com Risk Tolerance (apetite declarado)."
+Deep Mode 2 | Explicação com cálculo, variáveis e exemplo numérico. Mostra o raciocínio matemático com valores hipotéticos. Exemplo: "Se o portfólio tem vol de 12% e o perfil declarado tem tolerância a -20% de drawdown, o Risk Number resultante é calculado como [fórmula simplificada]. Exemplo com portfólio atual: vol 8.3%, DD máx -6.8% → RN 52."
+Deep Mode 3 | Explicação metodológica profunda conectando com TPT, MPT, Temporal Portfolio Theory, StormGuard, AlphaDroid, Journey Risk, Destination Risk ou governança de mandato. Para usuários institucionais. Após o Deep 3, o JIM sugere manual completo ou navegação guiada com advisor.
+[[TABLE 16]]
+Ocorrência | Comportamento do JIM
+1ª vez — mesma pergunta | Resposta completa normal.
+2ª vez — mesmo usuário, mesma sessão | Responde com reforço: "Já abordamos esse tema. Vou reforçar os pontos principais."
+3ª vez | Pergunta ao usuário: "Quer aprofundar mais? Posso ir ao nível técnico ou metodológico."
+4ª vez | Sugere o manual: "Você já explorou as camadas principais. O manual completo está disponível em Recursos do Terminal."
+5ª vez ou mais | Sugere advisor: "Para aprofundamento completo, recomendo uma navegação guiada com um advisor HARPIAN que pode contextualizar ao seu portfólio."
+[[TABLE 17]]
+SEÇÃO 4 Sistema de Otimização de Tokens — Arquitetura Híbrida
+[[TABLE 18]]
+Camada | Descrição e % Estimado de Cobertura
+Prebuilt Answer Library (80%) | Respostas completamente templateadas, armazenadas como texto formatado no banco de dados. Custo: zero tokens de LLM. Apenas injeção de variáveis de contexto (nome do cliente, valor de RN, % portfólio).
+Block Assembly (15%) | Respostas montadas dinamicamente combinando blocos de texto pré-aprovados + dados em tempo real do Core. Custo: mínimo (apenas montagem server-side). Exemplo: "Seu portfólio atual tem [X% HPC11] e [Y% HPC22]. O Risk Number resultante é [RN]. Isso está [alinhado/desalinhado] com o mandato declarado de [mandato]."
+LLM Fallback — HAAL (5%) | Perguntas novas, fora do mapeamento de intents. Chamada completa ao provedor de IA via HAAL. Custo total estimado por call: ~800–2.000 tokens. Resultado: nova resposta gerada + gravada para revisão e incorporação ao banco de prebuilts.
+[[TABLE 19]]
+INTENT: RISK_NUMBER_EXPLANATION "Como é feito o Risk Number?" "Da onde vem esse número?" "Como vocês calculam meu risco?" "Por que meu risco deu 68?" "O que significa o número 52 que apareceu?" "Me explica o que é esse score de risco" → Todos mapeiam para RISK_NUMBER_EXPLANATION + injeção de RN do cliente ativo.
+[[TABLE 20]]
+Componente | Tokens (FA Free) | Tokens (MFO Institucional)
+System prompt + domain constraint | ~400 | ~400
+Role permission block | ~80 | ~120
+Cliente ativo (perfil + RN) | ~250 | ~600
+Portfolio snapshot | ~0 (FA Free não acessa) | ~500
+HPC performance + fit | ~0 | ~300
+StormGuard + AlphaDroid | ~0 | ~400
+DIME feed (top 5 itens) | ~0 | ~500
+News/social signals | ~0 | ~400
+Client book summary | ~0 | ~600
+Histórico conversa (6 turns) | ~600 | ~800
+TOTAL CEILING | ~1.330 tokens | ~4.620 tokens
+[[TABLE 21]]
+SEÇÃO 5 Biblioteca de Intents — Mapeamento Completo
+[[TABLE 22]]
+Intent ID | Pergunta-exemplo | Contexto Injetado
+RISK_NUMBER_EXPLANATION | "O que é o Risk Number?" | Nenhum — resposta educacional
+RISK_NUMBER_SOURCE | "De onde vem esse número?" | RN do cliente ativo
+RISK_NUMBER_CALCULATION | "Como é calculado o RN?" | RN + componentes do cliente
+RISK_NUMBER_CONFIDENCE | "Por que a confiança é Moderate?" | Confidence Level + dados faltantes
+RISK_NUMBER_CHANGE | "Por que meu risco mudou?" | RN histórico do cliente
+RISK_NUMBER_CLIENT_ALIGNMENT | "O risco do portfólio bate com o perfil?" | RN cliente + RN portfólio + gap
+APPROXIMATE_VS_OFFICIAL | "Qual a diferença do Approximate para o oficial?" | Tier do usuário
+[[TABLE 23]]
+Intent ID | Pergunta-exemplo | Contexto Injetado
+PORTFOLIO_ALIGNMENT | "Meu portfólio está alinhado?" | RN cliente + RN portfólio + Alignment Score
+PORTFOLIO_MISALIGNMENT_CAUSE | "Por que está desalinhado?" | Portfólio + RN + componentes de gap
+PORTFOLIO_TARGET_RETURN_GAP | "Vou atingir minha meta?" | Return Gap + RAF + horizonte
+PORTFOLIO_RISK_TOLERANCE_GAP | "Estou abaixo do meu perfil?" | Risk Tolerance vs Risk Delivered
+PORTFOLIO_HORIZON_GAP | "Meu horizonte está adequado?" | Horizonte declarado + Destination Risk
+PORTFOLIO_MANDATE_GAP | "O portfólio cumpre o mandato FO?" | Mandato FO + desvio atual
+PORTFOLIO_ACCEPTED_MISALIGNMENT | "Posso aceitar esse desalinhamento?" | Alignment Score + nota de suitability
+[[TABLE 24]]
+Intent ID | Pergunta-exemplo | Contexto Injetado
+HPC_ALLOCATION_SIMULATION | "Quanto preciso alocar em HPC?" | RN + Alignment Score + portfólio
+HPC11_HPC22_MIX | "Qual a mistura ideal HPC11/HPC22?" | RN cliente + perfil + horizonte
+TARGET_RISK_ALIGNMENT | "Como alinhar ao meu perfil?" | Portfólio + RN gap + simulação
+DESTINATION_RISK_SIMULATION | "Qual risco preciso assumir para atingir minha meta?" | RAF + retorno alvo + horizonte
+DRAWDOWN_SIMULATION | "Qual drawdown vou enfrentar?" | RN + vol histórica HPC
+RETURN_TARGET_SIMULATION | "Qual retorno esperado com esse portfólio?" | Portfólio + CAGR histórico HPC
+[[TABLE 25]]
+Intent ID | Pergunta-exemplo | Resposta Tier
+HPC11_EXPLANATION | "O que é HPC11?" | Todos os tiers — educacional
+HPC22_EXPLANATION | "O que é HPC22?" | Todos os tiers — educacional
+HPC11_VS_HPC22 | "Qual a diferença entre HPC11 e HPC22?" | Todos — comparativo
+HPC11_LOWER_VOLATILITY | "O HPC11 é mais conservador?" | Todos — confirmação + dados
+HPC22_HIGHER_RETURN | "HPC22 tem retorno maior?" | Todos — histórico + contexto
+HPC22_HIGHER_RISK | "HPC22 tem mais risco?" | Todos — dados + disclaimer
+HPC_EFFICIENCY_COMPARISON | "Qual é mais eficiente?" | FA Pro + MFO — Sharpe/Sortino
+[[TABLE 26]]
+Intent ID | Pergunta-exemplo | Resposta Tier
+STORMGUARD_EXPLANATION | "O que é o StormGuard?" | Todos — educacional
+STORMGUARD_STATUS | "StormGuard está ativo?" | MFO Institucional — dado em tempo real
+STORMGUARD_TRIGGER | "Quando o StormGuard ativa?" | Todos — explicação do mecanismo
+DEFENSE_MODE | "O que acontece em modo defesa?" | Todos — fluxo de proteção
+CASH_MODE | "Por que o portfólio foi para caixa?" | MFO — contexto de ativação
+REENTRY_MODE | "Como funciona a reentrada?" | Todos — mecanismo de reentrada
+MARKET_REGIME_EXPLANATION | "O que é regime de mercado?" | Todos — educacional
+[[TABLE 27]]
+Intent ID | Pergunta-exemplo | Resposta Tier
+WHAT_IS_ETP | "O que é ETP?" | Todos — educacional
+ETP_LIQUIDITY | "Como funciona a liquidez?" | Todos — D+5, Bloomberg
+ETP_BLOOMBERG_ACCESS | "Posso comprar pela Bloomberg?" | Todos — sim, ticker disponível
+ETP_LYNK_STRUCTURE | "Quem é a Lynk Capital?" | Todos — Programme Administrator
+ETP_CUSTODY | "Onde ficam os ativos?" | Todos — IB + BNY Mellon
+ETP_DELOITTE_AUDIT | "Tem auditoria externa?" | Todos — Deloitte DAC
+ETP_DAILY_NAV | "O NAV é diário?" | Todos — sim, publicado diariamente
+ETP_ISIN_LEI | "Qual o ISIN do HPC?" | Todos — XS2998773373 / LEI 635400ZGH2KVXQAECS86
+ETP_VIENNA_LISTING | "O produto é listado em bolsa?" | Todos — Vienna Stock Exchange
+[[TABLE 28]]
+Intent ID | Pergunta-exemplo | Bifurcação
+US_INVESTOR_PATH | "Sou americano, posso investir?" | US → Managed Account path
+NON_US_INVESTOR_PATH | "Como não americano eu acesso?" | Non-US → ETP path
+WHY_NON_US_ETP | "Por que o ETP só para não americanos?" | Regulatório — explicação FATCA/SEC
+WHY_US_MANAGED_ACCOUNT | "Por que americano precisa de conta gerida?" | Regulatório — estrutura Plurar
+ACCOUNT_OPENING | "Como abro uma conta?" | Ambos — processo respectivo
+SUBSCRIPTION_PROCESS | "Como subscrevo?" | Non-US — processo ETP
+REDEMPTION_PROCESS | "Como resgato?" | Ambos — processo D+5
+[[TABLE 29]]
+Intent ID | Pergunta-exemplo | Importância
+DOES_HARPIAN_TOUCH_MONEY | "A Harpian toca no meu dinheiro?" | Alta — resposta crítica de confiança
+WHERE_ASSETS_ARE_HELD | "Onde ficam meus recursos?" | Alta — IB + BNY Mellon
+WHO_EXECUTES_TRADES | "Quem executa as ordens?" | Alta — AlphaDroid/IB automatizado
+INTERACTIVE_BROKERS_EXECUTION | "Por que Interactive Brokers?" | Média — institucional, regulado
+CUSTODY_EXPLANATION | "O que é custódia segregada?" | Alta — proteção do investidor
+AUDIT_EXPLANATION | "Tem auditoria independente?" | Alta — Deloitte DAC, anual
+MANDATE_EXPLANATION | "O que é mandato Family Office?" | Média — RN range + diretrizes
+[[TABLE 30]]
+Intent ID | Módulo / Tela do Terminal
+DIME_EXPLANATION | Intelligence → DIME Feed
+SOCIAL_MEDIA_INTELLIGENCE | Intelligence → Social Media Signals
+MARKET_TREND | Market Intelligence → Market Trends
+MOMENTUM | Strategies → Sector Momentum / RPM Momentum
+NOT_TOUCH_LIST | Strategies → Not Touch List
+PLANNING_INTELLIGENCE | Intelligence → Planning
+PORTFOLIO_ANALYSIS | Client Profile → Portfolio Analysis
+RISK_ALIGNMENT | Client Profile → Risk Alignment
+CLIENT_DASHBOARD | Clients Overview
+CONFIDENCE_LEVEL | Risk Wizard Result → Confidence Badge
+[[TABLE 31]]
+SEÇÃO 6 Sistema de Score Visual — Diagnóstico Quantitativo
+[[TABLE 32]]
+Score | Definição
+Alignment Score (0–100) | Grau de alinhamento entre o Risk Number do portfólio atual e o Risk Number declarado pelo cliente. 100 = alinhamento perfeito.
+Risk Fit Score (0–100) | Compatibilidade entre o perfil de risco do cliente e o perfil de risco das estratégias HPC disponíveis.
+Return Gap Score (0–100) | Estimativa da suficiência do retorno esperado do portfólio atual para atingir a meta declarada no horizonte informado. 100 = meta atingível com folga.
+Destination Risk Score (0–100) | Avalia se o nível de risco assumido é adequado para o objetivo de longo prazo — incluindo Journey Risk (risco de percurso) e Destination Risk (risco do destino).
+Confidence Score (0–100) | Qualidade e completude dos dados disponíveis para o diagnóstico. Determinado pela completude do onboarding, portfólio enviado, e variáveis preenchidas.
+[[TABLE 33]]
+Faixa | Classificação e Cor
+80–100 | Aligned — Verde (#059669)
+60–79 | Moderate Gap — Âmbar (#D97706)
+40–59 | Material Gap — Laranja (#EA580C)
+0–39 | Critical Gap — Vermelho (#E53E3E)
+[[TABLE 34]]
+───────────────────────────────────────── DIAGNÓSTICO JIM · Cliente: Vera Hollanda ───────────────────────────────────────── Alignment Score: 52 / 100 ■ MATERIAL GAP Risk Fit Score: 64 / 100 ■ MODERATE GAP Return Gap Score: 38 / 100 ■ CRITICAL GAP Destination Risk: 61 / 100 ■ MODERATE GAP Confidence Score: 88 / 100 ■ ALIGNED ───────────────────────────────────────── Seu portfólio está abaixo do nível de risco necessário para atingir a meta declarada no prazo informado. Simulação matemática de alinhamento: HPC11: 25% HPC22: 40% Alignment Score estimado pós-simulação: 81 / 100 NOTA: Isso é uma simulação matemática baseada nos parâmetros informados. Não constitui recomendação de investimento. ─────────────────────────────────────────
+[[TABLE 35]]
+SEÇÃO 7 Sistema de Permissões — Alçadas por Tipo de Usuário
+[[TABLE 36]]
+Capacidade JIM | FA Free | FA Pro | MFO Inst. | Admin
+Explicações educacionais (todos intents básicos) | Sim | Sim | Sim | Sim
+Risk Number Aproximado — explicação | Sim | Sim | Sim | Sim
+Alignment Score — explicação conceitual | Sim | Sim | Sim | Sim
+Alignment Score — diagnóstico do cliente ativo | Não | Sim | Sim | Sim
+Portfolio snapshot — interpretação | Não | Sim | Sim | Sim
+Simulação matemática HPC (cliente ativo) | Não | Sim | Sim | Sim
+Comparação HPC11 vs HPC22 com dados do cliente | Não | Sim | Sim | Sim
+Return Gap quantificado por cliente | Não | Sim | Sim | Sim
+Varredura multi-cliente ("quais estão desalinhados?") | Não | Não | Sim | Sim
+StormGuard status em tempo real | Não | Não | Sim | Sim
+AlphaDroid sinais brutos de momentum | Não | Não | Sim | Sim
+DIME feed — interpretação para cliente | Não | Sim | Sim | Sim
+DIME feed — impacto agregado na carteira FO | Não | Não | Sim | Sim
+News/Social signals — figuras monitoradas | Não | Não | Sim | Sim
+Geração de proposta / pitch (assistida) | Não | Sim | Sim | Sim
+Relatório institucional (PDF) | Não | Não | Sim | Sim
+Logs JIM — intents, confiança, respostas reprovadas | Não | Não | Não | Sim
+Edição de Prebuilt Answers | Não | Não | Não | Sim
+Mapeamento de novos intents | Não | Não | Não | Sim
+Auditoria completa do JIM | Não | Não | Não | Sim
+[[TABLE 37]]
+Situação | Texto do JIM
+FA Free tenta análise de portfólio do cliente | Essa análise requer dados completos do portfólio, disponíveis no plano FA Pro. Posso explicar o conceito ou você pode fazer upgrade para acessar o diagnóstico completo.
+FA Free tenta simulação de alocação | Simulações de alocação baseadas no portfólio do cliente estão disponíveis no FA Pro. Posso explicar como funciona a metodologia.
+FA Pro tenta varredura multi-cliente | Varredura de toda a carteira está disponível para usuários Multi-Family Office. Posso analisar o cliente ativo em detalhe.
+FA Pro / MFO tenta StormGuard em tempo real | O status em tempo real do StormGuard está disponível no HARPIAN Portfolio Engineering Terminal para usuários MFO Institucional.
+[[TABLE 38]]
+SEÇÃO 8 Banco de Dados de Perguntas, Intents e Respostas
+[[TABLE 39]]
+question_memory { question_id UUID PRIMARY KEY original_question TEXT NOT NULL -- texto exato enviado pelo usuário normalized_question TEXT NOT NULL -- lowercase, stemmed, sem stop words detected_intent VARCHAR(80) NOT NULL -- ex: RISK_NUMBER_EXPLANATION confidence_score DECIMAL(4,3) -- 0.000 a 1.000 user_type ENUM(FA_FREE, FA_PRO, MFO, ADMIN) answer_template_id UUID REFERENCES answer_templates(id) was_templated BOOLEAN DEFAULT TRUE -- false = LLM Fallback usado answer_version INTEGER DEFAULT 1 usage_count INTEGER DEFAULT 1 last_used_at TIMESTAMP approved_by_admin BOOLEAN DEFAULT FALSE needs_review BOOLEAN DEFAULT FALSE -- flagged para revisão humana created_at TIMESTAMP DEFAULT NOW() session_id UUID -- para auditoria }
+[[TABLE 40]]
+answer_templates { id UUID PRIMARY KEY intent_id VARCHAR(80) NOT NULL tier_scope TEXT[] -- [FA_FREE, FA_PRO, MFO, ADMIN] mode ENUM(QUICK, DEEP_1, DEEP_2, DEEP_3) template_text TEXT NOT NULL -- texto com variáveis: {{rn}}, {{client_name}} variables_required TEXT[] -- lista de variáveis necessárias do Core disclaimer_required BOOLEAN DEFAULT FALSE approved BOOLEAN DEFAULT FALSE approved_by UUID REFERENCES users(id) version INTEGER DEFAULT 1 language ENUM(pt_BR, en) DEFAULT pt_BR created_at TIMESTAMP updated_at TIMESTAMP }
+[[TABLE 41]]
+Condição | Comportamento
+Pergunta idêntica — mesma sessão | JIM responde: "Já abordei isso nessa sessão. Vou reforçar os pontos principais." → resposta resumida.
+Pergunta similar (confiança ≥ 0.80) | JIM responde: "Essa pergunta é parecida com algo que já respondi. Adaptando a resposta ao contexto atual." → injeção de contexto atualizado.
+Pergunta nova — intent não mapeado | JIM usa LLM Fallback. Após aprovação pelo admin, resposta é adicionada ao banco e intent mapeado.
+Pergunta fora do escopo | JIM responde com mensagem padrão de redirecionamento. Pergunta é logada com flag needs_review.
+[[TABLE 42]]
+SEÇÃO 9 Biblioteca Explicativa — Todos os Indicadores do Terminal
+[[TABLE 43]]
+Indicador | Definição Quick Mode | Nota TPT/Metodológica
+Risk Number (RN) | Pontuação 0–99 que representa o nível de risco combinado do perfil ou portfólio. Maior = mais risco e volatilidade esperada. | Integra Risk Capacity (capacidade financeira) + Risk Tolerance (apetite declarado). Base da TPT.
+Approximate Risk Number | Versão estimada do RN baseada em dados simplificados do onboarding Lite. Menos precisa que o RN oficial do Terminal. | Disponível no Lite. RN oficial exige Journey completo no Terminal.
+Confidence Level | Indica a qualidade dos dados disponíveis para o cálculo. Low / Moderate / Moderate-High / High. | Determinado pela completude do portfólio e variáveis do wizard.
+Journey Risk | Risco de percurso — volatilidade e drawdowns que o cliente enfrentará durante o horizonte de investimento. | Conceito central da TPT: o caminho importa tanto quanto o destino.
+Destination Risk | Risco de não atingir a meta no destino (horizonte declarado). Funciona como probabilidade de suficiência. | Complementar ao Journey Risk. RAF é o diagnóstico de suficiência.
+RAF (Return Adequacy Factor) | Fator que indica se o retorno esperado do portfólio é suficiente para atingir o objetivo declarado no prazo. | RAF > 1 = suficiente. RAF < 1 = gap. Usado no Return Gap Score.
+Alignment Score | Score 0–100 que mede o alinhamento entre RN do portfólio e RN declarado pelo cliente. | Eixo central do diagnóstico JIM. Base para simulação de realinhamento.
+Risk Fit Score | Compatibilidade entre o perfil do cliente e o perfil de risco das estratégias HPC. | Determinado pelo gap entre RN cliente e RN target HPC11/HPC22.
+Return Gap Score | Suficiência do retorno esperado para atingir a meta. 100 = meta atingível com folga. | Depende do RAF, horizonte e patrimônio atual.
+[[TABLE 44]]
+Indicador | Definição Quick Mode | Contexto de Uso
+Volatility | Desvio padrão anualizado dos retornos. Medida clássica de flutuação de preços. | Usada no cálculo do RN e na comparação HPC11/HPC22.
+Drawdown | Queda máxima do portfólio a partir do pico mais recente. | Indicador de Journey Risk. Tolerância a drawdown é input do Risk Wizard.
+Sharpe Ratio | Retorno ajustado ao risco. Retorno excedente por unidade de volatilidade. | Usado para comparar eficiência de HPC11 vs HPC22 vs portfólio atual.
+Sortino Ratio | Similar ao Sharpe, mas penaliza apenas volatilidade negativa (downside). | Mais relevante para avaliar proteção de capital. Disponível para MFO.
+CAGR | Compound Annual Growth Rate — taxa de crescimento anual composta. | Retorno histórico anualizado dos ETPs HPC11 e HPC22.
+[[TABLE 45]]
+Indicador | Definição Quick Mode | Escopo de Acesso
+Momentum | Força e direção de tendência de um ativo ou setor. Score 0–100 no AlphaDroid. | MFO Institucional. Base do modelo AlphaDroid.
+Sector Momentum | Ranking de força relativa entre setores do mercado (Equities, Bonds, Commodities, etc.). | MFO. Tela Sector Momentum no Terminal.
+RPM Momentum | Relative Position & Momentum — leitura diária de força e direção de todas as estratégias HARPIAN. | MFO. Tela RPM Momentum no Terminal.
+Market Trend | Indicador de regime macroeconômico. Separado do StormGuard — é a leitura, não o mecanismo. | Todos — tela Market Trends. Informa o regime (Bull/Bear/Neutral).
+StormGuard Armor | Mecanismo de proteção automática. Ativado quando Market Trend entra em zona crítica (-0.6% threshold mensal). | Todos (explicação). MFO (status em tempo real).
+Bull Market / Risk-On | Regime favorável. StormGuard inativo. Portfólios em exposição máxima. | Contexto de regime — informado pelo DIME e Market Trends.
+Bear Market / Risk-Off | Regime adverso. StormGuard potencialmente ativo. Liquidação parcial ou total para caixa. | Contexto crítico — JIM informa impacto nos portfólios.
+Not Touch List | Lista de ativos que os modelos HARPIAN evitam ativamente por momentum negativo ou risco estrutural. | Disponível no Terminal. Inclui: bonds longos, cripto sem hedge, China equities, XLRE.
+[[TABLE 46]]
+Termo | Explicação JIM
+ETP (Exchange Traded Product) | Produto financeiro listado em bolsa (Vienna Stock Exchange) que reúne a estratégia de gestão ativa HARPIAN em um único instrumento negociável. Acesso via Bloomberg, custodiantes internacionais, e corretoras institucionais.
+NAV (Net Asset Value) | Valor líquido dos ativos do ETP. Calculado e publicado diariamente. É o preço de referência para subscrição e resgate.
+D+5 Liquidity | Liquidez convencional de 5 dias úteis para resgates. Valor resgatado calculado pelo NAV do dia da solicitação.
+ISIN / LEI | ISIN: XS2998773373. LEI: 635400ZGH2KVXQAECS86. Identificadores únicos do ETP para acesso via Bloomberg e sistemas custodiantes.
+Vienna Stock Exchange | Bolsa austríaca onde o HPC ETP está listado. Escolha regulatória para acesso institucional não-EUA.
+Lynk Capital Markets | Programme Administrator — administrador do programa ETP. Responsável pela estrutura administrativa do produto.
+L-Series DAC | Special Purpose Vehicle (SPV) irlandês. Emissor legal do ETP. Ativos custodiados separados do balanço do SPV.
+Interactive Brokers | Prime Broker e executor de ordens. Regulado globalmente. Os ativos do portfólio ficam em custódia segregada no IB.
+Bank of New York Mellon | Settlement and Paying Agent. Responsável pela liquidação financeira das transações do ETP.
+Deloitte DAC | Auditora externa independente. Auditoria anual dos ativos e da estrutura do ETP.
+Custódia Segregada | Os ativos dos investidores são mantidos em contas separadas do balanço da HARPIAN e do SPV. Em caso de insolvência de qualquer parte, os ativos permanecem protegidos.
+[[TABLE 47]]
+SEÇÃO 10 Sistema de Confiança da Resposta
+[[TABLE 48]]
+Componente | Peso / Descrição
+Intent Match Score | Confiança do classifier na identificação do intent. Alta confiança = resposta templateada. Baixa = LLM fallback.
+Data Completeness Score | Qualidade dos dados do cliente injetados no contexto. Portfólio completo + onboarding completo = alta confiança nos scores.
+Template Approval Status | Se a resposta vem de template aprovado pelo admin, confidence é aumentada. LLM Fallback não aprovado = confidence reduzida.
+Data Freshness | Dados de portfólio com mais de 90 dias reduzem confidence. StormGuard e AlphaDroid são sempre dados em tempo real.
+[[TABLE 49]]
+"Essa resposta foi gerada com dados incompletos ou baseada em uma pergunta", "nova ainda em processo de validação. Confidence: 0.62 (Moderate).", "", "Para maior precisão: [Complete o portfólio] [Refaça o Risk Wizard]"
+[[TABLE 50]]
+Dado Faltante | Impacto e Ação Sugerida
+Portfólio não enviado | Portfolio Analysis, Alignment Score e simulações desabilitados. → Enviar portfólio
+Horizonte de investimento não declarado | Destination Risk e Return Gap Score indisponíveis. → Completar Risk Wizard
+Meta financeira não declarada | RAF e Return Gap Score indisponíveis. → Completar Risk Wizard
+Tax residency pendente (UNKNOWN) | Caminho de alocação bloqueado. Todos os CTAs de alocação suprimidos. → Resolver classificação
+Mandato FO não configurado | Portfolio Mandate Gap indisponível. → Configurar mandato no Terminal
+Confidence Level = Low | Diagnóstico limitado. Score visual não confiável. → Completar dados
+[[TABLE 51]]
+SEÇÃO 11 Escopo e Restrições — O que o JIM Não Responde
+[[TABLE 52]]
+Categoria | Exemplos Específicos
+Entretenimento e cultura | Futebol, filmes, séries, música, restaurantes, viagens, turismo, gastronomia
+Política opinativa | Análise político-eleitoral, partidos, candidatos, governos
+Saúde e medicina | Diagnósticos médicos, medicamentos, tratamentos, planos de saúde
+Direito e tributação específica | Interpretação de contratos, imposto sobre herança, legislação específica
+Concorrentes da HARPIAN | Comparativos com outros gestores, produtos de terceiros não na base
+Recomendações financeiras fora da plataforma | Stocks individuais, fundos externos, moedas, cripto fora do contexto HARPIAN
+Previsões não suportadas por dados | Qualquer garantia de retorno, previsão de preço, timing de mercado
+Assuntos pessoais do usuário | Vida pessoal, família (além do financeiro), carreiras fora da plataforma
+Funcionários ou fornecedores HARPIAN | Informações internas de pessoas físicas da empresa
+Qualquer coisa fora do universo HARPIAN | Perguntas genéricas de conhecimento geral, enciclopédia, tutoriais não relacionados
+[[TABLE 53]]
+"Esse tema está fora do meu escopo." "Eu opero exclusivamente dentro do universo HARPIAN:", "portfólios, risco, clientes, mercado, estratégias,", "HPC11, HPC22, StormGuard e navegação da plataforma.", "", "Posso ajudar com algum desses temas?"
+[[TABLE 54]]
+SEÇÃO 12 Tom de Voz e Diretrizes de Linguagem
+[[TABLE 55]]
+Princípio | Descrição
+Direto | Uma resposta começa pela informação, não pela contextualização. Sem preamble.
+Curto | Quick Mode: máximo 3 parágrafos. Nenhum parágrafo com mais de 4 linhas.
+Técnico sem jargão desnecessário | Usa os termos corretos (Risk Number, Alignment Score, StormGuard). Explica quando necessário, sem simplificar a ponto de perder precisão.
+Estilo trader, não estilo bancário | Frases curtas. Verbos ativos. Sem "gostaríamos de informar", sem "caro usuário", sem excesso institucional.
+Sem marketing | Zero hype. Zero pressão. Zero linguagem de vendas. O JIM não "empurra" HPC.
+Sem "recomendo" | A palavra "recomendo" e equivalentes diretos são banidas. A linguagem é sempre de simulação, diagnóstico e cálculo.
+Honesto sobre limitações | Se os dados são insuficientes, o JIM diz claramente: "Com os dados disponíveis, o diagnóstico é limitado."
+[[TABLE 56]]
+Incorreto (não usar) | Correto (modelo JIM)
+"Gostaríamos de informar que seu portfólio pode estar em desacordo com o perfil." | "Seu portfólio está desalinhado. Risk Number do portfólio: 38. Risk Number declarado: 62. Gap: 24 pontos."
+"Recomendamos que você considere alocar em HPC22 para melhorar seus resultados." | "A simulação indica que 40% em HPC22 reduziria o gap de alinhamento de 24 para 7 pontos. Não é uma recomendação de investimento."
+"Com certeza o HPC22 vai te ajudar a alcançar seus objetivos!" | "CAGR histórico HPC22: +22.4% ao ano. Simulação de 20 anos com aporte atual: R$12.1M. Passado não garante o futuro."
+"Infelizmente não temos dados suficientes para responder sua pergunta." | "Diagnóstico limitado: portfólio não enviado. Envie o portfólio para ativar o Alignment Score completo."
+[[TABLE 57]]
+SEÇÃO 13 Sistema de Fallback e Console Admin JIM
+[[TABLE 58]]
+Pergunta não mapeada └→ Intent Classifier: confidence < 0.60 └→ Flag: needs_new_intent = TRUE └→ CAE monta contexto conforme tier do usuário └→ HAAL despacha para Claude (primário) ou GPT-4o (failover) └→ Resposta gerada + inserida no banco com approved = FALSE └→ Resposta entregue ao usuário com nota: "Essa pergunta é nova no sistema. Resposta gerada em tempo real. Confidence: X.XX (Experimental)" └→ Admin HARPIAN recebe notificação: "Nova pergunta para revisão" └→ Admin aprova, edita ou rejeita a resposta └→ Se aprovada: vira template com approved = TRUE, usage_count = 0 └→ Se rejeitada: marcada como needs_review com nota corretiva
+[[TABLE 59]]
+Módulo Admin | Funcionalidade
+Question Review Queue | Lista de perguntas com needs_review=TRUE pendentes de aprovação. Permite editar resposta, mapear intent, aprovar ou rejeitar.
+Intent Analytics | Dashboard com ranking de intents mais acionados por tipo de usuário. Taxa de templated vs LLM Fallback. Taxa de confiança média.
+Answer Library Manager | CRUD completo da biblioteca de respostas templateadas. Versionamento de respostas. A/B testing de templates.
+Confidence Monitor | Alertas para respostas com confidence < 0.65 entregues a usuários. Identifica áreas da biblioteca com cobertura fraca.
+Rejected Responses Log | Histórico de respostas filtradas, rejected ou override pelo sistema. Auditoria completa.
+User Behavior Map | Fluxo de perguntas por tipo de usuário, Deep Mode usage, loop detection triggers, out-of-scope rate.
+Token Usage Report | Consumo de tokens por tier, por provedor LLM, por data. Custo estimado por usuário e por organização.
+[[TABLE 60]]
+SEÇÃO 14 Requisitos Funcionais — Handoff de Engenharia
+[[TABLE 61]]
+JIM — HARPIAN AI INTELLIGENCE AGENT Versão 1.0 | Handoff de Engenharia | Confidencial

@@ -1,0 +1,230 @@
+{
+  "schema_version": "2.0",
+  "last_updated": "2026-04-28",
+  "description": "JIM v2 Dual Engine Routing Rules — Response Orchestrator Configuration",
+  "compliance_note": "This file governs engine activation, level selection, block composition, and adversarial triggers. Changes require Compliance Admin review.",
+
+  "response_level_mapping": {
+    "CLIENT": "L1",
+    "CLIENT_RELAY": "L1",
+    "FA_LITE": "L2",
+    "FA_PRO": "L2",
+    "MFO": "L3",
+    "FO_INST": "L3",
+    "COMPLIANCE": "L4",
+    "ADMIN": "L2"
+  },
+
+  "level_upgrade_rules": [
+    {
+      "rule_id": "LU-001",
+      "condition": "user_tier = FO_INST AND intent_risk_level = Critical",
+      "upgrade_to": "L4",
+      "reason": "Critical risk intents always require full adversarial analysis for institutional tier"
+    },
+    {
+      "rule_id": "LU-002",
+      "condition": "user_tier = MFO AND intent_category IN [SIMULATION_ENGINE, STRESS_TESTING]",
+      "upgrade_to": "L3",
+      "reason": "Simulation intents require adversarial output for MFO tier"
+    },
+    {
+      "rule_id": "LU-003",
+      "condition": "session_flags CONTAINS override_request",
+      "upgrade_to": null,
+      "action": "ESC-015",
+      "reason": "Override requests route to Compliance Admin — no level selection"
+    }
+  ],
+
+  "adversarial_engine_rules": [
+    {
+      "rule_id": "AE-001",
+      "condition": "response_level = L4",
+      "activate_blocks": ["ADVERSE_SCENARIO", "COUNTER_THESIS", "MODEL_LIMITATION"],
+      "reason": "Full adversarial activation always at L4"
+    },
+    {
+      "rule_id": "AE-002",
+      "condition": "response_level = L3 AND intent_category IN [SIMULATION_ENGINE, PORTFOLIO_ALIGNMENT, HIDDEN_RISK, STRESS_TESTING]",
+      "activate_blocks": ["ADVERSE_SCENARIO", "MODEL_LIMITATION"],
+      "reason": "Partial adversarial at L3 for simulation and alignment categories"
+    },
+    {
+      "rule_id": "AE-003",
+      "condition": "intent_id IN [INT-015, INT-016, INT-020]",
+      "activate_blocks": ["ADVERSE_SCENARIO", "MODEL_LIMITATION"],
+      "activate_at_levels": ["L2", "L3", "L4"],
+      "reason": "Simulation intents always trigger adversarial at L2+"
+    },
+    {
+      "rule_id": "AE-004",
+      "condition": "response_level IN [L1, L2] AND NOT (intent_id IN [INT-015, INT-016, INT-020])",
+      "activate_blocks": [],
+      "reason": "No adversarial at L1/L2 for non-simulation intents"
+    }
+  ],
+
+  "output_2_rules": [
+    {
+      "rule_id": "O2-001",
+      "condition": "intent_category = ACTION_REQUEST",
+      "generate_output_2": false,
+      "generate_advisor_notice": true,
+      "template_category": "CAT-7",
+      "reason": "No client message for ACTION_REQUEST — advisor notice only"
+    },
+    {
+      "rule_id": "O2-002",
+      "condition": "intent_category IN [COMPLIANCE_SUITABILITY, UX_NAVIGATION]",
+      "generate_output_2": false,
+      "reason": "Compliance and navigation intents do not produce client messages"
+    },
+    {
+      "rule_id": "O2-003",
+      "condition": "intent_id = INT-023",
+      "generate_output_2": false,
+      "reason": "Prospect sharing intent routes to Compliance Admin — no client message"
+    },
+    {
+      "rule_id": "O2-004",
+      "condition": "response_level = L4 AND intent_category = FO_INSTITUTIONAL",
+      "generate_output_2": true,
+      "output_2_audience": "INTERNAL_INSTITUTIONAL",
+      "reason": "L4 FO Institutional produces institutional summary, not retail client message"
+    },
+    {
+      "rule_id": "O2-005",
+      "condition": "default",
+      "generate_output_2": true,
+      "template_selection": "by_alert_level_and_intent_category",
+      "reason": "Default: generate client message using template library"
+    }
+  ],
+
+  "block_composition_rules": {
+    "DIAGNOSTIC": {
+      "required_at_levels": ["L1", "L2", "L3", "L4"],
+      "exclude_for_intents": ["INT-021", "INT-022", "INT-027", "INT-028", "INT-029", "INT-030"]
+    },
+    "CAUSE": {
+      "required_at_levels": ["L2", "L3", "L4"],
+      "applicable_categories": ["RISK_NUMBER", "QUANTITATIVE_METRICS", "PORTFOLIO_ALIGNMENT", "STORMGUARD", "ALPHADROID", "HIDDEN_RISK"]
+    },
+    "SIMULATION": {
+      "required_at_levels": ["L2", "L3", "L4"],
+      "applicable_intents": ["INT-015", "INT-016", "INT-020"],
+      "applicable_categories": ["SIMULATION_ENGINE", "STRESS_TESTING"],
+      "disc_before_table": "DISC-002",
+      "attribution_required": "HRD Engine — Hypothetical Scenario"
+    },
+    "RISK": {
+      "required_at_levels": ["L2", "L3", "L4"],
+      "applicable_categories": ["QUANTITATIVE_METRICS", "STORMGUARD", "ALPHADROID", "PORTFOLIO_ALIGNMENT", "SIMULATION_ENGINE", "HIDDEN_RISK", "STRESS_TESTING", "FO_INSTITUTIONAL"]
+    },
+    "ADVERSE_SCENARIO": {
+      "required_at_levels": ["L3", "L4"],
+      "also_required_when": "SIMULATION block is present at L2",
+      "applicable_categories": ["SIMULATION_ENGINE", "STRESS_TESTING", "PORTFOLIO_ALIGNMENT", "HIDDEN_RISK", "FO_INSTITUTIONAL"],
+      "required_discs": ["DISC-002", "DISC-009"]
+    },
+    "COUNTER_THESIS": {
+      "required_at_levels": ["L4"],
+      "applicable_categories": ["SIMULATION_ENGINE", "PORTFOLIO_ALIGNMENT", "FO_INSTITUTIONAL"],
+      "condition": "SIMULATION block directionally clear result"
+    },
+    "MODEL_LIMITATION": {
+      "required_at_levels": ["L2", "L3", "L4"],
+      "applicable_categories": ["SIMULATION_ENGINE", "STRESS_TESTING", "STORMGUARD", "ALPHADROID", "QUANTITATIVE_METRICS", "PORTFOLIO_ALIGNMENT"],
+      "model_specific": true
+    },
+    "NEUTRAL_CONCLUSION": {
+      "required_at_levels": ["L2", "L3", "L4"],
+      "exclude_for_intents": ["INT-017", "INT-021", "INT-022", "INT-025", "INT-026", "INT-027", "INT-028", "INT-029", "INT-030"],
+      "must_not_contain": ["should", "recommend", "ideal", "best", "you should"],
+      "must_reference_suitability_process": true
+    }
+  },
+
+  "confidence_score_thresholds": {
+    "proceed_normal": 0.90,
+    "proceed_with_disc_012": 0.70,
+    "proceed_reduced_depth": 0.40,
+    "clarification_request": 0.0,
+    "clarification_threshold": 0.40
+  },
+
+  "session_flag_actions": {
+    "repeated_query": {
+      "threshold_count": 3,
+      "action": "escalate",
+      "escalation_code": "ESC-014",
+      "route": "FA_OF_RECORD"
+    },
+    "override_request": {
+      "action": "escalate",
+      "escalation_code": "ESC-015",
+      "route": "COMPLIANCE_ADMIN"
+    },
+    "distress_language": {
+      "action": "escalate",
+      "escalation_code": "ESC-006",
+      "route": "FA_OF_RECORD"
+    },
+    "suitability_topic": {
+      "action": "escalate",
+      "escalation_code": "ESC-009",
+      "route": "FA_OF_RECORD",
+      "required_disc": "DISC-006"
+    },
+    "social_share_request": {
+      "action": "escalate",
+      "escalation_code": "ESC-011",
+      "route": "COMPLIANCE_ADMIN"
+    }
+  },
+
+  "dual_engine_output_format": {
+    "output_1_label": "INTERNAL_ANALYSIS",
+    "output_2_label": "CLIENT_READY_MESSAGE",
+    "output_1_visibility": ["FA_LITE", "FA_PRO", "MFO", "FO_INST", "COMPLIANCE", "ADMIN"],
+    "output_2_visibility": ["FA_LITE", "FA_PRO", "MFO", "FO_INST"],
+    "output_2_copy_enabled": true,
+    "output_2_edit_requires_compliance_review": true,
+    "modified_output_2_log_flag": "MODIFIED_BY_ADVISOR"
+  },
+
+  "language_detection": {
+    "primary_signal": "input_text_language",
+    "fallback": "user_profile_language",
+    "supported_languages": ["EN", "PT"],
+    "template_selection": "language_match",
+    "regulatory_text_languages": ["EN", "PT"]
+  },
+
+  "audit_log_requirements": {
+    "both_outputs_logged": true,
+    "hash_algorithm": "SHA-256",
+    "retention_years": 7,
+    "immutable": true,
+    "fields_required": [
+      "session_id",
+      "timestamp",
+      "user_tier",
+      "intent_id",
+      "response_level",
+      "output_1_sha256",
+      "output_1_blocks_present",
+      "output_1_disclaimers_injected",
+      "output_1_cge_result",
+      "output_2_sha256",
+      "output_2_template_id",
+      "output_2_modified_by_advisor",
+      "output_2_cge_result",
+      "escalation_code",
+      "adversarial_engine_activated",
+      "confidence_score",
+      "language"
+    ]
+  }
+}

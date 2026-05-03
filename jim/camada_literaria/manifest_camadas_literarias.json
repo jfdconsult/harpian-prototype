@@ -1,0 +1,14 @@
+{
+  "created_at": "2026-05-02T22:33:39.686380",
+  "output_dir": "/mnt/c/Users/jfdco/OneDrive/Área de Trabalho/HARPIAN/04_JIM_COMPLIANCE_QA/CAMADA_LITERARIA_JIM_2026-05-02",
+  "book_dir": "/mnt/c/Users/jfdco/OneDrive/Área de Trabalho/LIVROS PDF TEXTOS/BOOK FOR JIM",
+  "jim_dir": "/mnt/c/Users/jfdco/OneDrive/Área de Trabalho/HARPIAN/04_JIM_COMPLIANCE_QA",
+  "qa_rows": 586,
+  "books": 14,
+  "files": [
+    "/mnt/c/Users/jfdco/OneDrive/Área de Trabalho/HARPIAN/04_JIM_COMPLIANCE_QA/CAMADA_LITERARIA_JIM_2026-05-02/DOCUMENTO_CORRELACAO_QA_LITERATURA_JIM.md",
+    "/mnt/c/Users/jfdco/OneDrive/Área de Trabalho/HARPIAN/04_JIM_COMPLIANCE_QA/CAMADA_LITERARIA_JIM_2026-05-02/MATRIZ_CORRELACAO_QA_LITERATURA_JIM.csv",
+    "/mnt/c/Users/jfdco/OneDrive/Área de Trabalho/HARPIAN/04_JIM_COMPLIANCE_QA/CAMADA_LITERARIA_JIM_2026-05-02/BIBLIOTECA_LITERARIA_JIM.md",
+    "/mnt/c/Users/jfdco/OneDrive/Área de Trabalho/HARPIAN/04_JIM_COMPLIANCE_QA/CAMADA_LITERARIA_JIM_2026-05-02/INSTRUCOES_USO_CAMADA_LITERARIA_JIM.md"
+  ]
+}
