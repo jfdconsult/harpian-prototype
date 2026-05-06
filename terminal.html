@@ -984,6 +984,37 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--g
 </head>
 <body>
 
+<!-- ═══ LOGIN OVERLAY ═══ -->
+<div id="harpian-login" style="position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:0;">
+  <div style="width:380px;background:var(--panel);border:1px solid var(--border2);border-radius:8px;padding:44px 40px 36px;">
+    <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;">HARPIAN</div>
+    <div style="font-size:22px;font-weight:700;color:var(--text);line-height:1.2;margin-bottom:4px;">Intelligence Terminal</div>
+    <div style="font-family:var(--mono);font-size:12px;color:var(--text3);margin-bottom:32px;letter-spacing:0.06em;">Family Office Edition</div>
+    <div style="margin-bottom:16px;">
+      <label style="display:block;font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text3);margin-bottom:7px;">Email</label>
+      <input id="login-email" type="email" placeholder="manager@familyoffice.com"
+        style="width:100%;background:rgba(255,255,255,0.04);border:1px solid var(--border2);border-radius:5px;padding:11px 14px;color:var(--text);font-family:var(--mono);font-size:13px;outline:none;transition:border 0.15s;"
+        onfocus="this.style.borderColor='rgba(212,175,69,0.5)'" onblur="this.style.borderColor='var(--border2)'"
+        onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <div style="margin-bottom:10px;">
+      <label style="display:block;font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text3);margin-bottom:7px;">Password</label>
+      <input id="login-pass" type="password" placeholder="••••••••"
+        style="width:100%;background:rgba(255,255,255,0.04);border:1px solid var(--border2);border-radius:5px;padding:11px 14px;color:var(--text);font-family:var(--mono);font-size:13px;outline:none;transition:border 0.15s;"
+        onfocus="this.style.borderColor='rgba(212,175,69,0.5)'" onblur="this.style.borderColor='var(--border2)'"
+        onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <div id="login-err" style="display:none;font-family:var(--mono);font-size:11px;color:var(--red);margin-bottom:10px;letter-spacing:0.06em;padding:8px 12px;background:var(--red-bg);border-radius:4px;"></div>
+    <button onclick="doLogin()"
+      style="width:100%;background:var(--gold);border:none;border-radius:5px;padding:13px;font-family:var(--g);font-weight:700;font-size:15px;color:#0B0F14;cursor:pointer;margin-top:6px;transition:background 0.15s;letter-spacing:0.01em;"
+      onmouseover="this.style.background='#e0bc4a'" onmouseout="this.style.background='var(--gold)'">Enter Terminal →</button>
+    <div style="margin-top:24px;display:flex;justify-content:space-between;align-items:center;">
+      <a href="presentation-mode.html" style="font-family:var(--mono);font-size:11px;color:var(--gold);text-decoration:none;letter-spacing:0.06em;">New session? Start Presentation →</a>
+      <button onclick="demoMode()" style="background:none;border:none;font-family:var(--mono);font-size:11px;color:var(--text4);cursor:pointer;letter-spacing:0.06em;padding:0;">Demo</button>
+    </div>
+  </div>
+</div>
+
 <!-- ═══ TOPBAR ═══ -->
 <div class="topbar">
   <div class="tb-mark"><svg viewBox="0 0 15 15" fill="none"><path d="M7.5 1.5L13 5V10L7.5 13.5L2 10V5L7.5 1.5Z" stroke="#060B12" stroke-width="1.4"/><circle cx="7.5" cy="7.5" r="2.5" fill="#060B12"/></svg></div>
@@ -995,6 +1026,10 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--g
     <div class="tb-live"><div class="tb-live-dot"></div>LIVE</div>
     <div class="jim-toggle" id="jim-toggle" onclick="jimToggle()"><div class="jim-dot" id="jim-dot"></div><span id="jim-toggle-lbl">Jim AI</span></div>
     <a href="presentation-mode.html" class="tb-btn au">Presentation →</a>
+    <div id="tb-user-badge" style="display:none;font-family:var(--mono);font-size:11px;color:var(--text3);letter-spacing:0.08em;border-left:1px solid var(--border);padding-left:14px;display:flex;align-items:center;gap:10px;">
+      <span id="tb-user-name" style="color:var(--text2);"></span>
+      <button onclick="logoutSession()" style="background:none;border:1px solid var(--border);border-radius:4px;padding:4px 10px;color:var(--text4);font-family:var(--mono);font-size:10px;letter-spacing:0.1em;cursor:pointer;text-transform:uppercase;transition:all 0.15s;" onmouseover="this.style.color='var(--red)';this.style.borderColor='var(--red)'" onmouseout="this.style.color='var(--text4)';this.style.borderColor='var(--border)'">Logout</button>
+    </div>
   </div>
 </div>
 
@@ -6946,14 +6981,133 @@ function rvpRenderH2H() {
 function tick(){const n=new Date(),p=v=>String(v).padStart(2,'0');document.getElementById('tb-clock').textContent=`${p(n.getHours())}:${p(n.getMinutes())}:${p(n.getSeconds())}`;}
 setInterval(tick,1000); tick();
 
+// ═══════════════ HARPIAN AUTH & SESSION ═══════════════
+function hAuth()    { try { return JSON.parse(localStorage.getItem('harpian_auth')    || '{}'); } catch(e) { return {}; } }
+function hFos()     { try { return JSON.parse(localStorage.getItem('harpian_fos')     || '{}'); } catch(e) { return {}; } }
+function hClients() { try { return JSON.parse(localStorage.getItem('harpian_clients') || '{}'); } catch(e) { return {}; } }
+function hSession() { try { return JSON.parse(localStorage.getItem('harpian_session') || 'null'); } catch(e) { return null; } }
+
+function doLogin() {
+  const email  = (document.getElementById('login-email').value || '').toLowerCase().trim();
+  const pass   = document.getElementById('login-pass').value || '';
+  const errEl  = document.getElementById('login-err');
+  const auth   = hAuth();
+  const user   = auth[email];
+  if (!user) { errEl.textContent = 'Email not found. Start a presentation to create your account.'; errEl.style.display = 'block'; return; }
+  let stored = '';
+  try { stored = atob(user.password || ''); } catch(e) { stored = user.password || ''; }
+  if (stored !== pass) { errEl.textContent = 'Incorrect password.'; errEl.style.display = 'block'; return; }
+  errEl.style.display = 'none';
+  // Find most recent client for this FO
+  const allClients = Object.values(hClients()).filter(c => c.foId === user.foId);
+  const latest = allClients.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
+  localStorage.setItem('harpian_session', JSON.stringify({
+    email, foId: user.foId,
+    activeClientId: latest ? latest.id : null,
+    ts: Date.now(), fromPresentation: false
+  }));
+  initWithSession();
+}
+
+function demoMode() {
+  document.getElementById('harpian-login').style.display = 'none';
+  activeClientId = 'hollanda';
+  go('dashboard');
+}
+
+function logoutSession() {
+  localStorage.removeItem('harpian_session');
+  const badge = document.getElementById('tb-user-badge');
+  if (badge) badge.style.display = 'none';
+  const loginEl = document.getElementById('harpian-login');
+  if (loginEl) {
+    loginEl.style.display = 'flex';
+    document.getElementById('login-email').value = '';
+    document.getElementById('login-pass').value  = '';
+    document.getElementById('login-err').style.display = 'none';
+  }
+}
+
+function initWithSession() {
+  const session = hSession();
+  if (!session) { document.getElementById('harpian-login').style.display = 'flex'; return; }
+
+  // Hide login
+  document.getElementById('harpian-login').style.display = 'none';
+
+  const fos     = hFos();
+  const clients = hClients();
+  const fo      = fos[session.foId] || {};
+
+  // Show user badge in topbar
+  const badge = document.getElementById('tb-user-badge');
+  const nameEl = document.getElementById('tb-user-name');
+  if (badge && nameEl) {
+    nameEl.textContent = fo.manager || session.email;
+    badge.style.display = 'flex';
+  }
+
+  // Update topbar product label with FO name
+  const prodEl = document.querySelector('.tb-product');
+  if (prodEl && fo.name) prodEl.textContent = fo.name + ' · Terminal';
+
+  // Inject session clients into CLIENTS map
+  const myClients = Object.values(clients).filter(c => c.foId === session.foId);
+  myClients.forEach(c => {
+    const portRN = c.rnPort || c.rnClient;
+    const gap    = portRN - c.rnClient;
+    CLIENTS[c.id] = {
+      name:      c.name,
+      email:     c.email,
+      aum:       'R$ —',
+      aumN:      0,
+      rnClient:  c.rnClient,
+      rnPort:    portRN,
+      mfoRn:     c.rnFO,
+      mandate:   c.mandate || ('FO Mandate: RN ' + Math.max(1, (c.rnFO||65) - 15) + '–' + (c.rnFO||65)),
+      ret: '—', retC: 'n',
+      vol: '—', volC: 'n',
+      dd:  '—', ddC:  'n',
+      sharpe: '—', sharpeC: 'n',
+      status:    c.status || (gap > 8 ? 'misaligned' : gap > 0 ? 'watch' : 'aligned'),
+      gap,
+      gap20y:     '—',
+      gap20yDesc: 'Analysis in progress.',
+      suggestion: 'Portfolio RN: ' + portRN + ' · Client tolerance: ' + c.rnClient + ' · FO mandate RN: ' + (c.rnFO || '—') + '.',
+      hpc11Sug: Math.max(0, Math.min(50, gap > 0 ? 35 : 0)),
+      hpc22Sug: Math.max(0, Math.min(50, gap > 0 ? 30 : 20)),
+      cmpCagr: '—', cmpVol: '—', cmpDd: '—', cmpSharpe: '—',
+      cmpRn:   String(portRN),
+      relatedNews: []
+    };
+  });
+
+  // Re-render sidebar so session clients appear
+  renderClientTree();
+
+  // Auto-load active client from session
+  if (session.activeClientId && CLIENTS[session.activeClientId]) {
+    loadClient(session.activeClientId);
+  } else {
+    go('clients');
+  }
+}
+
 // ═══════════════ INIT ═══════════════
 activeClientId = 'hollanda';
 clientWorkspaceActive = false;
 clientTreeOpen = false;
-go('dashboard');
 renderMarket();
 renderSectorMomentum();
 setTimeout(()=>drawMarketTrendGauge(22,'dash-gauge-mini'),120);
+
+// Check for active session (from presentation handoff or previous login)
+const _initSession = hSession();
+if (_initSession) {
+  initWithSession();
+} else {
+  go('dashboard');
+}
 
 // ── API bootstrap (non-blocking) ──
 (async () => {

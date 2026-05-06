@@ -458,9 +458,13 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
         <label class="start-lbl">Manager / Advisor Name</label>
         <input type="text" id="sp-manager-name" class="start-inp" placeholder="e.g. John Hartwell" oninput="updateNextBtn()">
       </div>
+      <div class="start-field">
+        <label class="start-lbl">Contact Email</label>
+        <input type="email" id="sp-email" class="start-inp" placeholder="manager@familyoffice.com" oninput="updateNextBtn()">
+      </div>
       <div class="start-field" style="margin-bottom:0;">
-        <label class="start-lbl">Contact Email <span style="color:var(--text4);font-size:10px;">(optional)</span></label>
-        <input type="email" id="sp-email" class="start-inp" placeholder="manager@familyoffice.com">
+        <label class="start-lbl">Password <span style="color:var(--text4);font-size:10px;">(to access terminal)</span></label>
+        <input type="password" id="sp-password" class="start-inp" placeholder="••••••••" oninput="updateNextBtn()">
       </div>
       <div id="sp-error" style="display:none;margin-top:14px;font-family:var(--mono);font-size:12px;color:var(--red);letter-spacing:0.08em;">Please fill in Family Office Name and Manager Name.</div>
       <button class="start-btn" id="sp-start-btn" onclick="startPresentation()" disabled>Start Guided Presentation →</button>
@@ -1576,7 +1580,7 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
       </div>
       <div style="margin-top:28px;display:flex;justify-content:center;gap:14px;">
         <button class="btn btn-ghost" style="font-size:13px;" onclick="goStep(11)">← Adjust Simulation</button>
-        <a href="terminal.html" class="btn btn-ghost" style="font-size:13px;">Open Terminal →</a>
+        <button onclick="saveSessionAndGo()" class="btn btn-ghost" style="font-size:13px;">Open Terminal →</button>
       </div>
     </div>
   </div>
@@ -1815,7 +1819,9 @@ function updateNextBtn() {
   if (cur === 1) {
     const fo = document.getElementById('sp-fo-name')?.value.trim();
     const mg = document.getElementById('sp-manager-name')?.value.trim();
-    disabled = !fo || !mg;
+    const em = document.getElementById('sp-email')?.value.trim();
+    const pw = document.getElementById('sp-password')?.value.trim();
+    disabled = !fo || !mg || !em || !pw;
     if (startBtn) startBtn.disabled = disabled;
   } else if (cur === 3) {
     disabled = Object.keys(foAnswers).length < 13;
@@ -1835,10 +1841,90 @@ function startPresentation() {
   const fo = document.getElementById('sp-fo-name').value.trim();
   const mg = document.getElementById('sp-manager-name').value.trim();
   const em = document.getElementById('sp-email').value.trim();
-  if (!fo || !mg) { document.getElementById('sp-error').style.display = 'block'; return; }
-  presData = { fo, manager: mg, email: em };
+  const pw = document.getElementById('sp-password').value.trim();
+  if (!fo || !mg || !em || !pw) { document.getElementById('sp-error').style.display = 'block'; return; }
+  presData = { fo, manager: mg, email: em, password: pw };
   document.getElementById('sp-error').style.display = 'none';
   goStep(2);
+}
+
+function saveSessionAndGo() {
+  const pd = presData;
+  if (!pd.email || !pd.password) {
+    alert('Complete step 1 (email + password) before opening the terminal.');
+    goStep(1);
+    return;
+  }
+
+  // Compute final Risk Numbers
+  const foRaw = Object.keys(foAnswers).length === 13
+    ? Object.values(foAnswers).reduce((a, b) => a + b, 0) : null;
+  const indRaw = Object.keys(indAnswers).length === 13
+    ? Object.values(indAnswers).reduce((a, b) => a + b, 0) : null;
+  const foRNval  = foRaw  !== null ? foRN(foRaw)   : 65;
+  const indRNval = indRaw !== null ? indRN(indRaw)  : 55;
+
+  const portData = (selectedPortKey && portfolios[selectedPortKey]) ? portfolios[selectedPortKey] : portfolios.aggressive;
+  const portRN   = portData.rn;
+  const gap      = portRN - indRNval;
+
+  const email  = pd.email.toLowerCase().trim();
+  const ts36   = Date.now().toString(36);
+
+  // Load existing stores
+  const auth    = JSON.parse(localStorage.getItem('harpian_auth')    || '{}');
+  const fos     = JSON.parse(localStorage.getItem('harpian_fos')     || '{}');
+  const clients = JSON.parse(localStorage.getItem('harpian_clients') || '{}');
+
+  // FO — create once per email, reuse on returning sessions
+  let activeFoId;
+  if (auth[email]) {
+    activeFoId = auth[email].foId;
+    // Update FO RN if new questionnaire was done
+    if (fos[activeFoId] && foRaw !== null) {
+      fos[activeFoId].rn = foRNval;
+      fos[activeFoId].foAnswers = { ...foAnswers };
+    }
+  } else {
+    activeFoId = pd.fo.toLowerCase().replace(/[^a-z0-9]/g, '_').slice(0, 20) + '_' + ts36;
+    fos[activeFoId] = {
+      id: activeFoId, name: pd.fo, manager: pd.manager,
+      rn: foRNval, foAnswers: { ...foAnswers },
+      createdAt: new Date().toISOString()
+    };
+    auth[email] = {
+      name: pd.manager, email,
+      password: btoa(pd.password),
+      foId: activeFoId,
+      createdAt: new Date().toISOString()
+    };
+  }
+
+  // Client record (gestor = first client)
+  const clientId = 'c_' + ts36;
+  const foData   = fos[activeFoId];
+  clients[clientId] = {
+    id: clientId, foId: activeFoId,
+    name: pd.manager, email,
+    rnClient: indRNval, rnFO: foRNval, rnPort: portRN,
+    clientAnswers: { ...indAnswers }, foAnswers: { ...foAnswers },
+    returnTarget: ree4Val, selectedPort: selectedPortKey,
+    status: gap > 8 ? 'misaligned' : gap > 0 ? 'watch' : 'aligned',
+    gap,
+    mandate: 'FO Mandate: RN ' + Math.max(1, foRNval - 15) + '–' + foRNval,
+    isGestor: true,
+    createdAt: new Date().toISOString()
+  };
+
+  localStorage.setItem('harpian_auth',    JSON.stringify(auth));
+  localStorage.setItem('harpian_fos',     JSON.stringify(fos));
+  localStorage.setItem('harpian_clients', JSON.stringify(clients));
+  localStorage.setItem('harpian_session', JSON.stringify({
+    email, foId: activeFoId, activeClientId: clientId,
+    ts: Date.now(), fromPresentation: true
+  }));
+
+  window.location.href = 'terminal.html';
 }
 
 /* ══════════════════════════════════════
