@@ -1,0 +1,985 @@
+Documentação de produção e base de conhecimento do 
+DMA 
+Sumário executivo 
+O DMA deve ser tratado como um assistente fechado de domínio, operando só dentro do 
+universo Harpian/Arpen Terminal, em arquitetura browser-only, sem processamento 
+local, sem cache local de dados de cliente, com contexto montado no backend por CAE e 
+roteado por uma camada de abstração de modelos (HAAL). O desenho interno disponível 
+já fixa: execução web, inferência server-side, histórico principalmente por sessão, failover 
+entre provedores e escopo restrito ao domínio da plataforma. 
+filecite
+turn0file0
+ 
+A âncora regulatória do projeto deve partir de FINRA[1] Rule 2210, da SEC[2] Marketing 
+Rule, de Reg BI/Form CRS e, na camada estadual, da Florida Office of Financial 
+Regulation[3]; a Florida Department of Financial Services[4] entra como fonte 
+complementar de fraude e cibereducação, não como fonte primária de regras de advisory. 
+Em termos práticos, todo output do DMA deve ser fair and balanced, sem omissão 
+material, sem exagero, sem promessa, sem projeção de performance e sem linguagem 
+que possa “subir” para recomendação personalizada. [5] 
+A consequência operacional é simples: o DMA pode diagnosticar desalinhamento, 
+explicar mecanismos, comparar cenários matemáticos e simular percentuais; ele não 
+pode “empurrar” ação nem usar frases do tipo “eu recomendo”, “o melhor para você”, 
+“garantido”, “seguro”, “vai performar”, “deve comprar”. Mesmo percentuais matemáticos 
+exigem linguagem neutra, contexto de cálculo e disclaimer curto em linguagem simples. 
+Isso é particularmente importante porque comunicações que se tornem 
+“recommendation” para cliente de varejo acionam Reg BI/obrigações correlatas. [6] 
+A melhor arquitetura de custo/latência é híbrida: templates determinísticos + blocos 
+reutilizáveis + fallback LLM controlado. Recomenda-se meta operacional de 80% 
+respostas templateadas, 15% respostas compostas por blocos e 5% fallback generativo; 
+todo o resto deve virar memória reutilizável via hashing de perguntas, cache por contexto e 
+trilha de aprovação/compliance. A razão é regulatória e econômica: o universo de 
+perguntas é semi-finito; o custo de erro em linguagem é maior do que o custo de manter 
+uma biblioteca fechada. 
+filecite
+turn0file0
+ 
+Arquitetura funcional e técnica 
+A arquitetura recomendada mantém a linha do documento interno: browser apenas 
+renderiza; o backend autentica, monta contexto vivo, aplica regras de permissão, decide 
+se a resposta vem de template, bloco ou LLM, normaliza a saída, aplica filtros de 
+compliance e registra auditoria imutável. O DMA não acessa banco diretamente; ele 
+raciocina apenas sobre o payload injetado por contexto. Isso é consistente com o 
+CAE/HAAL descritos no material interno e reduz superfície de vazamento, “hallucination 
+by absence” e drift entre tela e resposta. 
+filecite
+turn0file0
+ 
+O requisito técnico mais importante é desacoplar fonte de verdade de motor linguístico. 
+O score, o risco, a simulação, o mandato, a carteira e a performance não devem ser 
+“inferidos” pelo modelo; devem ser calculados pelo Core e apenas explicados pelo DMA. 
+Isso também alinha o projeto ao alerta da SEC sobre plataformas de advice eletrônico: 
+advisers precisam ter políticas específicas para o uso de algoritmos, testar algoritmos 
+periodicamente, explicar como coletam/empregam dados do cliente, como ocorre 
+rebalanceamento e quais são as limitações e conflitos. [7] 
+A seguir, o fluxo-alvo de produção. 
+flowchart LR 
+A[Mensagem do usuário] --> B[API Gateway + JWT] 
+B --> C[CAE monta contexto vivo] 
+C --> D{Intent hash conhecido?} 
+D -- sim --> E[Template/Block Engine] 
+D -- não --> F[Fallback LLM restrito] 
+E --> G[Filtro de compliance] 
+F --> G 
+G --> H[Resposta + disclaimer + links] 
+H --> I[Logging + audit trail + métricas] 
+I --> J[Admin review + aprovação + retraining] 
+Camadas de permissão 
+A matriz abaixo combina o documento interno com os requisitos funcionais definidos na 
+conversa. Onde o documento ainda não fixa detalhes, a linha é tratada como proposta de 
+produção. 
+Recurso/ação Lite Pro Multi-FO Admin 
+Explicar telas, termos e 
+fluxos 
+Sim Sim Sim Sim 
+Explicar Risk Number 
+exibido 
+Sim Sim Sim Sim 
+Cliente ativo apenas Sim Sim Não Não 
+Visão de carteira completa 
+do cliente ativo 
+Não Sim Sim Não 
+Scan do book completo Não Não Sim Não 
+Comparar carteira vs 
+HPC11/HPC22 
+Conceitual Sim Sim Não 
+Simular desalinhamento Não Sim Sim Não 
+Retornar % matemáticos Não Sim Sim Não 
+Sinais Não Não Sim Não 
+Recurso/ação Lite Pro Multi-FO Admin 
+AlphaDroid/StormGuard 
+brutos 
+DIME/news/social 
+monitorado 
+Não Parcial Sim Não 
+Gerar proposta 
+externa/marketing 
+Não Roteado p/ 
+aprovação 
+Roteado p/ 
+aprovação 
+Aprovar/rejeitar 
+Editar taxonomia, 
+templates, políticas 
+Não Não Não Sim 
+Ver logs, confidence, 
+retraining queue 
+Não Não Não Sim 
+O documento interno já fixa: Lite com escopo mínimo e sem portfolio analytics/live 
+market, Pro com cliente ativo e analytics estendidos, Institutional com client-book, 
+StormGuard, AlphaDroid, DIME, news/social e comparações multi-cliente; além disso, o 
+material já define rate limit por tier, memória predominantemente por sessão e logging 
+detalhado. A camada “Admin” aqui é a especialização natural do audit/governance já 
+previsto no documento. 
+filecite
+turn0file0
+ 
+Dados e ações estritamente proibidos 
+Categoria Proibição 
+Fora do domínio futebol, filmes, gastronomia, viagem, política opinativa, medicina, 
+direito, impostos específicos, vida pessoal 
+Dados não injetados qualquer informação não presente no contexto vivo/Core 
+Recomendação “eu recomendo”, “o melhor para você”, “deve comprar”, “ideal”, 
+“safe/safest”, “garantido” 
+Projeção “vai render”, “vai subir”, “vai bater benchmark”, “essa estratégia 
+deve ganhar” 
+Omissão material mostrar benefício sem risco/limitação correspondente 
+Marketing irregular ranking prêmio/third-party rating sem disclosure; performance 
+gross sem net; extrato seletivo sem total portfolio 
+Advice automatizado 
+opaco 
+uso de questionário raso, algoritmo sem teste/oversight, 
+rebalanceamento não explicado 
+Essas vedações decorrem diretamente do padrão FINRA 2210 de clareza, equilíbrio e 
+vedação a promessas/projeções; da Marketing Rule da SEC, que proíbe omissão material, 
+afirmação sem base, implicação enganosa, benefícios sem riscos e referências a advice 
+específica sem tratamento equilibrado; e dos achados da SEC em advisers digitais sobre 
+disclosures, questionários, oversights e testes de algoritmos. [8] 
+Taxonomia de intents e templates 
+A taxonomia abaixo é a espinha dorsal da redução de tokens. Ela deriva do universo 
+permitido no material interno — risco, carteira, HPC11/HPC22, DIME, StormGuard, 
+momentum, news/social monitorados e navegação da plataforma — e da exigência de 
+respostas curtas com aprofundamento progressivo. 
+filecite
+turn0file0
+ 
+Biblioteca de blocos obrigatórios 
+Todos os templates devem ser compostos a partir destes blocos padronizados: 
+• DIAGNOSTIC: o que é / onde está o gap 
+• CAUSE: por que aconteceu 
+• SIMULATION: cenário matemático e impacto no score 
+• ALERT: criticidade / urgência analítica 
+• EDUCATION: definição curta e mecânica 
+• LINK: deep link interno para a tela/manual 
+• DISCLAIMER: texto curto, plain language, sem “hedging” excessivo 
+A SEC exige comunicações concisas, diretas e em plain English quando fala com varejo, e 
+viu como problema o uso de jargão e de disclaimers/footnotes que atrapalham 
+entendimento. Portanto, o disclaimer do DMA deve ser curto, visível e funcional — não um 
+rodapé jurídico que obscurece a resposta. [9] 
+Templates canônicos 
+Quick Mode 
+[DIAGNOSTIC] 
+{resposta curta em 1–2 frases} 
+ 
+[CAUSE] 
+{driver principal} 
+ 
+[ALERT] 
+{opcional, só se score/risco cruzar limiar} 
+ 
+[LINK] 
+{deep link interno} 
+ 
+[DISCLAIMER] 
+{obrigatório se houver simulação, score, performance, alocação ou estratégia} 
+Deep Mode 1 
+[DIAGNOSTIC] 
+[CAUSE] 
+[EDUCATION] 
+[LINK] 
+[DISCLAIMER se aplicável] 
+Deep Mode 2 
+[DIAGNOSTIC] 
+[CAUSE] 
+[SIMULATION ou FORMULA] 
+[ALERT] 
+[LINK] 
+[DISCLAIMER se aplicável] 
+Deep Mode 3 
+[DIAGNOSTIC] 
+[CAUSE] 
+[EDUCATION] 
+[SIMULATION] 
+[LIMITATIONS] 
+[LINK manual/advisor] 
+[DISCLAIMER] 
+Tabela de intents com exemplos 
+Intent Quick exemplo Deep exemplo 
+RISK_NUMBER_EXPLANATION “Seu Risk Number 
+mede o risco da 
+carteira em escala 
+padronizada.” 
+“Ele resume perda 
+potencial/oscilações 
+esperadas, 
+condicionado aos 
+dados carregados.” 
+RISK_NUMBER_SOURCE “Esse número vem do 
+motor de risco da 
+plataforma.” 
+“É calculado sobre 
+perfil, horizonte, 
+meta e carteira atual; 
+a fórmula exata deve 
+vir do Core.” 
+RISK_NUMBER_CALCULATION “O cálculo usa os seus 
+dados e a composição 
+da carteira.” 
+“Deep: entradas, 
+pesos, normalização 
+e confiança do 
+cálculo.” 
+RISK_NUMBER_CONFIDENCE “A confiança indica 
+quão completos e 
+atuais estão os 
+dados.” 
+“Deep: completude, 
+frescor, estabilidade 
+e cobertura do 
+modelo.” 
+RISK_NUMBER_CHANGE “Seu número mudou 
+porque a carteira ou o 
+“Deep: 
+decomposição por 
+carteira, meta, 
+Intent Quick exemplo Deep exemplo 
+perfil mudou.” horizonte e 
+mandato.” 
+RISK_NUMBER_CLIENT_ALIGNMENT “O Risk Number da 
+carteira não bate com 
+o perfil declarado.” 
+“Deep: gap entre 
+risco-alvo e risco 
+entregue, com 
+score.” 
+VOLATILITY_EXPLANATION “Volatilidade é a 
+oscilação esperada da 
+carteira.” 
+“Deep: anualização, 
+leitura de risco e 
+limites 
+interpretativos.” 
+DRAWDOWN_EXPLANATION “Drawdown é a queda 
+a partir do pico.” 
+“Deep: max 
+drawdown, duração e 
+recuperação.” 
+SHARPE_EXPLANATION “Sharpe mede retorno 
+por unidade de risco.” 
+“Deep: retorno 
+excedente, 
+volatilidade e 
+cautelas de uso.” 
+SORTINO_EXPLANATION “Sortino foca no risco 
+de baixa.” 
+“Deep: downside 
+deviation e por que 
+pode ser mais útil.” 
+CAGR_EXPLANATION “CAGR é a taxa 
+composta do período.” 
+“Deep: annualização 
+e diferenças para 
+retorno acumulado.” 
+CORRELATION_EXPLANATION “Correlação mostra 
+como dois ativos se 
+movem juntos.” 
+“Deep: regimes, 
+janelas e 
+instabilidade em 
+crises.” 
+ALIGNMENT_SCORE_EXPLANATION “Seu Alignment Score 
+resume o nível de 
+aderência ao perfil.” 
+“Deep: pesos do 
+score, gaps e leitura 
+operacional.” 
+RISK_FIT_SCORE_EXPLANATION “Esse score mede 
+quão perto a carteira 
+está do risco-alvo.” 
+“Deep: distância 
+entre RN alvo e RN 
+entregue.” 
+RETURN_GAP_SCORE_EXPLANATION “Esse score mede o 
+gap entre meta e 
+retorno esperado.” 
+“Deep: target CAGR, 
+expectativa implícita 
+e tolerância.” 
+DESTINATION_RISK_EXPLANATION “Destination Risk 
+mede a chance de não 
+chegar ao objetivo.” 
+“Deep: probabilidade 
+de falha no horizonte, 
+por cenário.” 
+Intent Quick exemplo Deep exemplo 
+PORTFOLIO_ALIGNMENT “Sua carteira está 
+desalinhada com o 
+perfil declarado.” 
+“Deep: score, causas 
+e simulação 
+matemática.” 
+PORTFOLIO_MISALIGNMENT_CAUSE “O gap vem de risco 
+abaixo/acima do 
+necessário.” 
+“Deep: 
+decomposição por 
+classes, volatilidade 
+e meta.” 
+PORTFOLIO_TARGET_RETURN_GAP “A carteira atual tende 
+a entregar menos que 
+a meta.” 
+“Deep: retorno 
+implícito vs objetivo 
+declarado.” 
+PORTFOLIO_RISK_TOLERANCE_GAP “Você aceita mais 
+risco do que a carteira 
+está usando.” 
+“Deep: delta de RN, 
+impacto em meta e 
+prazo.” 
+PORTFOLIO_HORIZON_GAP “Seu horizonte pede 
+uma estrutura 
+diferente da atual.” 
+“Deep: prazo, 
+liquidez e exposição 
+compatível.” 
+PORTFOLIO_MANDATE_GAP “O mandato do FO não 
+está refletido 
+integralmente na 
+carteira.” 
+“Deep: restrições, 
+concentração e 
+regras violadas.” 
+PORTFOLIO_ACCEPTED_MISALIGNMENT “Você marcou que 
+aceita o 
+desalinhamento 
+atual.” 
+“Deep: registra 
+aceite, mantém 
+alerta e auditoria.” 
+PORTFOLIO_PERFORMANCE “Aqui está a leitura 
+curta da performance 
+da carteira.” 
+“Deep: 1Y/3Y/5Y, 
+drawdown, Sharpe e 
+contexto.” 
+PORTFOLIO_DRAWDOWN_ALERT “O drawdown recente 
+elevou o risco de 
+destino.” 
+“Deep: causa, 
+duração e caminhos 
+de mitigação.” 
+HPC11_EXPLANATION “HPC11 é a estratégia 
+de menor risco 
+relativo.” 
+“Deep: universo, 
+construção e perfil 
+típico.” 
+HPC22_EXPLANATION “HPC22 busca maior 
+retorno com mais 
+oscilação.” 
+“Deep: construção, 
+risco e sensibilidade 
+a regime.” 
+HPC11_VS_HPC22 “HPC11 tende a 
+oscilar menos; HPC22, 
+mais.” 
+“Deep: comparação 
+de risco-retorno, 
+drawdown e uso.” 
+Intent Quick exemplo Deep exemplo 
+HPC11_LOWER_VOLATILITY “O HPC11 tem menor 
+volatilidade porque é 
+mais defensivo.” 
+“Deep: 
+composição/seleção 
+e menor beta 
+implícito.” 
+HPC22_HIGHER_RETURN “O HPC22 mira retorno 
+maior com risco 
+maior.” 
+“Deep: maior 
+participação em 
+ativos mais 
+sensíveis.” 
+HPC22_HIGHER_RISK “O lado negativo do 
+HPC22 é oscilar mais.” 
+“Deep: drawdown e 
+consistência por 
+regime.” 
+HPC_EFFICIENCY_COMPARISON “Eficiência aqui é 
+retorno ajustado ao 
+risco.” 
+“Deep: como 
+comparar sem 
+vender o produto.” 
+HPC_ALLOCATION_SIMULATION “A simulação mostra o 
+mix matemático que 
+reduz o gap.” 
+“Deep: % por sleeve, 
+novo score e limites.” 
+TARGET_RISK_ALIGNMENT “Para seu risco-alvo, a 
+carteira precisaria de 
+outro equilíbrio.” 
+“Deep: delta de RN e 
+simulação por 
+percentuais.” 
+RETURN_TARGET_SIMULATION “A meta declarada 
+pede uma estrutura 
+mais eficiente.” 
+“Deep: sensibilidade 
+de meta, horizonte e 
+risco.” 
+DRAWDOWN_SIMULATION “Esse cenário estima o 
+impacto em 
+drawdown.” 
+“Deep: baseline vs 
+cenário ajustado.” 
+WHAT_IS_ETP “ETP é um produto 
+listado em bolsa.” 
+“Deep: diferença 
+para ETF, ETN e 
+fundo.” 
+ETP_LIQUIDITY “A liquidez segue a 
+estrutura do produto e 
+do mercado.” 
+“Deep: janela, 
+formador, resgate e 
+restrições.” 
+ETP_BLOOMBERG_ACCESS “Você pode localizar o 
+produto pelo 
+identificador/ticker.” 
+“Deep: ticker, ISIN, 
+tela e campo 
+relevante.” 
+ETP_CUSTODY “A custódia fica com a 
+estrutura/custodiante, 
+não com a Harpian.” 
+“Deep: fluxo 
+operacional e 
+segregação.” 
+ETP_DELOITTE_AUDIT “A auditoria valida “Deep: escopo do 
+Intent Quick exemplo Deep exemplo 
+demonstrações e 
+controles do produto.” 
+auditor e o que ele 
+não garante.” 
+ETP_DAILY_NAV “O NAV mostra o valor 
+de referência do 
+produto.” 
+“Deep: cálculo, 
+horário e uso 
+correto.” 
+US_INVESTOR_PATH “Para US person, o 
+caminho operacional 
+pode ser diferente.” 
+“Deep: conta, 
+suitability, 
+distribuição e 
+restrições.” 
+NON_US_INVESTOR_PATH “Para non-US, a 
+estrutura de acesso 
+pode ser distinta.” 
+“Deep: onboarding, 
+documentação e 
+produto elegível.” 
+ACCOUNT_OPENING “A abertura de conta 
+depende do seu perfil 
+e jurisdição.” 
+“Deep: KYC/AML, 
+documentos e fluxo.” 
+DOES_HARPIAN_TOUCH_MONEY “Não: a Harpian não 
+deve tocar no dinheiro 
+do cliente.” 
+“Deep: custódia, 
+execução e 
+segregação.” 
+AUDIT_EXPLANATION “Toda interação crítica 
+deve deixar trilha.” 
+“Deep: logs, hashes, 
+aprovações e 
+retenção.” 
+STORMGUARD_EXPLANATION “StormGuard é o 
+mecanismo defensivo 
+de regime.” 
+“Deep: gatilhos, 
+caixa e reentrada.” 
+STORMGUARD_STATUS “O status atual 
+informa se o regime 
+está favorável ou 
+defensivo.” 
+“Deep: último trigger, 
+data e efeito.” 
+MARKET_REGIME_EXPLANATION “Regime = ambiente 
+de mercado, não 
+previsão.” 
+“Deep: risk-on, risk-
+off, neutro e 
+limitações.” 
+MOMENTUM_MODEL “Momentum mede 
+persistência de 
+tendência.” 
+“Deep: ranking, 
+janela e filtros.” 
+SOCIAL_MEDIA_INTELLIGENCE “Esse módulo filtra 
+sinais relevantes do 
+feed monitorado.” 
+“Deep: origem, 
+curadoria e 
+relevância.” 
+DIME_EXPLANATION “DIME organiza 
+eventos/insights de 
+“Deep: score de 
+relevância, 
+correlação e clientes 
+Intent Quick exemplo Deep exemplo 
+impacto.” afetados.” 
+NOT_TOUCH_LIST “A Not Touch List 
+marca itens que não 
+devem ser alterados.” 
+“Deep: regra de 
+governança, origem e 
+exceções.” 
+PLANNING_INTELLIGENCE “Esse módulo liga 
+objetivo, mandato e 
+plano de ação.” 
+“Deep: inputs, 
+outputs e alertas.” 
+CLIENT_DASHBOARD “Esse dashboard 
+resume risco, gaps e 
+próximos pontos.” 
+“Deep: campos, 
+score e navegação.” 
+ADMIN_CONFIDENCE_LEVEL “Confidence Level 
+mede a robustez da 
+resposta.” 
+“Deep: dados, 
+modelo, cobertura e 
+revisão.” 
+Estratégia de otimização de tokens 
+O DMA deve usar question hashing para mapear perguntas diferentes à mesma intenção 
+canônica. Exemplo: “como é feito o risk number?”, “da onde vem esse número?” e “como 
+vocês calculam meu risco?” devem cair em RISK_NUMBER_CALCULATION. A chave 
+recomendada é: sha256(normalized_text + slots + tier + lang), onde 
+normalized_text remove pontuação, stopwords, flexões usuais e sinônimos 
+operacionais; slots guarda entidades como cliente, produto, prazo e jurisdição. Isso 
+reduz custo e aumenta consistência. O documento interno já suporta a ideia porque o 
+contexto é montado com payload estruturado, por tier e por tela. 
+filecite
+turn0file0
+ 
+A estratégia de resposta deve seguir esta ordem: cache determinístico → template por 
+intent → composição por blocos → fallback LLM. O fallback só deve disparar quando: não 
+houver intent mapeado; a confiança da classificação ficar abaixo do limiar; ou o usuário 
+pedir explicitamente aprofundamento além do Deep 3. Mesmo assim, o LLM só recebe 
+fatos validados do Core e nunca navega fora do domínio. Isso reduz risco regulatório e se 
+alinha às observações da SEC sobre plataformas digitais: pouca transparência sobre 
+algoritmo, questionário inadequado e rebalances não claramente explicados geram 
+deficiência. [10] 
+Regras de fallback 
+• confidence_intent >= 0.85: template puro 
+• 0.70–0.84: template + blocos variáveis 
+• 0.55–0.69: fallback LLM com facts-only context 
+• <0.55: pedir reformulação ou encaminhar à navegação/manual 
+• compliance_risk = high: bloquear resposta livre e usar template seguro 
+• data_confidence < 60: proibir percentuais e projeções de alinhamento 
+Esquema de memória e cache 
+Camada Escopo Conteúdo TTL 
+Session memory sessão últimos turnos + 
+screen context 
+sessão 
+Canonical Q/A 
+cache 
+org+tier+intent resposta validada 30–90 dias 
+Client-context 
+cache 
+client+portfolio_version facts computados 5–60 min 
+Compliance 
+cache 
+template_version blocos aprovados até nova 
+aprovação 
+Semantic 
+dedupe 
+global/org embeddings + 
+variações 
+permanente com 
+revisão 
+O material interno já indica memória majoritariamente por sessão, com histórico curto em 
+janela rolante e possibilidade opcional de contexto persistente por organização/usuário; 
+por isso a recomendação é manter “memória longa” fora do modelo, em tabelas 
+auditáveis. 
+filecite
+turn0file0
+ 
+Banco de dados, envelope de resposta e fórmulas 
+Como a fórmula exata do Risk Number não foi especificada nos documentos visíveis, as 
+fórmulas abaixo são uma implementação de referência: úteis para engenharia, mas 
+devem ser trocadas pela verdade matemática do Core assim que o time de risco fornecer 
+o cálculo oficial. 
+Esquema relacional recomendado 
+Tabela Finalidade Campos-chave 
+intents catálogo de intents intent_id, code, group_name, tier_mask, 
+status 
+question_variants hashing e 
+normalização 
+variant_id, intent_id, normalized_text, 
+embedding, lang 
+response_templates versões aprovadas template_id, intent_id, mode, version, 
+approved_by, approved_at 
+response_blocks biblioteca de blocos block_id, block_type, locale, content, 
+compliance_tag 
+intent_block_map composição intent_id, mode, block_order, required, 
+condition_expr 
+confidence_rules cálculo de confiança rule_id, signal, weight, thresholds_json 
+simulation_runs rastreio de cenários run_id, client_id, inputs_json, 
+outputs_json, disclaimer_text 
+conversation_logs auditoria turn_id, session_id, user_id, tier, 
+Tabela Finalidade Campos-chave 
+context_hash, provider, tokens_in, 
+tokens_out 
+compliance_flags bloqueios/alertas flag_id, turn_id, rule_code, severity, 
+action_taken 
+admin_reviews QA e aprovação review_id, turn_id, reviewer_id, label, 
+notes, retrain_needed 
+policy_rules linguagem 
+proibida/permitida 
+rule_code, scope, pattern, allowed_alt, 
+reg_source 
+link_catalog deep links internos link_id, module, intent_id, url_path, 
+requires_client_context 
+create table intents ( 
+  intent_id uuid primary key, 
+  code text unique not null, 
+  group_name text not null, 
+  tier_mask text not null, 
+  status text not null default 'active' 
+); 
+ 
+create table question_variants ( 
+  variant_id uuid primary key, 
+  intent_id uuid references intents(intent_id), 
+  lang text not null, 
+  normalized_text text not null, 
+  question_hash char(64) not null, 
+  embedding vector, 
+  unique(question_hash, lang) 
+); 
+ 
+create table response_templates ( 
+  template_id uuid primary key, 
+  intent_id uuid references intents(intent_id), 
+  mode text check (mode in ('quick','deep1','deep2','deep3')), 
+  version int not null, 
+  content jsonb not null, 
+  approved_by text, 
+  approved_at timestamptz, 
+  status text not null default 'draft' 
+); 
+ 
+create table conversation_logs ( 
+  turn_id uuid primary key, 
+  session_id uuid not null, 
+  user_id text not null, 
+  org_id text not null, 
+  tier text not null, 
+  intent_id uuid, 
+  context_hash char(64) not null, 
+  provider text, 
+  input_tokens int, 
+  output_tokens int, 
+  confidence_score numeric(5,2), 
+  compliance_state text, 
+  created_at timestamptz not null default now() 
+); 
+Envelope JSON de resposta 
+{ 
+  "intent": "PORTFOLIO_ALIGNMENT", 
+  "mode": "quick", 
+  "blocks": { 
+    "DIAGNOSTIC": "Seu portfólio está desalinhado com o perfil declarado.", 
+    "CAUSE": "O risco entregue está abaixo do risco necessário para a meta.", 
+    "SIMULATION": { 
+      "allowed": true, 
+      "allocation_math": 
+[{"product":"HPC11","pct":25},{"product":"HPC22","pct":40}], 
+      "score_before": 52, 
+      "score_after": 81 
+    }, 
+    "ALERT": "A probabilidade de não atingir a meta é elevada.", 
+    "EDUCATION": "Alignment Score mede aderência entre perfil, mandato e 
+carteira.", 
+    "LINK": "/terminal/client/portfolio/simulation", 
+    "DISCLAIMER": "Isto é uma simulação matemática com base nos parâmetros 
+informados. Não constitui recomendação de investimento." 
+  }, 
+  "confidence": { 
+    "intent": 0.94, 
+    "data": 0.88, 
+    "response": 0.91 
+  }, 
+  "flags": ["allocation_math_only","plain_language_required"] 
+} 
+Scores recomendados 
+Risk Fit Score 
+risk_fit = round(100 * (1 - min(1, abs(rn_target - rn_portfolio)/100))) 
+Return Gap Score 
+return_gap_score = round(100 * (1 - min(1, max(0, target_cagr - 
+exp_cagr)/max(target_cagr,0.01)))) 
+Destination Risk Score 
+destination_risk_score = round(100 * (1 - p(final_wealth < target_wealth))) 
+p(...) deve ser estimado via bootstrap/Monte Carlo do motor de risco, não pelo LLM. 
+Alignment Score 
+alignment = round(0.40*risk_fit + 0.25*return_gap_score + 0.15*horizon_fit + 
+0.20*mandate_fit) 
+Confidence Score 
+confidence = round(0.35*data_completeness + 0.20*freshness + 
+0.20*model_coverage + 0.15*historical_stability + 0.10*policy_pass) 
+Limiar de leitura 
+Faixa Leitura 
+80–100 alinhado 
+60–79 gap moderado 
+40–59 gap material 
+0–39 gap crítico 
+Especificação do motor de simulação 
+Entradas: rn_target, rn_current, target_cagr, horizon_months, mandate_constraints, 
+current_weights, expected_return, volatility, drawdown, jurisdiction, 
+investor_type, product_universe, fees, liquidity_constraints, do_not_touch_rules. 
+Saídas: allocation_math, score_before/after, delta_rn, delta_expected_return, 
+delta_volatility, delta_drawdown, binding_constraints, confidence, disclaimer. 
+Restrições: 
+• só usar produtos elegíveis para a jurisdição/mandato 
+• respeitar do_not_touch_list 
+• não simular com data_confidence < 60 
+• não exibir percentuais se faltar perfil, meta, horizonte ou carteira válida 
+• nunca usar linguagem recomendatória 
+Frase permitida 
+“Para reduzir o gap entre o risco-alvo e o risco atual, a simulação matemática indica a 
+seguinte distribuição estimada…” 
+Frases proibidas 
+“Eu recomendo…”, “o melhor para você é…”, “você deve investir…”, “essa é a opção 
+ideal”, “garante…”, “vai entregar…”. 
+Essa blindagem é consistente com Reg BI/FINRA suitability, que são acionados quando a 
+comunicação sobe ao nível de recomendação a cliente de varejo; e também com a 
+exigência de comunicações equilibradas e não enganosas. [11] 
+Compliance, auditoria e ciclo de melhoria 
+Mapeamento regulatório para templates e linguagem 
+Fonte Exigência Tradução operacional no DMA 
+FINRA 2210 fair and balanced; sem omissão 
+material; sem promessas/exageros; 
+riscos e benefícios balanceados 
+bloquear “garantido”, “seguro”, 
+“vai bater”; sempre mostrar risco 
+ao lado do benefício 
+FINRA 
+2210/records 
+pre-approval de retail comms em 
+vários casos; retenção de 
+comunicações 
+todo template “externizável” entra 
+em fila de aprovação; guardar 
+prompts/outputs/versões 
+FINRA social 
+media 
+business comms em social/chat 
+contam para retenção 
+logar chat, propostas, snippets e 
+links compartilhados 
+SEC 
+Marketing 
+Rule 
+sem untrue statement/omissão; 
+sem benefits sem risks; specific 
+advice só fair and balanced; gross 
+com net; períodos prescritos 
+performance só com metodologia 
+consistente; proibir cherry-picking; 
+disclaimer simples 
+SEC robo-
+advice alert 
+disclosures de algoritmo, uso de 
+dados, rebal, conflitos; testes e 
+supervisão 
+template Deep 2/3 para algoritmos; 
+painel admin de testagem e 
+mudanças 
+SEC books & 
+records 
+preservar comunicações, anúncios, 
+questionários e suporte de 
+performance 
+armazenar inputs, outputs, 
+questionários, cálculo, versão de 
+template 
+Florida OFR políticas escritas, supervisão, cyber 
+no manual; regras estaduais de 
+custody/fee deduction 
+manuais formais; workflows de 
+supervisão; se houver fee 
+deduction, invoice/state flow fora 
+do DMA 
+FINRA determina que comunicações sejam justas, equilibradas, sem promessa ou 
+projeção de performance, e que lendas/footnotes não prejudiquem entendimento; a SEC 
+proíbe omissões e inferências enganosas, exige riscos junto de benefícios, impõe regras 
+para performance e cobra livros e registros de anúncios, questionários e bases de cálculo; 
+a OFR exige políticas escritas e supervisão razoável, inclusive para cibersegurança, e tem 
+requisitos próprios sobre custody e invoices em fee deductions. [12] 
+Logging e trilha de auditoria 
+O log mínimo por turno deve incluir: session_id, user_id, org_id, tier, client_id (se 
+houver), screen_context, intent, question_hash, context_hash, provider_used, 
+template_version, input_tokens, output_tokens, confidence_scores, 
+compliance_flags, response_hash, approved_state, escalated_to, timestamps. Isso 
+complementa o que o documento interno já prevê para hash de contexto, provider, token 
+count e session isolation. 
+filecite
+turn0file0
+ 
+A retenção deve ser desenhada por regime regulatório: para broker-dealer 
+communications, FINRA/SEC falam em preservação de comunicações de negócio por 
+pelo menos três anos em várias categorias; para advisers, Rule 204-2 exige manutenção 
+de comunicações escritas, anúncios, questionários e documentação de performance, e 
+políticas/compliance ficam disponíveis por cinco anos; o próprio documento interno já 
+sugere retenção de sessões por sete anos como parâmetro configurável de governança. A 
+política final deve ser fechada com counsel, mas a arquitetura precisa nascer com storage 
+imutável, versionamento e exportabilidade. [13] 
+filecite
+turn0file0
+ 
+Loop detection e escalonamento 
+Condição Ação 
+mesmo intent 2x em 10 min responder novamente com Quick + “quer 
+aprofundar?” 
+mesmo intent 3x subir para Deep 1/2 automaticamente 
+mesmo intent 4x oferecer manual/tela guiada 
+mesmo intent 5x ou conflito 
+persistente 
+encaminhar para advisor/gestor 
+intent fora do domínio recusa elegante + redirecionamento interno 
+baixo data_confidence responder educacionalmente, sem % nem score 
+decisório 
+Resposta-padrão de escalonamento 
+“Você já explorou os principais pontos deste tema. Se quiser, posso te levar à tela 
+correspondente ou você pode falar com seu advisor para uma navegação guiada.” 
+Ferramentas de admin e loop de retraining 
+Admin deve ter: fila de respostas reprovadas; heatmap de intents; taxa de fallback; top 
+frases bloqueadas; score de confiança por módulo; drift de templates; tempo médio por 
+tier; falsos positivos de recommendation-risk; revisão por counsel/compliance; e export 
+para auditoria. O loop de melhoria é: log -> label -> fix intent/template/policy -> 
+approval -> redeploy -> monitor. Isso atende tanto à governança interna quanto ao 
+padrão da SEC para políticas, supervisão e testes em advice digital. [14] 
+Persona, tom e tópicos proibidos 
+A persona do DMA pode manter a inspiração em Jim Simons[15], mas a linguagem precisa 
+ser curta, técnica e orientada a decisão — não institucionalizada demais, nem 
+promocional. Como Form CRS e o staff statement da SEC reforçam, o texto deve ser 
+conciso, direto, sem jargão não explicado e sem “hedging” jurídico excessivo. [16] 
+Tom permitido 
+direto, objetivo, analítico, “estilo trader”, sem hype, sem adjetivação vazia, sem venda. 
+Tópicos proibidos 
+futebol, filme, gastronomia, viagem, política opinativa, medicina, direito, imposto 
+específico, celebridades, vida pessoal, concorrentes fora da base, qualquer assunto sem 
+dado no Core. 
+Frases proibidas 
+“eu recomendo”, “ideal para você”, “melhor investimento”, “garantido”, “seguro”, “vai 
+subir”, “vai render mais”, “é superior para o seu caso”, “compre”, “entre agora”. 
+Frases obrigatórias quando aplicável 
+“Isto é uma simulação matemática com base nos parâmetros informados. Não constitui 
+recomendação de investimento.” 
+“Posso explicar o cálculo, o impacto e a tela correspondente.” 
+“Se quiser, eu aprofundo até o próximo nível.” 
+Integração regulatória, backlog externo e cronograma 
+Plano de ingestão regulatória 
+A base regulatória do DMA deve ser versionada como policy-as-data, com três 
+repositórios mínimos: 
+1. Communications: FINRA Rule 2210, social media guidance, books and records 
+2. Adviser marketing: SEC Marketing Rule, FAQs, Risk Alerts, Form CRS, Reg BI 
+interfaces 
+3. Florida layer: OFR compliance tips, custody/cyber/supervision; DFS apenas para 
+fraude/cibereducação 
+Cada fonte oficial deve gerar: 
+• rule_code 
+• source_doc 
+• applies_to (Lite/Pro/Multi-FO/Admin; RIA/BD; US/non-US) 
+• forbidden_patterns 
+• required_disclosures 
+• review_workflow 
+• retention_period 
+• notes_for_template_engine 
+Lacunas a buscar externamente 
+O maior risco do projeto hoje não é tecnológico; é de falta de definições oficiais 
+internas. A lista prioritária é: 
+• fórmula oficial do Risk Number 
+• fórmula oficial do Confidence Level 
+• fórmula oficial do Alignment/Risk Fit/Return Gap/Destination Risk 
+• definição operacional de DIME, Not Touch List, Planning Intelligence, Trend, 
+Momentum, Social Media Intelligence 
+• regras exatas do StormGuard/AlphaDroid em linguagem publicável 
+• metodologia e rebalance do HPC11/HPC22 
+• benchmark policy e performance methodology líquida/bruta 
+• docs do ETP: ISIN, ticker, LEI, listing, liquidez, NAV, custódia, auditoria, fees 
+• matriz de distribuição US vs non-US 
+• textos aprovados por compliance/jurídico para disclaimers e escalonamento 
+• deep links definitivos das telas 
+• critérios de stale data por módulo 
+• playbook de quando sugerir advisor humano 
+Trinta perguntas de maior valor para o Gemini 
+Estas são as 30 do checklist de 150 que mais destravam produção primeiro: 
+1. Fórmula pública análoga para Risk Number 1–100 
+2. Diferença entre tolerância e capacidade de risco 
+3. Como estimar perda potencial em 6 meses com 95% de confiança 
+4. Como explicar Approximate Risk Number sem prometer precisão 
+5. O que é Destination Risk em linguagem simples 
+6. Como TPT difere de MPT para cliente final 
+7. O que é RAF e como explicá-lo 
+8. Evidências acadêmicas para momentum 
+9. O que é sector rotation / matched filter 
+10. Como explicar StormGuard sem parecer promessa de proteção 
+11. Como explicar whipsaw e falso positivo de regime 
+12. O que é HPC11 
+13. O que é HPC22 
+14. Por que HPC11 tende a menor volatilidade 
+15. Por que HPC22 tende a maior retorno e drawdown 
+16. Como comparar HPC11 vs HPC22 sem recomendar 
+17. O que é ETP vs ETF vs ETN 
+18. Como explicar NAV diário 
+19. Como explicar liquidez D+5 
+20. Como explicar custódia sem “Harpian tocar no dinheiro” 
+21. O que o auditor externo valida e o que não valida 
+22. Como acessar produto por Bloomberg ticker/ISIN 
+23. Qual o caminho operacional para US person 
+24. Qual o caminho operacional para non-US 
+25. Quais disclaimers usar para temas fiscais sem dar tax advice 
+26. Reg BI: o que vira recommendation na prática 
+27. Regras SEC para mostrar performance gross/net e períodos 
+28. Requisitos de retenção para chats/electronic communications 
+29. Regras OFR sobre custody/fee deduction e invoices 
+30. Padrões SEC para robo-advisers: disclosure de algoritmo/questionário/rebalance 
+Cronograma recomendado 
+gantt 
+title Fases de implementação do DMA 
+dateFormat  YYYY-MM-DD 
+section Arquitetura 
+Claude build:active, a1, 2026-04-29, 14d 
+Taxonomia + templates: a2, after a1, 10d 
+section Pesquisa 
+Gemini 30 perguntas prioritárias: b1, 2026-04-29, 10d 
+Gemini checklist completo: b2, after b1, 21d 
+section Integração 
+Mapeamento regulatório -> policy rules: c1, after a2, 10d 
+Ingestão docs internos + links: c2, after a2, 14d 
+section Testes 
+Compliance QA + adversarial prompts: d1, after c1, 10d 
+UAT com Lite/Pro/Multi-FO/Admin: d2, after c2, 10d 
+section Produção 
+Deploy controlado + monitoramento: e1, after d1, 7d 
+Retraining loop inicial: e2, after e1, 14d 
+O caminho recomendado é: Claude agora para estrutura, Gemini em paralelo para 
+preencher lacunas públicas, counsel/compliance para aprovar policy rules, e só 
+então liberar automação plena. A arquitetura base já existe; o que falta agora é congelar 
+a linguagem permitida, a matemática dos scores e a taxonomia fechada. 
+filecite
+turn0file0
+ 
+ 
+[1] [2] [7] [10] [14] sec.gov 
+https://www.sec.gov/files/exams-eia-risk-alert.pdf 
+[3] [9] SEC.gov | Staff Statement Regarding Form CRS Disclosures 
+https://www.sec.gov/newsroom/speeches-statements/staff-statement-form-crs-
+disclosures-121721 
+[4] [5] [8] [12] [15] 2210. Communications with the Public | FINRA.org 
+https://www.finra.org/rules-guidance/rulebooks/finra-rules/2210 
+[6] [11] Frequently Asked Questions on Regulation Best Interest 
+https://www.sec.gov/rules-regulations/staff-guidance/trading-markets-frequently-asked-
+questions/faq-regulation-best?utm_source=chatgpt.com 
+[13] Books and Records | FINRA.org 
+https://www.finra.org/rules-guidance/key-topics/books-records 
+[16] Form CRS 
+https://www.sec.gov/files/formcrs.pdf?utm_source=chatgpt.com 

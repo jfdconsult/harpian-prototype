@@ -1,0 +1,319 @@
+1.1 Infrastructure Principle
+HARPIAN is a 100% browser-delivered platform. All modules — Terminal, Lite (FA), Lite (MFO), and Jim — execute exclusively via web browser. No native application, no local installation, and no device-resident compute layer exists or is planned.
+1.2 Implications for Jim
+2.1 Design Objective
+Jim must not be architecturally coupled to a single AI provider. The HARPIAN AI Abstraction Layer (HAAL) sits between HARPIAN Core and any external LLM API. This enables provider switching, multi-provider routing, cost optimization, and fallback without changes to Jim's logic, context pipeline, or permission system.
+2.2 Supported AI Providers (Initial)
+2.3 HAAL Routing Rules
+2.4 HAAL Prompt Payload Structure
+Every request dispatched by HAAL to a provider includes a standardized payload. Structure:
+3.1 Restricted Interaction Principle
+Jim operates exclusively within the Harpian domain. It does not answer general knowledge questions, personal questions, or any query unrelated to portfolio management, market intelligence, client risk, or Harpian platform navigation. This restriction is enforced via the system prompt and is not bypassable by user input.
+3.2 Domain Boundary Definition
+3.3 System Prompt — Domain Constraint Block
+This block is injected at the start of every Jim request, for every tier, without exception:
+4.1 Architecture Principle
+Jim does not have direct database access. It receives a structured, pre-assembled context payload from HARPIAN Core at the moment each request is processed. Core determines what data to inject based on: (a) the user's role, (b) the active screen context, (c) the active client (if any), and (d) the tier permission level. Jim reasons over what is injected — it cannot request additional data outside what Core provides.
+4.2 Context Data Sources and Assembly Rules
+4.3 Context Volume Rules
+4.4 CAE Context Payload — Size Limits
+5.1 Client Intelligence Queries
+5.2 Portfolio and Risk Queries
+5.3 Market and Intelligence Queries
+5.4 Platform and Navigation Queries
+6.1 Jim Lite — FA Free Examples
+6.2 Jim Institutional — MFO Examples
+7.1 Component Overview
+7.2 Security Architecture
+8.1 Prompt Block Structure
+Every Jim request uses a layered system prompt composed of four blocks, assembled in this order:
+Domain Constraint Block — identical for all tiers (defined in Section 3.3)
+Role Permission Block — specifies what this tier can and cannot do
+Context Block — live data injected by CAE
+Behavioral Instruction Block — tone, format, language, length rules
+8.2 Role Permission Block — Jim Lite
+8.3 Role Permission Block — Jim Institutional
+9.1 DIME Integration
+Jim has read access to the DIME intelligence feed via context injection. Jim can explain, correlate, and prioritize DIME items. Jim cannot create, modify, or delete DIME items — these are managed by HARPIAN Core.
+9.2 News Feed — Monitored Figures
+Core maintains a curated list of monitored figures whose public statements are ingested, tagged, and stored in the HARPIAN news layer. Jim Institutional has access to this feed via context injection.
+9.3 Social Signal Layer (Future)
+10.1 Session Memory
+Jim maintains conversational memory within a session (defined as a continuous browser session without logout). The last 6 conversation turns (user + Jim = 1 turn) are included in every request payload as conversation_history. Turns older than 6 are dropped from the context window (not from audit logs).
+10.2 Cross-Session Continuity
+Jim does not natively remember conversations from previous sessions. However, HARPIAN Core supports an optional Persistent Context Store — a structured summary of key points from prior Jim interactions with a user, stored in Core and injectable as context. This is available to Jim Institutional users only and must be explicitly enabled per organization.
+10.3 Language Handling
+Jim detects the language of the user's message and responds in the same language automatically. Both Brazilian Portuguese and English are fully supported. If the user switches language mid-session, Jim switches immediately. Mixed-language queries are answered in the dominant language of the query.
+10.4 Response Format Rules
+11.2 Rate Limiting Rules
+12.1 Audit Log — Required Fields
+12.2 Regulatory Compliance Notes
+Jim responses do not constitute investment advice under any regulatory framework. This is enforced via system prompt and must be reflected in UI documentation.
+All Jim sessions are logged and retained for a minimum of 7 years (configurable per jurisdiction) in HARPIAN Core audit store.
+Jim responses that reference specific portfolio actions include the disclaimer: "This is analytical context, not a regulated investment recommendation. Consult your suitability documentation before taking action."
+Jim cannot be instructed by a user to remove, modify, or bypass compliance disclaimers.
+In jurisdictions requiring AI disclosure: a persistent label "AI-powered — for informational use only" must be visible in the Jim chat UI at all times.
+13.1 HAAL Service
+FR-HAAL-01: HAAL must support Anthropic Claude, OpenAI GPT-4o, and Google Gemini as interchangeable providers via a unified internal interface.
+FR-HAAL-02: HAAL must implement automatic failover: if primary provider returns error or times out after 5 seconds, HAAL retries with the next provider in the tier chain.
+FR-HAAL-03: Provider API keys must never be included in any response or log accessible to the browser client.
+FR-HAAL-04: HAAL must normalize all provider responses to a single internal response schema before returning to Core.
+FR-HAAL-05: HAAL must implement output filtering: any response containing raw API keys, unexpanded template variables, or flagged harmful content must be suppressed and retried.
+13.2 Context Assembly Engine (CAE)
+FR-CAE-01: CAE must assemble the context payload fresh on every request. No cross-request caching of data components.
+FR-CAE-02: CAE must enforce role-based data access rules independently of the browser client. FA tier must never receive client list data, AlphaDroid signals, or SGA status.
+FR-CAE-03: CAE must enforce total context token ceiling of 4,200 tokens. If ceiling is exceeded, lower-priority data components must be trimmed (social signals first, then news, then DIME, then HPC detail).
+FR-CAE-04: CAE must tag each context component with its data timestamp. Jim receives staleness information as part of context.
+13.3 Jim Chat API Endpoint
+FR-JIM-01: Endpoint: POST /v1/jim/chat — accepts user_message, session_id, conversation_history, client_id (optional), screen_context.
+FR-JIM-02: Response: { message: string, session_id: string, turn_id: string, data_freshness: object, disclaimer_required: boolean }.
+FR-JIM-03: Every response must include a disclaimer_required flag. If true, the client UI must render the appropriate compliance disclaimer below the response.
+FR-JIM-04: Endpoint must validate JWT and extract role scope before invoking CAE. Unauthorized calls return 403 without invoking HAAL.
+FR-JIM-05: Endpoint must write audit log entry on every call (success, error, or filtered response).
+13.4 Jim UI Component (Browser)
+FR-UI-01: Jim chat interface must be available as a modal overlay from any screen in Lite and Terminal.
+FR-UI-02: Jim tier badge must be permanently visible in the chat header (Jim Lite / Jim Pro / Jim Institutional).
+FR-UI-03: Contextual suggested prompts must update based on the screen the user is on when Jim is opened.
+FR-UI-04: When disclaimer_required is true in the API response, display the appropriate disclaimer text below the Jim response in 12px gray text.
+FR-UI-05: Jim input field must be disabled and show offline message when browser network is unavailable.
+FR-UI-06: Rate limit state must be tracked client-side with server confirmation; display remaining message count when user is within 5 messages of limit.
+[[TABLE 1]]
+JIM AI INTELLIGENCE ARCHITECTURE HARPIAN Platform — Technical & Functional Specification Covers: Jim Lite | Jim Pro | Jim Institutional
+[[TABLE 2]]
+Deployment Browser-only. No local processing. | AI Providers Claude / GPT-4o / Gemini (pluggable) | Interaction Scope Restricted — Harpian domain only
+[[TABLE 3]]
+SECTION 1 Platform Foundation — Browser-Only, Zero Local Processing
+[[TABLE 4]]
+CRITICAL Jim has no offline mode. All inference, data retrieval, context assembly, and response generation requires an active network connection to HARPIAN Core and the AI Provider API. Any feature implying offline capability must be rejected at the architecture level.
+[[TABLE 5]]
+Constraint | Architectural Consequence
+No local compute | All LLM inference calls originate from HARPIAN Core backend, not from the browser client
+No offline operation | Jim is unavailable without network; UI must show clear offline state with no fallback responses
+No local data cache | Jim cannot access stale or cached portfolio/client data; every context injection is a live API call to Core
+No client-side model | Zero AI model code is served to the browser; the browser renders responses only
+Session state only | Jim conversation history is session-scoped; cross-session memory requires explicit Core storage
+[[TABLE 6]]
+SECTION 2 Pluggable AI Provider Layer
+[[TABLE 7]]
+HAAL — Harpian AI Abstraction Layer HAAL is the internal service responsible for: (1) receiving a structured Jim request from Core, (2) selecting the target AI provider based on routing rules, (3) assembling the final prompt payload, (4) dispatching the API call, (5) normalizing the response, and (6) returning the result to Core for delivery to the client.
+[[TABLE 8]]
+Provider | API Standard | Primary Use Case in Jim
+Anthropic Claude (claude-sonnet / opus) | Messages API v1 | Default provider. Strong reasoning, instruction-following, long context. Preferred for complex Institutional queries.
+OpenAI GPT-4o | Chat Completions API | Secondary provider. Fast response for Jim Lite queries. Fallback if Claude unavailable.
+Google Gemini 1.5 Pro | Generative AI API | Tertiary / experimental. Multimodal potential for future chart/document interpretation in Jim Pro.
+[[TABLE 9]]
+Condition | Provider Selected
+Jim Institutional — complex multi-data query | Claude (primary); GPT-4o (fallback)
+Jim Pro — pitch/proposal generation | Claude (primary); GPT-4o (fallback)
+Jim Lite — educational/navigation query | GPT-4o (primary, lower latency); Claude (fallback)
+Provider API returns error or timeout >5s | Automatic failover to next provider in tier chain
+All providers unavailable | Return graceful error: "Jim is temporarily unavailable. Please try again in a moment."
+[[TABLE 10]]
+{ "system_prompt": "[HARPIAN Domain Constraint Block] + [Role Permission Block] + [Context Block]", "conversation_history": [ { "role": "user/assistant", "content": "..." }, ... ], "user_message": "[current user input, sanitized]", "injected_data": { "client_context": { ... }, // active client data from Core "portfolio_snapshot": { ... }, // live portfolio analytics "risk_data": { ... }, // Approximate or Official Risk Number "hpc_performance": { ... }, // HPC11/HPC22 live data "stormguard_status": { ... }, // SGA signal state "dime_feed": [ ... ], // active intelligence items "momentum_data": { ... }, // AlphaDroid sector momentum "news_feed": [ ... ], // filtered news items "social_signals": [ ... ] // filtered social content (future) }, "response_constraints": { "max_tokens": 800, "language": "pt-BR | en", "format": "conversational | structured", "tier": "lite | pro | institutional" } }
+[[TABLE 11]]
+SECTION 3 Domain Restriction — Jim's Interaction Universe
+[[TABLE 12]]
+CONSTRAINT Jim must reject, politely and consistently, any query outside the defined domain. The refusal must be graceful and redirect to a relevant Harpian capability. Jim never apologizes excessively — it redirects constructively.
+[[TABLE 13]]
+IN DOMAIN — Jim responds | OUT OF DOMAIN — Jim redirects
+Risk alignment status of specific clients | General current events, politics, entertainment
+Portfolio misalignment analysis and recommendations | Personal advice unrelated to financial planning
+HPC11 / HPC22 suitability and performance | Legal, medical, or tax advice
+StormGuard Armor signal history and current state | AI model comparisons, tech product recommendations
+AlphaDroid momentum signals by sector | Film, sports, travel, food, lifestyle queries
+Market regime interpretation (risk-on/risk-off) | Social media unrelated to monitored signals
+DIME intelligence feed — event impact explanation | Competitor platform features or pricing
+News and social content about monitored figures (Dalio, Fink, etc.) | Queries about Harpian employees or internal company matters
+Harpian platform navigation and feature explanation | Requests to perform actions outside Jim's permission scope
+Commission status and client tracking (FA only) | Any request to generate content for use outside Harpian
+[[TABLE 14]]
+You are Jim, the AI intelligence assistant embedded within the HARPIAN platform. You operate exclusively within the following domain: - Portfolio risk analysis and alignment - Client risk profiling and suitability assessment - HPC11 and HPC22 strategy interpretation - Market intelligence and macro event analysis - StormGuard Armor signal interpretation - AlphaDroid momentum and sector rotation data - DIME intelligence feed items - Financial news and monitored social signals - HARPIAN platform navigation and feature guidance You do NOT answer questions outside this domain. If asked an out-of-domain question, respond: "That's outside my scope here. I focus on your portfolios, clients, and market intelligence within HARPIAN. Can I help you with any of those?" You never provide investment advice as a regulated financial advisor. You provide analytical context, pattern identification, and platform guidance. Always include appropriate context that your analysis is informational. You respond in the same language as the user (Portuguese or English). Your tone is precise, institutional, and efficient. No filler. No flattery.
+[[TABLE 15]]
+SECTION 4 Context Injection Pipeline — How Jim Sees Harpian Data
+[[TABLE 16]]
+Context Assembly Engine (CAE) The Context Assembly Engine is the HARPIAN Core component responsible for determining, fetching, and formatting the data payload injected into each Jim request. CAE runs on every message and does not cache between turns (to ensure live accuracy).
+[[TABLE 17]]
+Data Source | Source System | Injected When
+Client risk profile | HARPIAN Core — Client DB | Active client selected or query mentions client name/ID
+Approximate Risk Number + confidence | Core Risk Engine (HRIE) | Client context active; or risk-related query detected
+Portfolio snapshot | Core Portfolio Analytics | Client context active; or portfolio-related query detected
+HPC11 / HPC22 live performance | Core Performance Engine | Strategy query detected; or HPC fit context active
+StormGuard Armor (SGA) signal | AlphaDroid API via Core | SGA query detected; or MFO Institutional tier (always available)
+AlphaDroid sector momentum | AlphaDroid API via Core | Momentum/sector query; or Institutional tier (always available)
+DIME intelligence feed | Core Intelligence Engine | Intelligence query; or triggered by current screen (DIME module)
+Financial news feed | Core News Aggregator | News query; or figure-specific query (Dalio, Fink, etc.)
+Social signals (future) | Core Social Monitor (TBD) | Social signal query; monitored figures; Institutional tier
+Client list + status | Core Client DB (advisor-scoped) | List/comparison query ("which clients are misaligned")
+Commission data (FA only) | Core Commission Engine | FA tier + commission query
+[[TABLE 18]]
+Tier | Context Injection Policy
+Jim Lite (FA Free) | Minimal. Active client data only (if client is open). Platform data (feature definitions, navigation). No portfolio analytics. No live market data.
+Jim Pro (FA Paid — future) | Extended. Active client full profile + portfolio analytics. HPC fit data. DIME summary. No AlphaDroid raw signals. No full client list scan.
+Jim Institutional (MFO) | Full. All data sources available. Full client list access. Live AlphaDroid signals. StormGuard status. Full DIME feed. News + social signals. Multi-client queries allowed.
+[[TABLE 19]]
+Component | Token Budget (approx.)
+System prompt (domain + role + constraints) | ~500 tokens — fixed
+Role permission block | ~100 tokens — fixed per tier
+Active client data (Lite) | ~300 tokens — client profile only
+Active client data (Pro/Institutional) | ~600 tokens — full profile + risk + portfolio
+HPC performance context | ~300 tokens — recent returns, volatility, drawdown
+SGA + AlphaDroid signals (Institutional only) | ~400 tokens — current signal + last 3 changes
+DIME feed items | ~500 tokens — top 5 items with impact scores
+News/social items | ~400 tokens — top 10 headlines with relevance scores
+Client list summary (Institutional) | ~600 tokens — all clients, risk number, status, mismatch flag
+Conversation history (last 6 turns) | ~800 tokens — rolling window
+Total ceiling | ~4,200 tokens context + 800 response = ~5,000 tokens per call
+[[TABLE 20]]
+SECTION 5 Query Capability Matrix — What Jim Can Answer by Tier
+[[TABLE 21]]
+Query Type | Jim Lite | Jim Pro | Jim Institutional
+Who are my clients with risk misalignment? | No | Partial (active client only) | Yes — full book scan
+Which clients need a portfolio review? | No | No | Yes — with priority ranking
+Which clients are ready for HPC allocation? | No | No | Yes
+Show clients with incomplete onboarding | Navigate to filter | Navigate to filter | Yes — list with status
+What is the risk profile of [client X]? | Yes (if client open) | Yes | Yes
+Has client X's risk number changed since last month? | No | Yes | Yes
+Which clients have exposure to current DIME event? | No | No | Yes
+[[TABLE 22]]
+Query Type | Jim Lite | Jim Pro | Jim Institutional
+Explain this Approximate Risk Number | Yes | Yes | Yes
+Why is this client flagged as misaligned? | Yes (explain only) | Yes (with detail) | Yes (with full context)
+What is driving the mismatch in this portfolio? | No | Yes | Yes
+How does this client's portfolio compare to HPC11? | Explain concept only | Yes — numerical comparison | Yes — full analysis
+Suggest portfolio adjustments for client X | No | Yes — directional suggestions | Yes — with rationale
+What is the max drawdown of HPC22 historically? | No | Yes | Yes
+Run a scenario: what if this client moves to 100% HPC22? | No | No | Yes (simplified)
+[[TABLE 23]]
+Query Type | Jim Lite | Jim Pro | Jim Institutional
+What is the current StormGuard Armor status? | No | No | Yes
+When was the last SGA activation? What happened? | No | No | Yes — with date, trigger, and portfolio impact
+Which sectors have the worst momentum right now? | No | No | Yes — AlphaDroid data
+Which sectors are leading in momentum? | No | No | Yes
+What are the recent posts/articles from Ray Dalio? | No | No | Yes — monitored feed
+What did Larry Fink say about rates this week? | No | No | Yes — monitored feed
+What macro events are posted in the DIME feed? | Explain feature | Summary (1–2 items) | Full feed access
+Which DIME events affect my client book? | No | Partial (active client) | Yes — full book
+What is the current market regime? | Educational explanation | Basic summary | Full AlphaDroid context
+[[TABLE 24]]
+Query Type | Jim Lite | Jim Pro | Jim Institutional
+How do I upload a portfolio? | Yes | Yes | Yes
+What does Confidence Level mean? | Yes | Yes | Yes
+How is the Approximate Risk Number calculated? | Yes | Yes | Yes
+What documents are missing for this client? | Yes | Yes | Yes
+How do I generate a client proposal? | Yes (guide) | Yes (generate) | Yes
+What is the difference between HPC11 and HPC22? | Yes — educational | Yes — with client fit | Yes — with full context
+How do I track my commissions? | Yes (FA) | Yes (FA) | N/A (MFO)
+[[TABLE 25]]
+SECTION 6 Example Interactions — Live Query Illustrations
+[[TABLE 26]]
+[FA Lite] "O que significa o Risk Number 47 que saiu para o meu cliente João?" Jim: O Risk Number Aproximado 47 indica um perfil Moderado — o cliente tem tolerância a risco intermediária, acima de perfis conservadores mas abaixo de perfis agressivos. A escala vai de 0 a 99. Um 47 sugere que estratégias com volatilidade controlada são mais adequadas do que estratégias de alta exposição. O Nível de Confiança exibido junto ao número indica o quanto os dados disponíveis sustentam essa estimativa — quanto mais completo o portfólio e os dados financeiros, maior a confiança.
+[[TABLE 27]]
+[FA Lite] "Como eu faço para subir o portfólio de um cliente aqui no app?" Jim: Para subir o portfólio: acesse a tela do cliente → toque em "Portfolio" → depois em "Upload Portfolio". Você pode enviar um extrato em PDF, Excel, CSV ou imagem. O sistema processa o arquivo e exibe as categorias para você confirmar antes de salvar. Se preferir, use o input manual e distribua o portfólio por categorias (renda fixa, ações, alternativos, etc.). Quer que eu te guie pelo fluxo agora?
+[[TABLE 28]]
+[FA Lite (out-of-domain test)] "Jim, qual é o melhor fundo de investimento do Brasil hoje?" Jim: Isso fica fora do que posso responder aqui — meu foco é nos seus clientes, portfólios e análises dentro da plataforma HARPIAN. Posso te ajudar a ver o fit do seu cliente com HPC11 ou HPC22, ou explicar o resultado de risco que apareceu na tela. O que prefere?
+[[TABLE 29]]
+[MFO Institutional] "Jim, quais clientes da minha carteira estão com risco desalinhado e precisam aumentar o portfólio?" Jim: Identifico 4 clientes com desalinhamento ativo: (1) Carlos M. — Risk Number 62, portfólio atual em 28% equities vs. capacidade para 55%; (2) Fernanda L. — expectativa de retorno acima da capacidade financeira (3 dependentes, renda moderada); (3) Roberto S. — portfólio concentrado em renda fixa (74%) com Risk Number 55; (4) Ana P. — dados de portfólio desatualizados há 98 dias, confiança reduzida. Quer abrir algum deles agora ou ver a análise comparativa com HPC11/HPC22?
+[[TABLE 30]]
+[MFO Institutional] "Qual é o status atual do StormGuard e quando foi a última ativação?" Jim: StormGuard Armor está atualmente POSITIVO — regime de mercado favorável. A última ativação negativa ocorreu em 31 de outubro de 2024: o sinal virou negativo intraday, aproximadamente 40% do portfólio foi liquidado naquele dia e o restante (60%) na virada do mês (1 de novembro), por conta do trigger de rebalanceamento mensal coincidindo com a virada de fim de semana. O portfólio ficou 100% caixa por 18 dias. O sinal voltou positivo em 18 de novembro, iniciando a reentrada gradual conforme leitura de momentum dos setores líderes via AlphaDroid.
+[[TABLE 31]]
+[MFO Institutional] "Quais setores estão com pior momento agora segundo o AlphaDroid?" Jim: Com base nos dados AlphaDroid de hoje: os setores com momentum mais fraco são (1) Real Estate (XLRE) — momentum negativo há 3 semanas, correlação alta com sensibilidade a juros; (2) Utilities (XLU) — desaceleração de tendência após alta de energia; (3) Consumer Staples (XLP) — fluxo de saída acima da média. Os setores líderes no momento são Technology (XLK), Industrials (XLI), e Energy (XLE). O portfólio HPC22 está alinhado com os líderes atuais. Quer ver quais clientes têm exposição aos setores fracos?
+[[TABLE 32]]
+[MFO Institutional] "O que Ray Dalio publicou recentemente sobre ciclo de dívida e inflação?" Jim: No feed monitorado: Ray Dalio publicou 2 posts relevantes nos últimos 7 dias. (1) Em 22 abr: análise sobre o ciclo de dívida de longo prazo nos EUA, comparando ao período 1971–1980, com tese de que inflação estrutural acima de 3% é o novo baseline por 5–7 anos. (2) Em 25 abr: comentário sobre ouro e ativos reais como hedge, alertando que bonds de longa duration continuam vulneráveis. Quer que eu correlacione com os portfólios da sua carteira que têm exposição significativa a renda fixa longa?
+[[TABLE 33]]
+SECTION 7 Technical Architecture — Component Map
+[[TABLE 34]]
+Architecture Layers Jim's architecture has 5 distinct layers: (1) Client Layer — browser rendering only; (2) API Gateway — authenticated request routing; (3) Context Assembly Layer — CAE builds the payload; (4) HAAL — AI provider abstraction and dispatch; (5) Provider Layer — Claude/GPT/Gemini APIs. Each layer is strictly separated. No layer can bypass an upstream layer.
+[[TABLE 35]]
+┌─────────────────────────────────────────────────────────────────┐ │ BROWSER CLIENT (React / Mobile Web) │ │ Jim Chat UI — renders messages, sends raw user text │ │ No AI logic. No data access. Display only. │ └───────────────────────────┬─────────────────────────────────────┘ │ HTTPS — authenticated JWT ┌───────────────────────────▼─────────────────────────────────────┐ │ HARPIAN CORE BACKEND │ │ ┌─────────────────────────────────────────────────────────┐ │ │ │ API Gateway — validates role token, routes to Jim svc │ │ │ └─────────────────────┬───────────────────────────────────┘ │ │ ┌─────────────────────▼───────────────────────────────────┐ │ │ │ Context Assembly Engine (CAE) │ │ │ │ Reads: Client DB / Risk Engine / Portfolio Analytics │ │ │ │ AlphaDroid API / DIME / News / SGA / HPC │ │ │ │ Builds: structured context payload (role-scoped) │ │ │ └─────────────────────┬───────────────────────────────────┘ │ │ ┌─────────────────────▼───────────────────────────────────┐ │ │ │ HARPIAN AI Abstraction Layer (HAAL) │ │ │ │ - Selects provider (Claude / GPT-4o / Gemini) │ │ │ │ - Assembles final prompt payload │ │ │ │ - Dispatches API call │ │ │ │ - Normalizes response │ │ │ │ - Handles failover │ │ │ └─────────────────────┬───────────────────────────────────┘ │ │ ┌─────────────────────▼───────────────────────────────────┐ │ │ │ Audit Logger — logs session ID, tier, context hash, │ │ │ │ timestamp, provider used, token count │ │ │ └─────────────────────────────────────────────────────────┘ │ └─────────────────────────────────────────────────────────────────┘ │ HTTPS — provider API keys (server-side only) ┌───────────────────────────▼─────────────────────────────────────┐ │ AI PROVIDER LAYER │ │ Anthropic Claude API │ OpenAI GPT-4o API │ Gemini API │ └─────────────────────────────────────────────────────────────────┘
+[[TABLE 36]]
+Security Control | Implementation
+API keys never exposed to browser | All provider API keys held server-side in Core; never returned to browser in any response
+Role enforcement at API gateway | JWT bearer token validated and role extracted before CAE is invoked; unauthorized role → 403
+Context scoping at CAE | CAE enforces data access rules per role; FA token cannot trigger client-list scan even if query requests it
+Input sanitization | User input sanitized before insertion into prompt payload; prompt injection attempts are stripped
+Output filtering | HAAL post-processes provider responses; any response containing API keys, PII outside permitted fields, or out-of-domain promotional content is rejected and retried
+Session isolation | Each user session has a unique session ID; conversation history is keyed to that session and is not accessible cross-session or cross-user
+Audit immutability | Every Jim call logged to append-only audit store; logs include: user ID, role, session ID, active client ID, context hash, provider, token count, response hash
+[[TABLE 37]]
+SECTION 8 Full System Prompt Architecture by Tier
+[[TABLE 38]]
+== ROLE: JIM LITE (Financial Advisor — Free Tier) == You are operating as Jim Lite. Your capabilities are restricted to: - Explaining the platform: features, navigation, how to complete tasks - Explaining results already displayed to the user (Risk Number shown, Confidence Level shown, HPC Fit shown, alerts displayed) - Defining financial terms at an educational level - Guiding the user through onboarding and workflow steps You CANNOT in this tier: - Make personalized investment recommendations - Analyze a portfolio and suggest changes - Compare scenarios or run what-if analysis - Access or reference any client other than the one currently open - Access market data, news, StormGuard, or AlphaDroid signals - Generate client communication materials or pitch content If the user asks something beyond your scope, say: "That analysis is available in the Pro tier. I can explain the concept or guide you to where this information is displayed in the platform."
+[[TABLE 39]]
+== ROLE: JIM INSTITUTIONAL (Multi-Family Office) == You are operating as Jim Institutional — full capability tier. You have access to the following live data in the injected context: - Full client book: all clients, risk numbers, portfolio snapshots, mismatch flags - HPC11 and HPC22 live performance and fit assessments - StormGuard Armor (SGA): current status, last 5 activation events with dates, trigger values, portfolio actions taken - AlphaDroid sector momentum: all sectors, current rankings, trend direction - DIME intelligence feed: all active items with impact scores and affected clients - News feed: last 10 items per monitored figure (Dalio, Fink, Druckenmiller, etc.) - Social signals: monitored accounts (when available) You CAN in this tier: - Identify and rank clients by risk misalignment severity - Analyze portfolio composition and identify drivers of mismatch - Explain SGA activation events with full context - Report sector momentum rankings and trend changes - Summarize and correlate news/social content with portfolio implications - Suggest directional portfolio adjustments (not financial advice — analytical context) - Cross-reference DIME events with affected clients You always: cite the data source (e.g., "per AlphaDroid data as of today") You always: flag when data may be stale (>24h) and suggest Core refresh You never: guarantee returns, predict specific outcomes, or act as a licensed advisor
+[[TABLE 40]]
+SECTION 9 Intelligence Integration — DIME, News, and Social Signals
+[[TABLE 41]]
+Jim's DIME Capability | Description
+Explain a DIME event | Expand on the event context, explain the mechanism of impact, clarify terms
+Identify affected clients | Cross-reference event's asset class impact with client portfolio exposures (Institutional only)
+Prioritize events by relevance | Rank injected DIME items by relevance to user's specific client book (Institutional only)
+Correlate events to SGA | Identify if a DIME event contributed to or is consistent with the SGA signal state
+Suggest action | Provide directional guidance ("review fixed income allocation") — not a specific trade recommendation
+[[TABLE 42]]
+Monitored Figure List (initial — configurable in Admin Console) Ray Dalio (Bridgewater) / Larry Fink (BlackRock) / Stanley Druckenmiller / Jamie Dimon (JPMorgan) / Howard Marks (Oaktree) / Bill Gross / Jerome Powell (Federal Reserve) / Nouriel Roubini. List is configurable by HARPIAN Admin. New figures can be added without code changes.
+[[TABLE 43]]
+News Data Field | Description
+figure_name | Full name of monitored figure
+source | Platform: Twitter/X / LinkedIn / Bloomberg / FT / institutional letter
+published_at | Timestamp of original publication
+headline | One-line summary (auto-generated by Core ingestion pipeline)
+relevance_tags | Asset class, sector, macro theme tags (e.g., "rates", "inflation", "credit")
+sentiment | Directional flag: bullish / bearish / neutral / unclear
+portfolio_impact_score | 0–10 score computed by Core for relevance to HPC strategies
+[[TABLE 44]]
+CONSTRAINT Social signal monitoring is architecturally defined but not active in v1. The context payload schema already includes the social_signals array. The Core Social Monitor component is deferred to Phase 2. Jim Institutional will receive social content in the same format as news feed items once the component is live.
+[[TABLE 45]]
+SECTION 10 Conversation Management and State
+[[TABLE 46]]
+Cross-Session Feature | Specification
+Persistent context scope | Per user, per organization — not global
+What is stored | Key decisions, client concerns flagged, follow-up items noted by Jim
+What is NOT stored | Full conversation transcripts in persistent context (those exist only in audit logs)
+Injection point | Prepended to Context Block as "Prior session notes:" before live data
+Max size | 400 tokens — older items rolled off as newer items are added
+User control | MFO admin can clear persistent context for any user via Terminal settings
+[[TABLE 47]]
+Query Type | Response Format
+Simple factual query ("what is the SGA status?") | One paragraph. Max 3 sentences. No lists.
+Multi-item query ("which clients are misaligned?") | Numbered or bulleted list. Max 5 items with brief description. Offer to detail any.
+Explanation query ("how does StormGuard work?") | Structured: concept, mechanism, example from HARPIAN context. Max 4 paragraphs.
+Complex correlation query | Summary paragraph + supporting data list. Always cite data source and date.
+Navigation guidance | Step-by-step numbered list. Short steps. Offer to guide to the feature.
+[[TABLE 48]]
+SECTION 11 Jim Availability States and Error Handling
+[[TABLE 49]]
+State | User-Facing Message and Behavior
+Available — all providers responding | Normal operation. No status indicator required.
+Primary provider degraded — failover active | No user-visible change. HAAL switches to secondary provider. Slightly higher latency may occur.
+Elevated latency (>3s response) | Show typing indicator with message: "Jim is thinking..." — no timeout before 10s.
+All providers unavailable | Display: "Jim is temporarily unavailable. Our team has been notified. Please try again in a few minutes." No retry loop — single graceful message.
+Network disconnected (browser offline) | Display: "No connection. Jim requires internet access." Suppress Jim input field.
+Rate limit reached (per-user) | Display: "Jim has reached its usage limit for this session. Limit resets in [X] minutes."
+Context Assembly failure (Core data unavailable) | Display: "Jim cannot access your data right now. Please refresh and try again." Log error to Core.
+Response filtered (output safety check failed) | Discard provider response. Display: "Jim couldn't generate a useful response to that. Please rephrase." Retry with modified prompt.
+[[TABLE 50]]
+Tier | Rate Limit
+Jim Lite (FA Free) | 20 messages per session; 50 per day per user
+Jim Pro (FA Paid — future) | 100 messages per session; 300 per day per user
+Jim Institutional (MFO) | Unlimited messages; provider cost metered to organization account
+[[TABLE 51]]
+SECTION 12 Audit, Compliance, and Governance
+[[TABLE 52]]
+Field | Specification
+session_id | UUID per browser session
+user_id | HARPIAN Core user ID
+org_id | Organization ID (MFO or FA firm)
+jim_tier | lite | pro | institutional
+active_client_id | Client ID if client context was active (null if none)
+timestamp_utc | ISO 8601 timestamp of request initiation
+provider_used | Anthropic | OpenAI | Google
+context_hash | SHA-256 hash of assembled context payload (for forensic reproducibility)
+input_tokens | Token count of full prompt payload sent
+output_tokens | Token count of provider response
+response_hash | SHA-256 hash of raw provider response
+was_filtered | Boolean — whether response was filtered before delivery
+domain_rejection | Boolean — whether query was rejected as out-of-domain
+[[TABLE 53]]
+SECTION 13 Functional Requirements — Engineering Handoff
+[[TABLE 54]]
+JIM AI ARCHITECTURE — HARPIAN PLATFORM Version 1.0 | Engineering Handoff Ready | Confidential

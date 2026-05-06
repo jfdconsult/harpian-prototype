@@ -1,0 +1,18 @@
+{
+  "created_at": "2026-05-03 08:59:30",
+  "book_dir": "/mnt/c/Users/jfdco/OneDrive/Área de Trabalho/LIVROS PDF TEXTOS/BOOK FOR JIM",
+  "manual_md": "/mnt/c/Users/jfdco/OneDrive/Área de Trabalho/HARPIAN/04_JIM_COMPLIANCE_QA/CAMADA_LITERARIA_JIM_2026-05-02/MANUAL_BOOK_FOR_JIM_TAXONOMIA_29_LIVROS.md",
+  "manual_csv": "/mnt/c/Users/jfdco/OneDrive/Área de Trabalho/HARPIAN/04_JIM_COMPLIANCE_QA/CAMADA_LITERARIA_JIM_2026-05-02/MANUAL_BOOK_FOR_JIM_TAXONOMIA_29_LIVROS.csv",
+  "books_count": 29,
+  "themes": [
+    "Clássico",
+    "Estrutura & Complexidade dos Mercados",
+    "Finanças Quantitativas",
+    "Investimento & Biografia",
+    "Macro & Geopolítica",
+    "Market Wizards Series",
+    "Price Action Técnica",
+    "Psicologia do Trading",
+    "Risco, Probabilidade & Incerteza"
+  ]
+}

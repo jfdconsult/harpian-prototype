@@ -1,0 +1,407 @@
+{
+  "schema_version": "1.0",
+  "last_updated": "2026-04-29",
+  "description": "JIM Forbidden Language Library — severity-stratified list of prohibited terms and phrases with rewrite rules. Requires Compliance Admin approval for any modification.",
+  "compliance_review_required_for_changes": true,
+  "severity_definitions": {
+    "SEVERITY_1": "Block response entirely. Replace with safe fallback. Log SEVERITY_1_VIOLATION. Route to escalation queue.",
+    "SEVERITY_2": "Rewrite the affected phrase using approved alternative. Log SEVERITY_2_REWRITE. Continue with rewritten response.",
+    "SEVERITY_3": "Append required disclaimer. Log SEVERITY_3_DISCLAIMER. Continue with response."
+  },
+  "severity_1": {
+    "description": "Block response entirely if any of these terms appear",
+    "terms": [
+      {
+        "term": "guaranteed",
+        "variants": ["guarantee", "guarantees", "guaranteeing"],
+        "languages": ["en"],
+        "regulatory_basis": ["SEC_MARKETING_RULE", "FINRA_2210"],
+        "context": "performance_or_protection"
+      },
+      {
+        "term": "garantido",
+        "variants": ["garantia", "garantimos", "garante"],
+        "languages": ["pt"],
+        "regulatory_basis": ["SEC_MARKETING_RULE", "FINRA_2210"],
+        "context": "performance_or_protection"
+      },
+      {
+        "term": "without risk",
+        "variants": ["no risk", "risk-free", "zero risk"],
+        "languages": ["en"],
+        "regulatory_basis": ["SEC_MARKETING_RULE", "FINRA_2210"],
+        "context": "all"
+      },
+      {
+        "term": "sem risco",
+        "variants": ["livre de risco", "risco zero", "sem riscos"],
+        "languages": ["pt"],
+        "regulatory_basis": ["SEC_MARKETING_RULE", "FINRA_2210"],
+        "context": "all"
+      },
+      {
+        "term": "safe investment",
+        "variants": ["completely safe", "totally safe", "absolutely safe"],
+        "languages": ["en"],
+        "regulatory_basis": ["SEC_MARKETING_RULE", "FINRA_2210"],
+        "context": "all"
+      },
+      {
+        "term": "investimento seguro",
+        "variants": ["completamente seguro", "totalmente seguro"],
+        "languages": ["pt"],
+        "regulatory_basis": ["SEC_MARKETING_RULE", "FINRA_2210"],
+        "context": "all"
+      },
+      {
+        "term": "you should buy",
+        "variants": ["you should purchase", "you must buy", "i suggest buying"],
+        "languages": ["en"],
+        "regulatory_basis": ["SEC_REG_BI", "SEC_FIDUCIARY"],
+        "context": "all"
+      },
+      {
+        "term": "i recommend",
+        "variants": ["we recommend", "jim recommends", "my recommendation is"],
+        "languages": ["en"],
+        "regulatory_basis": ["SEC_REG_BI", "SEC_FIDUCIARY"],
+        "context": "all"
+      },
+      {
+        "term": "eu recomendo",
+        "variants": ["nós recomendamos", "jim recomenda", "minha recomendação é"],
+        "languages": ["pt"],
+        "regulatory_basis": ["SEC_REG_BI", "SEC_FIDUCIARY"],
+        "context": "all"
+      },
+      {
+        "term": "you should invest",
+        "variants": ["you need to invest", "you must invest", "you ought to invest"],
+        "languages": ["en"],
+        "regulatory_basis": ["SEC_REG_BI", "SEC_FIDUCIARY"],
+        "context": "all"
+      },
+      {
+        "term": "você deve investir",
+        "variants": ["você precisa investir", "você tem que investir"],
+        "languages": ["pt"],
+        "regulatory_basis": ["SEC_REG_BI", "SEC_FIDUCIARY"],
+        "context": "all"
+      },
+      {
+        "term": "the best investment for you",
+        "variants": ["best product for you", "perfect investment for you", "ideal investment for you"],
+        "languages": ["en"],
+        "regulatory_basis": ["SEC_REG_BI", "SEC_MARKETING_RULE"],
+        "context": "all"
+      },
+      {
+        "term": "o melhor investimento para você",
+        "variants": ["melhor produto para você", "investimento ideal para você"],
+        "languages": ["pt"],
+        "regulatory_basis": ["SEC_REG_BI", "SEC_MARKETING_RULE"],
+        "context": "all"
+      },
+      {
+        "term": "will earn",
+        "variants": ["will return", "will yield", "will generate", "will produce"],
+        "languages": ["en"],
+        "regulatory_basis": ["SEC_MARKETING_RULE", "FINRA_2210"],
+        "context": "forward_looking_performance"
+      },
+      {
+        "term": "vai render",
+        "variants": ["vai retornar", "vai gerar", "vai produzir"],
+        "languages": ["pt"],
+        "regulatory_basis": ["SEC_MARKETING_RULE", "FINRA_2210"],
+        "context": "forward_looking_performance"
+      },
+      {
+        "term": "total protection",
+        "variants": ["full protection", "complete protection", "100% protection"],
+        "languages": ["en"],
+        "regulatory_basis": ["SEC_MARKETING_RULE", "FINRA_2210"],
+        "context": "all"
+      },
+      {
+        "term": "proteção total",
+        "variants": ["proteção completa", "100% protegido"],
+        "languages": ["pt"],
+        "regulatory_basis": ["SEC_MARKETING_RULE", "FINRA_2210"],
+        "context": "all"
+      },
+      {
+        "term": "won't lose",
+        "variants": ["will not lose", "cannot lose", "can't lose", "no downside"],
+        "languages": ["en"],
+        "regulatory_basis": ["SEC_MARKETING_RULE", "FINRA_2210"],
+        "context": "all"
+      },
+      {
+        "term": "não vai perder",
+        "variants": ["não pode perder", "impossível perder"],
+        "languages": ["pt"],
+        "regulatory_basis": ["SEC_MARKETING_RULE", "FINRA_2210"],
+        "context": "all"
+      },
+      {
+        "term": "guaranteed return",
+        "variants": ["guaranteed yield", "guaranteed income", "guaranteed profit"],
+        "languages": ["en"],
+        "regulatory_basis": ["SEC_MARKETING_RULE", "FINRA_2210"],
+        "context": "all"
+      },
+      {
+        "term": "retorno garantido",
+        "variants": ["rendimento garantido", "lucro garantido"],
+        "languages": ["pt"],
+        "regulatory_basis": ["SEC_MARKETING_RULE", "FINRA_2210"],
+        "context": "all"
+      },
+      {
+        "term": "protected capital",
+        "variants": ["capital guarantee", "principal guaranteed", "capital preservation guaranteed"],
+        "languages": ["en"],
+        "regulatory_basis": ["SEC_MARKETING_RULE", "FINRA_2210"],
+        "context": "all"
+      },
+      {
+        "term": "capital protegido",
+        "variants": ["capital garantido", "principal garantido"],
+        "languages": ["pt"],
+        "regulatory_basis": ["SEC_MARKETING_RULE", "FINRA_2210"],
+        "context": "all"
+      },
+      {
+        "term": "foolproof",
+        "variants": ["can't go wrong", "fail-safe"],
+        "languages": ["en"],
+        "regulatory_basis": ["SEC_MARKETING_RULE", "FINRA_2210"],
+        "context": "all"
+      }
+    ]
+  },
+  "severity_2": {
+    "description": "Rewrite required — replace with approved alternative",
+    "terms": [
+      {
+        "term": "ideal",
+        "languages": ["en", "pt"],
+        "context": "recommendation_context",
+        "approved_alternative": "mathematically consistent with the stated profile in the current scenario",
+        "regulatory_basis": ["SEC_MARKETING_RULE"]
+      },
+      {
+        "term": "perfect",
+        "variants": ["perfeito"],
+        "languages": ["en", "pt"],
+        "context": "product_or_allocation_context",
+        "approved_alternative": "well-matched in the analyzed parameters",
+        "regulatory_basis": ["SEC_MARKETING_RULE"]
+      },
+      {
+        "term": "superior",
+        "languages": ["en", "pt"],
+        "context": "without_supporting_data",
+        "approved_alternative": "showed higher [specific metric] in the analyzed period [date range]",
+        "regulatory_basis": ["SEC_MARKETING_RULE", "FINRA_2210"]
+      },
+      {
+        "term": "the best",
+        "variants": ["best strategy", "best product", "best option"],
+        "languages": ["en"],
+        "context": "without_supporting_data",
+        "approved_alternative": "among the higher-performing in the analyzed period [date range]",
+        "regulatory_basis": ["SEC_MARKETING_RULE", "FINRA_2210"]
+      },
+      {
+        "term": "o melhor",
+        "variants": ["melhor estratégia", "melhor produto", "melhor opção"],
+        "languages": ["pt"],
+        "context": "without_supporting_data",
+        "approved_alternative": "entre os de maior desempenho no período analisado [intervalo de datas]",
+        "regulatory_basis": ["SEC_MARKETING_RULE", "FINRA_2210"]
+      },
+      {
+        "term": "certainty",
+        "variants": ["certain", "with certainty"],
+        "languages": ["en"],
+        "context": "performance_or_outcome_context",
+        "approved_alternative": "based on current data and historical analysis",
+        "regulatory_basis": ["SEC_MARKETING_RULE", "FINRA_2210"]
+      },
+      {
+        "term": "certeza",
+        "variants": ["com certeza"],
+        "languages": ["pt"],
+        "context": "performance_or_outcome_context",
+        "approved_alternative": "com base nos dados atuais e na análise histórica",
+        "regulatory_basis": ["SEC_MARKETING_RULE", "FINRA_2210"]
+      },
+      {
+        "term": "always",
+        "languages": ["en"],
+        "context": "performance_frequency_context",
+        "approved_alternative": "in all historically analyzed periods",
+        "regulatory_basis": ["FINRA_2210"]
+      },
+      {
+        "term": "sempre",
+        "languages": ["pt"],
+        "context": "performance_frequency_context",
+        "approved_alternative": "em todos os períodos históricos analisados",
+        "regulatory_basis": ["FINRA_2210"]
+      },
+      {
+        "term": "never loses",
+        "variants": ["never failed", "never negative"],
+        "languages": ["en"],
+        "context": "performance_context",
+        "approved_alternative": "not observed to have lost value in the historical period analyzed [date range]; this does not guarantee future results",
+        "regulatory_basis": ["FINRA_2210", "SEC_MARKETING_RULE"]
+      },
+      {
+        "term": "low risk",
+        "languages": ["en"],
+        "context": "without_methodology_definition",
+        "approved_alternative": "lower measured volatility in the analyzed period, based on [metric]. Lower volatility does not eliminate the risk of loss.",
+        "regulatory_basis": ["SEC_MARKETING_RULE", "FINRA_2210"]
+      },
+      {
+        "term": "baixo risco",
+        "languages": ["pt"],
+        "context": "without_methodology_definition",
+        "approved_alternative": "menor volatilidade medida no período analisado, com base em [métrica]. Menor volatilidade não elimina o risco de perda.",
+        "regulatory_basis": ["SEC_MARKETING_RULE", "FINRA_2210"]
+      },
+      {
+        "term": "defensive",
+        "languages": ["en"],
+        "context": "without_limitation_caveat",
+        "approved_alternative": "positioned with lower measured volatility in the current regime, which does not eliminate the risk of loss",
+        "regulatory_basis": ["SEC_MARKETING_RULE"]
+      },
+      {
+        "term": "defensivo",
+        "languages": ["pt"],
+        "context": "without_limitation_caveat",
+        "approved_alternative": "posicionado com menor volatilidade medida no regime atual, o que não elimina o risco de perda",
+        "regulatory_basis": ["SEC_MARKETING_RULE"]
+      }
+    ]
+  },
+  "severity_3": {
+    "description": "Disclaimer required — append appropriate DISC-ID to response",
+    "terms": [
+      {
+        "term": "historical",
+        "variants": ["historic", "historically"],
+        "languages": ["en"],
+        "context": "performance_data",
+        "required_disclaimers": ["DISC-001"],
+        "regulatory_basis": ["SEC_MARKETING_RULE", "FINRA_2210"]
+      },
+      {
+        "term": "histórico",
+        "variants": ["historicamente"],
+        "languages": ["pt"],
+        "context": "performance_data",
+        "required_disclaimers": ["DISC-001"],
+        "regulatory_basis": ["SEC_MARKETING_RULE", "FINRA_2210"]
+      },
+      {
+        "term": "projected",
+        "variants": ["projection", "projecting"],
+        "languages": ["en"],
+        "context": "forward_looking",
+        "required_disclaimers": ["DISC-013"],
+        "regulatory_basis": ["SEC_MARKETING_RULE"]
+      },
+      {
+        "term": "projetado",
+        "variants": ["projeção"],
+        "languages": ["pt"],
+        "context": "forward_looking",
+        "required_disclaimers": ["DISC-013"],
+        "regulatory_basis": ["SEC_MARKETING_RULE"]
+      },
+      {
+        "term": "expected",
+        "variants": ["expected return", "expected performance"],
+        "languages": ["en"],
+        "context": "forward_looking_performance",
+        "required_disclaimers": ["DISC-013"],
+        "regulatory_basis": ["SEC_MARKETING_RULE", "FINRA_2210"]
+      },
+      {
+        "term": "esperado",
+        "variants": ["retorno esperado"],
+        "languages": ["pt"],
+        "context": "forward_looking_performance",
+        "required_disclaimers": ["DISC-013"],
+        "regulatory_basis": ["SEC_MARKETING_RULE", "FINRA_2210"]
+      },
+      {
+        "term": "simulated",
+        "variants": ["simulation", "simulates"],
+        "languages": ["en"],
+        "context": "all",
+        "required_disclaimers": ["DISC-002"],
+        "regulatory_basis": ["SEC_MARKETING_RULE"]
+      },
+      {
+        "term": "simulado",
+        "variants": ["simulação", "simula"],
+        "languages": ["pt"],
+        "context": "all",
+        "required_disclaimers": ["DISC-002"],
+        "regulatory_basis": ["SEC_MARKETING_RULE"]
+      },
+      {
+        "term": "backtest",
+        "variants": ["back-test", "back test"],
+        "languages": ["en", "pt"],
+        "context": "all",
+        "required_disclaimers": ["DISC-001", "DISC-002"],
+        "regulatory_basis": ["SEC_MARKETING_RULE", "FINRA_2210"]
+      },
+      {
+        "term": "benchmark",
+        "languages": ["en", "pt"],
+        "context": "comparison_context",
+        "required_disclaimers": ["DISC-014"],
+        "regulatory_basis": ["FINRA_2210", "SEC_MARKETING_RULE"]
+      },
+      {
+        "term": "outperformance",
+        "variants": ["outperformed", "outperforms"],
+        "languages": ["en"],
+        "context": "all",
+        "required_disclaimers": ["DISC-001", "DISC-014"],
+        "regulatory_basis": ["SEC_MARKETING_RULE", "FINRA_2210"]
+      },
+      {
+        "term": "drawdown control",
+        "variants": ["drawdown protection", "drawdown management"],
+        "languages": ["en"],
+        "context": "all",
+        "required_disclaimers": ["DISC-004"],
+        "regulatory_basis": ["SEC_MARKETING_RULE"]
+      },
+      {
+        "term": "scenario",
+        "languages": ["en", "pt"],
+        "context": "stress_test_or_simulation",
+        "required_disclaimers": ["DISC-009"],
+        "regulatory_basis": ["SEC_MARKETING_RULE"]
+      },
+      {
+        "term": "CAGR",
+        "languages": ["en", "pt"],
+        "context": "forward_looking",
+        "required_disclaimers": ["DISC-013"],
+        "regulatory_basis": ["SEC_MARKETING_RULE"]
+      }
+    ]
+  }
+}

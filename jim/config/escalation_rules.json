@@ -1,0 +1,376 @@
+{
+  "schema_version": "1.0",
+  "last_updated": "2026-04-29",
+  "description": "JIM Escalation Rules — conditions that trigger mandatory human review. JIM must stop and route to human when any of these conditions are met.",
+  "escalation_targets": {
+    "FA_OF_RECORD": {
+      "target_id": "FA_OF_RECORD",
+      "description": "The licensed financial advisor assigned to the client",
+      "notification_method": "platform_notification + escalation_queue",
+      "sla_hours": null,
+      "notes": "SLA to be defined by Operations"
+    },
+    "COMPLIANCE_ADMIN": {
+      "target_id": "COMPLIANCE_ADMIN",
+      "description": "Designated compliance supervisor with FINRA principal designation",
+      "notification_method": "platform_notification + compliance_queue + email",
+      "sla_hours": null,
+      "notes": "SLA to be defined by Compliance"
+    },
+    "LEGAL_ADVISOR": {
+      "target_id": "LEGAL_ADVISOR",
+      "description": "Legal counsel or tax advisor (external)",
+      "notification_method": "platform_notification + escalation_queue",
+      "sla_hours": null,
+      "notes": "JIM routes to FA first; FA routes to legal as appropriate"
+    }
+  },
+  "escalation_rules": [
+    {
+      "rule_id": "ESC-001",
+      "reason_code": "ESC_ACTION_REQUEST",
+      "trigger_name": "Action Request — Investment Action",
+      "description": "User asks JIM for a specific investment action (buy, sell, increase, decrease, move, allocate)",
+      "detection_method": "intent_classifier",
+      "intent_ids_triggered": ["INT-027", "INT-029"],
+      "condition": {
+        "type": "intent_match",
+        "intent_category": "ACTION_REQUEST"
+      },
+      "escalation_target": "FA_OF_RECORD",
+      "mandatory": true,
+      "stop_response": true,
+      "mandatory_response_template": "JIM does not provide individualized investment recommendations. JIM can present the mathematical simulation, the portfolio diagnostic, and the risk/return impact based on data loaded in the terminal. The investment decision must be made by a licensed advisor, within the formal suitability process, in accordance with the client's best interest.",
+      "log_fields_required": ["intent_id", "input_original", "escalation_reason", "session_id", "user_id"],
+      "regulatory_basis": ["SEC_REG_BI", "SEC_FIDUCIARY"]
+    },
+    {
+      "rule_id": "ESC-002",
+      "reason_code": "ESC_RECOMMENDATION_REQUEST",
+      "trigger_name": "Investment Recommendation Request",
+      "description": "User asks JIM to recommend a product, strategy, or allocation",
+      "detection_method": "intent_classifier",
+      "intent_ids_triggered": ["INT-030"],
+      "condition": {
+        "type": "intent_match",
+        "intent_category": "ACTION_REQUEST",
+        "subcategory": "best_product"
+      },
+      "escalation_target": "FA_OF_RECORD",
+      "mandatory": true,
+      "stop_response": true,
+      "mandatory_response_template": "JIM does not provide individualized investment recommendations. JIM can present the mathematical simulation, the portfolio diagnostic, and the risk/return impact based on data loaded in the terminal. The investment decision must be made by a licensed advisor, within the formal suitability process, in accordance with the client's best interest.",
+      "log_fields_required": ["intent_id", "input_original", "escalation_reason", "session_id", "user_id"],
+      "regulatory_basis": ["SEC_REG_BI", "SEC_MARKETING_RULE"]
+    },
+    {
+      "rule_id": "ESC-003",
+      "reason_code": "ESC_LOW_ALIGNMENT",
+      "trigger_name": "Low Alignment Score",
+      "description": "Portfolio Alignment Score is below 50 — material misalignment detected",
+      "detection_method": "context_data_evaluation",
+      "condition": {
+        "type": "threshold",
+        "field": "alignment_score",
+        "operator": "less_than",
+        "value": 50
+      },
+      "escalation_target": "FA_OF_RECORD",
+      "mandatory": true,
+      "stop_response": false,
+      "append_to_response": true,
+      "escalation_message": "ALERT: Alignment Score below 50 indicates material portfolio misalignment. This session has been flagged for advisor review. Reference: {session_id}.",
+      "log_fields_required": ["alignment_score", "alignment_flags", "client_id", "session_id"],
+      "regulatory_basis": ["SEC_REG_BI", "SEC_FIDUCIARY"]
+    },
+    {
+      "rule_id": "ESC-004",
+      "reason_code": "ESC_HIGH_RISK_GAP",
+      "trigger_name": "High Risk Gap",
+      "description": "Risk gap between current Risk Number and target exceeds 20 points",
+      "detection_method": "context_data_evaluation",
+      "condition": {
+        "type": "computed_threshold",
+        "computation": "abs(risk_number - risk_tolerance_target)",
+        "operator": "greater_than",
+        "value": 20
+      },
+      "escalation_target": "FA_OF_RECORD",
+      "mandatory": true,
+      "stop_response": false,
+      "append_to_response": true,
+      "escalation_message": "ALERT: Risk gap exceeds 20 points. Current Risk Number: {risk_number}, Target: {risk_tolerance_target}. This session has been flagged for advisor review. Reference: {session_id}.",
+      "log_fields_required": ["risk_number", "risk_tolerance_target", "client_id", "session_id"],
+      "regulatory_basis": ["SEC_REG_BI"]
+    },
+    {
+      "rule_id": "ESC-005",
+      "reason_code": "ESC_NEGATIVE_HORIZON_GAP",
+      "trigger_name": "Negative Horizon Gap",
+      "description": "Client's projected trajectory is below their stated financial target at the stated horizon",
+      "detection_method": "context_data_evaluation",
+      "condition": {
+        "type": "threshold",
+        "field": "horizon_gap",
+        "operator": "less_than",
+        "value": 0
+      },
+      "escalation_target": "FA_OF_RECORD",
+      "mandatory": true,
+      "stop_response": false,
+      "append_to_response": true,
+      "escalation_message": "ALERT: Negative Horizon Gap detected — the current trajectory projects a shortfall relative to the client's stated goal. This session has been flagged for advisor review. Reference: {session_id}.",
+      "log_fields_required": ["horizon_gap", "retirement_date", "target_value", "client_id", "session_id"],
+      "regulatory_basis": ["SEC_FIDUCIARY"]
+    },
+    {
+      "rule_id": "ESC-006",
+      "reason_code": "ESC_CLIENT_DISTRESS",
+      "trigger_name": "Client Distress Signal",
+      "description": "User input contains emotional distress signals indicating panic or crisis",
+      "detection_method": "natural_language_signal_detection",
+      "distress_patterns": [
+        "panicking",
+        "panic",
+        "emergency",
+        "losing everything",
+        "market crash now what",
+        "terrified",
+        "scared",
+        "ruined",
+        "what do i do",
+        "help me now",
+        "crisis",
+        "desesperado",
+        "pânico",
+        "perdendo tudo",
+        "socorro"
+      ],
+      "condition": {
+        "type": "pattern_match",
+        "threshold": "any_match"
+      },
+      "escalation_target": "FA_OF_RECORD",
+      "mandatory": true,
+      "stop_response": true,
+      "mandatory_response_template": "JIM understands this is a stressful moment. JIM's role is to provide diagnostic data, not investment direction. This session has been escalated to your advisor immediately. While you wait, remember that short-term market movements are part of investing — your advisor will review your portfolio and contact you shortly. Reference: {session_id}.",
+      "log_fields_required": ["input_original", "distress_signals_detected", "session_id", "user_id"],
+      "regulatory_basis": ["SEC_FIDUCIARY", "FINRA_SUITABILITY"]
+    },
+    {
+      "rule_id": "ESC-007",
+      "reason_code": "ESC_TAX_QUESTION",
+      "trigger_name": "Tax-Related Question",
+      "description": "User asks about tax implications of a portfolio action or investment",
+      "detection_method": "intent_classifier + keyword_detection",
+      "tax_patterns": [
+        "tax",
+        "taxes",
+        "tax implication",
+        "capital gains",
+        "tax loss harvesting",
+        "imposto",
+        "tributação",
+        "ganho de capital"
+      ],
+      "condition": {
+        "type": "pattern_match",
+        "threshold": "any_match"
+      },
+      "escalation_target": "FA_OF_RECORD",
+      "mandatory": true,
+      "stop_response": true,
+      "mandatory_response_template": "Tax implications require consultation with a qualified tax advisor. JIM is not authorized to provide tax guidance. This has been noted for your advisor's review. Reference: {session_id}.",
+      "log_fields_required": ["input_original", "session_id", "user_id"],
+      "regulatory_basis": ["SEC_FIDUCIARY"]
+    },
+    {
+      "rule_id": "ESC-008",
+      "reason_code": "ESC_LEGAL_QUESTION",
+      "trigger_name": "Legal Question",
+      "description": "User asks about legal implications or legal advice",
+      "detection_method": "keyword_detection",
+      "legal_patterns": [
+        "legal",
+        "lawsuit",
+        "liability",
+        "legally required",
+        "fiduciary liability",
+        "jurídico",
+        "legal",
+        "responsabilidade legal"
+      ],
+      "condition": {
+        "type": "pattern_match",
+        "threshold": "any_match"
+      },
+      "escalation_target": "FA_OF_RECORD",
+      "mandatory": true,
+      "stop_response": true,
+      "mandatory_response_template": "Legal questions require consultation with qualified legal counsel. JIM is not authorized to provide legal guidance. This has been noted for your advisor's review. Reference: {session_id}.",
+      "log_fields_required": ["input_original", "session_id", "user_id"],
+      "regulatory_basis": ["SEC_FIDUCIARY"]
+    },
+    {
+      "rule_id": "ESC-009",
+      "reason_code": "ESC_SUITABILITY_QUESTION",
+      "trigger_name": "Suitability Determination Request",
+      "description": "User asks JIM to make or confirm a suitability determination",
+      "detection_method": "intent_classifier",
+      "intent_ids_triggered": ["INT-021", "INT-022"],
+      "condition": {
+        "type": "intent_match",
+        "intent_category": "COMPLIANCE_SUITABILITY"
+      },
+      "escalation_target": "FA_OF_RECORD",
+      "mandatory": true,
+      "stop_response": true,
+      "mandatory_response_template": "Suitability determination requires formal best-interest analysis by a licensed advisor. JIM cannot make suitability determinations. JIM can provide the diagnostic data — Risk Number, Alignment Score, mandate flags — for the advisor's use in that process. This session has been flagged for advisor review. Reference: {session_id}.",
+      "log_fields_required": ["intent_id", "input_original", "client_id", "session_id"],
+      "regulatory_basis": ["SEC_REG_BI", "SEC_FIDUCIARY"]
+    },
+    {
+      "rule_id": "ESC-010",
+      "reason_code": "ESC_EXTERNAL_CONTENT",
+      "trigger_name": "External Content Distribution Request",
+      "description": "User requests to share, distribute, or publish JIM-generated content externally",
+      "detection_method": "intent_classifier",
+      "intent_ids_triggered": ["INT-023"],
+      "condition": {
+        "type": "intent_match",
+        "intent_category": "FO_INSTITUTIONAL",
+        "subcategory": "content_review"
+      },
+      "escalation_target": "COMPLIANCE_ADMIN",
+      "mandatory": true,
+      "stop_response": true,
+      "mandatory_response_template": "External content distribution requires compliance review and approval before any sharing or publication. JIM has flagged this request for the Compliance Admin review queue. Do not distribute this content until you receive approval confirmation. Reference: {session_id}.",
+      "log_fields_required": ["input_original", "content_reference", "session_id", "user_id"],
+      "regulatory_basis": ["FINRA_2210", "SEC_MARKETING_RULE"]
+    },
+    {
+      "rule_id": "ESC-011",
+      "reason_code": "ESC_SOCIAL_MEDIA",
+      "trigger_name": "Social Media Publication Request",
+      "description": "User requests to post or share content on social media",
+      "detection_method": "intent_classifier",
+      "intent_ids_triggered": ["INT-028"],
+      "condition": {
+        "type": "intent_match",
+        "intent_category": "ACTION_REQUEST",
+        "subcategory": "social_media"
+      },
+      "escalation_target": "COMPLIANCE_ADMIN",
+      "mandatory": true,
+      "stop_response": true,
+      "mandatory_response_template": "Social media content requires compliance review before publication. JIM has routed this to the Compliance Admin queue. Do not publish until you receive approval. Unauthorized publication may violate FINRA rules. Reference: {session_id}.",
+      "log_fields_required": ["input_original", "content_reference", "platform_specified", "session_id", "user_id"],
+      "regulatory_basis": ["FINRA_2210", "FINRA_SOCIAL_MEDIA", "SEC_MARKETING_RULE"]
+    },
+    {
+      "rule_id": "ESC-012",
+      "reason_code": "ESC_LOW_CONFIDENCE",
+      "trigger_name": "Low Confidence Score",
+      "description": "JIM's confidence in the response quality is critically low",
+      "detection_method": "confidence_scoring",
+      "condition": {
+        "type": "threshold",
+        "field": "confidence_score",
+        "operator": "less_than",
+        "value": 0.40
+      },
+      "escalation_target": "FA_OF_RECORD",
+      "mandatory": true,
+      "stop_response": false,
+      "append_to_response": true,
+      "escalation_message": "JIM's confidence in this response is critically low. This response should not be acted upon without advisor review. Reference: {session_id}.",
+      "log_fields_required": ["confidence_score", "intent_id", "session_id"],
+      "regulatory_basis": ["FINRA_BOOKS_RECORDS"]
+    },
+    {
+      "rule_id": "ESC-013",
+      "reason_code": "ESC_INCOMPLETE_DATA",
+      "trigger_name": "Critical Data Missing",
+      "description": "Required context data for the requested analysis is not present in the payload",
+      "detection_method": "context_validation",
+      "condition": {
+        "type": "missing_required_fields",
+        "severity": "critical"
+      },
+      "escalation_target": "FA_OF_RECORD",
+      "mandatory": true,
+      "stop_response": false,
+      "append_to_response": true,
+      "escalation_message": "Critical data is missing from the current context. JIM cannot provide a complete analysis. The advisor should verify that all relevant accounts and client data are loaded in the terminal. Reference: {session_id}.",
+      "log_fields_required": ["missing_fields", "intent_id", "session_id"],
+      "regulatory_basis": ["FINRA_BOOKS_RECORDS"]
+    },
+    {
+      "rule_id": "ESC-014",
+      "reason_code": "ESC_LOOP_DETECTED",
+      "trigger_name": "Conversation Loop Detected",
+      "description": "User has asked the same or substantially similar question more than 3 times in the session",
+      "detection_method": "session_loop_detection",
+      "condition": {
+        "type": "repetition_threshold",
+        "field": "similar_intent_count",
+        "operator": "greater_than",
+        "value": 3
+      },
+      "escalation_target": "FA_OF_RECORD",
+      "mandatory": true,
+      "stop_response": true,
+      "mandatory_response_template": "JIM has detected that this question has been asked multiple times in this session without a satisfying resolution. This may indicate a need for direct advisor consultation. JIM has flagged this session for advisor review. Reference: {session_id}.",
+      "log_fields_required": ["loop_count", "repeated_intent_id", "session_id", "user_id"],
+      "regulatory_basis": ["SEC_FIDUCIARY"]
+    },
+    {
+      "rule_id": "ESC-015",
+      "reason_code": "ESC_OVERRIDE_REQUEST",
+      "trigger_name": "Compliance Override Request",
+      "description": "User requests that JIM bypass a compliance guardrail",
+      "detection_method": "keyword_detection",
+      "override_patterns": [
+        "ignore compliance",
+        "bypass the rule",
+        "skip the disclaimer",
+        "just answer without",
+        "override",
+        "ignore the warning",
+        "ignorar o aviso",
+        "ignorar compliance"
+      ],
+      "condition": {
+        "type": "pattern_match",
+        "threshold": "any_match"
+      },
+      "escalation_target": "COMPLIANCE_ADMIN",
+      "mandatory": true,
+      "stop_response": true,
+      "mandatory_response_template": "JIM cannot bypass compliance guardrails. All compliance rules are mandatory and non-negotiable by user tier. If you believe a guardrail is incorrectly applied, please contact your Compliance Admin for review. Reference: {session_id}.",
+      "log_fields_required": ["input_original", "override_pattern_detected", "session_id", "user_id"],
+      "regulatory_basis": ["SEC_MARKETING_RULE", "FINRA_2210", "FINRA_BOOKS_RECORDS"]
+    },
+    {
+      "rule_id": "ESC-016",
+      "reason_code": "ESC_SPECIFIC_SECURITY",
+      "trigger_name": "Specific Security Buy/Sell Decision",
+      "description": "User asks about a specific security (ticker, fund name) in the context of a buy/sell decision",
+      "detection_method": "intent_classifier + ticker_detection",
+      "condition": {
+        "type": "combined",
+        "conditions": [
+          {"type": "action_present"},
+          {"type": "ticker_or_security_detected"}
+        ],
+        "operator": "AND"
+      },
+      "escalation_target": "FA_OF_RECORD",
+      "mandatory": true,
+      "stop_response": true,
+      "mandatory_response_template": "JIM does not provide buy or sell guidance for specific securities. This question has been escalated to your advisor. Reference: {session_id}.",
+      "log_fields_required": ["input_original", "security_detected", "session_id", "user_id"],
+      "regulatory_basis": ["SEC_REG_BI", "SEC_FIDUCIARY"]
+    }
+  ]
+}

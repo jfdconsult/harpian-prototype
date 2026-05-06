@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Harpian · Missing Layers · HRD-002-ML</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap');
+
+  :root {
+    --bg:#090E14; --s1:#0F1820; --s2:#162130; --s3:#1C2D40;
+    --gold:#B8972A; --gold-l:#D4AF45;
+    --text:#C8D8E8; --dim:#6A8AA8; --bright:#EBF1F7;
+    --bsub:rgba(235,241,247,0.06); --bgold:rgba(184,151,42,0.14);
+    --green:#1A7A4A; --green-l:#3DBE78; --green-bg:rgba(26,122,74,0.08);
+    --amber:#D4860A; --amber-l:#F0A830; --amber-bg:rgba(212,134,10,0.08);
+    --red:#C0392B; --red-l:#E87060; --red-bg:rgba(192,57,43,0.08);
+    --blue:#2D7AC0; --blue-l:#5BA8E8; --blue-bg:rgba(45,122,192,0.08);
+  }
+
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;line-height:1.6;}
+  .page{max-width:1160px;margin:0 auto;padding:0 40px 120px;}
+
+  /* COVER */
+  .cover{padding:56px 0 40px;border-bottom:1px solid var(--bgold);margin-bottom:52px;display:grid;grid-template-columns:1fr auto;align-items:end;gap:40px;}
+  .badge{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.14em;color:var(--gold);background:var(--bgold);border:1px solid rgba(184,151,42,.25);padding:4px 10px;display:inline-block;margin-bottom:14px;text-transform:uppercase;}
+  .cover h1{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:var(--bright);line-height:1.1;letter-spacing:-.02em;}
+  .cover h1 em{color:var(--gold);font-style:normal;}
+  .cover-sub{font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);margin-top:10px;letter-spacing:.06em;line-height:2;}
+  .cover-meta{font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);line-height:2.2;letter-spacing:.06em;text-align:right;}
+  .cover-meta strong{color:var(--gold);display:block;font-size:11px;margin-bottom:4px;}
+
+  /* BLOCKS */
+  .blk{margin-top:68px;padding-top:32px;border-top:1px solid var(--bgold);margin-bottom:10px;}
+  .blk-head{display:flex;align-items:center;gap:14px;margin-bottom:32px;}
+  .blk-id{font-family:'DM Mono',monospace;font-size:10px;color:var(--gold);background:var(--bgold);border:1px solid rgba(184,151,42,.25);padding:5px 11px;letter-spacing:.1em;flex-shrink:0;}
+  .blk-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--bright);letter-spacing:-.02em;}
+
+  .section{margin-bottom:48px;}
+  .sh{display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:10px;border-bottom:1px solid var(--bsub);}
+  .sn{font-family:'DM Mono',monospace;font-size:9px;color:var(--gold);background:var(--bgold);border:1px solid rgba(184,151,42,.2);padding:3px 8px;letter-spacing:.1em;flex-shrink:0;}
+  .st{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;color:var(--bright);letter-spacing:-.01em;}
+  .sub{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.14em;color:var(--gold);text-transform:uppercase;margin:20px 0 8px;}
+
+  .card{background:var(--s1);border:1px solid var(--bsub);padding:18px 22px;}
+  .card.gl{border-left:3px solid var(--gold);}
+  .card.gg{border-left:3px solid var(--green);}
+  .card.gr{border-left:3px solid var(--red);}
+  .card.gb{border-left:3px solid var(--blue);}
+  .card.ga{border-left:3px solid var(--amber);}
+
+  .g2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+
+  .tag{display:inline-block;font-family:'DM Mono',monospace;font-size:8px;padding:2px 7px;letter-spacing:.08em;text-transform:uppercase;}
+  .tg{background:var(--green-bg);color:var(--green-l);border:1px solid rgba(26,122,74,.3);}
+  .ta{background:var(--amber-bg);color:var(--amber-l);border:1px solid rgba(212,134,10,.3);}
+  .tr{background:var(--red-bg);color:var(--red-l);border:1px solid rgba(192,57,43,.3);}
+  .tb{background:var(--blue-bg);color:var(--blue-l);border:1px solid rgba(45,122,192,.3);}
+  .tgd{background:var(--bgold);color:var(--gold);border:1px solid rgba(184,151,42,.3);}
+
+  .note{font-family:'DM Mono',monospace;font-size:9.5px;color:var(--dim);padding:7px 12px;border-left:2px solid var(--bsub);margin-top:8px;line-height:1.6;}
+
+  table.dt{width:100%;border-collapse:collapse;}
+  table.dt th{background:var(--s3);padding:8px 13px;font-family:'DM Mono',monospace;font-size:8px;color:var(--gold);text-align:left;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--bsub);}
+  table.dt td{padding:8px 13px;font-size:11.5px;color:var(--text);border:1px solid var(--bsub);background:var(--s1);vertical-align:middle;}
+
+  /* ── CAPITAL IMPACT WIDGET ── */
+  .cap-widget{display:grid;grid-template-columns:1fr 40px 1fr 1px 1fr;gap:0;border:1px solid var(--bsub);overflow:hidden;margin:14px 0;}
+  .cap-col{padding:20px 22px;}
+  .cap-col.before{background:var(--s2);}
+  .cap-col.after{background:rgba(26,122,74,0.04);}
+  .cap-arrow{display:flex;align-items:center;justify-content:center;background:var(--s3);color:var(--gold);font-size:18px;}
+  .cap-divider{background:var(--bsub);}
+  .cap-label{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.12em;color:var(--dim);text-transform:uppercase;margin-bottom:10px;}
+  .cap-val{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;line-height:1;margin-bottom:4px;}
+  .cap-sub{font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);}
+  .cap-delta-badge{display:inline-block;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;padding:3px 10px;margin-top:8px;}
+
+  /* Worst-case strip */
+  .worst-strip{background:var(--s2);border:1px solid var(--bsub);padding:12px 22px;display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin:10px 0;}
+  .ws-item{padding:0 16px;border-right:1px solid var(--bsub);text-align:center;}
+  .ws-item:first-child{padding-left:0;text-align:left;}
+  .ws-item:last-child{border-right:none;text-align:right;}
+  .ws-label{font-family:'DM Mono',monospace;font-size:8px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px;}
+  .ws-val{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;}
+
+  /* ── SCENARIO GRID ── */
+  .scenario-grid{display:grid;grid-template-columns:1fr 1px 1fr 1px 1fr;gap:0;border:1px solid var(--bsub);overflow:hidden;margin:14px 0;}
+  .sc-col{padding:22px 20px;}
+  .sc-col.cons{background:var(--blue-bg);}
+  .sc-col.base{background:rgba(184,151,42,0.04);border-left:3px solid var(--gold);}
+  .sc-col.opt{background:var(--green-bg);}
+  .sc-div{background:var(--bsub);}
+  .sc-label{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.12em;color:var(--dim);text-transform:uppercase;margin-bottom:10px;}
+  .sc-name{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;margin-bottom:14px;}
+  .sc-metric{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--bsub);font-size:11.5px;}
+  .sc-metric:last-child{border-bottom:none;}
+  .sc-metric-l{color:var(--dim);}
+  .sc-metric-v{font-family:'DM Mono',monospace;font-size:11px;}
+  .sc-return{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;margin:12px 0 4px;}
+  .sc-tag{margin-top:12px;}
+
+  /* ── ASYMMETRY PANEL ── */
+  .asym-main{display:grid;grid-template-columns:1fr 1px 1fr 1px 1fr;gap:0;border:1px solid var(--bsub);overflow:hidden;margin:14px 0;}
+  .asym-col{padding:22px 20px;text-align:center;}
+  .asym-col.up{background:rgba(26,122,74,0.05);}
+  .asym-col.ratio{background:var(--s3);}
+  .asym-col.down{background:rgba(192,57,43,0.05);}
+  .asym-div{background:var(--bsub);}
+  .asym-label{font-family:'DM Mono',monospace;font-size:8px;text-transform:uppercase;letter-spacing:.12em;color:var(--dim);margin-bottom:8px;}
+  .asym-val{font-family:'Syne',sans-serif;font-size:38px;font-weight:800;line-height:1;margin-bottom:6px;}
+  .asym-desc{font-size:11px;color:var(--text);line-height:1.5;}
+  .asym-band{height:8px;border-radius:4px;overflow:hidden;display:flex;margin:12px 0 4px;}
+  .asym-band-up{background:var(--green);}
+  .asym-band-down{background:var(--red);}
+  .asym-band-labels{display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:8px;color:var(--dim);}
+
+  /* ── TRADEOFF — complementary mini ── */
+  .to-row{display:grid;grid-template-columns:190px 1fr 1fr;gap:0;border:1px solid var(--bsub);margin-bottom:2px;overflow:hidden;}
+  .to-want{padding:10px 16px;background:var(--s2);border-right:1px solid var(--bsub);display:flex;align-items:center;font-size:11.5px;color:var(--bright);font-weight:500;}
+  .to-cost{padding:10px 16px;background:var(--s1);border-right:1px solid var(--bsub);display:flex;flex-direction:column;justify-content:center;}
+  .to-alt{padding:10px 16px;background:var(--s1);display:flex;flex-direction:column;justify-content:center;}
+  .to-lbl{font-family:'DM Mono',monospace;font-size:7.5px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px;}
+  .to-val{font-size:11.5px;}
+
+  /* ── FINAL DECISION BLOCK ── */
+  .fdb{border:1px solid var(--bgold);overflow:hidden;margin-top:14px;}
+  .fdb-header{background:var(--s3);padding:20px 26px;border-bottom:1px solid var(--bsub);}
+  .fdb-overline{font-family:'DM Mono',monospace;font-size:8px;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px;}
+  .fdb-verdict{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--bright);letter-spacing:-.01em;line-height:1.15;}
+  .fdb-body{padding:26px;display:grid;grid-template-columns:1fr 1px 260px;gap:24px;}
+  .fdb-div{background:var(--bsub);}
+  .fdb-col-label{font-family:'DM Mono',monospace;font-size:7.5px;color:var(--gold);text-transform:uppercase;letter-spacing:.14em;margin-bottom:12px;}
+
+  .alloc-pair{display:flex;gap:8px;margin-bottom:12px;}
+  .alloc-box{flex:1;background:var(--s2);border:1px solid var(--bsub);padding:12px;text-align:center;}
+  .ab-label{font-family:'DM Mono',monospace;font-size:7.5px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px;}
+  .ab-val{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--gold);}
+  .ab-range{font-family:'DM Mono',monospace;font-size:8px;color:var(--dim);margin-top:2px;}
+
+  .outcome-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--bsub);font-size:11.5px;}
+  .outcome-row:last-child{border-bottom:none;}
+  .orl{color:var(--dim);}
+  .orv{font-family:'DM Mono',monospace;font-size:11px;}
+
+  .meaning-box{background:var(--s2);border:1px solid rgba(184,151,42,.2);border-left:3px solid var(--gold);padding:14px 18px;margin-bottom:14px;font-family:'DM Mono',monospace;font-size:10.5px;color:var(--bright);line-height:1.7;}
+  .meaning-label{font-size:8px;color:var(--gold);text-transform:uppercase;letter-spacing:.12em;margin-bottom:6px;}
+
+  .cta-primary{background:var(--gold);color:#090E14;padding:15px 22px;font-family:'Syne',sans-serif;font-size:14px;font-weight:800;text-align:center;letter-spacing:.02em;display:block;width:100%;cursor:pointer;margin-top:0;}
+  .cta-sec{background:var(--s3);color:var(--text);padding:10px 16px;font-family:'DM Mono',monospace;font-size:9px;text-align:center;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--bsub);display:block;width:100%;margin-top:6px;cursor:pointer;}
+
+  /* ── FEASIBILITY LABEL ── */
+  .feas-label{display:flex;align-items:center;gap:16px;padding:14px 20px;border:1px solid;margin:10px 0;}
+  .feas-label.feasible{background:var(--green-bg);border-color:rgba(26,122,74,.3);}
+  .feas-label.border{background:var(--amber-bg);border-color:rgba(212,134,10,.3);}
+  .feas-label.infeasible{background:var(--red-bg);border-color:rgba(192,57,43,.3);}
+  .feas-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+  .feas-name{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;}
+  .feas-desc{font-size:11.5px;color:var(--text);margin-left:auto;text-align:right;max-width:400px;}
+
+  ::-webkit-scrollbar{width:4px;}
+  ::-webkit-scrollbar-thumb{background:rgba(184,151,42,.2);}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- COVER -->
+<div class="cover">
+  <div>
+    <div class="badge">Missing Layers Supplement · HRD-002-ML · Addendum to Series</div>
+    <h1>Five New Layers.<br><em>Nothing repeated.</em></h1>
+    <div class="cover-sub">
+      Adds to: Spec v1 · Engine v1 · Decision v1 · Outcome v1<br>
+      New only: Capital Impact · Scenario Ranges · Asymmetry · Tradeoff Visual · Final Block
+    </div>
+  </div>
+  <div class="cover-meta">
+    <strong>HARPIAN LLC</strong>
+    ADDENDUM: HRD-002-ML<br>
+    SERIES: 5 OF 4 (SUPPLEMENT)<br>
+    STATUS: DRAFT
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════
+     BLOCK A — CAPITAL IMPACT LAYER
+════════════════════════════════════════════════ -->
+<div class="blk">
+  <div class="blk-head">
+    <span class="blk-id">BLOCK A</span>
+    <span class="blk-title">Capital Impact Layer</span>
+  </div>
+</div>
+
+<div class="section">
+  <div class="sh"><span class="sn">A·01</span><span class="st">Terminal Capital — Before vs After in Absolute Dollars</span></div>
+
+  <div style="font-size:12px;color:var(--text);line-height:1.8;margin-bottom:14px;">
+    All prior documents show percentages. This layer adds the one number that crystallizes everything: <strong style="color:var(--bright);">final dollar value of the decision</strong>. The gap between "Current" and "Adjusted" at year 12 IS the recommendation, expressed as capital.
+  </div>
+
+  <!-- CAPITAL WIDGET -->
+  <div class="cap-widget">
+    <div class="cap-col before">
+      <div class="cap-label">Current path · No action · Year 12</div>
+      <div class="cap-val" style="color:var(--amber-l);">$1.82M</div>
+      <div class="cap-sub">P50 median terminal capital</div>
+      <div class="cap-sub" style="margin-top:4px;">P_goal(Target $3.5M): 52%</div>
+      <div class="cap-delta-badge" style="background:rgba(192,57,43,0.12);color:var(--red-l);">$1.68M short of target</div>
+    </div>
+    <div class="cap-arrow">→</div>
+    <div class="cap-col after">
+      <div class="cap-label">Adjusted path · C11 18% + C22 11% · Year 12</div>
+      <div class="cap-val" style="color:var(--green-l);">$2.31M</div>
+      <div class="cap-sub">P50 median terminal capital</div>
+      <div class="cap-sub" style="margin-top:4px;">P_goal(Target $3.5M): 74%</div>
+      <div class="cap-delta-badge" style="background:rgba(26,122,74,0.12);color:var(--green-l);">+$490K vs current path</div>
+    </div>
+    <div class="cap-divider"></div>
+    <div class="cap-col" style="background:var(--s3);padding:20px 22px;">
+      <div class="cap-label">Impact of acting now</div>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-top:6px;">
+        <div>
+          <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--dim);margin-bottom:2px;text-transform:uppercase;letter-spacing:.08em;">Capital gain (P50)</div>
+          <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--green-l);">+$490K</div>
+        </div>
+        <div>
+          <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--dim);margin-bottom:2px;text-transform:uppercase;letter-spacing:.08em;">Time saved to target</div>
+          <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--green-l);">−4 yrs</div>
+        </div>
+        <div>
+          <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--dim);margin-bottom:2px;text-transform:uppercase;letter-spacing:.08em;">Probability gain</div>
+          <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--green-l);">+22%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WORST CASE STRIP -->
+  <div class="sub">Loss Range — Worst Case Exposure per Scenario</div>
+  <div class="worst-strip">
+    <div class="ws-item">
+      <div class="ws-label">Worst case · Current (P10)</div>
+      <div class="ws-val" style="color:var(--red-l);">$680K</div>
+      <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);margin-top:3px;">−32% from base · Max drawdown −8%</div>
+    </div>
+    <div class="ws-item">
+      <div class="ws-label">Worst case · Adjusted (P10)</div>
+      <div class="ws-val" style="color:var(--amber-l);">$740K</div>
+      <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);margin-top:3px;">−26% from base · Max drawdown −14%</div>
+    </div>
+    <div class="ws-item">
+      <div class="ws-label">Worst case differential</div>
+      <div class="ws-val" style="color:var(--green-l);">+$60K</div>
+      <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);margin-top:3px;">Adjusted is better even in downside</div>
+    </div>
+  </div>
+
+  <div class="note">Capital figures are P50 (median outcome). Loss range uses P10 (10th percentile — 1-in-10 adverse scenario). Never presented as guarantees. Context always visible. Drawdown is expressed both as % and as implied dollar loss on base capital.</div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════
+     BLOCK B — SCENARIO LAYER
+════════════════════════════════════════════════ -->
+<div class="blk">
+  <div class="blk-head">
+    <span class="blk-id">BLOCK B</span>
+    <span class="blk-title">Scenario Layer — Three Outcome Ranges</span>
+  </div>
+</div>
+
+<div class="section">
+  <div class="sh"><span class="sn">B·01</span><span class="st">Conservative · Base · Optimistic — Applied to Adjusted Portfolio</span></div>
+
+  <div class="scenario-grid">
+    <!-- CONSERVATIVE -->
+    <div class="sc-col cons">
+      <div class="sc-label">Scenario · 01</div>
+      <div class="sc-name" style="color:var(--blue-l);">Conservative</div>
+      <div class="sc-return" style="color:var(--blue-l);">$1.58M</div>
+      <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);margin-bottom:14px;">Terminal capital · P25 · Year 12</div>
+      <div class="sc-metric"><span class="sc-metric-l">Annual return</span><span class="sc-metric-v" style="color:var(--blue-l);">6.8%</span></div>
+      <div class="sc-metric"><span class="sc-metric-l">Volatility</span><span class="sc-metric-v">14.2%</span></div>
+      <div class="sc-metric"><span class="sc-metric-l">Max drawdown</span><span class="sc-metric-v" style="color:var(--amber-l);">−18%</span></div>
+      <div class="sc-metric"><span class="sc-metric-l">P_goal</span><span class="sc-metric-v" style="color:var(--amber-l);">41%</span></div>
+      <div class="sc-metric"><span class="sc-metric-l">Applies when</span><span class="sc-metric-v" style="color:var(--dim);font-size:9px;">Bearish regime · low trend capture</span></div>
+      <div class="sc-tag"><span class="tag tb">P25 outcome</span></div>
+    </div>
+    <div class="sc-div"></div>
+    <!-- BASE -->
+    <div class="sc-col base">
+      <div class="sc-label">Scenario · 02</div>
+      <div class="sc-name" style="color:var(--gold);">Base Case ★</div>
+      <div class="sc-return" style="color:var(--gold);">$2.31M</div>
+      <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);margin-bottom:14px;">Terminal capital · P50 · Year 12</div>
+      <div class="sc-metric"><span class="sc-metric-l">Annual return</span><span class="sc-metric-v" style="color:var(--green-l);">11.4%</span></div>
+      <div class="sc-metric"><span class="sc-metric-l">Volatility</span><span class="sc-metric-v">11.6%</span></div>
+      <div class="sc-metric"><span class="sc-metric-l">Max drawdown</span><span class="sc-metric-v" style="color:var(--amber-l);">−14%</span></div>
+      <div class="sc-metric"><span class="sc-metric-l">P_goal</span><span class="sc-metric-v" style="color:var(--green-l);">74%</span></div>
+      <div class="sc-metric"><span class="sc-metric-l">Applies when</span><span class="sc-metric-v" style="color:var(--dim);font-size:9px;">Normal regime · trend-following active</span></div>
+      <div class="sc-tag"><span class="tag tgd">Primary estimate</span></div>
+    </div>
+    <div class="sc-div"></div>
+    <!-- OPTIMISTIC -->
+    <div class="sc-col opt">
+      <div class="sc-label">Scenario · 03</div>
+      <div class="sc-name" style="color:var(--green-l);">Optimistic</div>
+      <div class="sc-return" style="color:var(--green-l);">$3.44M</div>
+      <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);margin-bottom:14px;">Terminal capital · P75 · Year 12</div>
+      <div class="sc-metric"><span class="sc-metric-l">Annual return</span><span class="sc-metric-v" style="color:var(--green-l);">16.8%</span></div>
+      <div class="sc-metric"><span class="sc-metric-l">Volatility</span><span class="sc-metric-v">11.6%</span></div>
+      <div class="sc-metric"><span class="sc-metric-l">Max drawdown</span><span class="sc-metric-v" style="color:var(--amber-l);">−11%</span></div>
+      <div class="sc-metric"><span class="sc-metric-l">P_goal</span><span class="sc-metric-v" style="color:var(--green-l);">96%</span></div>
+      <div class="sc-metric"><span class="sc-metric-l">Applies when</span><span class="sc-metric-v" style="color:var(--dim);font-size:9px;">Strong trend year · low drawdown realized</span></div>
+      <div class="sc-tag"><span class="tag tg">P75 outcome</span></div>
+    </div>
+  </div>
+
+  <div class="sub">Scenario Range Summary — What the Band Means</div>
+  <div class="card gl" style="padding:16px 20px;">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;">
+      <div style="text-align:center;">
+        <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;">Downside floor (P10)</div>
+        <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--red-l);">$740K</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;">Conservative (P25)</div>
+        <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--blue-l);">$1.58M</div>
+      </div>
+      <div style="text-align:center;border-left:1px solid var(--bgold);border-right:1px solid var(--bgold);">
+        <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;">Base case (P50) ★</div>
+        <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--gold);">$2.31M</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;">Optimistic (P75)</div>
+        <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--green-l);">$3.44M</div>
+      </div>
+    </div>
+    <!-- visual band -->
+    <div style="margin-top:16px;height:8px;background:linear-gradient(90deg, var(--red) 0%, var(--amber) 25%, var(--gold) 50%, var(--green) 75%, var(--green-l) 100%);border-radius:4px;"></div>
+    <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:8px;color:var(--dim);margin-top:4px;">
+      <span>$740K</span><span>$1.58M</span><span>$2.31M</span><span>$3.44M</span><span>$4.1M+</span>
+    </div>
+  </div>
+
+  <div class="note">Scenarios are computed from the same volatility model — not hand-picked. P25/P50/P75 are percentile outcomes of the same return distribution. Base case is always the primary recommendation reference. Conservative and Optimistic exist to calibrate expectation range — not to present best/worst cases as realistic planning inputs.</div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════
+     BLOCK C — ASYMMETRY PANEL
+════════════════════════════════════════════════ -->
+<div class="blk">
+  <div class="blk-head">
+    <span class="blk-id">BLOCK C</span>
+    <span class="blk-title">Asymmetry Panel — Risk/Reward Structure</span>
+  </div>
+</div>
+
+<div class="section">
+  <div class="sh"><span class="sn">C·01</span><span class="st">Upside / Downside / Asymmetry Ratio</span></div>
+
+  <div style="font-size:12px;color:var(--text);line-height:1.8;margin-bottom:14px;">
+    The asymmetry ratio is the single most important structural insight. It answers: <strong style="color:var(--bright);">for every unit of risk taken, how many units of potential return exist?</strong> A ratio above 3x is considered institutionally acceptable. Below 1.5x = unfavorable structure.
+  </div>
+
+  <div class="asym-main">
+    <div class="asym-col up">
+      <div class="asym-label">Expected Upside</div>
+      <div class="asym-val" style="color:var(--green-l);">+112%</div>
+      <div class="asym-desc">Gain from current capital ($1M) to P75 scenario ($2.31M) over 12 years</div>
+      <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);margin-top:8px;">P75 terminal: $2.31M · CAGR: 16.8%</div>
+    </div>
+    <div class="asym-div"></div>
+    <div class="asym-col ratio" style="display:flex;flex-direction:column;align-items:center;justify-content:center;">
+      <div class="asym-label">Asymmetry Ratio</div>
+      <div class="asym-val" style="color:var(--gold);font-size:48px;">6.2×</div>
+      <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);text-align:center;line-height:1.6;">Upside ÷ Downside<br>+112% ÷ −18%<br><span style="color:var(--green-l);">Institutional threshold: ≥3×</span></div>
+      <div style="margin-top:10px;"><span class="tag tg">Favorable structure</span></div>
+    </div>
+    <div class="asym-div"></div>
+    <div class="asym-col down">
+      <div class="asym-label">Expected Downside</div>
+      <div class="asym-val" style="color:var(--red-l);">−18%</div>
+      <div class="asym-desc">Maximum expected loss in P10 stress scenario over 12 years (worst-case annual drawdown: −14%)</div>
+      <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);margin-top:8px;">P10 terminal: $740K · DD: −14% max</div>
+    </div>
+  </div>
+
+  <!-- Asymmetry bar -->
+  <div class="card" style="padding:16px 20px;margin-top:10px;">
+    <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;">Visual: Upside vs Downside exposure band</div>
+    <div class="asym-band">
+      <div class="asym-band-up" style="width:86%;"></div>
+      <div class="asym-band-down" style="width:14%;"></div>
+    </div>
+    <div class="asym-band-labels">
+      <span style="color:var(--green-l);">Upside exposure: +112%</span>
+      <span style="color:var(--red-l);">Downside: −18%</span>
+    </div>
+    <div style="margin-top:14px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding-top:14px;border-top:1px solid var(--bsub);">
+      <div>
+        <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px;">Current portfolio asymmetry</div>
+        <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--amber-l);">3.1×</div>
+        <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);">+58% upside / −19% down</div>
+      </div>
+      <div>
+        <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px;">Adjusted portfolio asymmetry</div>
+        <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--green-l);">6.2×</div>
+        <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);">+112% upside / −18% down</div>
+      </div>
+      <div>
+        <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px;">Asymmetry improvement</div>
+        <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--green-l);">+3.1×</div>
+        <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);">Better structure at lower drawdown cost</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="note">Asymmetry ratio = (P75 return − P50 return) ÷ (P50 return − P10 return). Values above 3× indicate the distribution is positively skewed — more outcome mass on the upside. StormGuard Armor in Core 11 mechanically improves this ratio by truncating the left tail.</div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════
+     BLOCK D — TRADEOFF VISUAL (COMPLEMENT)
+════════════════════════════════════════════════ -->
+<div class="blk">
+  <div class="blk-head">
+    <span class="blk-id">BLOCK D</span>
+    <span class="blk-title">Tradeoff Visual — Engineering Constraints at a Glance</span>
+  </div>
+</div>
+
+<div class="section">
+  <div class="sh"><span class="sn">D·01</span><span class="st">If You Want X, the Price Is Y — No Free Optimization</span></div>
+
+  <div style="font-size:12px;color:var(--text);line-height:1.8;margin-bottom:14px;">
+    This is the visual complement to the prior tradeoff table. Presented inline as the user approaches slider limits — <strong style="color:var(--bright);">not as a standalone page, but as contextual constraint messaging.</strong>
+  </div>
+
+  <div class="to-row">
+    <div class="to-want">↑ Higher return</div>
+    <div class="to-cost">
+      <div class="to-lbl">Primary cost</div>
+      <div class="to-val" style="color:var(--red-l);">Accept ↑ max drawdown (+4–8%)</div>
+    </div>
+    <div class="to-alt">
+      <div class="to-lbl">Or alternatively</div>
+      <div class="to-val" style="color:var(--dim);">Accept wider return variance</div>
+    </div>
+  </div>
+  <div class="to-row">
+    <div class="to-want">↓ Lower drawdown</div>
+    <div class="to-cost">
+      <div class="to-lbl">Primary cost</div>
+      <div class="to-val" style="color:var(--amber-l);">Accept ↓ expected return (−2–4%)</div>
+    </div>
+    <div class="to-alt">
+      <div class="to-lbl">Or alternatively</div>
+      <div class="to-val" style="color:var(--dim);">Extend horizon +2–4 years</div>
+    </div>
+  </div>
+  <div class="to-row">
+    <div class="to-want">↑ Shorter time to target</div>
+    <div class="to-cost">
+      <div class="to-lbl">Primary cost</div>
+      <div class="to-val" style="color:var(--red-l);">Accept ↑ RN (+8–14 pts consumed)</div>
+    </div>
+    <div class="to-alt">
+      <div class="to-lbl">Or alternatively</div>
+      <div class="to-val" style="color:var(--dim);">Accept ↑ drawdown tolerance −22%</div>
+    </div>
+  </div>
+  <div class="to-row">
+    <div class="to-want">↑ P(Goal) without more risk</div>
+    <div class="to-cost">
+      <div class="to-lbl">Primary cost</div>
+      <div class="to-val" style="color:var(--amber-l);">Extend horizon or reduce target capital</div>
+    </div>
+    <div class="to-alt">
+      <div class="to-lbl">Or alternatively</div>
+      <div class="to-val" style="color:var(--dim);">Increase initial capital deployed</div>
+    </div>
+  </div>
+  <div class="to-row">
+    <div class="to-want">↑ Asymmetry ratio</div>
+    <div class="to-cost">
+      <div class="to-lbl">Primary mechanism</div>
+      <div class="to-val" style="color:var(--green-l);">Add Core 11 (SGA truncates left tail)</div>
+    </div>
+    <div class="to-alt">
+      <div class="to-lbl">Marginal cost</div>
+      <div class="to-val" style="color:var(--dim);">Slight return reduction at C11 &gt;30%</div>
+    </div>
+  </div>
+
+  <div class="note">Shown contextually as tooltip copy when slider approaches constraint boundary. Example trigger: C22 slider reaches RN_appetite ceiling → system shows "You cannot increase return further without exceeding your risk budget. Consider extending your time horizon by 2 years instead."</div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════
+     BLOCK E — FINAL DECISION BLOCK
+════════════════════════════════════════════════ -->
+<div class="blk">
+  <div class="blk-head">
+    <span class="blk-id">BLOCK E</span>
+    <span class="blk-title">Final Decision Block — Complete Closing Screen</span>
+  </div>
+</div>
+
+<div class="section">
+  <div class="sh"><span class="sn">E·01</span><span class="st">Goal Feasibility Label — Always Visible, Unambiguous</span></div>
+
+  <div class="feas-label feasible">
+    <div class="feas-dot" style="background:var(--green);"></div>
+    <div class="feas-name" style="color:var(--green-l);">Feasible</div>
+    <div class="feas-desc">P(Goal) ≥ 75% with suggested allocation. Goal achievable within stated horizon and risk parameters.</div>
+  </div>
+  <div class="feas-label border" style="opacity:0.5;">
+    <div class="feas-dot" style="background:var(--amber);"></div>
+    <div class="feas-name" style="color:var(--amber-l);">Borderline</div>
+    <div class="feas-desc">P(Goal) 50–74%. Achievable but requires adjustment. One variable change resolves it.</div>
+  </div>
+  <div class="feas-label infeasible" style="opacity:0.5;">
+    <div class="feas-dot" style="background:var(--red);"></div>
+    <div class="feas-name" style="color:var(--red-l);">Not Feasible</div>
+    <div class="feas-desc">P(Goal) &lt;50% even at max tolerance. Requires: ↑ risk OR ↑ time OR ↓ target.</div>
+  </div>
+
+  <div class="note" style="margin-top:12px;">Exactly one label visible at all times. Label recolors the top banner of the entire final screen — not just a badge. At "Not Feasible" state, the three levers (from Outcome Impact doc) appear inline below the label with exact numbers.</div>
+</div>
+
+<div class="section">
+  <div class="sh"><span class="sn">E·02</span><span class="st">Final Decision Block — Complete Closing Output</span></div>
+
+  <div class="fdb">
+    <div class="fdb-header">
+      <div class="fdb-overline">Final output · Allocation strategy assessment</div>
+      <div class="fdb-verdict">
+        Your portfolio is under-risked relative to your goal.<br>
+        A targeted adjustment closes the gap and improves your trajectory materially.
+      </div>
+    </div>
+    <div class="fdb-body">
+
+      <!-- COL 1: Numbers -->
+      <div>
+        <div class="fdb-col-label">Recommended Allocation</div>
+        <div class="alloc-pair">
+          <div class="alloc-box">
+            <div class="ab-label">Core 11</div>
+            <div class="ab-val">18%</div>
+            <div class="ab-range">Range: 15 – 22%</div>
+          </div>
+          <div class="alloc-box">
+            <div class="ab-label">Core 22</div>
+            <div class="ab-val">11%</div>
+            <div class="ab-range">Range: 8 – 14%</div>
+          </div>
+        </div>
+        <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);margin-bottom:16px;">Combined: 29% Harpian · 71% existing · Within budget</div>
+
+        <div class="fdb-col-label">Expected Outcome — Base Case (P50)</div>
+        <div class="outcome-row"><span class="orl">Terminal capital</span><span class="orv" style="color:var(--green-l);">$2.31M ← from $1.82M</span></div>
+        <div class="outcome-row"><span class="orl">Capital gain</span><span class="orv" style="color:var(--green-l);">+$490K</span></div>
+        <div class="outcome-row"><span class="orl">Annual return</span><span class="orv" style="color:var(--green-l);">9 – 13%</span></div>
+        <div class="outcome-row"><span class="orl">Max drawdown</span><span class="orv" style="color:var(--amber-l);">−11 – −16%</span></div>
+        <div class="outcome-row"><span class="orl">Success probability</span><span class="orv" style="color:var(--green-l);">74% ← from 52%</span></div>
+        <div class="outcome-row"><span class="orl">Time to target</span><span class="orv" style="color:var(--green-l);">~7 yrs ← from ~11 yrs</span></div>
+        <div class="outcome-row"><span class="orl">Asymmetry ratio</span><span class="orv" style="color:var(--green-l);">6.2× ← from 3.1×</span></div>
+        <div class="outcome-row"><span class="orl">Goal feasibility</span><span class="orv"><span class="tag tg">Feasible</span></span></div>
+        <div class="outcome-row"><span class="orl">Confidence level</span><span class="orv" style="color:var(--green-l);">High</span></div>
+        <div class="outcome-row"><span class="orl">Risk status</span><span class="orv"><span class="tag tg">Optimal zone</span></span></div>
+      </div>
+
+      <div class="fdb-div"></div>
+
+      <!-- COL 2: Translation + Action -->
+      <div>
+        <div class="fdb-col-label">What This Means</div>
+        <div class="meaning-box">
+          <div class="meaning-label">Decision Translation</div>
+          "To materially improve your outcome, increase exposure to Core 22 within controlled limits and add Core 11 to preserve the risk budget. This allocation improves your success probability from 52% to 74% — a 22-point improvement — while adding only 6 points of Risk Number and improving your asymmetry ratio from 3.1× to 6.2×."
+        </div>
+
+        <div class="fdb-col-label" style="margin-top:16px;">Cost of Inaction</div>
+        <div style="background:var(--red-bg);border:1px solid rgba(192,57,43,.2);padding:12px 16px;font-family:'DM Mono',monospace;font-size:10px;color:var(--red-l);line-height:1.7;margin-bottom:16px;">
+          "You are currently sacrificing ~22% probability of reaching your goal and ~$490K of median terminal capital. Each year of delay compounds this gap."
+        </div>
+
+        <div class="fdb-col-label">Action</div>
+        <div class="cta-primary">Apply Allocation Strategy</div>
+        <div class="cta-sec">Adjust Strategy</div>
+        <div class="cta-sec">Export to PDF</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="note" style="margin-top:12px;">This is the terminal screen. Nothing appears after the CTA. "Apply Allocation Strategy" confirms and logs the recommendation. "Adjust Strategy" returns to the simulator. "Export to PDF" generates the client-facing one-pager. No fourth option exists — the system must lead to a decision, not offer infinite navigation.</div>
+</div>
+
+<!-- FOOTER -->
+<div style="border-top:1px solid var(--bsub);padding:24px 0;display:flex;justify-content:space-between;align-items:center;margin-top:40px;">
+  <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);letter-spacing:.1em;line-height:2;">
+    HARPIAN LLC · MISSING LAYERS SUPPLEMENT · HRD-002-ML<br>
+    SERIES COMPLETE: SPEC · ENGINE · DECISION · OUTCOME · SUPPLEMENT
+  </div>
+  <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);letter-spacing:.1em;text-align:right;line-height:2;">
+    INTERNAL · DEVELOPMENT USE ONLY<br>
+    DO NOT DISTRIBUTE
+  </div>
+</div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,380 @@
+{
+  "schema_version": "1.0",
+  "last_updated": "2026-04-29",
+  "description": "JIM Permission Matrix — tier-based feature access control. Changes require Admin approval and Engineering review.",
+  "tiers": [
+    {
+      "tier_id": "FA_FREE",
+      "tier_name": "FA Free",
+      "description": "Entry-level FA access — basic diagnostic and navigation features only"
+    },
+    {
+      "tier_id": "FA_LITE",
+      "tier_name": "FA Lite",
+      "description": "Standard FA access — most diagnostic and educational features"
+    },
+    {
+      "tier_id": "FA_PRO",
+      "tier_name": "FA Pro",
+      "description": "Full FA access — advanced analytics, simulation, comparison tools"
+    },
+    {
+      "tier_id": "MFO_LITE",
+      "tier_name": "MFO Lite",
+      "description": "Multi-Family Office — team-level access with book management"
+    },
+    {
+      "tier_id": "MFO_INSTITUTIONAL",
+      "tier_name": "MFO Institutional",
+      "description": "Full institutional access — bulk operations, Deep Mode 3, advanced methodology"
+    },
+    {
+      "tier_id": "ADMIN",
+      "tier_name": "Admin",
+      "description": "Platform administration — user management, intent configuration, platform-wide audit logs"
+    },
+    {
+      "tier_id": "COMPLIANCE_ADMIN",
+      "tier_name": "Compliance Admin",
+      "description": "Compliance oversight — approval workflows, audit access, disclaimer editing, override authority"
+    }
+  ],
+  "features": [
+    {
+      "feature_id": "RISK_NUMBER_OWN_CLIENTS",
+      "feature_name": "Risk Number — Own Clients",
+      "description": "View Risk Number for the FA's own assigned clients",
+      "access": {
+        "FA_FREE": true,
+        "FA_LITE": true,
+        "FA_PRO": true,
+        "MFO_LITE": true,
+        "MFO_INSTITUTIONAL": true,
+        "ADMIN": true,
+        "COMPLIANCE_ADMIN": true
+      }
+    },
+    {
+      "feature_id": "RISK_NUMBER_BOOK_LEVEL",
+      "feature_name": "Risk Number — Full Book View",
+      "description": "View Risk Number across entire client book",
+      "access": {
+        "FA_FREE": false,
+        "FA_LITE": false,
+        "FA_PRO": true,
+        "MFO_LITE": true,
+        "MFO_INSTITUTIONAL": true,
+        "ADMIN": true,
+        "COMPLIANCE_ADMIN": true
+      }
+    },
+    {
+      "feature_id": "ACTIVE_PORTFOLIO_VIEW",
+      "feature_name": "Active Portfolio View",
+      "description": "View current portfolio composition and metrics",
+      "access": {
+        "FA_FREE": true,
+        "FA_LITE": true,
+        "FA_PRO": true,
+        "MFO_LITE": true,
+        "MFO_INSTITUTIONAL": true,
+        "ADMIN": true,
+        "COMPLIANCE_ADMIN": true
+      }
+    },
+    {
+      "feature_id": "CLIENT_BOOK_ACCESS",
+      "feature_name": "Client Book Access",
+      "description": "Access to multi-client book management",
+      "access": {
+        "FA_FREE": false,
+        "FA_LITE": true,
+        "FA_PRO": true,
+        "MFO_LITE": true,
+        "MFO_INSTITUTIONAL": true,
+        "ADMIN": true,
+        "COMPLIANCE_ADMIN": true
+      }
+    },
+    {
+      "feature_id": "SIMULATIONS_BASIC",
+      "feature_name": "Simulations — Basic",
+      "description": "Run standard HRD Engine simulations (allocation changes, basic scenarios)",
+      "access": {
+        "FA_FREE": false,
+        "FA_LITE": true,
+        "FA_PRO": true,
+        "MFO_LITE": true,
+        "MFO_INSTITUTIONAL": true,
+        "ADMIN": true,
+        "COMPLIANCE_ADMIN": true
+      }
+    },
+    {
+      "feature_id": "SIMULATIONS_ADVANCED",
+      "feature_name": "Simulations — Advanced",
+      "description": "Run advanced HRD Engine simulations (stress tests, multi-scenario, institutional-grade)",
+      "access": {
+        "FA_FREE": false,
+        "FA_LITE": false,
+        "FA_PRO": true,
+        "MFO_LITE": true,
+        "MFO_INSTITUTIONAL": true,
+        "ADMIN": false,
+        "COMPLIANCE_ADMIN": true
+      }
+    },
+    {
+      "feature_id": "HPC_COMPARISON",
+      "feature_name": "HPC Strategy Comparison (HPC11 / HPC22)",
+      "description": "Compare HPC11 and HPC22 strategy characteristics",
+      "access": {
+        "FA_FREE": false,
+        "FA_LITE": true,
+        "FA_PRO": true,
+        "MFO_LITE": true,
+        "MFO_INSTITUTIONAL": true,
+        "ADMIN": true,
+        "COMPLIANCE_ADMIN": true
+      }
+    },
+    {
+      "feature_id": "STORMGUARD_STATUS",
+      "feature_name": "StormGuard — Status",
+      "description": "View current StormGuard regime and activation status",
+      "access": {
+        "FA_FREE": true,
+        "FA_LITE": true,
+        "FA_PRO": true,
+        "MFO_LITE": true,
+        "MFO_INSTITUTIONAL": true,
+        "ADMIN": true,
+        "COMPLIANCE_ADMIN": true
+      }
+    },
+    {
+      "feature_id": "STORMGUARD_METHODOLOGY",
+      "feature_name": "StormGuard — Methodology Detail",
+      "description": "Access detailed StormGuard methodology documentation and model explanation",
+      "access": {
+        "FA_FREE": false,
+        "FA_LITE": true,
+        "FA_PRO": true,
+        "MFO_LITE": true,
+        "MFO_INSTITUTIONAL": true,
+        "ADMIN": true,
+        "COMPLIANCE_ADMIN": true
+      }
+    },
+    {
+      "feature_id": "ALPHADROID_SIGNALS_SUMMARY",
+      "feature_name": "AlphaDroid — Summary Signals",
+      "description": "View summarized AlphaDroid momentum signals",
+      "access": {
+        "FA_FREE": false,
+        "FA_LITE": true,
+        "FA_PRO": true,
+        "MFO_LITE": true,
+        "MFO_INSTITUTIONAL": true,
+        "ADMIN": false,
+        "COMPLIANCE_ADMIN": true
+      }
+    },
+    {
+      "feature_id": "ALPHADROID_RAW_SIGNALS",
+      "feature_name": "AlphaDroid — Raw Signals",
+      "description": "View raw, unfiltered AlphaDroid quantitative signal outputs",
+      "access": {
+        "FA_FREE": false,
+        "FA_LITE": false,
+        "FA_PRO": true,
+        "MFO_LITE": false,
+        "MFO_INSTITUTIONAL": true,
+        "ADMIN": false,
+        "COMPLIANCE_ADMIN": true
+      }
+    },
+    {
+      "feature_id": "DIMA_NEWS_SENTIMENT",
+      "feature_name": "DIMA / News / Sentiment",
+      "description": "Access DIMA intelligence outputs: news, macro sentiment, contextual data",
+      "access": {
+        "FA_FREE": false,
+        "FA_LITE": false,
+        "FA_PRO": true,
+        "MFO_LITE": true,
+        "MFO_INSTITUTIONAL": true,
+        "ADMIN": false,
+        "COMPLIANCE_ADMIN": true
+      }
+    },
+    {
+      "feature_id": "EXTERNAL_REPORTS_GENERATE",
+      "feature_name": "External Reports — Generate",
+      "description": "Generate client-facing or external reports",
+      "access": {
+        "FA_FREE": false,
+        "FA_LITE": true,
+        "FA_PRO": true,
+        "MFO_LITE": true,
+        "MFO_INSTITUTIONAL": true,
+        "ADMIN": false,
+        "COMPLIANCE_ADMIN": true
+      }
+    },
+    {
+      "feature_id": "EXTERNAL_REPORTS_APPROVE",
+      "feature_name": "External Reports — Approve for Distribution",
+      "description": "Grant compliance approval for external report distribution",
+      "access": {
+        "FA_FREE": false,
+        "FA_LITE": false,
+        "FA_PRO": false,
+        "MFO_LITE": false,
+        "MFO_INSTITUTIONAL": false,
+        "ADMIN": false,
+        "COMPLIANCE_ADMIN": true
+      }
+    },
+    {
+      "feature_id": "SOCIAL_MEDIA_FLAG",
+      "feature_name": "Social Media Content — Flag for Review",
+      "description": "Flag JIM-generated content for social media compliance review",
+      "access": {
+        "FA_FREE": true,
+        "FA_LITE": true,
+        "FA_PRO": true,
+        "MFO_LITE": true,
+        "MFO_INSTITUTIONAL": true,
+        "ADMIN": false,
+        "COMPLIANCE_ADMIN": true
+      }
+    },
+    {
+      "feature_id": "SOCIAL_MEDIA_APPROVE",
+      "feature_name": "Social Media Content — Approve for Publication",
+      "description": "Grant compliance approval for social media publication",
+      "access": {
+        "FA_FREE": false,
+        "FA_LITE": false,
+        "FA_PRO": false,
+        "MFO_LITE": false,
+        "MFO_INSTITUTIONAL": false,
+        "ADMIN": false,
+        "COMPLIANCE_ADMIN": true
+      }
+    },
+    {
+      "feature_id": "AUDIT_LOGS_OWN",
+      "feature_name": "Audit Logs — Own Sessions",
+      "description": "View own session audit logs",
+      "access": {
+        "FA_FREE": true,
+        "FA_LITE": true,
+        "FA_PRO": true,
+        "MFO_LITE": true,
+        "MFO_INSTITUTIONAL": true,
+        "ADMIN": true,
+        "COMPLIANCE_ADMIN": true
+      }
+    },
+    {
+      "feature_id": "AUDIT_LOGS_BOOK",
+      "feature_name": "Audit Logs — Full Book",
+      "description": "View audit logs for all advisors/users in the book",
+      "access": {
+        "FA_FREE": false,
+        "FA_LITE": false,
+        "FA_PRO": false,
+        "MFO_LITE": true,
+        "MFO_INSTITUTIONAL": true,
+        "ADMIN": true,
+        "COMPLIANCE_ADMIN": true
+      }
+    },
+    {
+      "feature_id": "AUDIT_LOGS_PLATFORM",
+      "feature_name": "Audit Logs — Platform-Wide",
+      "description": "View platform-wide audit logs across all users",
+      "access": {
+        "FA_FREE": false,
+        "FA_LITE": false,
+        "FA_PRO": false,
+        "MFO_LITE": false,
+        "MFO_INSTITUTIONAL": false,
+        "ADMIN": true,
+        "COMPLIANCE_ADMIN": true
+      }
+    },
+    {
+      "feature_id": "RETRAINING_QUEUE",
+      "feature_name": "Retraining Queue — Submit",
+      "description": "Submit JIM responses to the model retraining queue",
+      "access": {
+        "FA_FREE": false,
+        "FA_LITE": false,
+        "FA_PRO": false,
+        "MFO_LITE": false,
+        "MFO_INSTITUTIONAL": false,
+        "ADMIN": true,
+        "COMPLIANCE_ADMIN": true
+      }
+    },
+    {
+      "feature_id": "COMPLIANCE_OVERRIDE",
+      "feature_name": "Compliance Override Authority",
+      "description": "Override a JIM compliance guardrail decision (requires documented justification)",
+      "access": {
+        "FA_FREE": false,
+        "FA_LITE": false,
+        "FA_PRO": false,
+        "MFO_LITE": false,
+        "MFO_INSTITUTIONAL": false,
+        "ADMIN": false,
+        "COMPLIANCE_ADMIN": true
+      }
+    },
+    {
+      "feature_id": "INTENT_MAP_CONFIGURATION",
+      "feature_name": "Intent Map Configuration",
+      "description": "Modify intent classification configuration (intents.json)",
+      "access": {
+        "FA_FREE": false,
+        "FA_LITE": false,
+        "FA_PRO": false,
+        "MFO_LITE": false,
+        "MFO_INSTITUTIONAL": false,
+        "ADMIN": true,
+        "COMPLIANCE_ADMIN": true
+      }
+    },
+    {
+      "feature_id": "DISCLAIMER_LIBRARY_EDIT",
+      "feature_name": "Disclaimer Library Edit",
+      "description": "Modify disclaimer_library.json — requires Compliance Admin only",
+      "access": {
+        "FA_FREE": false,
+        "FA_LITE": false,
+        "FA_PRO": false,
+        "MFO_LITE": false,
+        "MFO_INSTITUTIONAL": false,
+        "ADMIN": false,
+        "COMPLIANCE_ADMIN": true
+      }
+    },
+    {
+      "feature_id": "DEEP_MODE_3",
+      "feature_name": "Response Mode — Deep Mode 3 (Institutional Methodology)",
+      "description": "Access to Deep Mode 3 institutional-grade methodology responses",
+      "access": {
+        "FA_FREE": false,
+        "FA_LITE": false,
+        "FA_PRO": false,
+        "MFO_LITE": false,
+        "MFO_INSTITUTIONAL": true,
+        "ADMIN": false,
+        "COMPLIANCE_ADMIN": true
+      }
+    }
+  ]
+}

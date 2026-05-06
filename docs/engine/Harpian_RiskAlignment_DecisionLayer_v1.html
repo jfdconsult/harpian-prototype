@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Harpian · Decision Engine Layer · Final</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap');
+
+  :root {
+    --bg: #090E14;
+    --s1: #0F1820;
+    --s2: #162130;
+    --s3: #1C2D40;
+    --gold: #B8972A;
+    --gold-l: #D4AF45;
+    --text: #C8D8E8;
+    --dim: #6A8AA8;
+    --bright: #EBF1F7;
+    --bsub: rgba(235,241,247,0.06);
+    --bgold: rgba(184,151,42,0.15);
+    --green: #1A7A4A; --green-l: #3DBE78; --green-bg: rgba(26,122,74,0.08);
+    --amber: #D4860A; --amber-l: #F0A830; --amber-bg: rgba(212,134,10,0.08);
+    --red: #C0392B;   --red-l: #E87060;   --red-bg: rgba(192,57,43,0.08);
+    --blue: #2D7AC0;  --blue-l: #5BA8E8;  --blue-bg: rgba(45,122,192,0.08);
+    --lgr: #2A6040;   --lgr-l: #5AAA7A;   --lgr-bg: rgba(42,96,64,0.08);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 13px; line-height: 1.6; }
+  .page { max-width: 1160px; margin: 0 auto; padding: 0 40px 120px; }
+
+  /* COVER */
+  .cover { padding: 64px 0 48px; border-bottom: 1px solid var(--bgold); margin-bottom: 56px; display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 40px; }
+  .badge { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.14em; color: var(--gold); background: var(--bgold); border: 1px solid rgba(184,151,42,0.25); padding: 4px 10px; display: inline-block; margin-bottom: 18px; text-transform: uppercase; }
+  .cover h1 { font-family: 'Syne', sans-serif; font-size: 38px; font-weight: 800; color: var(--bright); line-height: 1.08; letter-spacing: -0.025em; }
+  .cover h1 em { color: var(--gold); font-style: normal; }
+  .cover-sub { font-family: 'DM Mono', monospace; font-size: 9.5px; color: var(--dim); margin-top: 14px; letter-spacing: 0.06em; line-height: 1.8; }
+  .cover-meta { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--dim); line-height: 2.2; letter-spacing: 0.06em; text-align: right; }
+  .cover-meta strong { color: var(--gold); display: block; font-size: 12px; margin-bottom: 4px; }
+
+  /* BLOCK DIVIDERS */
+  .blk { margin-top: 80px; padding-top: 40px; border-top: 1px solid var(--bgold); margin-bottom: 16px; }
+  .blk-head { display: flex; align-items: center; gap: 18px; margin-bottom: 40px; }
+  .blk-id { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--gold); background: var(--bgold); border: 1px solid rgba(184,151,42,0.25); padding: 6px 12px; letter-spacing: 0.1em; flex-shrink: 0; }
+  .blk-title { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 800; color: var(--bright); letter-spacing: -0.02em; }
+  .blk-desc { font-size: 12px; color: var(--dim); margin-left: auto; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.06em; text-align: right; max-width: 200px; }
+
+  /* SECTIONS */
+  .section { margin-bottom: 56px; }
+  .sh { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 1px solid var(--bsub); }
+  .sn { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--gold); background: var(--bgold); border: 1px solid rgba(184,151,42,0.2); padding: 3px 8px; letter-spacing: 0.1em; flex-shrink: 0; }
+  .st { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; color: var(--bright); letter-spacing: -0.01em; }
+  .sub { font-family: 'DM Mono', monospace; font-size: 8px; letter-spacing: 0.14em; color: var(--gold); text-transform: uppercase; margin: 24px 0 10px; }
+
+  /* CARDS */
+  .card { background: var(--s1); border: 1px solid var(--bsub); padding: 20px 24px; }
+  .card + .card { margin-top: 10px; }
+  .card.gl { border-left: 3px solid var(--gold); }
+  .card.gg { border-left: 3px solid var(--green); }
+  .card.gr { border-left: 3px solid var(--red); }
+  .card.gb { border-left: 3px solid var(--blue); }
+  .card.ga { border-left: 3px solid var(--amber); }
+
+  /* GRIDS */
+  .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+  .g4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; }
+
+  /* TAGS */
+  .tag { display: inline-block; font-family: 'DM Mono', monospace; font-size: 8px; padding: 2px 7px; letter-spacing: 0.08em; text-transform: uppercase; }
+  .tg { background: var(--green-bg); color: var(--green-l); border: 1px solid rgba(26,122,74,0.3); }
+  .ta { background: var(--amber-bg); color: var(--amber-l); border: 1px solid rgba(212,134,10,0.3); }
+  .tr { background: var(--red-bg); color: var(--red-l); border: 1px solid rgba(192,57,43,0.3); }
+  .tb { background: var(--blue-bg); color: var(--blue-l); border: 1px solid rgba(45,122,192,0.3); }
+  .tgd { background: var(--bgold); color: var(--gold); border: 1px solid rgba(184,151,42,0.3); }
+  .tlg { background: var(--lgr-bg); color: var(--lgr-l); border: 1px solid rgba(42,96,64,0.3); }
+
+  /* ─── RISK BUDGET WIDGET ─── */
+  .budget-widget {
+    background: var(--s2);
+    border: 1px solid rgba(184,151,42,0.2);
+    padding: 28px 32px;
+    display: grid;
+    grid-template-columns: 1fr 1px 1fr 1px 1fr;
+    gap: 24px;
+    align-items: center;
+    margin: 16px 0;
+  }
+  .bw-divider { background: var(--bsub); }
+  .bw-item { text-align: center; }
+  .bw-label { font-family: 'DM Mono', monospace; font-size: 8px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--dim); margin-bottom: 8px; }
+  .bw-val { font-family: 'Syne', sans-serif; font-size: 40px; font-weight: 800; line-height: 1; margin-bottom: 6px; }
+  .bw-sub { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--dim); }
+  .bw-bar { height: 3px; background: var(--s3); border-radius: 2px; overflow: hidden; margin-top: 10px; }
+  .bw-bar-fill { height: 100%; border-radius: 2px; }
+
+  /* ─── BUDGET ACCOUNTING ─── */
+  .budget-row {
+    display: grid;
+    grid-template-columns: 160px 1fr 80px 80px;
+    gap: 0;
+    align-items: center;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--bsub);
+  }
+  .budget-row:last-child { border-bottom: none; }
+  .br-label { font-size: 11.5px; color: var(--text); }
+  .br-track { height: 4px; background: var(--s3); border-radius: 2px; overflow: hidden; margin: 0 16px; }
+  .br-fill { height: 100%; border-radius: 2px; }
+  .br-val { font-family: 'DM Mono', monospace; font-size: 11px; text-align: right; }
+  .br-tag { text-align: right; }
+
+  /* ─── ENVELOPE ZONE BAR ─── */
+  .zone-container { margin: 20px 0; }
+  .zone-axis-labels { display: flex; justify-content: space-between; font-family: 'DM Mono', monospace; font-size: 8px; color: var(--dim); margin-bottom: 6px; letter-spacing: 0.06em; }
+  .zone-bar {
+    height: 36px;
+    display: flex;
+    border: 1px solid var(--bsub);
+    overflow: hidden;
+    position: relative;
+  }
+  .zone-seg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-right: 1px solid rgba(255,255,255,0.06);
+    position: relative;
+  }
+  .zone-seg:last-child { border-right: none; }
+  .zone-pointer {
+    position: absolute;
+    top: -22px;
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.06em;
+    transform: translateX(-50%);
+    white-space: nowrap;
+  }
+  .zone-pointer::after {
+    content: '▼';
+    display: block;
+    text-align: center;
+    font-size: 10px;
+    margin-top: -2px;
+  }
+  .zone-legend { display: flex; gap: 20px; margin-top: 10px; flex-wrap: wrap; }
+  .zone-legend-item { display: flex; align-items: center; gap: 6px; font-family: 'DM Mono', monospace; font-size: 9px; color: var(--dim); }
+  .zone-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+  /* ─── PRODUCT COMPARISON ─── */
+  .product-compare {
+    display: grid;
+    grid-template-columns: 1fr 60px 1fr;
+    gap: 0;
+    border: 1px solid var(--bsub);
+    overflow: hidden;
+  }
+  .pc-col { padding: 24px 20px; }
+  .pc-col.c11 { background: rgba(26,122,74,0.04); border-right: 1px solid var(--bsub); }
+  .pc-col.c22 { background: rgba(184,151,42,0.03); }
+  .pc-vs { display: flex; align-items: center; justify-content: center; background: var(--s3); font-family: 'DM Mono', monospace; font-size: 9px; color: var(--dim); letter-spacing: 0.1em; writing-mode: vertical-rl; }
+  .pc-name { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+  .pc-tagline { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--dim); letter-spacing: 0.08em; margin-bottom: 16px; text-transform: uppercase; }
+  .pc-attrs { list-style: none; }
+  .pc-attrs li { font-size: 11.5px; color: var(--text); padding: 5px 0; border-bottom: 1px solid var(--bsub); display: flex; justify-content: space-between; align-items: center; }
+  .pc-attrs li:last-child { border-bottom: none; }
+  .pc-attr-label { color: var(--dim); }
+  .pc-effect { font-family: 'DM Mono', monospace; font-size: 10px; }
+  .pc-role { margin-top: 16px; padding: 10px 14px; font-size: 11px; line-height: 1.5; }
+  .pc-role.c11r { background: var(--green-bg); border: 1px solid rgba(26,122,74,0.2); color: var(--green-l); }
+  .pc-role.c22r { background: var(--amber-bg); border: 1px solid rgba(212,134,10,0.2); color: var(--amber-l); }
+
+  /* ─── DECISION OUTPUT ─── */
+  .decision-output {
+    border: 1px solid var(--bgold);
+    overflow: hidden;
+  }
+  .do-header {
+    background: var(--s3);
+    padding: 20px 28px;
+    border-bottom: 1px solid var(--bsub);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .do-verdict {
+    font-family: 'Syne', sans-serif;
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+  }
+  .do-body { padding: 28px; }
+  .do-body-grid { display: grid; grid-template-columns: 1fr 1px 220px; gap: 24px; }
+  .do-divider { background: var(--bsub); }
+
+  /* Emotional message */
+  .em-msg {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--bright);
+    line-height: 1.6;
+    padding: 12px 16px;
+    background: var(--s2);
+    border: 1px solid var(--bsub);
+    border-left: 3px solid;
+    margin-bottom: 16px;
+  }
+
+  /* Recommendation band */
+  .rec-band {
+    background: var(--s2);
+    border: 1px solid rgba(184,151,42,0.2);
+    padding: 18px 20px;
+    margin: 12px 0;
+  }
+  .rec-band-label { font-family: 'DM Mono', monospace; font-size: 8px; color: var(--gold); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 10px; }
+  .rec-alloc { display: flex; gap: 10px; margin-bottom: 10px; }
+  .rec-alloc-item { flex: 1; background: var(--s3); padding: 10px 14px; }
+  .rec-alloc-label { font-family: 'DM Mono', monospace; font-size: 8px; color: var(--dim); text-transform: uppercase; margin-bottom: 4px; }
+  .rec-alloc-range { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; }
+  .rec-alloc-optimal { font-family: 'DM Mono', monospace; font-size: 9px; margin-top: 2px; }
+
+  /* Action buttons */
+  .action-row { display: flex; gap: 10px; margin-top: 16px; }
+  .btn-primary {
+    flex: 2;
+    background: var(--gold);
+    color: #090E14;
+    padding: 14px 20px;
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    border: none;
+  }
+  .btn-secondary {
+    flex: 1;
+    background: var(--s3);
+    color: var(--text);
+    padding: 14px 16px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    text-align: center;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: 1px solid var(--bsub);
+  }
+  .btn-tertiary {
+    flex: 1;
+    background: transparent;
+    color: var(--dim);
+    padding: 14px 16px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    text-align: center;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: 1px solid var(--bsub);
+  }
+
+  /* ─── INDICATORS PANEL ─── */
+  .ind-panel { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2px; }
+  .ind-item { background: var(--s2); padding: 14px 16px; text-align: center; border: 1px solid var(--bsub); }
+  .ind-label { font-family: 'DM Mono', monospace; font-size: 8px; color: var(--dim); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
+  .ind-val { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+  .ind-bar { height: 3px; background: var(--s3); border-radius: 2px; overflow: hidden; }
+  .ind-bar-fill { height: 100%; border-radius: 2px; }
+  .ind-sub { font-family: 'DM Mono', monospace; font-size: 8.5px; color: var(--dim); margin-top: 5px; }
+
+  /* ─── STATE VARIATIONS ─── */
+  .state-row { display: grid; grid-template-columns: 200px 1fr 1fr auto; gap: 0; border: 1px solid var(--bsub); margin-bottom: 2px; }
+  .sr-state { padding: 12px 16px; display: flex; align-items: center; gap: 10px; background: var(--s2); }
+  .sr-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .sr-name { font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 600; color: var(--bright); }
+  .sr-msg { padding: 12px 16px; font-size: 11.5px; color: var(--text); border-left: 1px solid var(--bsub); }
+  .sr-rec { padding: 12px 16px; font-family: 'DM Mono', monospace; font-size: 10px; color: var(--dim); border-left: 1px solid var(--bsub); }
+  .sr-cta { padding: 12px 16px; border-left: 1px solid var(--bsub); display: flex; align-items: center; }
+  .cta-pill { font-family: 'DM Mono', monospace; font-size: 8px; text-transform: uppercase; letter-spacing: 0.08em; padding: 4px 10px; white-space: nowrap; }
+
+  /* ─── FORMULA ─── */
+  .formula { background: var(--s2); border: 1px solid rgba(184,151,42,0.2); border-left: 3px solid var(--gold); padding: 16px 20px; font-family: 'DM Mono', monospace; font-size: 11.5px; color: var(--bright); line-height: 2; margin: 10px 0; }
+  .f-comment { color: var(--dim); font-size: 10px; }
+  .f-var { color: var(--gold-l); }
+  .f-op { color: var(--blue-l); }
+  .f-res { color: var(--green-l); }
+
+  /* UX PRINCIPLE */
+  .ux-principle {
+    background: var(--s3);
+    border: 1px solid rgba(184,151,42,0.3);
+    padding: 28px 32px;
+    text-align: center;
+    margin: 32px 0;
+  }
+  .ux-principle h2 { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; color: var(--bright); margin-bottom: 12px; letter-spacing: -0.01em; }
+  .ux-sub-row { display: flex; gap: 32px; justify-content: center; margin-top: 16px; }
+  .ux-sub { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--dim); letter-spacing: 0.06em; }
+  .ux-sub strong { color: var(--gold); display: block; font-size: 13px; margin-bottom: 4px; }
+
+  /* NOTE */
+  .note { font-family: 'DM Mono', monospace; font-size: 9.5px; color: var(--dim); padding: 8px 12px; border-left: 2px solid var(--bsub); margin-top: 8px; line-height: 1.6; }
+
+  /* DATA TABLE */
+  table.dt { width: 100%; border-collapse: collapse; }
+  table.dt th { background: var(--s3); padding: 9px 14px; font-family: 'DM Mono', monospace; font-size: 8px; color: var(--gold); text-align: left; letter-spacing: 0.1em; text-transform: uppercase; border: 1px solid var(--bsub); }
+  table.dt td { padding: 9px 14px; font-size: 11.5px; color: var(--text); border: 1px solid var(--bsub); background: var(--s1); vertical-align: middle; }
+
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-thumb { background: rgba(184,151,42,0.2); }
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- ══════════════════════════════════════ COVER ═══════════════════════════════════════ -->
+<div class="cover">
+  <div>
+    <div class="badge">Decision Engine Layer · HRD-002-DL · Final</div>
+    <h1>This Is Not a Dashboard.<br><em>This Is a Decision Engine.</em></h1>
+    <div class="cover-sub">
+      Companion to: Visual Spec v1 + Engine Layer v1 &nbsp;·&nbsp; Zero repetition &nbsp;·&nbsp; New concepts only<br>
+      Output: User understands in 5 seconds. Acts in 30 seconds.
+    </div>
+  </div>
+  <div class="cover-meta">
+    <strong>HARPIAN LLC</strong>
+    MODULE: HRD-002-DL<br>
+    LAYER: FINAL — DECISION UX<br>
+    AUDIENCE: DEVELOPER + DESIGNER<br>
+    PRECEDED BY: SPEC v1 + ENGINE-EL v1
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════════════════
+     BLOCK A — RISK BUDGET LAYER
+═══════════════════════════════════════════════════════════════════════════════════════ -->
+<div class="blk">
+  <div class="blk-head">
+    <span class="blk-id">BLOCK A</span>
+    <span class="blk-title">Risk Budget Layer</span>
+    <div class="blk-desc">New core concept.<br>Not in prior documents.</div>
+  </div>
+</div>
+
+<!-- A1 — RISK BUDGET DEFINITION -->
+<div class="section">
+  <div class="sh"><span class="sn">A·01</span><span class="st">Risk Budget — Core Concept</span></div>
+
+  <div class="g3" style="margin-bottom:16px;">
+    <div class="card gl">
+      <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--gold);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:8px;">Risk Budget</div>
+      <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:600;color:var(--bright);margin-bottom:6px;">Maximum risk client can take</div>
+      <div style="font-size:11.5px;color:var(--text);line-height:1.7;">
+        <span class="f-res">= min(RN_appetite, RN_capacity)</span><br>
+        The tighter constraint always wins.<br>Behavioral floor beats financial floor when lower.
+      </div>
+    </div>
+    <div class="card ga">
+      <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--amber-l);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:8px;">Risk Used</div>
+      <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:600;color:var(--bright);margin-bottom:6px;">Current portfolio risk</div>
+      <div style="font-size:11.5px;color:var(--text);line-height:1.7;">
+        <span style="color:var(--amber-l);">= RN_portfolio (current)</span><br>
+        This is what the portfolio actually carries today.<br>Calculated from upload — not estimated.
+      </div>
+    </div>
+    <div class="card gb">
+      <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--blue-l);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:8px;">Risk Available</div>
+      <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:600;color:var(--bright);margin-bottom:6px;">Remaining capacity to deploy</div>
+      <div style="font-size:11.5px;color:var(--text);line-height:1.7;">
+        <span style="color:var(--blue-l);">= Risk Budget − Risk Used</span><br>
+        Positive → can take more risk.<br>Negative → already overdrawn. Must reduce.
+      </div>
+    </div>
+  </div>
+
+  <!-- RISK BUDGET WIDGET -->
+  <div class="budget-widget">
+    <div class="bw-item">
+      <div class="bw-label">Risk Budget</div>
+      <div class="bw-val" style="color:var(--gold);">30</div>
+      <div class="bw-sub">min(appetite 30, capacity 38)</div>
+      <div class="bw-bar" style="margin-top:12px;"><div class="bw-bar-fill" style="width:100%;background:var(--gold);"></div></div>
+    </div>
+    <div style="background:var(--bsub);"></div>
+    <div class="bw-item">
+      <div class="bw-label">Risk Used</div>
+      <div class="bw-val" style="color:var(--amber-l);">20</div>
+      <div class="bw-sub">current portfolio RN</div>
+      <div class="bw-bar" style="margin-top:12px;"><div class="bw-bar-fill" style="width:67%;background:var(--amber);"></div></div>
+    </div>
+    <div style="background:var(--bsub);"></div>
+    <div class="bw-item">
+      <div class="bw-label">Risk Available</div>
+      <div class="bw-val" style="color:var(--green-l);">+10</div>
+      <div class="bw-sub">capacity to add allocation</div>
+      <div class="bw-bar" style="margin-top:12px;"><div class="bw-bar-fill" style="width:33%;background:var(--green);"></div></div>
+    </div>
+  </div>
+
+  <div class="note">Risk Available = the "fuel" for the allocation engine. Every slider move consumes or releases fuel. When Risk Available → 0, sliders lock. When negative (overdrawn), the engine escalates to a hard warning — not a soft yellow label.</div>
+
+  <!-- BUDGET ACCOUNTING TABLE -->
+  <div class="sub">Budget Accounting — How Allocation Consumes Risk</div>
+  <div class="card" style="padding: 16px 20px;">
+    <div class="budget-row">
+      <div class="br-label">Starting budget</div>
+      <div class="br-track"><div class="br-fill" style="width:100%;background:var(--gold);"></div></div>
+      <div class="br-val" style="color:var(--gold);">30 RN</div>
+      <div class="br-tag"></div>
+    </div>
+    <div class="budget-row">
+      <div class="br-label">Risk Used (existing)</div>
+      <div class="br-track"><div class="br-fill" style="width:67%;background:var(--amber);"></div></div>
+      <div class="br-val" style="color:var(--amber-l);">20 RN</div>
+      <div class="br-tag"><span class="tag ta">Used</span></div>
+    </div>
+    <div class="budget-row">
+      <div class="br-label">+ Core 11 (25% alloc)</div>
+      <div class="br-track"><div class="br-fill" style="width:14%;background:var(--green);"></div></div>
+      <div class="br-val" style="color:var(--green-l);">+2.1 RN</div>
+      <div class="br-tag"><span class="tag tg">Efficient</span></div>
+    </div>
+    <div class="budget-row">
+      <div class="br-label">− Corr. discount</div>
+      <div class="br-track"><div class="br-fill" style="width:7%;background:var(--blue);"></div></div>
+      <div class="br-val" style="color:var(--blue-l);">−2.0 RN</div>
+      <div class="br-tag"><span class="tag tb">Discount</span></div>
+    </div>
+    <div class="budget-row" style="border-top: 1px solid var(--bgold);">
+      <div class="br-label" style="color:var(--bright);font-weight:500;">Budget remaining</div>
+      <div class="br-track"><div class="br-fill" style="width:33%;background:var(--green);"></div></div>
+      <div class="br-val" style="color:var(--green-l);">+9.9 RN</div>
+      <div class="br-tag"><span class="tag tg">Available</span></div>
+    </div>
+  </div>
+
+  <div class="sub" style="margin-top:24px;">Critical Rule — Budget Governs All Decisions</div>
+  <div class="g2">
+    <div class="card gg">
+      <div style="font-size:11.5px;line-height:1.8;">
+        <strong style="color:var(--green-l);">Budget positive</strong> → engine may suggest adding allocation<br>
+        Every unit of Risk Available maps to a specific additional % in C11 or C22<br>
+        Engine never suggests allocation that would bring Risk Available below zero
+      </div>
+    </div>
+    <div class="card gr">
+      <div style="font-size:11.5px;line-height:1.8;">
+        <strong style="color:var(--red-l);">Budget overdrawn</strong> → engine enters REDUCTION mode<br>
+        No allocation suggestions shown — only deallocation guidance<br>
+        Primary action changes from "Apply Allocation" to "Reduce Exposure"
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- A2 — DECISION ENVELOPE -->
+<div class="section">
+  <div class="sh"><span class="sn">A·02</span><span class="st">Decision Envelope — Zones, Not Points</span></div>
+
+  <div class="card gl" style="margin-bottom:16px;">
+    <div style="font-size:12px;color:var(--text);line-height:1.8;">
+      The goal is <strong style="color:var(--bright)">NOT a number.</strong><br>
+      The goal is to stay inside the <strong style="color:var(--gold)">Optimal Band</strong> — a range defined by four zone boundaries.<br>
+      A portfolio at RN 48 or RN 54 is equally aligned if both are inside the band. Precision obsession is a UX failure.
+    </div>
+  </div>
+
+  <!-- ZONE BAR VISUAL -->
+  <div class="zone-container">
+    <div class="zone-axis-labels"><span>0</span><span>25</span><span>50</span><span>75</span><span>99</span></div>
+    <div style="position:relative;padding-top:28px;">
+      <!-- pointer example -->
+      <div class="zone-pointer" style="left:34.5%;color:var(--bright);">
+        Current RN: 34
+      </div>
+      <div class="zone-bar">
+        <div class="zone-seg" style="width:18%;background:rgba(45,122,192,0.18);color:var(--blue-l);">Under-Risk</div>
+        <div class="zone-seg" style="width:16%;background:rgba(42,96,64,0.25);color:var(--lgr-l);">Safe</div>
+        <div class="zone-seg" style="width:22%;background:rgba(26,122,74,0.25);color:var(--green-l);">Optimal</div>
+        <div class="zone-seg" style="width:16%;background:rgba(212,134,10,0.22);color:var(--amber-l);">Limit</div>
+        <div class="zone-seg" style="width:28%;background:rgba(192,57,43,0.2);color:var(--red-l);">Danger</div>
+      </div>
+    </div>
+    <div class="zone-legend">
+      <div class="zone-legend-item"><div class="zone-dot" style="background:var(--blue);"></div>Under-Risk: RN &lt; (RN_req − 10)</div>
+      <div class="zone-legend-item"><div class="zone-dot" style="background:var(--lgr);"></div>Safe: RN_req − 10 to RN_req</div>
+      <div class="zone-legend-item"><div class="zone-dot" style="background:var(--green);"></div>Optimal: RN_req to RN_app</div>
+      <div class="zone-legend-item"><div class="zone-dot" style="background:var(--amber);"></div>Limit: RN_app to RN_app + 10</div>
+      <div class="zone-legend-item"><div class="zone-dot" style="background:var(--red);"></div>Danger: &gt; RN_app + 10</div>
+    </div>
+  </div>
+
+  <table class="dt" style="margin-top:16px;">
+    <thead>
+      <tr>
+        <th>Zone</th>
+        <th>RN Range</th>
+        <th>What It Means</th>
+        <th>What Engine Does</th>
+        <th>Primary Action Label</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="tag tb">Under-Risk</span></td>
+        <td style="font-family:'DM Mono',monospace;font-size:10px;color:var(--blue-l);">&lt; RN_req − 10</td>
+        <td>Portfolio too conservative. Goal infeasible at current risk.</td>
+        <td>Suggest Core 22 to lift return potential. Show goal probability gap.</td>
+        <td style="font-family:'DM Mono',monospace;font-size:10px;color:var(--blue-l);">Boost Allocation</td>
+      </tr>
+      <tr>
+        <td><span class="tag tlg">Safe</span></td>
+        <td style="font-family:'DM Mono',monospace;font-size:10px;color:var(--lgr-l);">RN_req − 10 to RN_req</td>
+        <td>Conservative but viable. Slightly below requirement — acceptable.</td>
+        <td>Suggest small C11 increment. Goal reachable with longer horizon or modest add.</td>
+        <td style="font-family:'DM Mono',monospace;font-size:10px;color:var(--lgr-l);">Optimize Strategy</td>
+      </tr>
+      <tr style="background:rgba(26,122,74,0.03);">
+        <td><span class="tag tg">Optimal ★</span></td>
+        <td style="font-family:'DM Mono',monospace;font-size:10px;color:var(--green-l);">RN_req to RN_app</td>
+        <td>Fully aligned. Risk taken matches behavioral tolerance and goal need.</td>
+        <td>Confirm. No rebalancing needed. Optional efficiency enhancement.</td>
+        <td style="font-family:'DM Mono',monospace;font-size:10px;color:var(--green-l);">Apply Allocation</td>
+      </tr>
+      <tr>
+        <td><span class="tag ta">Limit</span></td>
+        <td style="font-family:'DM Mono',monospace;font-size:10px;color:var(--amber-l);">RN_app to RN_app + 10</td>
+        <td>At tolerance edge. One market shock away from behavioral breach.</td>
+        <td>Warn. Suggest C11 to dilute. Advise against adding more risk.</td>
+        <td style="font-family:'DM Mono',monospace;font-size:10px;color:var(--amber-l);">Adjust Strategy</td>
+      </tr>
+      <tr>
+        <td><span class="tag tr">Danger</span></td>
+        <td style="font-family:'DM Mono',monospace;font-size:10px;color:var(--red-l);">&gt; RN_app + 10</td>
+        <td>Tolerance breach. Portfolio exceeds what client can emotionally sustain.</td>
+        <td>Hard warning. Reduction mode. Block new C22 suggestions.</td>
+        <td style="font-family:'DM Mono',monospace;font-size:10px;color:var(--red-l);">Reduce Exposure</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════════════════
+     BLOCK B — DECISION ENGINE LAYER
+═══════════════════════════════════════════════════════════════════════════════════════ -->
+<div class="blk">
+  <div class="blk-head">
+    <span class="blk-id">BLOCK B</span>
+    <span class="blk-title">Decision Engine Layer</span>
+    <div class="blk-desc">Product differentiation.<br>Core 11 vs Core 22 logic.</div>
+  </div>
+</div>
+
+<!-- B1 — PRODUCT ROLE DEFINITION -->
+<div class="section">
+  <div class="sh"><span class="sn">B·01</span><span class="st">Core 11 vs Core 22 — Explicit Product Roles</span></div>
+
+  <div class="product-compare">
+    <div class="pc-col c11">
+      <div class="pc-name" style="color:var(--green-l);">Core 11</div>
+      <div class="pc-tagline">Efficiency tool · Fine-tuning instrument</div>
+      <ul class="pc-attrs">
+        <li><span class="pc-attr-label">Volatility</span> <span class="pc-effect" style="color:var(--green-l);">Low · ↓ reduces portfolio vol</span></li>
+        <li><span class="pc-attr-label">Return contribution</span> <span class="pc-effect" style="color:var(--amber-l);">Moderate · steady</span></li>
+        <li><span class="pc-attr-label">Drawdown impact</span> <span class="pc-effect" style="color:var(--green-l);">↓ significant reduction</span></li>
+        <li><span class="pc-attr-label">RN effect</span> <span class="pc-effect" style="color:var(--green-l);">↓ dilutes high-RN portfolios</span></li>
+        <li><span class="pc-attr-label">P(Goal) effect</span> <span class="pc-effect" style="color:var(--green-l);">↑ modest — via reduced risk</span></li>
+        <li><span class="pc-attr-label">Correlation benefit</span> <span class="pc-effect" style="color:var(--green-l);">High · low corr to LatAm mix</span></li>
+        <li><span class="pc-attr-label">StormGuard Armor</span> <span class="pc-effect" style="color:var(--green-l);">Active · crisis exits automatically</span></li>
+      </ul>
+      <div class="pc-role c11r">
+        <strong>Use Core 11 when:</strong> portfolio is over-risked · behavioral alignment needed · drawdown must be reduced · client is conservative to moderate
+      </div>
+    </div>
+    <div class="pc-vs">VS</div>
+    <div class="pc-col c22">
+      <div class="pc-name" style="color:var(--gold);">Core 22</div>
+      <div class="pc-tagline">Performance engine · Return accelerator</div>
+      <ul class="pc-attrs">
+        <li><span class="pc-attr-label">Volatility</span> <span class="pc-effect" style="color:var(--amber-l);">Higher · ↑ increases portfolio vol</span></li>
+        <li><span class="pc-attr-label">Return contribution</span> <span class="pc-effect" style="color:var(--green-l);">Strong · primary return driver</span></li>
+        <li><span class="pc-attr-label">Drawdown impact</span> <span class="pc-effect" style="color:var(--amber-l);">↑ moderate increase</span></li>
+        <li><span class="pc-attr-label">RN effect</span> <span class="pc-effect" style="color:var(--amber-l);">↑ increases blended RN</span></li>
+        <li><span class="pc-attr-label">P(Goal) effect</span> <span class="pc-effect" style="color:var(--green-l);">↑ significant — via return lift</span></li>
+        <li><span class="pc-attr-label">Correlation benefit</span> <span class="pc-effect" style="color:var(--amber-l);">Moderate · some corr with equity</span></li>
+        <li><span class="pc-attr-label">Trend regime</span> <span class="pc-effect" style="color:var(--gold);">Active · strong in bull trends</span></li>
+      </ul>
+      <div class="pc-role c22r">
+        <strong>Use Core 22 when:</strong> portfolio is under-risked · goal gap exists · return acceleration needed · budget has room · client is moderate to aggressive
+      </div>
+    </div>
+  </div>
+
+  <div class="sub">Decision Rule — Which Product to Recommend First</div>
+  <div class="formula">
+    <span class="f-comment">IF RN_portfolio &gt; RN_appetite:</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;→ <span class="f-var">Core 11 ONLY.</span> &nbsp;Core 22 is <span style="color:var(--red-l)">contraindicated</span>. Adding C22 worsens the behavioral breach.<br>
+    <br>
+    <span class="f-comment">IF RN_portfolio &lt; RN_requirement AND Risk_Available &gt; 5:</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;→ <span class="f-var">Core 22 first</span> (return gap), then <span class="f-var">Core 11</span> to smooth (if budget allows).<br>
+    <br>
+    <span class="f-comment">IF RN_portfolio within optimal band:</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;→ <span class="f-var">Core 11</span> for efficiency enhancement only. Core 22 optional if budget &gt; 10 pts remaining.<br>
+    <br>
+    <span class="f-comment">IF RN_appetite &lt; RN_requirement (structural conflict):</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;→ <span style="color:var(--red-l)">Neither product can resolve this.</span> Show horizon/target revision options.
+  </div>
+</div>
+
+<!-- B2 — INDICATOR PANEL SPEC -->
+<div class="section">
+  <div class="sh"><span class="sn">B·02</span><span class="st">Visual Decision Reinforcement — 3 Always-Visible Indicators</span></div>
+
+  <div class="ind-panel" style="margin-bottom:16px;">
+    <div class="ind-item">
+      <div class="ind-label">Confidence Level</div>
+      <div class="ind-val" style="color:var(--green-l);">High</div>
+      <div class="ind-bar"><div class="ind-bar-fill" style="width:82%;background:var(--green);"></div></div>
+      <div class="ind-sub">P_goal: 78% · Budget: +10 · Data: complete</div>
+    </div>
+    <div class="ind-item">
+      <div class="ind-label">Goal Feasibility</div>
+      <div class="ind-val" style="color:var(--amber-l);">Moderate</div>
+      <div class="ind-bar"><div class="ind-bar-fill" style="width:62%;background:var(--amber);"></div></div>
+      <div class="ind-sub">P(goal) 62% at current · 78% with suggestion</div>
+    </div>
+    <div class="ind-item">
+      <div class="ind-label">Risk Stress Index</div>
+      <div class="ind-val" style="color:var(--green-l);">Low</div>
+      <div class="ind-bar"><div class="ind-bar-fill" style="width:22%;background:var(--green);"></div></div>
+      <div class="ind-sub">Corr normal · DD within tolerance · Budget +10</div>
+    </div>
+  </div>
+
+  <div class="sub">Indicator Definitions — How Each Is Scored</div>
+  <table class="dt">
+    <thead>
+      <tr><th>Indicator</th><th>Low</th><th>Medium</th><th>High</th><th>Derived From</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong style="color:var(--bright);">Confidence Level</strong></td>
+        <td style="color:var(--red-l);">P_goal &lt;50% OR data incomplete</td>
+        <td style="color:var(--amber-l);">P_goal 50–70% AND data present</td>
+        <td style="color:var(--green-l);">P_goal ≥70% AND full data AND budget &gt;5</td>
+        <td>P_goal + data completeness + budget margin</td>
+      </tr>
+      <tr>
+        <td><strong style="color:var(--bright);">Goal Feasibility</strong></td>
+        <td style="color:var(--red-l);">P_goal &lt;50% even at max tolerance</td>
+        <td style="color:var(--amber-l);">P_goal 50–75% with suggested allocation</td>
+        <td style="color:var(--green-l);">P_goal ≥75% with current or suggested</td>
+        <td>P_goal at suggested allocation</td>
+      </tr>
+      <tr>
+        <td><strong style="color:var(--bright);">Risk Stress Index</strong></td>
+        <td style="color:var(--green-l);">No stress flags active</td>
+        <td style="color:var(--amber-l);">1 stress flag: corr rising OR DD at limit</td>
+        <td style="color:var(--red-l);">2+ flags: corr spike AND budget negative</td>
+        <td>Correlation regime + DD margin + budget</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="note">Risk Stress Index is the only forward-looking indicator. It captures regime stress — not historical. Use trailing 20-day correlation shift as the primary stress signal input.</div>
+</div>
+
+<!-- B3 — EMOTIONAL CLARITY -->
+<div class="section">
+  <div class="sh"><span class="sn">B·03</span><span class="st">Emotional Clarity — System Messages</span></div>
+
+  <div style="font-size:12px;color:var(--text);margin-bottom:16px;line-height:1.8;">
+    Institutional tone. No exclamation marks. No marketing language.<br>
+    Each message is generated from a condition — not from copy. One sentence. Always factual. Always linked to a number.
+  </div>
+
+  <div class="em-msg" style="border-left-color:var(--blue);">
+    "Your portfolio is safer than your goal requires. You have room to add targeted exposure without exceeding your tolerance."
+    <div style="margin-top:6px;font-size:9px;color:var(--dim);">Trigger: RN_portfolio &lt; RN_requirement − 8 AND Risk_Available &gt; 5</div>
+  </div>
+  <div class="em-msg" style="border-left-color:var(--green);">
+    "You are well positioned to reach your target. Maintain this structure or make minor efficiency adjustments."
+    <div style="margin-top:6px;font-size:9px;color:var(--dim);">Trigger: Optimal zone AND P_goal ≥ 75%</div>
+  </div>
+  <div class="em-msg" style="border-left-color:var(--amber);">
+    "You are taking more risk than your profile supports. A moderate rebalancing will bring your portfolio within tolerance."
+    <div style="margin-top:6px;font-size:9px;color:var(--dim);">Trigger: Limit zone — RN 5–10 above appetite</div>
+  </div>
+  <div class="em-msg" style="border-left-color:var(--red);">
+    "Your current portfolio exceeds your risk tolerance by [N] points. Structural adjustment is required before making further allocations."
+    <div style="margin-top:6px;font-size:9px;color:var(--dim);">Trigger: Danger zone — RN &gt; appetite + 10</div>
+  </div>
+  <div class="em-msg" style="border-left-color:var(--purple-l);color:var(--purple-l);">
+    "Your target requires a level of risk your profile cannot sustain. This cannot be resolved by allocation alone. Review your objective or time horizon."
+    <div style="margin-top:6px;font-size:9px;color:var(--dim);">Trigger: RN_appetite &lt; RN_requirement (structural conflict)</div>
+  </div>
+  <div class="em-msg" style="border-left-color:var(--gold);">
+    "Adding Core 11 at the suggested level will reduce your expected drawdown by [N]% while maintaining a trajectory toward your stated goal."
+    <div style="margin-top:6px;font-size:9px;color:var(--dim);">Trigger: Over-risked AND C11 allocation resolves gap</div>
+  </div>
+
+  <div class="note">Messages are never shown simultaneously. Priority: Danger &gt; Structural conflict &gt; Limit &gt; Under-risk &gt; Optimal. Exactly one message visible at all times. Never generic. Always includes a number.</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════════════════════
+     BLOCK C — FINAL USER EXPERIENCE
+═══════════════════════════════════════════════════════════════════════════════════════ -->
+<div class="blk">
+  <div class="blk-head">
+    <span class="blk-id">BLOCK C</span>
+    <span class="blk-title">Final User Experience</span>
+    <div class="blk-desc">Three output states.<br>Three action paths.</div>
+  </div>
+</div>
+
+<!-- C1 — DECISION OUTPUT STATES -->
+<div class="section">
+  <div class="sh"><span class="sn">C·01</span><span class="st">Decision Output — Three States, Three Verdicts</span></div>
+
+  <!-- STATE 1: ALIGNED -->
+  <div style="margin-bottom: 20px;">
+    <div class="decision-output">
+      <div class="do-header">
+        <div>
+          <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--green-l);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:6px;">System verdict · State 01</div>
+          <div class="do-verdict" style="color:var(--green-l);">You are optimally aligned.</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;">
+            <span class="tag tg">Optimal zone</span>
+            <span class="tag tg">P(Goal): 78%</span>
+            <span class="tag tg">Budget: +8</span>
+          </div>
+        </div>
+      </div>
+      <div class="do-body">
+        <div class="do-body-grid">
+          <div>
+            <div class="em-msg" style="border-left-color:var(--green);margin-bottom:14px;">"You are well positioned to reach your target. Maintain this structure or make minor efficiency adjustments."</div>
+            <div class="rec-band">
+              <div class="rec-band-label">Suggested Allocation</div>
+              <div class="rec-alloc">
+                <div class="rec-alloc-item">
+                  <div class="rec-alloc-label">Core 11</div>
+                  <div class="rec-alloc-range" style="color:var(--green-l);">15–22%</div>
+                  <div class="rec-alloc-optimal" style="color:var(--gold);">Optimal: 18%</div>
+                </div>
+                <div class="rec-alloc-item">
+                  <div class="rec-alloc-label">Core 22</div>
+                  <div class="rec-alloc-range" style="color:var(--green-l);">8–14%</div>
+                  <div class="rec-alloc-optimal" style="color:var(--gold);">Optimal: 11%</div>
+                </div>
+              </div>
+              <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);">Combined Harpian: 29% · Existing: 71%</div>
+            </div>
+            <div class="action-row">
+              <div class="btn-primary">Apply Allocation</div>
+              <div class="btn-secondary">Refine</div>
+            </div>
+          </div>
+          <div style="background:var(--bsub);"></div>
+          <div>
+            <div class="ind-panel" style="grid-template-columns:1fr;gap:4px;">
+              <div class="ind-item" style="text-align:left;padding:10px 14px;">
+                <div class="ind-label">Expected Return</div>
+                <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--green-l);">14.2 – 18.6%</div>
+                <div class="ind-sub">annual · post-allocation</div>
+              </div>
+              <div class="ind-item" style="text-align:left;padding:10px 14px;">
+                <div class="ind-label">Expected Drawdown</div>
+                <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--amber-l);">−11 – −16%</div>
+                <div class="ind-sub">max · stress scenario</div>
+              </div>
+              <div class="ind-item" style="text-align:left;padding:10px 14px;">
+                <div class="ind-label">Confidence Level</div>
+                <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--green-l);">High</div>
+                <div class="ind-sub">P_goal 78% · Full data · Budget +8</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATE 2: UNDER-RISKED -->
+  <div style="margin-bottom: 20px;">
+    <div class="decision-output" style="border-color:rgba(45,122,192,0.4);">
+      <div class="do-header" style="background:rgba(45,122,192,0.06);">
+        <div>
+          <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--blue-l);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:6px;">System verdict · State 02</div>
+          <div class="do-verdict" style="color:var(--blue-l);">You are currently under-risked.</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;">
+            <span class="tag tb">Safe zone</span>
+            <span class="tag ta">P(Goal): 44%</span>
+            <span class="tag tg">Budget: +12</span>
+          </div>
+        </div>
+      </div>
+      <div class="do-body">
+        <div class="do-body-grid">
+          <div>
+            <div class="em-msg" style="border-left-color:var(--blue);margin-bottom:14px;">"Your portfolio is safer than your goal requires. You have room to add targeted exposure without exceeding your tolerance."</div>
+            <div class="rec-band" style="border-color:rgba(45,122,192,0.2);">
+              <div class="rec-band-label">Suggested Allocation — Core 22 leads</div>
+              <div class="rec-alloc">
+                <div class="rec-alloc-item">
+                  <div class="rec-alloc-label">Core 22 (primary)</div>
+                  <div class="rec-alloc-range" style="color:var(--blue-l);">18–28%</div>
+                  <div class="rec-alloc-optimal" style="color:var(--gold);">Optimal: 22%</div>
+                </div>
+                <div class="rec-alloc-item">
+                  <div class="rec-alloc-label">Core 11 (support)</div>
+                  <div class="rec-alloc-range" style="color:var(--blue-l);">0–12%</div>
+                  <div class="rec-alloc-optimal" style="color:var(--gold);">Optimal: 8%</div>
+                </div>
+              </div>
+              <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);">P(Goal) improves: 44% → 71% with suggested allocation</div>
+            </div>
+            <div class="action-row">
+              <div class="btn-primary" style="background:var(--blue-l);">Boost Allocation</div>
+              <div class="btn-secondary">Adjust Strategy</div>
+              <div class="btn-tertiary">Stay Conservative</div>
+            </div>
+          </div>
+          <div style="background:var(--bsub);"></div>
+          <div>
+            <div class="ind-panel" style="grid-template-columns:1fr;gap:4px;">
+              <div class="ind-item" style="text-align:left;padding:10px 14px;">
+                <div class="ind-label">Goal gap (current)</div>
+                <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--red-l);">P: 44%</div>
+                <div class="ind-sub">Below 60% viability threshold</div>
+              </div>
+              <div class="ind-item" style="text-align:left;padding:10px 14px;">
+                <div class="ind-label">Goal gap (suggested)</div>
+                <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--green-l);">P: 71%</div>
+                <div class="ind-sub">+27 pts with C22 22% + C11 8%</div>
+              </div>
+              <div class="ind-item" style="text-align:left;padding:10px 14px;">
+                <div class="ind-label">Risk Budget Remaining</div>
+                <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--blue-l);">+4 pts</div>
+                <div class="ind-sub">After suggested allocation</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATE 3: OVER-RISKED -->
+  <div>
+    <div class="decision-output" style="border-color:rgba(192,57,43,0.4);">
+      <div class="do-header" style="background:rgba(192,57,43,0.05);">
+        <div>
+          <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--red-l);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:6px;">System verdict · State 03</div>
+          <div class="do-verdict" style="color:var(--red-l);">You are exceeding your risk tolerance.</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;">
+            <span class="tag tr">Danger zone</span>
+            <span class="tag ta">RN overdrawn: −13</span>
+            <span class="tag tr">Action required</span>
+          </div>
+        </div>
+      </div>
+      <div class="do-body">
+        <div class="do-body-grid">
+          <div>
+            <div class="em-msg" style="border-left-color:var(--red);margin-bottom:14px;">"Your current portfolio exceeds your risk tolerance by 13 points. Structural adjustment is required before making further allocations."</div>
+            <div class="rec-band" style="border-color:rgba(192,57,43,0.2);">
+              <div class="rec-band-label">Suggested Correction — Core 11 only</div>
+              <div class="rec-alloc">
+                <div class="rec-alloc-item">
+                  <div class="rec-alloc-label">Core 11 (corrective)</div>
+                  <div class="rec-alloc-range" style="color:var(--red-l);">38–48%</div>
+                  <div class="rec-alloc-optimal" style="color:var(--gold);">Optimal: 43%</div>
+                </div>
+                <div class="rec-alloc-item" style="opacity:0.4;">
+                  <div class="rec-alloc-label">Core 22</div>
+                  <div class="rec-alloc-range" style="color:var(--dim);">0%</div>
+                  <div class="rec-alloc-optimal" style="color:var(--dim);">Contraindicated</div>
+                </div>
+              </div>
+              <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--red-l);">⚠ Core 22 is blocked in this state. Adding it worsens tolerance breach.</div>
+            </div>
+            <div class="action-row">
+              <div class="btn-primary" style="background:var(--red);">Reduce Exposure</div>
+              <div class="btn-secondary">Adjust Strategy</div>
+            </div>
+          </div>
+          <div style="background:var(--bsub);"></div>
+          <div>
+            <div class="ind-panel" style="grid-template-columns:1fr;gap:4px;">
+              <div class="ind-item" style="text-align:left;padding:10px 14px;border-color:rgba(192,57,43,0.3);">
+                <div class="ind-label">Risk overdraw</div>
+                <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--red-l);">−13 pts</div>
+                <div class="ind-sub">RN 68 vs appetite ceiling 55</div>
+              </div>
+              <div class="ind-item" style="text-align:left;padding:10px 14px;">
+                <div class="ind-label">Expected correction</div>
+                <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--green-l);">RN → 54</div>
+                <div class="ind-sub">With 43% Core 11 · within budget</div>
+              </div>
+              <div class="ind-item" style="text-align:left;padding:10px 14px;">
+                <div class="ind-label">Drawdown improvement</div>
+                <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--green-l);">−24% → −16%</div>
+                <div class="ind-sub">Expected max loss reduction</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- C2 — ACTION BUTTON LOGIC -->
+<div class="section">
+  <div class="sh"><span class="sn">C·02</span><span class="st">Action Button Logic — System Always Leads to Action</span></div>
+
+  <div class="state-row" style="margin-top:0;">
+    <div class="sr-state"><div class="sr-dot" style="background:var(--green);"></div><div class="sr-name">Optimal</div></div>
+    <div class="sr-msg">"You are optimally aligned."</div>
+    <div class="sr-rec">Apply suggested C11+C22 mix.</div>
+    <div class="sr-cta"><div class="cta-pill" style="background:var(--gold);color:#090E14;font-weight:700;">Apply Allocation →</div></div>
+  </div>
+  <div class="state-row">
+    <div class="sr-state"><div class="sr-dot" style="background:var(--lgr);"></div><div class="sr-name">Safe</div></div>
+    <div class="sr-msg">"Small efficiency gain available."</div>
+    <div class="sr-rec">Optional C11 increment. Or confirm as-is.</div>
+    <div class="sr-cta"><div class="cta-pill" style="background:var(--s3);color:var(--text);border:1px solid var(--bsub);">Optimize Strategy</div></div>
+  </div>
+  <div class="state-row">
+    <div class="sr-state"><div class="sr-dot" style="background:var(--blue);"></div><div class="sr-name">Under-Risk</div></div>
+    <div class="sr-msg">"Goal gap. Room to grow."</div>
+    <div class="sr-rec">Add Core 22. Review P_goal improvement.</div>
+    <div class="sr-cta"><div class="cta-pill" style="background:var(--blue);color:var(--bright);">Boost Allocation</div></div>
+  </div>
+  <div class="state-row">
+    <div class="sr-state"><div class="sr-dot" style="background:var(--amber);"></div><div class="sr-name">Limit</div></div>
+    <div class="sr-msg">"At tolerance edge. Advise caution."</div>
+    <div class="sr-rec">Offer C11 dilution or horizon extension.</div>
+    <div class="sr-cta"><div class="cta-pill" style="background:rgba(212,134,10,0.15);color:var(--amber-l);border:1px solid rgba(212,134,10,0.3);">Adjust Strategy</div></div>
+  </div>
+  <div class="state-row">
+    <div class="sr-state"><div class="sr-dot" style="background:var(--red);"></div><div class="sr-name">Danger</div></div>
+    <div class="sr-msg">"Tolerance breached. Action required."</div>
+    <div class="sr-rec">C11 correction only. C22 blocked.</div>
+    <div class="sr-cta"><div class="cta-pill" style="background:var(--red);color:var(--bright);">Reduce Exposure</div></div>
+  </div>
+  <div class="state-row">
+    <div class="sr-state"><div class="sr-dot" style="background:var(--purple);"></div><div class="sr-name">Conflict</div></div>
+    <div class="sr-msg">"Allocation cannot resolve this."</div>
+    <div class="sr-rec">Show 3 structural options: horizon / target / capital.</div>
+    <div class="sr-cta"><div class="cta-pill" style="background:rgba(123,63,160,0.15);color:var(--purple-l);border:1px solid rgba(123,63,160,0.3);">Review Objective</div></div>
+  </div>
+
+  <div class="note">One primary button always visible. Never more than two secondary options. Button label changes with state. Primary button is always gold background when action leads to improvement. Red background only in Danger state.</div>
+</div>
+
+<!-- C3 — UX PRINCIPLE -->
+<div class="section">
+  <div class="sh"><span class="sn">C·03</span><span class="st">The Core UX Principle — Non-Negotiable</span></div>
+
+  <div class="ux-principle">
+    <h2>This is not a dashboard.<br>This is a decision engine.</h2>
+    <div style="font-size:12px;color:var(--dim);max-width:560px;margin:0 auto;line-height:1.8;">
+      A dashboard shows information. A decision engine <strong style="color:var(--bright)">eliminates ambiguity</strong> and produces a clear action.<br>
+      The user must never wonder what to do next.
+    </div>
+    <div class="ux-sub-row">
+      <div class="ux-sub">
+        <strong>5 seconds</strong>
+        Status understood.<br>Verdict visible.<br>No reading required.
+      </div>
+      <div class="ux-sub">
+        <strong>15 seconds</strong>
+        Recommendation absorbed.<br>Numbers reviewed.<br>Range understood.
+      </div>
+      <div class="ux-sub">
+        <strong>30 seconds</strong>
+        Action taken.<br>Allocation applied<br>or strategy adjusted.
+      </div>
+    </div>
+  </div>
+
+  <div class="sub">Developer Mandates — Absolute, Non-Negotiable</div>
+  <div class="g2">
+    <div class="card gl">
+      <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--gold);margin-bottom:10px;letter-spacing:0.1em;text-transform:uppercase;">Must Always Be True</div>
+      <div style="font-size:11.5px;line-height:2;color:var(--text);">
+        · One verdict. One emotional message. One primary button.<br>
+        · Zone color fills entire screen context — not just a badge<br>
+        · Risk Budget widget visible at all times during simulation<br>
+        · Recommendation card never below the fold<br>
+        · C22 slider disabled when state = Danger or Conflict<br>
+        · Budget = 0 → all sliders lock, warning fires<br>
+        · Indicators (Confidence, Feasibility, Stress) always shown
+      </div>
+    </div>
+    <div class="card gr">
+      <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--red-l);margin-bottom:10px;letter-spacing:0.1em;text-transform:uppercase;">Must Never Happen</div>
+      <div style="font-size:11.5px;line-height:2;color:var(--text);">
+        · Two simultaneous verdicts or emotional messages<br>
+        · "Apply Allocation" visible when state = Danger<br>
+        · Numbers without context (just "68" with no reference)<br>
+        · Positive framing when structural conflict is unresolvable<br>
+        · Loading state on slider drag — must be instantaneous<br>
+        · User reaches a dead end without a suggested next step<br>
+        · Ranges presented as exact point estimates
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div style="border-top:1px solid var(--bsub);padding:28px 0;display:flex;justify-content:space-between;align-items:center;margin-top:40px;">
+  <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);letter-spacing:0.1em;line-height:2;">
+    HARPIAN LLC · DECISION ENGINE LAYER · HRD-002-DL · v1.0<br>
+    THREE-DOCUMENT SERIES: VISUAL SPEC v1 · ENGINE LAYER v1 · DECISION LAYER v1
+  </div>
+  <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);letter-spacing:0.1em;text-align:right;line-height:2;">
+    INTERNAL · DEVELOPMENT USE<br>
+    NOT FOR CLIENT DISTRIBUTION
+  </div>
+</div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,285 @@
+﻿source_file,line,qa_id,question,risk_domain,status,finding
+Documentação de produção e base de conhecimento do DMA.txt,,DOC,Documento sem Q&A tabular detectado; auditado em nivel documental.,document-level,APROVADO_COM_RESSALVAS,"Revisar como especificacao/base de conhecimento; contem controles uteis, mas deve manter mesma politica de disclaimers e retencao."
+Harpian_150_Questionnaire.txt,13,1,O que é um Risk Number em linguagem simples?,baixo,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,16,2,Quais metodologias públicas existem para transformar risco em escala de 1 a 100?,performance/simulacao; regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,19,3,Como o Riskalyze/Nitrogen calcula ou comunica o Risk Number?,performance/simulacao; regulatorio,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_150_Questionnaire.txt,22,4,Qual é a diferença entre Risk Number e volatilidade?,performance/simulacao; regulatorio,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_150_Questionnaire.txt,25,5,Qual é a diferença entre Risk Number e drawdown?,performance/simulacao,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_150_Questionnaire.txt,28,6,Qual é a diferença entre Risk Number e suitability?,fiscal/legal; regulatorio,APROVADO_COM_CORRECAO,Tema fiscal/legal sem ressalva de nao aconselhamento.
+Harpian_150_Questionnaire.txt,31,7,Como explicar Risk Number para um cliente leigo?,performance/simulacao,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_150_Questionnaire.txt,34,8,Como explicar Risk Number para um Family Office?,baixo,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,37,9,Quais inputs mínimos são necessários para estimar Risk Number?,performance/simulacao,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_150_Questionnaire.txt,40,10,"Como renda, patrimônio, horizonte e dependentes afetam capacidade de risco?",performance/simulacao; regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,43,11,Como tolerância a risco difere de capacidade de risco?,performance/simulacao; regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,46,12,Como objetivo de retorno muda o risco necessário?,performance/simulacao,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_150_Questionnaire.txt,49,13,Como calcular perda potencial em 6 meses com 95% de confiança?,performance/simulacao,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_150_Questionnaire.txt,52,14,Como explicar intervalo de confiança aplicado a portfólios?,performance/simulacao,APROVADO_COM_CORRECAO,"Confirmar fonte, periodo, data de corte, net/gross, custos e comparabilidade antes de uso externo."
+Harpian_150_Questionnaire.txt,55,15,Quais limites regulatórios existem ao usar score de risco?,regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,58,16,Como explicar 'Approximate Risk Number' sem prometer precisão?,regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,61,17,Como comunicar baixa confiança no cálculo?,baixo,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,64,18,Quais frases evitar ao explicar score de risco?,performance/simulacao; linguagem promocional/proibida; regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Produto com discussao de risco/retorno deve trazer disclaimer padrao. Revisar linguagem absoluta/promocional ou palavra banida; manter apenas como exemplo negativo se for o caso.
+Harpian_150_Questionnaire.txt,67,19,Quais disclaimers usar em risk profiling?,performance/simulacao; fiscal/legal; regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,70,20,Como documentar que o cliente aceitou desalinhamento?,baixo,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,73,21,O que é volatilidade anualizada?,performance/simulacao,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_150_Questionnaire.txt,76,22,Como converter volatilidade diária em anualizada?,performance/simulacao; regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,79,23,O que é drawdown?,performance/simulacao; regulatorio; produto/estrutura,APROVADO_COM_CORRECAO,Produto com discussao de risco/retorno deve trazer disclaimer padrao.
+Harpian_150_Questionnaire.txt,82,24,O que é max drawdown?,performance/simulacao; regulatorio,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_150_Questionnaire.txt,85,25,O que é drawdown duration?,performance/simulacao; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_150_Questionnaire.txt,88,26,O que é downside deviation?,performance/simulacao,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_150_Questionnaire.txt,91,27,O que é Sharpe Ratio?,performance/simulacao,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_150_Questionnaire.txt,94,28,O que é Sortino Ratio?,performance/simulacao; regulatorio,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_150_Questionnaire.txt,97,29,Por que Sortino pode ser melhor que Sharpe?,performance/simulacao; regulatorio,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_150_Questionnaire.txt,100,30,O que é CAGR?,performance/simulacao; regulatorio,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_150_Questionnaire.txt,103,31,O que é retorno acumulado?,performance/simulacao,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_150_Questionnaire.txt,106,32,O que é retorno rolling?,performance/simulacao; regulatorio,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_150_Questionnaire.txt,109,33,O que é correlação?,performance/simulacao; regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,112,34,O que acontece com correlações em crises?,regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,115,35,O que é beta?,performance/simulacao,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_150_Questionnaire.txt,118,36,O que é alpha?,performance/simulacao; regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,121,37,O que é RAF — Risk Acceleration Factor?,performance/simulacao; regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,124,38,Como explicar RAF em linguagem simples?,baixo,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,127,39,Como ativos defensivos têm RAF baixo?,performance/simulacao; regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,130,40,Como ativos cíclicos têm RAF alto?,performance/simulacao; regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,133,41,O que é Temporal Portfolio Theory?,regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,136,42,Como TPT difere de Modern Portfolio Theory?,regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,139,43,Por que MPT pode falhar em crises?,performance/simulacao; regulatorio,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_150_Questionnaire.txt,142,44,O que significa tratar capital como sinal?,performance/simulacao; regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,145,45,O que é signal-to-noise ratio em mercados?,regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,148,46,Como ruído afeta decisões de investimento?,performance/simulacao,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,151,47,O que é momentum?,performance/simulacao; regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,154,48,Quais evidências acadêmicas sustentam momentum?,performance/simulacao; regulatorio,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_150_Questionnaire.txt,157,49,O que é sector rotation?,performance/simulacao; regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,160,50,O que é true sector rotation?,performance/simulacao; regulatorio,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_150_Questionnaire.txt,163,51,O que é matched filter theory?,regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,166,52,Como processamento de sinais se aplica a mercados?,performance/simulacao; regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,169,53,O que é Automated Polymorphic Momentum?,performance/simulacao,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,172,54,O que é forward-walk progressive tuning?,performance/simulacao,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,175,55,O que é hindsight bias em backtesting?,performance/simulacao; regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,178,56,Como evitar backtesting deception?,performance/simulacao; regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,181,57,O que é bear market avoidance?,performance/simulacao; regulatorio,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_150_Questionnaire.txt,184,58,Como a TPT trata regime de mercado?,baixo,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,187,59,Como explicar TPT para um advisor?,performance/simulacao; regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,190,60,Como explicar TPT para um investidor institucional?,regulatorio,BLOQUEAR_ATE_CORRIGIR,Afirma??o regulatoria categorica precisa de validacao por counsel e data de vigencia.
+Harpian_150_Questionnaire.txt,193,61,O que é StormGuard Armor?,baixo,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,196,62,Quais tipos de indicadores podem compor um sistema de regime?,performance/simulacao,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,199,63,"Como tendência, volume e sentimento podem indicar risco?",baixo,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,202,64,O que é risk-on?,performance/simulacao; regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,205,65,O que é risk-off?,baixo,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,208,66,O que é regime neutro?,baixo,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,211,67,Como explicar Bull / Bear / Neutral?,baixo,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,214,68,Quando um sistema defensivo vai para caixa?,baixo,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,217,69,Quando um sistema defensivo volta ao risco?,performance/simulacao,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_150_Questionnaire.txt,220,70,Como explicar que caixa é posição ativa?,performance/simulacao,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_150_Questionnaire.txt,223,71,Como evitar prometer proteção total contra queda?,performance/simulacao; regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,226,72,Quais disclaimers usar sobre mecanismos defensivos?,performance/simulacao,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,229,73,O que é whipsaw?,regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,232,74,Como explicar falso positivo de regime?,regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,235,75,Como medir eficácia de um indicador de mercado?,performance/simulacao; regulatorio,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_150_Questionnaire.txt,238,76,Como comunicar ativação do StormGuard ao cliente?,performance/simulacao,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,241,77,Como comunicar desativação do StormGuard?,performance/simulacao,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,244,78,Como explicar defesa sem parecer market timing especulativo?,regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,247,79,Como explicar que defesa prioriza sobrevivência do capital?,regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,250,80,Quais perguntas frequentes usuários fariam sobre StormGuard?,performance/simulacao; regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,253,81,O que é HPC11?,performance/simulacao; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Performance/simulacao numerica sem disclaimer suficiente. Afirma??o estrutural/legal categorica precisa ser qualificada e vinculada ao offering document/counsel.
+Harpian_150_Questionnaire.txt,256,82,O que é HPC22?,performance/simulacao; regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_150_Questionnaire.txt,259,83,Qual é a diferença entre ETF-based e stock-based strategy?,performance/simulacao; regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Performance/simulacao numerica sem disclaimer suficiente. Afirma??o estrutural/legal categorica precisa ser qualificada e vinculada ao offering document/counsel. Afirma??o regulatoria categorica precisa de validacao por counsel e data de vigencia.
+Harpian_150_Questionnaire.txt,262,84,Por que HPC11 tende a ter menor volatilidade?,performance/simulacao; regulatorio; produto/estrutura,APROVADO_COM_CORRECAO,Produto com discussao de risco/retorno deve trazer disclaimer padrao.
+Harpian_150_Questionnaire.txt,265,85,Por que HPC22 tende a ter maior retorno esperado?,performance/simulacao; regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_150_Questionnaire.txt,268,86,Por que HPC22 tende a ter maior drawdown?,performance/simulacao; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_150_Questionnaire.txt,271,87,Como explicar que maior retorno exige maior oscilação?,performance/simulacao; regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,274,88,Como comparar HPC11 e HPC22 sem recomendar?,performance/simulacao; produto/estrutura,APROVADO_COM_CORRECAO,Produto com discussao de risco/retorno deve trazer disclaimer padrao.
+Harpian_150_Questionnaire.txt,277,89,Como explicar mix HPC11/HPC22?,performance/simulacao; regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_150_Questionnaire.txt,280,90,Como explicar que uma simulação não é recomendação?,regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,283,91,Como explicar eficiência risco-retorno?,performance/simulacao,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_150_Questionnaire.txt,286,92,Como comparar HPC11/HPC22 contra S&P 500?,performance/simulacao; regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,"Confirmar fonte, periodo, data de corte, net/gross, custos e comparabilidade antes de uso externo."
+Harpian_150_Questionnaire.txt,289,93,Como comparar HPC11/HPC22 contra bonds?,performance/simulacao; regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,"Confirmar fonte, periodo, data de corte, net/gross, custos e comparabilidade antes de uso externo."
+Harpian_150_Questionnaire.txt,292,94,Como comparar HPC11/HPC22 contra ouro?,performance/simulacao; regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,"Confirmar fonte, periodo, data de corte, net/gross, custos e comparabilidade antes de uso externo."
+Harpian_150_Questionnaire.txt,295,95,Como comparar HPC11/HPC22 contra Nasdaq?,performance/simulacao; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,"Confirmar fonte, periodo, data de corte, net/gross, custos e comparabilidade antes de uso externo."
+Harpian_150_Questionnaire.txt,298,96,"Como explicar retorno de 1, 3, 5, 10, 20 e 30 anos?",performance/simulacao,APROVADO_COM_CORRECAO,"Confirmar fonte, periodo, data de corte, net/gross, custos e comparabilidade antes de uso externo."
+Harpian_150_Questionnaire.txt,301,97,Como explicar histórico vs expectativa futura?,performance/simulacao; regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,304,98,Como explicar baixa correlação ou correlação variável?,performance/simulacao; regulatorio; produto/estrutura,APROVADO_COM_CORRECAO,Produto com discussao de risco/retorno deve trazer disclaimer padrao.
+Harpian_150_Questionnaire.txt,307,99,Como explicar periodicidade de rotação?,regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,310,100,Como explicar por que não operar vendido?,performance/simulacao; regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_150_Questionnaire.txt,313,101,O que é um ETP?,regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Afirma??o estrutural/legal categorica precisa ser qualificada e vinculada ao offering document/counsel. Afirma??o regulatoria categorica precisa de validacao por counsel e data de vigencia.
+Harpian_150_Questionnaire.txt,316,102,"Qual é a diferença entre ETP, ETF, ETN e fundo?",regulatorio; produto/estrutura,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,319,103,Como funciona um ETP listado em bolsa?,regulatorio; produto/estrutura,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,322,104,O que é ISIN?,regulatorio; produto/estrutura,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,325,105,O que é LEI?,fiscal/legal; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Tema fiscal/legal sem ressalva de nao aconselhamento. Beneficio fiscal/estrutural de produto requer revisao por counsel e linguagem nao categorica.
+Harpian_150_Questionnaire.txt,328,106,O que é NAV diário?,regulatorio; produto/estrutura,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,331,107,O que é Bloomberg ticker?,regulatorio; produto/estrutura,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,334,108,Como um investidor acessa um ETP pela Bloomberg?,performance/simulacao; fiscal/legal; regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Produto com discussao de risco/retorno deve trazer disclaimer padrao. Tema fiscal/legal sem ressalva de nao aconselhamento. Beneficio fiscal/estrutural de produto requer revisao por counsel e linguagem nao categorica.
+Harpian_150_Questionnaire.txt,337,109,Como explicar liquidez D+5?,produto/estrutura,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,340,110,O que significa possibilidade de liquidez antes de D+5?,regulatorio; produto/estrutura,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,343,111,O que é custódia?,produto/estrutura,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,346,112,O que faz um custodiante?,produto/estrutura,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,349,113,Como explicar que HARPIAN não toca no dinheiro?,produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Afirma??o estrutural/legal categorica precisa ser qualificada e vinculada ao offering document/counsel.
+Harpian_150_Questionnaire.txt,352,114,Como funciona auditoria Deloitte em estrutura de produto?,regulatorio; produto/estrutura,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,355,115,Qual é o papel de Lynk / L-Series / Vienna Stock Exchange?,fiscal/legal; regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Tema fiscal/legal sem ressalva de nao aconselhamento. Beneficio fiscal/estrutural de produto requer revisao por counsel e linguagem nao categorica. Afirma??o estrutural/legal categorica precisa ser qualificada e vinculada ao offering document/counsel. Afirma??o regulatoria categorica precisa de validacao por counsel e data de vigencia.
+Harpian_150_Questionnaire.txt,358,116,Como explicar fluxo de subscrição?,regulatorio; produto/estrutura,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,361,117,Como explicar fluxo de resgate?,produto/estrutura,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,364,118,Como explicar taxa de administração?,performance/simulacao; regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_150_Questionnaire.txt,367,119,Como explicar taxa de performance?,performance/simulacao,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_150_Questionnaire.txt,370,120,Como explicar spread ou custos operacionais?,performance/simulacao; regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_150_Questionnaire.txt,373,121,Por que investidores US podem ter caminho diferente de Non-US?,regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Afirma??o estrutural/legal categorica precisa ser qualificada e vinculada ao offering document/counsel. Afirma??o regulatoria categorica precisa de validacao por counsel e data de vigencia.
+Harpian_150_Questionnaire.txt,376,122,Quais cuidados existem ao oferecer ETP para US persons?,regulatorio; produto/estrutura,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,379,123,Qual alternativa para investidor americano?,performance/simulacao; fiscal/legal; regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Produto com discussao de risco/retorno deve trazer disclaimer padrao. Tema fiscal/legal sem ressalva de nao aconselhamento. Beneficio fiscal/estrutural de produto requer revisao por counsel e linguagem nao categorica. Afirma??o estrutural/legal categorica precisa ser qualificada e vinculada ao offering document/counsel. Afirma??o regulatoria categorica precisa de validacao por counsel e data de vigencia.
+Harpian_150_Questionnaire.txt,382,124,Como explicar managed account para investidor americano?,fiscal/legal; regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Tema fiscal/legal sem ressalva de nao aconselhamento. Beneficio fiscal/estrutural de produto requer revisao por counsel e linguagem nao categorica.
+Harpian_150_Questionnaire.txt,385,125,Como explicar ETP para investidor Non-US?,regulatorio; produto/estrutura,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,388,126,Quais benefícios operacionais de ETP para Non-US?,fiscal/legal; regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Tema fiscal/legal sem ressalva de nao aconselhamento. Beneficio fiscal/estrutural de produto requer revisao por counsel e linguagem nao categorica.
+Harpian_150_Questionnaire.txt,391,127,Quais benefícios sucessórios ou fiscais podem existir sem dar tax advice?,fiscal/legal; linguagem promocional/proibida; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Beneficio fiscal/estrutural de produto requer revisao por counsel e linguagem nao categorica. Revisar linguagem absoluta/promocional ou palavra banida; manter apenas como exemplo negativo se for o caso.
+Harpian_150_Questionnaire.txt,394,128,Quais disclaimers usar para temas fiscais?,fiscal/legal; linguagem promocional/proibida; regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Beneficio fiscal/estrutural de produto requer revisao por counsel e linguagem nao categorica. Revisar linguagem absoluta/promocional ou palavra banida; manter apenas como exemplo negativo se for o caso.
+Harpian_150_Questionnaire.txt,397,129,Como explicar abertura de conta?,regulatorio; produto/estrutura,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,400,130,Como explicar KYC/AML?,regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,403,131,Como explicar documentação necessária?,fiscal/legal; regulatorio,APROVADO_COM_CORRECAO,Tema fiscal/legal sem ressalva de nao aconselhamento.
+Harpian_150_Questionnaire.txt,406,132,Como explicar suitability?,regulatorio; produto/estrutura,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,409,133,Como explicar perfil de investidor?,performance/simulacao; regulatorio; produto/estrutura,APROVADO_COM_CORRECAO,Produto com discussao de risco/retorno deve trazer disclaimer padrao.
+Harpian_150_Questionnaire.txt,412,134,Como explicar mandato do Family Office?,performance/simulacao; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_150_Questionnaire.txt,415,135,Como explicar aceite de desalinhamento?,regulatorio; produto/estrutura,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,418,136,O que é DIME?,regulatorio; produto/estrutura,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,421,137,O que é Social Media Intelligence?,performance/simulacao; regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,424,138,O que é Market Trend?,performance/simulacao,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_150_Questionnaire.txt,427,139,O que é Momentum (módulo)?,regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,430,140,O que é Sector Momentum?,regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,433,141,O que é Not Touch List?,produto/estrutura,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,436,142,O que é Planning Intelligence?,performance/simulacao; regulatorio; produto/estrutura,APROVADO_COM_CORRECAO,Produto com discussao de risco/retorno deve trazer disclaimer padrao.
+Harpian_150_Questionnaire.txt,439,143,O que é Client Dashboard?,performance/simulacao; regulatorio,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_150_Questionnaire.txt,442,144,O que é Portfolio Analysis?,performance/simulacao; fiscal/legal; regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Performance/simulacao numerica sem disclaimer suficiente. Tema fiscal/legal sem ressalva de nao aconselhamento. Beneficio fiscal/estrutural de produto requer revisao por counsel e linguagem nao categorica.
+Harpian_150_Questionnaire.txt,445,145,O que é Alignment Simulator?,performance/simulacao; produto/estrutura,APROVADO_COM_CORRECAO,Produto com discussao de risco/retorno deve trazer disclaimer padrao.
+Harpian_150_Questionnaire.txt,448,146,O que é Risk Gap?,performance/simulacao,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,451,147,O que é Confidence Level?,fiscal/legal,APROVADO_COM_CORRECAO,Tema fiscal/legal sem ressalva de nao aconselhamento.
+Harpian_150_Questionnaire.txt,454,148,O que é Admin Terminal?,performance/simulacao; regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_150_Questionnaire.txt,457,149,Como o DIMA deve responder quando não souber?,linguagem promocional/proibida; regulatorio,APROVADO_COM_CORRECAO,Revisar linguagem absoluta/promocional ou palavra banida; manter apenas como exemplo negativo se for o caso.
+Harpian_150_Questionnaire.txt,460,150,Como o DIMA deve encaminhar para advisor quando o usuário entra em loop?,linguagem promocional/proibida,APROVADO_COM_CORRECAO,Revisar linguagem absoluta/promocional ou palavra banida; manter apenas como exemplo negativo se for o caso.
+Harpian_JIM_GM.txt,13,G1,Qual a vantagem tributária de investir via ETP offshore?,performance/simulacao; fiscal/legal; regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Performance/simulacao numerica sem disclaimer suficiente. Tema fiscal/legal sem ressalva de nao aconselhamento. Beneficio fiscal/estrutural de produto requer revisao por counsel e linguagem nao categorica.
+Harpian_JIM_GM.txt,16,G2,Qual a diferença entre investir direto vs via veículo?,fiscal/legal; regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Tema fiscal/legal sem ressalva de nao aconselhamento. Beneficio fiscal/estrutural de produto requer revisao por counsel e linguagem nao categorica.
+Harpian_JIM_GM.txt,19,G3,Como funciona a tributação de ganho de capital em ETP?,fiscal/legal; regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Beneficio fiscal/estrutural de produto requer revisao por counsel e linguagem nao categorica.
+Harpian_JIM_GM.txt,22,G4,Existe diferimento fiscal?,performance/simulacao; fiscal/legal; regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Performance/simulacao numerica sem disclaimer suficiente. Tema fiscal/legal sem ressalva de nao aconselhamento. Beneficio fiscal/estrutural de produto requer revisao por counsel e linguagem nao categorica.
+Harpian_JIM_GM.txt,25,G5,Como funciona o efeito de juros compostos sem tributação intermediária?,performance/simulacao; fiscal/legal; regulatorio,BLOQUEAR_ATE_CORRIGIR,"Confirmar fonte, periodo, data de corte, net/gross, custos e comparabilidade antes de uso externo. Afirma??o regulatoria categorica precisa de validacao por counsel e data de vigencia."
+Harpian_JIM_GM.txt,28,G6,Qual impacto de imposto no longo prazo?,performance/simulacao; fiscal/legal; regulatorio,APROVADO_COM_CORRECAO,"Confirmar fonte, periodo, data de corte, net/gross, custos e comparabilidade antes de uso externo."
+Harpian_JIM_GM.txt,31,G7,Como funciona sucessão patrimonial (herança)?,fiscal/legal; regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Beneficio fiscal/estrutural de produto requer revisao por counsel e linguagem nao categorica. Afirma??o estrutural/legal categorica precisa ser qualificada e vinculada ao offering document/counsel. Afirma??o regulatoria categorica precisa de validacao por counsel e data de vigencia.
+Harpian_JIM_GM.txt,34,G8,ETP pode ser comparado a eurobond?,performance/simulacao; fiscal/legal; regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Produto com discussao de risco/retorno deve trazer disclaimer padrao. Tema fiscal/legal sem ressalva de nao aconselhamento. Beneficio fiscal/estrutural de produto requer revisao por counsel e linguagem nao categorica.
+Harpian_JIM_GM.txt,37,G9,Existe risco de bitributação?,performance/simulacao; fiscal/legal; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Performance/simulacao numerica sem disclaimer suficiente. Tema fiscal/legal sem ressalva de nao aconselhamento. Beneficio fiscal/estrutural de produto requer revisao por counsel e linguagem nao categorica.
+Harpian_JIM_GM.txt,40,G10,Como isso se encaixa para residente fiscal brasileiro?,fiscal/legal; regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Tema fiscal/legal sem ressalva de nao aconselhamento. Beneficio fiscal/estrutural de produto requer revisao por counsel e linguagem nao categorica. Afirma??o estrutural/legal categorica precisa ser qualificada e vinculada ao offering document/counsel. Afirma??o regulatoria categorica precisa de validacao por counsel e data de vigencia.
+Harpian_JIM_GM.txt,43,H1,Quem pode investir em ETP?,regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Afirma??o estrutural/legal categorica precisa ser qualificada e vinculada ao offering document/counsel. Afirma??o regulatoria categorica precisa de validacao por counsel e data de vigencia.
+Harpian_JIM_GM.txt,46,H2,Por que americanos não podem investir?,regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Afirma??o estrutural/legal categorica precisa ser qualificada e vinculada ao offering document/counsel. Afirma??o regulatoria categorica precisa de validacao por counsel e data de vigencia.
+Harpian_JIM_GM.txt,49,H3,Qual a diferença entre US Person e non-US?,fiscal/legal; regulatorio,APROVADO_COM_CORRECAO,Tema fiscal/legal sem ressalva de nao aconselhamento.
+Harpian_JIM_GM.txt,52,H4,Por que usamos conta administrada para americanos?,regulatorio; produto/estrutura,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_JIM_GM.txt,55,H5,Qual o papel da RIA?,regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_JIM_GM.txt,58,H6,Como funciona Reg BI nesse contexto?,performance/simulacao; regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_JIM_GM.txt,61,H7,Qual a diferença entre advisory vs execution?,performance/simulacao; regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_JIM_GM.txt,64,H8,Como funciona suitability vs simulation?,performance/simulacao; fiscal/legal; regulatorio,APROVADO_COM_CORRECAO,Tema fiscal/legal sem ressalva de nao aconselhamento.
+Harpian_JIM_GM.txt,67,H9,O JIM pode ser considerado advisor?,regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_JIM_GM.txt,70,H10,Qual limite legal da plataforma?,performance/simulacao; fiscal/legal; regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_JIM_GM.txt,73,I1,Por que não investir em ETF passivo?,performance/simulacao; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_GM.txt,76,I2,Qual diferença vs hedge fund?,performance/simulacao; regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Performance/simulacao numerica sem disclaimer suficiente. Afirma??o estrutural/legal categorica precisa ser qualificada e vinculada ao offering document/counsel. Afirma??o regulatoria categorica precisa de validacao por counsel e data de vigencia.
+Harpian_JIM_GM.txt,79,I3,Qual diferença vs asset manager tradicional?,performance/simulacao; regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_GM.txt,82,I4,Qual diferença vs quant funds?,performance/simulacao,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_GM.txt,85,I5,Por que não usar portfolio 60/40?,performance/simulacao,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_GM.txt,88,I6,Como isso se compara ao S&P?,performance/simulacao; linguagem promocional/proibida; regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,"Confirmar fonte, periodo, data de corte, net/gross, custos e comparabilidade antes de uso externo. Revisar linguagem absoluta/promocional ou palavra banida; manter apenas como exemplo negativo se for o caso."
+Harpian_JIM_GM.txt,91,I7,Como isso se comporta em crise?,performance/simulacao; linguagem promocional/proibida; regulatorio,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente. Revisar linguagem absoluta/promocional ou palavra banida; manter apenas como exemplo negativo se for o caso.
+Harpian_JIM_GM.txt,94,I8,Qual diferencial real do StormGuard?,regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_JIM_GM.txt,97,I9,Qual diferencial do AlphaDroid?,performance/simulacao; regulatorio,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_GM.txt,100,I10,Isso é replicável por outro gestor?,regulatorio; produto/estrutura,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_JIM_GM.txt,103,J1,O que é um portfólio conservative?,performance/simulacao; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_GM.txt,106,J2,O que é balanced?,performance/simulacao; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_GM.txt,109,J3,O que é growth?,performance/simulacao; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_GM.txt,112,J4,Como o Risk Number define isso?,baixo,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_JIM_GM.txt,115,J5,Qual diferença entre income vs growth?,performance/simulacao; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_GM.txt,118,J6,Como escolher modelo adequado?,performance/simulacao; regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_GM.txt,121,J7,Qual drawdown esperado por perfil?,performance/simulacao; regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,"Confirmar fonte, periodo, data de corte, net/gross, custos e comparabilidade antes de uso externo."
+Harpian_JIM_GM.txt,124,J8,Qual CAGR esperado por perfil?,performance/simulacao; regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,"Confirmar fonte, periodo, data de corte, net/gross, custos e comparabilidade antes de uso externo."
+Harpian_JIM_GM.txt,127,J9,Qual horizonte ideal por perfil?,performance/simulacao; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_GM.txt,130,J10,Como migrar entre perfis?,fiscal/legal; regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Tema fiscal/legal sem ressalva de nao aconselhamento. Beneficio fiscal/estrutural de produto requer revisao por counsel e linguagem nao categorica.
+Harpian_JIM_GM.txt,133,K1,O sistema usa alavancagem?,performance/simulacao; regulatorio,BLOQUEAR_ATE_CORRIGIR,Performance/simulacao numerica sem disclaimer suficiente. Afirma??o regulatoria categorica precisa de validacao por counsel e data de vigencia.
+Harpian_JIM_GM.txt,136,K2,O sistema faz short?,performance/simulacao; regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Performance/simulacao numerica sem disclaimer suficiente. Afirma??o estrutural/legal categorica precisa ser qualificada e vinculada ao offering document/counsel. Afirma??o regulatoria categorica precisa de validacao por counsel e data de vigencia.
+Harpian_JIM_GM.txt,139,K3,Usa derivativos?,performance/simulacao; regulatorio; produto/estrutura,APROVADO_COM_CORRECAO,Produto com discussao de risco/retorno deve trazer disclaimer padrao.
+Harpian_JIM_GM.txt,142,K4,Usa opções?,performance/simulacao,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_GM.txt,145,K5,Opera intraday?,produto/estrutura,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_JIM_GM.txt,148,K6,Qual frequência de trade?,performance/simulacao; regulatorio,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_GM.txt,151,K7,Existe market timing?,performance/simulacao; regulatorio,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_GM.txt,154,K8,Existe discretionary override?,fiscal/legal,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_JIM_GM.txt,157,K9,Existe risco de liquidez?,regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Afirma??o estrutural/legal categorica precisa ser qualificada e vinculada ao offering document/counsel. Afirma??o regulatoria categorica precisa de validacao por counsel e data de vigencia.
+Harpian_JIM_GM.txt,160,K10,Existe risco de execução?,performance/simulacao; regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_GM.txt,163,L1,A plataforma inclui cripto?,performance/simulacao; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_GM.txt,166,L2,Cripto entra no AlphaDroid?,performance/simulacao; regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_GM.txt,169,L3,Como tratar volatilidade extrema?,performance/simulacao; regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_GM.txt,172,L4,Cripto altera Risk Number?,performance/simulacao; regulatorio,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_GM.txt,175,L5,Pode entrar em HPC?,regulatorio; produto/estrutura,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_JIM_GM.txt,178,L6,Existe estratégia específica para cripto?,performance/simulacao; regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_GM.txt,181,L7,Como integrar com regime?,performance/simulacao; regulatorio,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_GM.txt,184,L8,Existe hedge para cripto?,regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_JIM_GM.txt,187,L9,Qual papel de cripto no portfólio?,performance/simulacao; regulatorio,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_GM.txt,190,L10,Cripto melhora ou piora o Alignment?,performance/simulacao; regulatorio,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_GM.txt,193,M1,Quanto estou perdendo por estar desalinhado?,performance/simulacao,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_GM.txt,196,M2,Quanto eu deveria ter hoje?,performance/simulacao; fiscal/legal; regulatorio,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente. Tema fiscal/legal sem ressalva de nao aconselhamento.
+Harpian_JIM_GM.txt,199,M3,Qual o custo de não agir?,performance/simulacao; regulatorio,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_GM.txt,202,M4,Quanto tempo estou atrasado?,performance/simulacao; regulatorio,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_GM.txt,205,M5,Qual probabilidade de falhar meu objetivo?,performance/simulacao; fiscal/legal; regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,"Confirmar fonte, periodo, data de corte, net/gross, custos e comparabilidade antes de uso externo. Beneficio fiscal/estrutural de produto requer revisao por counsel e linguagem nao categorica."
+Harpian_JIM_GM.txt,208,M6,Qual cenário quebra meu plano?,performance/simulacao; regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_GM.txt,211,M7,Meu portfólio sobreviveria a 2008?,performance/simulacao; regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_GM.txt,214,M8,Qual meu maior erro hoje?,performance/simulacao; fiscal/legal; regulatorio,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente. Tema fiscal/legal sem ressalva de nao aconselhamento.
+Harpian_JIM_GM.txt,217,M9,O que está invisível na minha carteira?,performance/simulacao; regulatorio,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_GM.txt,220,M10,Isso está alinhado com minha vida ou só com o mercado?,performance/simulacao; regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_N.txt,,DOC,Documento sem Q&A tabular detectado; auditado em nivel documental.,document-level,APROVADO_COM_RESSALVAS,"Revisar como especificacao/base de conhecimento; contem controles uteis, mas deve manter mesma politica de disclaimers e retencao."
+Harpian_JIM_v2.txt,12,A1,O que significa o StormGuard estar positivo?,performance/simulacao; regulatorio,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_v2.txt,15,A2,O que muda quando ele vira negativo?,regulatorio; produto/estrutura,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_JIM_v2.txt,18,A3,Quanto tempo demora uma transição de regime?,regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_JIM_v2.txt,21,A4,Quais indicadores alimentam o StormGuard?,performance/simulacao,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_v2.txt,24,A5,O StormGuard pode gerar falso positivo?,performance/simulacao; regulatorio,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_v2.txt,27,A6,Como o sistema diferencia ruído de sinal?,regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_JIM_v2.txt,30,A7,O que acontece com a carteira em Risk-Off?,performance/simulacao; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_v2.txt,33,A8,Caixa é posição ou ausência de decisão?,performance/simulacao,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_v2.txt,36,A9,Qual o custo de sair cedo demais do mercado?,performance/simulacao; regulatorio,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_v2.txt,39,A10,Qual o custo de entrar atrasado?,performance/simulacao; regulatorio,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_v2.txt,42,B1,Como o AlphaDroid escolhe setores?,regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_JIM_v2.txt,45,B2,O que define 'momentum forte'?,baixo,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_JIM_v2.txt,48,B3,Qual a frequência de rotação?,regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_JIM_v2.txt,51,B4,O sistema pode trocar ativos todos os dias?,performance/simulacao; regulatorio; produto/estrutura,APROVADO_COM_CORRECAO,Produto com discussao de risco/retorno deve trazer disclaimer padrao.
+Harpian_JIM_v2.txt,54,B5,Como evitar overtrading?,performance/simulacao; regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_JIM_v2.txt,57,B6,O que acontece em sideways market?,regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_JIM_v2.txt,60,B7,Momentum funciona em bear market?,performance/simulacao,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_JIM_v2.txt,63,B8,Como o sistema lida com reversões?,baixo,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_JIM_v2.txt,66,B9,Existe concentração excessiva?,regulatorio; produto/estrutura,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_JIM_v2.txt,69,B10,Qual o limite de exposição por setor?,performance/simulacao; regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_v2.txt,72,C1,O que é Alignment Score exatamente?,performance/simulacao; regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_JIM_v2.txt,75,C2,Como ele é calculado?,performance/simulacao; regulatorio; produto/estrutura,APROVADO_COM_CORRECAO,Produto com discussao de risco/retorno deve trazer disclaimer padrao.
+Harpian_JIM_v2.txt,78,C3,Qual o peso de cada variável?,performance/simulacao; regulatorio,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_v2.txt,81,C4,O que causa desalinhamento?,performance/simulacao; regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_JIM_v2.txt,84,C5,Como medir desalinhamento ao longo do tempo?,performance/simulacao; regulatorio,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_v2.txt,87,C6,O desalinhamento pode ser intencional?,regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_JIM_v2.txt,90,C7,O que é Return Gap?,performance/simulacao,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_JIM_v2.txt,93,C8,Como calcular o retorno necessário?,performance/simulacao; fiscal/legal; regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Produto com discussao de risco/retorno deve trazer disclaimer padrao. Tema fiscal/legal sem ressalva de nao aconselhamento. Beneficio fiscal/estrutural de produto requer revisao por counsel e linguagem nao categorica.
+Harpian_JIM_v2.txt,96,C9,O que é Risk Fit Score?,performance/simulacao,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_JIM_v2.txt,99,C10,O que é Horizon Gap?,performance/simulacao; regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_v2.txt,102,D1,O que acontece se eu mudar 10% para HPC22?,performance/simulacao; regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_v2.txt,105,D2,Como o risco muda com essa alocação?,performance/simulacao; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_v2.txt,108,D3,Qual impacto no drawdown?,performance/simulacao; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_v2.txt,111,D4,Qual impacto no prazo do objetivo?,performance/simulacao; regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_v2.txt,114,D5,Como o sistema calcula essa simulação?,performance/simulacao,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_v2.txt,117,D6,A simulação considera correlação?,performance/simulacao; regulatorio,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_v2.txt,120,D7,Considera regime?,performance/simulacao,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_JIM_v2.txt,123,D8,Considera RAF?,performance/simulacao,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_JIM_v2.txt,126,D9,Qual a margem de erro?,performance/simulacao; regulatorio,APROVADO_COM_CORRECAO,"Confirmar fonte, periodo, data de corte, net/gross, custos e comparabilidade antes de uso externo."
+Harpian_JIM_v2.txt,129,D10,Como interpretar o resultado?,performance/simulacao; regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_JIM_v2.txt,132,E1,O que mudou hoje no meu portfólio?,performance/simulacao; regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_JIM_v2.txt,135,E2,Qual ativo mais impactou meu risco?,fiscal/legal,APROVADO_COM_CORRECAO,Tema fiscal/legal sem ressalva de nao aconselhamento.
+Harpian_JIM_v2.txt,138,E3,Meu risco subiu — por quê?,performance/simulacao,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_JIM_v2.txt,141,E4,Meu retorno esperado caiu — por quê?,performance/simulacao,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_v2.txt,144,E5,O que está fora do mandato?,baixo,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_JIM_v2.txt,147,E6,Qual o principal risco oculto hoje?,regulatorio; produto/estrutura,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_JIM_v2.txt,150,E7,Qual a maior fragilidade da carteira?,performance/simulacao; regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_v2.txt,153,E8,Existe concentração invisível?,regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_JIM_v2.txt,156,E9,Existe correlação oculta?,produto/estrutura,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_JIM_v2.txt,159,E10,O portfólio está resiliente a crise?,performance/simulacao; regulatorio,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_v2.txt,162,F1,O que caracteriza recomendação?,regulatorio; produto/estrutura,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_JIM_v2.txt,165,F2,O que o sistema pode ou não pode dizer?,performance/simulacao; linguagem promocional/proibida; regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Performance/simulacao numerica sem disclaimer suficiente. Revisar linguagem absoluta/promocional ou palavra banida; manter apenas como exemplo negativo se for o caso.
+Harpian_JIM_v2.txt,168,F3,Como documentar desalinhamento?,performance/simulacao; regulatorio,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_v2.txt,171,F4,O que é suitability vs risk score?,fiscal/legal; regulatorio,APROVADO_COM_CORRECAO,Tema fiscal/legal sem ressalva de nao aconselhamento.
+Harpian_JIM_v2.txt,174,F5,Como explicar incerteza ao cliente?,performance/simulacao; regulatorio,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_v2.txt,177,F6,Como evitar overpromising?,performance/simulacao; linguagem promocional/proibida; regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,"Confirmar fonte, periodo, data de corte, net/gross, custos e comparabilidade antes de uso externo. Revisar linguagem absoluta/promocional ou palavra banida; manter apenas como exemplo negativo se for o caso."
+Harpian_JIM_v2.txt,180,F7,Como comunicar risco sem gerar medo?,performance/simulacao; regulatorio,APROVADO_COM_CORRECAO,Performance/simulacao numerica sem disclaimer suficiente.
+Harpian_JIM_v2.txt,183,F8,O que deve sempre ter disclaimer?,performance/simulacao; fiscal/legal; regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Harpian_JIM_v2.txt,186,F9,Quando escalar para advisor humano?,fiscal/legal; regulatorio; produto/estrutura,BLOQUEAR_ATE_CORRIGIR,Tema fiscal/legal sem ressalva de nao aconselhamento. Beneficio fiscal/estrutural de produto requer revisao por counsel e linguagem nao categorica.
+Harpian_JIM_v2.txt,189,F10,Como auditar decisões do sistema?,regulatorio,APROVADO,Sem achado material na triagem; manter revisao periodica.
+Jim_AI_Architecture_v1.txt,,DOC,Documento sem Q&A tabular detectado; auditado em nivel documental.,document-level,APROVADO_COM_RESSALVAS,"Revisar como especificacao/base de conhecimento; contem controles uteis, mas deve manter mesma politica de disclaimers e retencao."
+JIM_Architecture_v2.txt,,DOC,Documento sem Q&A tabular detectado; auditado em nivel documental.,document-level,APROVADO_COM_RESSALVAS,"Revisar como especificacao/base de conhecimento; contem controles uteis, mas deve manter mesma politica de disclaimers e retencao."

@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Harpian Intelligence Terminal · Architecture Document</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap');
+:root{
+  --bg:#090E14;--s1:#0F1820;--s2:#162130;--s3:#1C2D40;
+  --gold:#B8972A;--gold-l:#D4AF45;
+  --text:#C8D8E8;--dim:#6A8AA8;--bright:#EBF1F7;
+  --bsub:rgba(235,241,247,0.06);--bgold:rgba(184,151,42,0.12);
+  --green:#1A7A4A;--green-l:#3DBE78;--green-bg:rgba(26,122,74,0.08);
+  --amber:#D4860A;--amber-l:#F0A830;--amber-bg:rgba(212,134,10,0.08);
+  --red:#C0392B;--red-l:#E87060;--red-bg:rgba(192,57,43,0.08);
+  --blue:#2D7AC0;--blue-l:#5BA8E8;--blue-bg:rgba(45,122,192,0.08);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;line-height:1.7;}
+
+/* LAYOUT */
+.doc-shell{display:grid;grid-template-columns:260px 1fr;min-height:100vh;}
+.doc-toc{position:sticky;top:0;height:100vh;background:var(--s1);border-right:1px solid var(--bsub);overflow-y:auto;padding:24px 0;}
+.doc-toc::-webkit-scrollbar{width:3px;}
+.doc-toc::-webkit-scrollbar-thumb{background:var(--bsub);}
+.doc-content{padding:48px 56px 120px;}
+
+/* TOC */
+.toc-header{padding:0 20px 20px;border-bottom:1px solid var(--bsub);margin-bottom:16px;}
+.toc-logo{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:var(--bright);margin-bottom:2px;}
+.toc-sub{font-family:'DM Mono',monospace;font-size:8px;color:var(--dim);letter-spacing:.1em;text-transform:uppercase;}
+.toc-doc{font-family:'DM Mono',monospace;font-size:9px;color:var(--gold);margin-top:8px;letter-spacing:.06em;}
+.toc-section{margin-bottom:2px;}
+.toc-group{font-family:'DM Mono',monospace;font-size:7.5px;color:var(--dim);text-transform:uppercase;letter-spacing:.14em;padding:10px 20px 4px;}
+.toc-link{display:block;font-family:'DM Mono',monospace;font-size:9.5px;color:var(--text);padding:5px 20px;text-decoration:none;border-left:2px solid transparent;transition:all .15s;}
+.toc-link:hover{color:var(--gold);border-left-color:rgba(184,151,42,.3);background:rgba(184,151,42,.04);}
+.toc-link.sub{padding-left:30px;font-size:9px;color:var(--dim);}
+.toc-sep{height:1px;background:var(--bsub);margin:8px 20px;}
+
+/* SECTIONS */
+.section{margin-bottom:64px;scroll-margin-top:32px;}
+.section-num{font-family:'DM Mono',monospace;font-size:9px;color:var(--gold);background:var(--bgold);border:1px solid rgba(184,151,42,.2);padding:3px 8px;letter-spacing:.1em;display:inline-block;margin-bottom:10px;}
+.section-title{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:var(--bright);letter-spacing:-.02em;margin-bottom:8px;}
+.section-desc{font-size:12.5px;color:var(--dim);margin-bottom:24px;line-height:1.7;max-width:720px;}
+.sub-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--bright);margin:28px 0 12px;letter-spacing:-.01em;}
+.sub-title-sm{font-family:'DM Mono',monospace;font-size:9px;color:var(--gold);text-transform:uppercase;letter-spacing:.12em;margin:20px 0 8px;}
+.divider{height:1px;background:var(--bsub);margin:40px 0;}
+.cover-section{padding-bottom:40px;border-bottom:1px solid var(--bgold);margin-bottom:56px;}
+
+/* COMPONENTS */
+.card{background:var(--s1);border:1px solid var(--bsub);padding:18px 22px;margin-bottom:8px;}
+.card.gl{border-left:3px solid var(--gold);}
+.card.gg{border-left:3px solid var(--green);}
+.card.gr{border-left:3px solid var(--red);}
+.card.gb{border-left:3px solid var(--blue);}
+.card.ga{border-left:3px solid var(--amber);}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+.g4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;}
+
+/* TAGS */
+.tag{display:inline-block;font-family:'DM Mono',monospace;font-size:8px;padding:2px 7px;letter-spacing:.08em;text-transform:uppercase;}
+.tg{background:var(--green-bg);color:var(--green-l);border:1px solid rgba(26,122,74,.3);}
+.ta{background:var(--amber-bg);color:var(--amber-l);border:1px solid rgba(212,134,10,.3);}
+.tr{background:var(--red-bg);color:var(--red-l);border:1px solid rgba(192,57,43,.3);}
+.tb{background:var(--blue-bg);color:var(--blue-l);border:1px solid rgba(45,122,192,.3);}
+.tgd{background:var(--bgold);color:var(--gold);border:1px solid rgba(184,151,42,.3);}
+.tp{background:rgba(123,63,160,.1);color:#B07AE0;border:1px solid rgba(123,63,160,.3);}
+
+/* CODE / FORMULA */
+code{font-family:'DM Mono',monospace;font-size:10.5px;background:rgba(255,255,255,.04);padding:1px 6px;color:var(--gold-l);border:1px solid var(--bsub);}
+.code-block{background:var(--s2);border:1px solid var(--bsub);border-left:3px solid var(--gold);padding:16px 20px;font-family:'DM Mono',monospace;font-size:11px;color:var(--bright);line-height:2;margin:10px 0;white-space:pre-wrap;}
+.code-comment{color:var(--dim);font-size:9.5px;}
+
+/* DATA TABLE */
+table.dt{width:100%;border-collapse:collapse;margin:10px 0;}
+table.dt th{background:var(--s3);padding:8px 13px;font-family:'DM Mono',monospace;font-size:8px;color:var(--gold);text-align:left;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--bsub);}
+table.dt td{padding:8px 13px;font-size:11.5px;color:var(--text);border:1px solid var(--bsub);background:var(--s1);vertical-align:top;}
+table.dt td code{font-size:10px;}
+
+/* TREE */
+.tree{font-family:'DM Mono',monospace;font-size:10.5px;background:var(--s2);border:1px solid var(--bsub);padding:20px 24px;line-height:2.2;color:var(--text);margin:10px 0;}
+.tree-root{color:var(--bright);font-weight:500;}
+.tree-branch{color:var(--gold);}
+.tree-leaf{color:var(--text);}
+.tree-desc{color:var(--dim);font-size:9px;}
+.tree-line{color:var(--bsub);}
+
+/* FLOW STEPS */
+.flow{display:flex;flex-direction:column;gap:2px;margin:12px 0;}
+.flow-step{display:grid;grid-template-columns:28px 1fr;align-items:stretch;gap:0;}
+.flow-num{display:flex;flex-direction:column;align-items:center;}
+.flow-circle{width:24px;height:24px;background:var(--s3);border:1.5px solid var(--gold);display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:9px;color:var(--gold);flex-shrink:0;margin-top:8px;}
+.flow-line{width:1px;background:var(--bsub);flex:1;margin:2px auto;}
+.flow-step:last-child .flow-line{display:none;}
+.flow-body{background:var(--s1);border:1px solid var(--bsub);padding:10px 14px;margin:4px 0 2px;}
+.flow-body strong{color:var(--bright);font-weight:500;display:block;margin-bottom:3px;}
+.flow-body span{color:var(--dim);font-size:11.5px;}
+.flow-body.hl{border-color:rgba(184,151,42,.25);background:var(--s2);}
+
+/* ENTITY CARDS */
+.entity{background:var(--s2);border:1px solid var(--bsub);padding:16px 18px;margin-bottom:8px;}
+.entity-name{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--gold);margin-bottom:8px;}
+.entity-fields{display:flex;flex-direction:column;gap:3px;}
+.entity-field{display:flex;gap:10px;font-size:11.5px;padding:3px 0;border-bottom:1px solid var(--bsub);}
+.entity-field:last-child{border-bottom:none;}
+.ef-name{font-family:'DM Mono',monospace;font-size:10px;color:var(--gold-l);min-width:160px;}
+.ef-type{font-family:'DM Mono',monospace;font-size:9.5px;color:var(--blue-l);min-width:80px;}
+.ef-desc{color:var(--dim);font-size:11px;}
+
+/* COMPONENT SPEC */
+.comp-row{display:grid;grid-template-columns:180px 1fr 120px;gap:0;border:1px solid var(--bsub);margin-bottom:2px;overflow:hidden;}
+.comp-name{background:var(--s2);padding:9px 14px;font-family:'DM Mono',monospace;font-size:10px;color:var(--bright);border-right:1px solid var(--bsub);}
+.comp-desc{padding:9px 14px;font-size:11.5px;color:var(--text);border-right:1px solid var(--bsub);}
+.comp-used{padding:9px 14px;font-size:10px;color:var(--dim);font-family:'DM Mono',monospace;}
+
+/* API */
+.endpoint{background:var(--s2);border:1px solid var(--bsub);padding:12px 16px;margin-bottom:6px;display:flex;gap:12px;align-items:flex-start;}
+.ep-method{font-family:'DM Mono',monospace;font-size:9px;padding:3px 8px;min-width:48px;text-align:center;flex-shrink:0;margin-top:1px;}
+.ep-get{background:var(--green-bg);color:var(--green-l);border:1px solid rgba(26,122,74,.3);}
+.ep-post{background:var(--amber-bg);color:var(--amber-l);border:1px solid rgba(212,134,10,.3);}
+.ep-put{background:var(--blue-bg);color:var(--blue-l);border:1px solid rgba(45,122,192,.3);}
+.ep-delete{background:var(--red-bg);color:var(--red-l);border:1px solid rgba(192,57,43,.3);}
+.ep-path{font-family:'DM Mono',monospace;font-size:11px;color:var(--bright);flex:1;}
+.ep-desc{font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);margin-top:3px;}
+
+/* ZONE STRIP */
+.zone-strip{display:flex;height:20px;border:1px solid var(--bsub);overflow:hidden;margin:8px 0;border-radius:2px;}
+.zone-seg{display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:7.5px;font-weight:500;letter-spacing:.08em;}
+
+/* NOTE */
+.note{font-family:'DM Mono',monospace;font-size:9.5px;color:var(--dim);padding:8px 12px;border-left:2px solid var(--bsub);margin:8px 0;line-height:1.6;}
+.critical{font-family:'DM Mono',monospace;font-size:9.5px;color:var(--amber-l);padding:10px 14px;border-left:3px solid var(--amber);background:var(--amber-bg);margin:10px 0;line-height:1.7;}
+
+/* INLINE LIST */
+ul.clean{list-style:none;padding:0;}
+ul.clean li{padding:4px 0;padding-left:14px;position:relative;font-size:12px;color:var(--text);border-bottom:1px solid var(--bsub);}
+ul.clean li:last-child{border-bottom:none;}
+ul.clean li::before{content:'›';position:absolute;left:0;color:var(--gold);}
+
+/* SCREEN SPEC */
+.screen-spec{border:1px solid var(--bsub);overflow:hidden;margin-bottom:12px;}
+.ss-header{background:var(--s3);padding:12px 18px;border-bottom:1px solid var(--bsub);display:flex;align-items:center;justify-content:space-between;}
+.ss-id{font-family:'DM Mono',monospace;font-size:8.5px;color:var(--gold);letter-spacing:.1em;}
+.ss-name{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--bright);}
+.ss-body{padding:16px 18px;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:16px;}
+.ss-col-label{font-family:'DM Mono',monospace;font-size:7.5px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;}
+.ss-col ul{list-style:none;}
+.ss-col ul li{font-size:11px;color:var(--text);padding:2px 0;padding-left:10px;position:relative;}
+.ss-col ul li::before{content:'·';position:absolute;left:0;color:var(--gold);}
+
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-thumb{background:rgba(184,151,42,.2);}
+</style>
+</head>
+<body>
+<div class="doc-shell">
+
+<!-- ══════════ TABLE OF CONTENTS ══════════ -->
+<div class="doc-toc">
+  <div class="toc-header">
+    <div class="toc-logo">HARPIAN</div>
+    <div class="toc-sub">Intelligence Terminal</div>
+    <div class="toc-doc">Architecture Document v1.0</div>
+  </div>
+
+  <div class="toc-group">Overview</div>
+  <a class="toc-link" href="#s01">01 · System Overview</a>
+  <a class="toc-link" href="#s02">02 · High-Level Architecture</a>
+
+  <div class="toc-group">Navigation</div>
+  <a class="toc-link" href="#s03">03 · Navigation Map</a>
+  <a class="toc-link sub" href="#s03-tree">Screen Tree</a>
+  <a class="toc-link sub" href="#s03-routes">Route Table</a>
+
+  <div class="toc-group">Screens</div>
+  <a class="toc-link" href="#s04">04 · Screen Descriptions</a>
+  <a class="toc-link sub" href="#s04-01">Overview Dashboard</a>
+  <a class="toc-link sub" href="#s04-02">Family Office Profile</a>
+  <a class="toc-link sub" href="#s04-03">All Clients</a>
+  <a class="toc-link sub" href="#s04-04">Client Detail</a>
+  <a class="toc-link sub" href="#s04-05">Risk Assessment</a>
+  <a class="toc-link sub" href="#s04-06">Portfolio Upload</a>
+  <a class="toc-link sub" href="#s04-07">Allocation Simulator</a>
+  <a class="toc-link sub" href="#s04-08">Harpian Strategies</a>
+  <a class="toc-link sub" href="#s04-09">Market Intelligence</a>
+  <a class="toc-link sub" href="#s04-10">StormGuard Monitor</a>
+  <a class="toc-link sub" href="#s04-11">Don't Touch List</a>
+  <a class="toc-link sub" href="#s04-12">Reports & Export</a>
+
+  <div class="toc-group">Flows & Data</div>
+  <a class="toc-link" href="#s05">05 · User Flows</a>
+  <a class="toc-link" href="#s06">06 · Data Model</a>
+  <a class="toc-link" href="#s07">07 · Calculation Logic</a>
+  <a class="toc-link" href="#s08">08 · Intelligence Layer</a>
+
+  <div class="toc-group">Implementation</div>
+  <a class="toc-link" href="#s09">09 · Reusable Components</a>
+  <a class="toc-link" href="#s10">10 · Frontend Structure</a>
+  <a class="toc-link" href="#s11">11 · Backend API</a>
+  <a class="toc-link" href="#s12">12 · Dev Notes</a>
+</div>
+
+<!-- ══════════ CONTENT ══════════ -->
+<div class="doc-content">
+
+<!-- COVER -->
+<div class="cover-section">
+  <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;margin-bottom:16px;">HARPIAN LLC · Technical Document · HRD-ARCH-001</div>
+  <h1 style="font-family:'Syne',sans-serif;font-size:40px;font-weight:800;color:var(--bright);letter-spacing:-.025em;line-height:1.05;margin-bottom:12px;">Harpian Intelligence<br>Terminal</h1>
+  <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:500;color:var(--dim);margin-bottom:20px;">Complete System Architecture Document</div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px;">
+    <span class="tag tgd">Architecture v1.0</span>
+    <span class="tag tg">Based on 6 production HTMLs</span>
+    <span class="tag tb">For developer implementation</span>
+    <span class="tag ta">March 2026</span>
+  </div>
+  <div class="g4">
+    <div style="background:var(--s2);border:1px solid var(--bsub);padding:12px;text-align:center;"><div style="font-family:'DM Mono',monospace;font-size:7.5px;color:var(--dim);margin-bottom:4px;text-transform:uppercase;">Source Files</div><div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--bright)">6</div><div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--dim)">HTML documents</div></div>
+    <div style="background:var(--s2);border:1px solid var(--bsub);padding:12px;text-align:center;"><div style="font-family:'DM Mono',monospace;font-size:7.5px;color:var(--dim);margin-bottom:4px;text-transform:uppercase;">Screens</div><div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--bright)">12</div><div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--dim)">navigable pages</div></div>
+    <div style="background:var(--s2);border:1px solid var(--bsub);padding:12px;text-align:center;"><div style="font-family:'DM Mono',monospace;font-size:7.5px;color:var(--dim);margin-bottom:4px;text-transform:uppercase;">User Flows</div><div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--bright)">7</div><div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--dim)">documented paths</div></div>
+    <div style="background:var(--s2);border:1px solid var(--bsub);padding:12px;text-align:center;"><div style="font-family:'DM Mono',monospace;font-size:7.5px;color:var(--dim);margin-bottom:4px;text-transform:uppercase;">Modules</div><div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--bright)">4</div><div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--dim)">logical groups</div></div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════
+     01. SYSTEM OVERVIEW
+══════════════════════════════════════ -->
+<div class="section" id="s01">
+  <div class="section-num">SECTION 01</div>
+  <div class="section-title">System Overview</div>
+  <div class="section-desc">Harpian Intelligence Terminal is a B2B institutional platform serving Family Offices in Brazil and Latin America. It combines three distinct functions in one environment: risk diagnosis, allocation simulation, and recurring market intelligence.</div>
+
+  <div class="g3" style="margin-bottom:20px;">
+    <div class="card gg">
+      <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--green-l);text-transform:uppercase;letter-spacing:.12em;margin-bottom:8px;">Function 01</div>
+      <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--bright);margin-bottom:6px;">Risk Diagnosis</div>
+      <div style="font-size:11.5px;color:var(--text);line-height:1.7;">Onboard FO and clients. Collect risk questionnaires. Calculate Risk Numbers. Compare RN across FO / client / portfolio / requirement. Identify misalignment and classify zone.</div>
+    </div>
+    <div class="card ga">
+      <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--amber-l);text-transform:uppercase;letter-spacing:.12em;margin-bottom:8px;">Function 02</div>
+      <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--bright);margin-bottom:6px;">Allocation Simulation</div>
+      <div style="font-size:11.5px;color:var(--text);line-height:1.7;">Upload client portfolio. Parse asset weights. Simulate Core 11 + Core 22 allocation. Real-time recalculation of RN, return, drawdown, P(Goal). Enforce 10% max Harpian exposure.</div>
+    </div>
+    <div class="card gb">
+      <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--blue-l);text-transform:uppercase;letter-spacing:.12em;margin-bottom:8px;">Function 03</div>
+      <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--bright);margin-bottom:6px;">Market Intelligence</div>
+      <div style="font-size:11.5px;color:var(--text);line-height:1.7;">Institutional terminal with live ETP pricing, sector heatmaps, momentum rankings, StormGuard status, Don't Touch List, and tactical notes — creating daily usage habit.</div>
+    </div>
+  </div>
+
+  <div class="sub-title">Users & Roles</div>
+  <table class="dt">
+    <thead><tr><th>Role</th><th>Who</th><th>Primary Access</th><th>Key Actions</th></tr></thead>
+    <tbody>
+      <tr><td><span class="tag tgd">FO Admin</span></td><td>Family Office manager, CIO</td><td>Full system access</td><td>Manage FO profile, manage clients, apply allocations, export reports</td></tr>
+      <tr><td><span class="tag tg">Advisor</span></td><td>Client relationship manager</td><td>Clients, Risk, Simulator</td><td>Run questionnaires, upload portfolios, run simulations, view intelligence</td></tr>
+      <tr><td><span class="tag tb">Read-Only</span></td><td>Compliance, auditor</td><td>View all, no edit</td><td>View reports, export data, review audit trail</td></tr>
+      <tr><td><span class="tag ta">Client (external)</span></td><td>End client</td><td>Questionnaire link only</td><td>Complete risk questionnaire (standalone link, no terminal access)</td></tr>
+    </tbody>
+  </table>
+
+  <div class="sub-title">Source HTML Files</div>
+  <table class="dt">
+    <thead><tr><th>File</th><th>Purpose</th><th>Key Components</th></tr></thead>
+    <tbody>
+      <tr><td><code>Harpian_Intelligence_Terminal.html</code></td><td>Master dashboard — all 12 screens</td><td>Navigation, all page templates, simulator JS logic</td></tr>
+      <tr><td><code>Harpian_RiskAlignment_VisualSpec_v1.html</code></td><td>UX blueprint — screens, charts, zones</td><td>Radar chart, RN rails, zone bands, screen wireframes</td></tr>
+      <tr><td><code>Harpian_RiskAlignment_EngineLayer_v1.html</code></td><td>Math engine — all formulas</td><td>RN formula, blended portfolio, sigma, P(Goal)</td></tr>
+      <tr><td><code>Harpian_RiskAlignment_DecisionLayer_v1.html</code></td><td>Decision logic — zones, actions</td><td>Risk Budget, zones, Core 11 vs 22 decision rules</td></tr>
+      <tr><td><code>Harpian_RiskAlignment_OutcomeImpact_v1.html</code></td><td>Outcome engine — before/after</td><td>Before/After panels, trajectory chart, cost of inaction</td></tr>
+      <tr><td><code>Harpian_RiskAlignment_MissingLayers_v1.html</code></td><td>Final layers — capital, scenarios</td><td>Capital impact, scenario ranges, asymmetry ratio, final block</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════════════
+     02. HIGH-LEVEL ARCHITECTURE
+══════════════════════════════════════ -->
+<div class="section" id="s02">
+  <div class="section-num">SECTION 02</div>
+  <div class="section-title">High-Level Architecture</div>
+
+  <div class="code-block">┌─────────────────────────────────────────────────────────────────────────────────┐
+│  HARPIAN INTELLIGENCE TERMINAL                                                  │
+│                                                                                 │
+│  ┌──────────────────┐   ┌──────────────────┐   ┌──────────────────────────┐   │
+│  │   MODULE 01       │   │   MODULE 02       │   │   MODULE 03               │   │
+│  │   FO & CLIENT     │   │   RISK & PORTFOLIO│   │   SIMULATION ENGINE       │   │
+│  │   MANAGEMENT      │   │   ANALYSIS        │   │                           │   │
+│  │                   │   │                   │   │  ┌─────────────────────┐  │   │
+│  │  · FO Profile     │   │  · Questionnaire  │   │  │ Allocation Simulator │  │   │
+│  │  · Client List    │   │  · RN Calculation │   │  │ · Slider C11 / C22  │  │   │
+│  │  · Client Detail  │   │  · Gap Analysis   │   │  │ · Real-time recalc  │  │   │
+│  │  · Onboarding     │   │  · Portfolio Parse│   │  │ · Zone detection    │  │   │
+│  │  · Timeline       │   │  · Risk Budget    │   │  │ · 10% cap enforced  │  │   │
+│  └──────────────────┘   └──────────────────┘   └─────────────────────────┘   │
+│                                                                                 │
+│  ┌──────────────────────────────────────────────────────────────────────────┐  │
+│  │   MODULE 04 — INTELLIGENCE TERMINAL                                        │  │
+│  │                                                                            │  │
+│  │  · Market Heatmap  · Momentum Map  · Watchlist  · StormGuard Monitor     │  │
+│  │  · Don't Touch List  · Tactical Notes  · Risk Regime  · ETP Pricing      │  │
+│  └──────────────────────────────────────────────────────────────────────────┘  │
+│                                                                                 │
+│  ─────────────────────  SHARED LAYER  ────────────────────────────────────     │
+│  Topbar (ticker + SGA pill + clock)  │  Sidebar (nav)  │  Reports / Export     │
+└─────────────────────────────────────────────────────────────────────────────────┘</div>
+
+  <div class="sub-title">Module Relations</div>
+  <table class="dt">
+    <thead><tr><th>Module</th><th>Feeds Into</th><th>Receives From</th><th>Independence</th></tr></thead>
+    <tbody>
+      <tr><td><strong style="color:var(--bright)">FO & Client Mgmt</strong></td><td>Risk Analysis, Simulator</td><td>User input, questionnaire responses</td><td>Entry point — standalone</td></tr>
+      <tr><td><strong style="color:var(--bright)">Risk & Portfolio Analysis</strong></td><td>Simulator, Reports</td><td>FO & Client Mgmt, portfolio uploads</td><td>Requires client to exist</td></tr>
+      <tr><td><strong style="color:var(--bright)">Simulation Engine</strong></td><td>Reports, Final Output</td><td>Risk Analysis results, slider inputs</td><td>Requires RN data to run</td></tr>
+      <tr><td><strong style="color:var(--bright)">Intelligence Terminal</strong></td><td>Alerts (to overview), Reports</td><td>Market data feed (external)</td><td>Fully independent — standalone module</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════════════
+     03. NAVIGATION MAP
+══════════════════════════════════════ -->
+<div class="section" id="s03">
+  <div class="section-num">SECTION 03</div>
+  <div class="section-title">Navigation Map</div>
+
+  <div class="sub-title" id="s03-tree">Screen Tree</div>
+  <div class="tree">
+<span class="tree-root">HARPIAN INTELLIGENCE TERMINAL</span>
+├── <span class="tree-branch">[/overview]</span>           Overview Dashboard          <span class="tree-desc">← entry point · home</span>
+│
+├── <span class="tree-branch">[/fo-profile]</span>         Family Office Profile       <span class="tree-desc">← FO config, mandate, RN</span>
+│
+├── <span class="tree-branch">[/clients]</span>            All Clients                 <span class="tree-desc">← client list, status table</span>
+│   └── <span class="tree-branch">[/client/:id]</span>     Client Detail               <span class="tree-desc">← individual client view</span>
+│
+├── <span class="tree-branch">[/risk]</span>               Risk Assessment             <span class="tree-desc">← RN comparison, gap analysis</span>
+│
+├── <span class="tree-branch">[/portfolio]</span>          Portfolio Upload & Analysis <span class="tree-desc">← upload, parse, RN calc</span>
+│
+├── <span class="tree-branch">[/simulator]</span>          Allocation Simulator        <span class="tree-desc">← Core 11/22 sliders, real-time</span>
+│
+├── <span class="tree-branch">[/strategies]</span>         Harpian Strategies          <span class="tree-desc">← Core 11 + Core 22 product pages</span>
+│
+├── <span class="tree-branch">[/intelligence]</span>       Market Intelligence         <span class="tree-desc">← heatmap, watchlist, momentum</span>
+│
+├── <span class="tree-branch">[/stormguard]</span>         StormGuard Monitor          <span class="tree-desc">← SGA status, history, protocol</span>
+│
+├── <span class="tree-branch">[/dtl]</span>                Don't Touch List            <span class="tree-desc">← weak momentum signals</span>
+│
+├── <span class="tree-branch">[/reports]</span>            Reports & Export            <span class="tree-desc">← PDF, JSON, compliance</span>
+│
+└── <span class="tree-branch">[/settings]</span>           Settings & Admin            <span class="tree-desc">← users, permissions, config</span>
+  </div>
+
+  <div class="sub-title" id="s03-routes">Route Table — Entry, Exit, and Triggers</div>
+  <table class="dt">
+    <thead><tr><th>Screen</th><th>Route</th><th>Entry Points</th><th>Exit / Links To</th><th>Context Required</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Overview</strong></td><td><code>/overview</code></td><td>Login, sidebar, logo click</td><td>Any screen via sidebar or alert clicks</td><td>FO authenticated</td></tr>
+      <tr><td><strong>FO Profile</strong></td><td><code>/fo-profile</code></td><td>Sidebar, first-time setup</td><td>Clients, Settings</td><td>FO exists</td></tr>
+      <tr><td><strong>All Clients</strong></td><td><code>/clients</code></td><td>Sidebar, Overview → "View All"</td><td>Client Detail, Risk Assessment</td><td>FO has clients</td></tr>
+      <tr><td><strong>Client Detail</strong></td><td><code>/clients/:id</code></td><td>Client list row click, Overview alert, search</td><td>Portfolio, Simulator, Risk</td><td>Client ID valid</td></tr>
+      <tr><td><strong>Risk Assessment</strong></td><td><code>/risk</code></td><td>Sidebar, Client Detail, Overview alert</td><td>Client Detail, Simulator</td><td>Questionnaire done</td></tr>
+      <tr><td><strong>Portfolio Upload</strong></td><td><code>/portfolio</code></td><td>Sidebar, Client Detail, Risk screen</td><td>Simulator, Risk Assessment</td><td>Client selected</td></tr>
+      <tr><td><strong>Simulator</strong></td><td><code>/simulator</code></td><td>Client Detail CTA, Risk screen, Sidebar</td><td>Reports, Client Detail</td><td>Portfolio + RN exist</td></tr>
+      <tr><td><strong>Strategies</strong></td><td><code>/strategies</code></td><td>Sidebar, Simulator info link</td><td>Simulator, Reports</td><td>None</td></tr>
+      <tr><td><strong>Intelligence</strong></td><td><code>/intelligence</code></td><td>Sidebar, Overview SGA widget</td><td>StormGuard, DTL</td><td>None (standalone)</td></tr>
+      <tr><td><strong>StormGuard</strong></td><td><code>/stormguard</code></td><td>Sidebar, Intelligence, Overview pill</td><td>Intelligence</td><td>None</td></tr>
+      <tr><td><strong>DTL</strong></td><td><code>/dtl</code></td><td>Sidebar, Intelligence mini card</td><td>Intelligence</td><td>None</td></tr>
+      <tr><td><strong>Reports</strong></td><td><code>/reports</code></td><td>Sidebar, any "Generate Report" button</td><td>—</td><td>Any data exists</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════════════
+     04. SCREEN DESCRIPTIONS
+══════════════════════════════════════ -->
+<div class="section" id="s04">
+  <div class="section-num">SECTION 04</div>
+  <div class="section-title">Screen Descriptions</div>
+
+  <!-- S01 OVERVIEW -->
+  <div class="screen-spec" id="s04-01">
+    <div class="ss-header">
+      <div><div class="ss-id">SCREEN · S01 · /overview</div><div class="ss-name">Overview Dashboard</div></div>
+      <span class="tag tgd">Home · Entry Point</span>
+    </div>
+    <div class="ss-body">
+      <div class="ss-col"><div class="ss-col-label">Objective</div><ul><li>Macro view of entire FO</li><li>Immediate alert surface</li><li>Jump point to any area</li><li>Always up to date</li></ul></div>
+      <div class="ss-col"><div class="ss-col-label">Key Components</div><ul><li>5-item KPI row</li><li>Client status table</li><li>RN comparison rail</li><li>Active alerts panel</li><li>Recent activity feed</li><li>StormGuard mini card</li></ul></div>
+      <div class="ss-col"><div class="ss-col-label">Data Displayed</div><ul><li>Total / aligned / pending clients</li><li>FO Risk Number</li><li>SGA current status</li><li>RN for each client</li><li>Alignment zone per client</li></ul></div>
+      <div class="ss-col"><div class="ss-col-label">Actions</div><ul><li>+ New Client</li><li>Export Report</li><li>Click client → detail</li><li>Click alert → action screen</li><li>Click SGA → StormGuard</li></ul></div>
+    </div>
+  </div>
+
+  <!-- S02 FO PROFILE -->
+  <div class="screen-spec" id="s04-02">
+    <div class="ss-header">
+      <div><div class="ss-id">SCREEN · S02 · /fo-profile</div><div class="ss-name">Family Office Profile</div></div>
+      <span class="tag tb">Configuration · Mandate</span>
+    </div>
+    <div class="ss-body">
+      <div class="ss-col"><div class="ss-col-label">Objective</div><ul><li>Define FO identity</li><li>Set institutional mandate</li><li>Establish RN ceiling</li><li>Document philosophy</li></ul></div>
+      <div class="ss-col"><div class="ss-col-label">Key Components</div><ul><li>Legal identity card</li><li>FO Risk Number display</li><li>Max Harpian % bar (10%)</li><li>Philosophy statement</li><li>Risk stance bars</li></ul></div>
+      <div class="ss-col"><div class="ss-col-label">Data Displayed</div><ul><li>Legal name, CNPJ</li><li>RN_FO and RN_Capacity</li><li>Questionnaire status</li><li>AUM summary</li><li>Harpian tier</li></ul></div>
+      <div class="ss-col"><div class="ss-col-label">Actions</div><ul><li>Edit Profile</li><li>Retake questionnaire</li><li>Adjust mandate settings</li></ul></div>
+    </div>
+  </div>
+
+  <!-- S03 CLIENTS -->
+  <div class="screen-spec" id="s04-03">
+    <div class="ss-header">
+      <div><div class="ss-id">SCREEN · S03 · /clients</div><div class="ss-name">All Clients</div></div>
+      <span class="tag tg">Client Management</span>
+    </div>
+    <div class="ss-body">
+      <div class="ss-col"><div class="ss-col-label">Objective</div><ul><li>Full client roster</li><li>Status at a glance</li><li>Filter and sort</li><li>Quick actions</li></ul></div>
+      <div class="ss-col"><div class="ss-col-label">Key Components</div><ul><li>Full data table</li><li>Status badges per row</li><li>RN columns with colors</li><li>Zone classification</li></ul></div>
+      <div class="ss-col"><div class="ss-col-label">Columns</div><ul><li>ID · Name · Email</li><li>RN Client / Portfolio / Required</li><li>Risk Budget (delta)</li><li>Harpian % current</li><li>Feasibility · Status · Last Action</li></ul></div>
+      <div class="ss-col"><div class="ss-col-label">Actions</div><ul><li>Click row → Client Detail</li><li>+ New Client</li><li>Filter by status/zone</li><li>Bulk export</li></ul></div>
+    </div>
+  </div>
+
+  <!-- S04 CLIENT DETAIL -->
+  <div class="screen-spec" id="s04-04">
+    <div class="ss-header">
+      <div><div class="ss-id">SCREEN · S04 · /clients/:id</div><div class="ss-name">Client Detail</div></div>
+      <span class="tag tgd">Primary Decision Surface</span>
+    </div>
+    <div class="ss-body">
+      <div class="ss-col"><div class="ss-col-label">Objective</div><ul><li>Full client dossier</li><li>All RNs compared</li><li>Portfolio profile</li><li>Recommendation preview</li><li>Action history</li></ul></div>
+      <div class="ss-col"><div class="ss-col-label">Key Components</div><ul><li>Client header card</li><li>4-box RN grid</li><li>Hexagon radar chart (6D)</li><li>Before/After panel</li><li>Activity timeline</li><li>Feasibility badge</li></ul></div>
+      <div class="ss-col"><div class="ss-col-label">Data Displayed</div><ul><li>Personal info + AUM</li><li>RN Individual / Portfolio / Required / FO</li><li>6 risk dimensions scored</li><li>Impact of suggested allocation</li><li>Full action log</li></ul></div>
+      <div class="ss-col"><div class="ss-col-label">Actions</div><ul><li>Open Simulator</li><li>Generate Report</li><li>Send questionnaire link</li><li>Upload portfolio</li><li>Add note</li></ul></div>
+    </div>
+  </div>
+
+  <!-- S05 RISK -->
+  <div class="screen-spec" id="s04-05">
+    <div class="ss-header">
+      <div><div class="ss-id">SCREEN · S05 · /risk</div><div class="ss-name">Risk Assessment</div></div>
+      <span class="tag ta">Risk Analysis · Comparison</span>
+    </div>
+    <div class="ss-body">
+      <div class="ss-col"><div class="ss-col-label">Objective</div><ul><li>All clients' RNs in one view</li><li>Gap analysis across FO</li><li>Pending questionnaires</li></ul></div>
+      <div class="ss-col"><div class="ss-col-label">Key Components</div><ul><li>KPI: pending / complete / conflicts</li><li>Full RN comparison table</li><li>Zone badge per client</li></ul></div>
+      <div class="ss-col"><div class="ss-col-label">Columns</div><ul><li>Client name</li><li>RN Individual / FO / Portfolio / Required</li><li>Risk Budget · Zone · P(Goal)</li></ul></div>
+      <div class="ss-col"><div class="ss-col-label">Actions</div><ul><li>Send questionnaire link</li><li>Click client → detail</li><li>Bulk send questionnaires</li></ul></div>
+    </div>
+  </div>
+
+  <!-- S06 PORTFOLIO -->
+  <div class="screen-spec" id="s04-06">
+    <div class="ss-header">
+      <div><div class="ss-id">SCREEN · S06 · /portfolio</div><div class="ss-name">Portfolio Upload & Analysis</div></div>
+      <span class="tag tb">Data Ingestion</span>
+    </div>
+    <div class="ss-body">
+      <div class="ss-col"><div class="ss-col-label">Objective</div><ul><li>Upload client portfolio</li><li>Parse positions</li><li>Calculate RN Portfolio</li><li>Show composition</li></ul></div>
+      <div class="ss-col"><div class="ss-col-label">Key Components</div><ul><li>Drag-and-drop upload zone</li><li>Parse stats grid</li><li>Positions table</li><li>Asset class breakdown</li></ul></div>
+      <div class="ss-col"><div class="ss-col-label">Accepted Formats</div><ul><li>.xlsx Excel</li><li>.pdf (text-parseable)</li><li>.csv plain</li><li>.html table</li><li>Manual entry (fallback)</li></ul></div>
+      <div class="ss-col"><div class="ss-col-label">Output</div><ul><li>Position count</li><li>RN Portfolio calculated</li><li>Equity / FI / FX %</li><li>Per-position RN_i</li><li>Feeds Risk Assessment</li></ul></div>
+    </div>
+  </div>
+
+  <!-- S07 SIMULATOR -->
+  <div class="screen-spec" id="s04-07">
+    <div class="ss-header">
+      <div><div class="ss-id">SCREEN · S07 · /simulator</div><div class="ss-name">Allocation Simulator</div></div>
+      <span class="tag tgd">Core Product Feature · Interactive</span>
+    </div>
+    <div class="ss-body">
+      <div class="ss-col"><div class="ss-col-label">Objective</div><ul><li>Simulate C11 + C22 allocation</li><li>See real-time impact</li><li>Stay within 10% cap</li><li>Get alignment verdict</li></ul></div>
+      <div class="ss-col"><div class="ss-col-label">Key Components</div><ul><li>C11 slider (0–10%)</li><li>C22 slider (0–10%)</li><li>Combined % constraint bar</li><li>6-metric output panel</li><li>4 delta cards</li><li>Verdict box</li></ul></div>
+      <div class="ss-col"><div class="ss-col-label">Metrics Recalculated</div><ul><li>Risk Number (RN blend)</li><li>Expected return %</li><li>Volatility %</li><li>Expected max drawdown</li><li>P(Goal) %</li><li>Time to target (years)</li></ul></div>
+      <div class="ss-col"><div class="ss-col-label">Actions</div><ul><li>Drag sliders (live)</li><li>Reset to zero</li><li>Apply Strategy (confirm)</li><li>Constraint auto-enforcement</li></ul></div>
+    </div>
+  </div>
+
+  <!-- S08 STRATEGIES -->
+  <div class="screen-spec" id="s04-08">
+    <div class="ss-header">
+      <div><div class="ss-id">SCREEN · S08 · /strategies</div><div class="ss-name">Harpian Strategies</div></div>
+      <span class="tag tg">Product Information</span>
+    </div>
+    <div class="ss-body">
+      <div class="ss-col"><div class="ss-col-label">Objective</div><ul><li>Document Core 11 and Core 22</li><li>Show live NAV</li><li>Communicate product roles</li></ul></div>
+      <div class="ss-col"><div class="ss-col-label">Core 11</div><ul><li>RN: 42 (fixed)</li><li>Efficiency tool</li><li>Low volatility</li><li>StormGuard active</li></ul></div>
+      <div class="ss-col"><div class="ss-col-label">Core 22</div><ul><li>RN: 58 (fixed)</li><li>Performance engine</li><li>Higher return potential</li><li>Trend-following</li></ul></div>
+      <div class="ss-col"><div class="ss-col-label">Data Shown</div><ul><li>NAV · YTD · Max DD</li><li>ISIN: XS2998773373</li><li>Issuer, Admin, Settlement</li><li>Momentum bar comparisons</li></ul></div>
+    </div>
+  </div>
+
+  <!-- S09 INTEL -->
+  <div class="screen-spec" id="s04-09">
+    <div class="ss-header">
+      <div><div class="ss-id">SCREEN · S09 · /intelligence</div><div class="ss-name">Market Intelligence</div></div>
+      <span class="tag tb">Terminal · Recurring Use</span>
+    </div>
+    <div class="ss-body">
+      <div class="ss-col"><div class="ss-col-label">Objective</div><ul><li>Daily use terminal</li><li>Market context for FO</li><li>Harpian signal layer</li></ul></div>
+      <div class="ss-col"><div class="ss-col-label">Key Components</div><ul><li>12-cell sector heatmap</li><li>Momentum map (7 sectors)</li><li>ETF watchlist (live)</li><li>Tactical note (weekly)</li><li>Risk regime panel</li><li>Don't Touch mini</li></ul></div>
+      <div class="ss-col"><div class="ss-col-label">Data Sources</div><ul><li>Market data API (prices)</li><li>Harpian proprietary signals</li><li>SGA status feed</li><li>Internal research notes</li></ul></div>
+      <div class="ss-col"><div class="ss-col-label">Actions</div><ul><li>Click DTL mini → full DTL</li><li>Click SGA → StormGuard</li><li>Read tactical note</li></ul></div>
+    </div>
+  </div>
+
+  <!-- S10 STORMGUARD -->
+  <div class="screen-spec" id="s04-10">
+    <div class="ss-header">
+      <div><div class="ss-id">SCREEN · S10 · /stormguard</div><div class="ss-name">StormGuard Monitor</div></div>
+      <span class="tag ta">Crisis Detection</span>
+    </div>
+    <div class="ss-body">
+      <div class="ss-col"><div class="ss-col-label">Objective</div><ul><li>Real-time SGA status</li><li>Explain protocol clearly</li><li>Show event history</li></ul></div>
+      <div class="ss-col"><div class="ss-col-label">Key Components</div><ul><li>Circular status indicator</li><li>4-box metrics (days, position, signal)</li><li>3-step protocol explainer</li><li>Historical events table</li></ul></div>
+      <div class="ss-col"><div class="ss-col-label">SGA States</div><ul><li>RISK-ON → fully invested</li><li>NEGATIVE → liquidation triggered</li><li>DEFENSIVE → 100% cash</li><li>SLIGHTLY NEG → re-entry watch</li></ul></div>
+      <div class="ss-col"><div class="ss-col-label">Data Shown</div><ul><li>Signal value (±)</li><li>Days in current regime</li><li>C11 position %</li><li>Historical event log</li></ul></div>
+    </div>
+  </div>
+
+  <!-- S11 DTL -->
+  <div class="screen-spec" id="s04-11">
+    <div class="ss-header">
+      <div><div class="ss-id">SCREEN · S11 · /dtl</div><div class="ss-name">Don't Touch List</div></div>
+      <span class="tag tr">Negative Signal Layer</span>
+    </div>
+    <div class="ss-body">
+      <div class="ss-col"><div class="ss-col-label">Objective</div><ul><li>Flag weak-momentum assets</li><li>Institutional intelligence</li><li>Avoid without revealing full strategy</li></ul></div>
+      <div class="ss-col"><div class="ss-col-label">Key Components</div><ul><li>Methodology disclaimer</li><li>ETF avoid list (7+)</li><li>Individual equities table</li><li>Momentum bars</li></ul></div>
+      <div class="ss-col"><div class="ss-col-label">Data Shown</div><ul><li>Ticker + full name</li><li>Momentum score (0–99)</li><li>Sector + reason</li><li>Signal classification</li></ul></div>
+      <div class="ss-col"><div class="ss-col-label">Update Cadence</div><ul><li>Daily refresh</li><li>Timestamp visible</li><li>Not investment advice</li><li>Harpian proprietary</li></ul></div>
+    </div>
+  </div>
+
+  <!-- S12 REPORTS -->
+  <div class="screen-spec" id="s04-12">
+    <div class="ss-header">
+      <div><div class="ss-id">SCREEN · S12 · /reports</div><div class="ss-name">Reports & Export</div></div>
+      <span class="tag tg">Output Layer</span>
+    </div>
+    <div class="ss-body">
+      <div class="ss-col"><div class="ss-col-label">Objective</div><ul><li>Generate client deliverables</li><li>Compliance exports</li><li>Data handoff</li></ul></div>
+      <div class="ss-col"><div class="ss-col-label">Report Types</div><ul><li>Client Risk Report (PDF)</li><li>Portfolio Overview (PDF)</li><li>Allocation Proposal (PDF)</li><li>Market Intelligence Brief</li><li>Compliance Export</li><li>JSON / API handoff</li></ul></div>
+      <div class="ss-col"><div class="ss-col-label">Formats</div><ul><li>PDF (client-facing)</li><li>PDF (advisor format)</li><li>JSON structured</li><li>CSV data export</li></ul></div>
+      <div class="ss-col"><div class="ss-col-label">Content Per Report</div><ul><li>RN comparison</li><li>Allocation suggestion</li><li>Before/After outcomes</li><li>Feasibility verdict</li><li>Confidence level</li></ul></div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════════════
+     05. USER FLOWS
+══════════════════════════════════════ -->
+<div class="section" id="s05">
+  <div class="section-num">SECTION 05</div>
+  <div class="section-title">Main User Flows</div>
+
+  <div class="sub-title">Flow 1 — Family Office Onboarding</div>
+  <div class="flow">
+    <div class="flow-step"><div class="flow-num"><div class="flow-circle">1</div><div class="flow-line"></div></div><div class="flow-body"><strong>FO creates account</strong><span>Sets legal identity (name, CNPJ, regulator). Selects Harpian tier. Account activated.</span></div></div>
+    <div class="flow-step"><div class="flow-num"><div class="flow-circle">2</div><div class="flow-line"></div></div><div class="flow-body"><strong>FO completes institutional questionnaire</strong><span>Defines risk philosophy, mandate ceiling, investment stance. Outputs: RN_FO (institutional floor).</span></div></div>
+    <div class="flow-step"><div class="flow-num"><div class="flow-circle">3</div><div class="flow-line"></div></div><div class="flow-body hl"><strong>System sets max Harpian exposure = 10%</strong><span>This is a configurable constant (current default: 10%). All client simulations will be capped at this value.</span></div></div>
+    <div class="flow-step"><div class="flow-num"><div class="flow-circle">4</div><div class="flow-line"></div></div><div class="flow-body"><strong>FO accesses Overview Dashboard</strong><span>Entry point to all modules. Can now onboard clients.</span></div></div>
+  </div>
+
+  <div class="sub-title">Flow 2 — Client Registration & Questionnaire</div>
+  <div class="flow">
+    <div class="flow-step"><div class="flow-num"><div class="flow-circle">1</div><div class="flow-line"></div></div><div class="flow-body"><strong>FO creates client record</strong><span>Enters name, email, AUM, time horizon, target capital. Client appears in /clients with status "Pending Q".</span></div></div>
+    <div class="flow-step"><div class="flow-num"><div class="flow-circle">2</div><div class="flow-line"></div></div><div class="flow-body"><strong>System generates unique questionnaire link</strong><span>Link is client-specific. Client accesses via email — no platform login required.</span></div></div>
+    <div class="flow-step"><div class="flow-num"><div class="flow-circle">3</div><div class="flow-line"></div></div><div class="flow-body"><strong>Client completes behavioral questionnaire</strong><span>20–30 scored questions covering loss aversion, time horizon sensitivity, volatility comfort, wealth dependency.</span></div></div>
+    <div class="flow-step"><div class="flow-num"><div class="flow-circle">4</div><div class="flow-line"></div></div><div class="flow-body hl"><strong>System calculates RN_Individual (0–99)</strong><span>Score stored. Client status updates to "Questionnaire Complete". FO notified. Client visible in /risk table.</span></div></div>
+  </div>
+
+  <div class="sub-title">Flow 3 — Portfolio Upload & RN Calculation</div>
+  <div class="flow">
+    <div class="flow-step"><div class="flow-num"><div class="flow-circle">1</div><div class="flow-line"></div></div><div class="flow-body"><strong>FO uploads portfolio file</strong><span>Accepted: .xlsx, .pdf, .csv, .html. Drag-and-drop or file browser. Fallback: manual entry.</span></div></div>
+    <div class="flow-step"><div class="flow-num"><div class="flow-circle">2</div><div class="flow-line"></div></div><div class="flow-body"><strong>System parses portfolio</strong><span>Extracts: position names, weights (%), asset class, country, currency, instrument type. Infers liquidity bucket.</span></div></div>
+    <div class="flow-step"><div class="flow-num"><div class="flow-circle">3</div><div class="flow-line"></div></div><div class="flow-body hl"><strong>Engine calculates RN_Portfolio</strong><span>RN_portfolio = Σ(w_i × RN_i) + Δ_concentration + Δ_correlation − Δ_diversification + Δ_liquidity</span></div></div>
+    <div class="flow-step"><div class="flow-num"><div class="flow-circle">4</div><div class="flow-line"></div></div><div class="flow-body"><strong>Gap analysis runs automatically</strong><span>System compares: RN_portfolio vs RN_individual, RN_individual vs RN_requirement, RN_portfolio vs RN_FO. Assigns zone.</span></div></div>
+  </div>
+
+  <div class="sub-title">Flow 4 — Allocation Simulation</div>
+  <div class="flow">
+    <div class="flow-step"><div class="flow-num"><div class="flow-circle">1</div><div class="flow-line"></div></div><div class="flow-body"><strong>FO opens Simulator for a client</strong><span>From Client Detail CTA or sidebar. Simulator preloads client's RN data and current portfolio metrics.</span></div></div>
+    <div class="flow-step"><div class="flow-num"><div class="flow-circle">2</div><div class="flow-line"></div></div><div class="flow-body"><strong>FO drags Core 11 slider</strong><span>System enforces: C11 % + C22 % ≤ 10% (FO mandate cap). Constraint bar updates. Sliders auto-lock at limit.</span></div></div>
+    <div class="flow-step"><div class="flow-num"><div class="flow-circle">3</div><div class="flow-line"></div></div><div class="flow-body hl"><strong>Real-time recalculation fires (&lt;100ms)</strong><span>RN_blend, return, volatility, drawdown, P(Goal), time-to-target all update. Delta cards show marginal change.</span></div></div>
+    <div class="flow-step"><div class="flow-num"><div class="flow-circle">4</div><div class="flow-line"></div></div><div class="flow-body"><strong>Verdict box updates by zone</strong><span>Green (Optimal) / Amber (Limit) / Red (Still over-risked). Message includes specific number guidance.</span></div></div>
+    <div class="flow-step"><div class="flow-num"><div class="flow-circle">5</div><div class="flow-line"></div></div><div class="flow-body"><strong>FO applies strategy or exports proposal</strong><span>"Apply Allocation Strategy" confirms. "Export" generates PDF proposal. Allocation saved to client record.</span></div></div>
+  </div>
+
+  <div class="sub-title">Flow 5 — Intelligence Terminal (Daily Use)</div>
+  <div class="flow">
+    <div class="flow-step"><div class="flow-num"><div class="flow-circle">1</div><div class="flow-line"></div></div><div class="flow-body"><strong>FO opens terminal — /intelligence</strong><span>First check: topbar SGA pill. If still Risk-On, proceed. If changed, navigate to /stormguard.</span></div></div>
+    <div class="flow-step"><div class="flow-num"><div class="flow-circle">2</div><div class="flow-line"></div></div><div class="flow-body"><strong>Reviews sector heatmap and momentum map</strong><span>12-cell heatmap shows daily sector performance. Momentum bars show 20-day relative strength per sector.</span></div></div>
+    <div class="flow-step"><div class="flow-num"><div class="flow-circle">3</div><div class="flow-line"></div></div><div class="flow-body"><strong>Checks Don't Touch List</strong><span>7+ ETFs and 5 equities with weak momentum. Reviews if any client portfolios have exposure to flagged assets.</span></div></div>
+    <div class="flow-step"><div class="flow-num"><div class="flow-circle">4</div><div class="flow-line"></div></div><div class="flow-body"><strong>Reads weekly tactical note</strong><span>Harpian-authored market summary. Context for client conversations. No explicit position disclosure.</span></div></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════════════
+     06. DATA MODEL
+══════════════════════════════════════ -->
+<div class="section" id="s06">
+  <div class="section-num">SECTION 06</div>
+  <div class="section-title">Data Model — High Level</div>
+
+  <div class="code-block">ENTITY RELATIONS
+
+FamilyOffice
+    ├── has many → Client
+    ├── has one  → FORiskProfile (RN_FO, RN_Capacity, philosophy, max_harpian_pct)
+    └── has many → User (admin, advisor, read-only)
+
+Client
+    ├── belongs to  → FamilyOffice
+    ├── has one     → RiskAssessment (RN_individual, questionnaire_answers)
+    ├── has one     → Portfolio (positions[], RN_portfolio, parsed_at)
+    ├── has one     → GoalProfile (target_capital, time_horizon, current_aum)
+    ├── has many    → AllocationScenario (simulated or applied)
+    └── has many    → TimelineEvent (actions, uploads, alerts)
+
+AllocationScenario
+    ├── belongs to  → Client
+    ├── c11_pct     → Float [0–10]
+    ├── c22_pct     → Float [0–10]
+    ├── rn_blend    → Calculated
+    ├── status      → enum[simulated, applied, exported]
+    └── computed_at → DateTime
+
+MarketSignal
+    ├── date
+    ├── sga_status  → enum[risk_on, negative, defensive]
+    ├── sector_scores → { sector: String, momentum_score: Float }[]
+    ├── dtl_etfs    → { ticker, name, score }[]
+    └── tactical_note → Text</div>
+
+  <div class="g2" style="margin-top:16px;">
+    <div class="entity">
+      <div class="entity-name">FamilyOffice</div>
+      <div class="entity-fields">
+        <div class="entity-field"><span class="ef-name">id</span><span class="ef-type">UUID</span><span class="ef-desc">Primary key</span></div>
+        <div class="entity-field"><span class="ef-name">legal_name</span><span class="ef-type">String</span><span class="ef-desc">Official legal entity name</span></div>
+        <div class="entity-field"><span class="ef-name">cnpj</span><span class="ef-type">String</span><span class="ef-desc">Brazilian tax ID</span></div>
+        <div class="entity-field"><span class="ef-name">rn_fo</span><span class="ef-type">Integer</span><span class="ef-desc">Institutional mandate ceiling (0–99)</span></div>
+        <div class="entity-field"><span class="ef-name">rn_capacity</span><span class="ef-type">Integer</span><span class="ef-desc">Financial capacity floor (0–99)</span></div>
+        <div class="entity-field"><span class="ef-name">max_harpian_pct</span><span class="ef-type">Float</span><span class="ef-desc">Max combined C11+C22 exposure (default: 10)</span></div>
+        <div class="entity-field"><span class="ef-name">philosophy_text</span><span class="ef-type">Text</span><span class="ef-desc">Free-form investment philosophy statement</span></div>
+        <div class="entity-field"><span class="ef-name">tier</span><span class="ef-type">Enum</span><span class="ef-desc">partner | premier_partner | institutional</span></div>
+        <div class="entity-field"><span class="ef-name">questionnaire_completed_at</span><span class="ef-type">DateTime</span><span class="ef-desc">When FO questionnaire was last completed</span></div>
+      </div>
+    </div>
+    <div class="entity">
+      <div class="entity-name">Client</div>
+      <div class="entity-fields">
+        <div class="entity-field"><span class="ef-name">id</span><span class="ef-type">UUID</span><span class="ef-desc">Primary key</span></div>
+        <div class="entity-field"><span class="ef-name">fo_id</span><span class="ef-type">FK → FO</span><span class="ef-desc">Parent Family Office</span></div>
+        <div class="entity-field"><span class="ef-name">display_name</span><span class="ef-type">String</span><span class="ef-desc">Full name or entity name</span></div>
+        <div class="entity-field"><span class="ef-name">email</span><span class="ef-type">String</span><span class="ef-desc">For questionnaire link delivery</span></div>
+        <div class="entity-field"><span class="ef-name">current_aum</span><span class="ef-type">Float</span><span class="ef-desc">Assets under advisory (USD)</span></div>
+        <div class="entity-field"><span class="ef-name">target_capital</span><span class="ef-type">Float</span><span class="ef-desc">Goal capital (USD)</span></div>
+        <div class="entity-field"><span class="ef-name">time_horizon_years</span><span class="ef-type">Integer</span><span class="ef-desc">Investment horizon in years</span></div>
+        <div class="entity-field"><span class="ef-name">rn_individual</span><span class="ef-type">Integer</span><span class="ef-desc">From questionnaire (0–99)</span></div>
+        <div class="entity-field"><span class="ef-name">rn_portfolio</span><span class="ef-type">Integer</span><span class="ef-desc">From portfolio parse engine</span></div>
+        <div class="entity-field"><span class="ef-name">rn_requirement</span><span class="ef-type">Integer</span><span class="ef-desc">Calculated from goal + horizon</span></div>
+        <div class="entity-field"><span class="ef-name">alignment_zone</span><span class="ef-type">Enum</span><span class="ef-desc">under | safe | optimal | limit | danger</span></div>
+        <div class="entity-field"><span class="ef-name">questionnaire_token</span><span class="ef-type">String</span><span class="ef-desc">Unique link token (expires)</span></div>
+        <div class="entity-field"><span class="ef-name">status</span><span class="ef-type">Enum</span><span class="ef-desc">draft | pending_q | active | aligned | action_needed</span></div>
+      </div>
+    </div>
+    <div class="entity">
+      <div class="entity-name">Portfolio</div>
+      <div class="entity-fields">
+        <div class="entity-field"><span class="ef-name">id</span><span class="ef-type">UUID</span><span class="ef-desc">Primary key</span></div>
+        <div class="entity-field"><span class="ef-name">client_id</span><span class="ef-type">FK → Client</span><span class="ef-desc">Owner client</span></div>
+        <div class="entity-field"><span class="ef-name">positions</span><span class="ef-type">JSON[]</span><span class="ef-desc">[{ticker, name, weight_pct, rn_i, asset_class, country, currency, liquidity_bucket}]</span></div>
+        <div class="entity-field"><span class="ef-name">rn_portfolio</span><span class="ef-type">Integer</span><span class="ef-desc">Blended calculated score</span></div>
+        <div class="entity-field"><span class="ef-name">equity_pct</span><span class="ef-type">Float</span><span class="ef-desc">Total equity allocation</span></div>
+        <div class="entity-field"><span class="ef-name">fx_exposure_pct</span><span class="ef-type">Float</span><span class="ef-desc">Unhedged FX weight</span></div>
+        <div class="entity-field"><span class="ef-name">source_format</span><span class="ef-type">Enum</span><span class="ef-desc">xlsx | pdf | csv | manual</span></div>
+        <div class="entity-field"><span class="ef-name">parsed_at</span><span class="ef-type">DateTime</span><span class="ef-desc">When parsing completed</span></div>
+      </div>
+    </div>
+    <div class="entity">
+      <div class="entity-name">AllocationScenario</div>
+      <div class="entity-fields">
+        <div class="entity-field"><span class="ef-name">id</span><span class="ef-type">UUID</span><span class="ef-desc">Primary key</span></div>
+        <div class="entity-field"><span class="ef-name">client_id</span><span class="ef-type">FK → Client</span><span class="ef-desc">Client this applies to</span></div>
+        <div class="entity-field"><span class="ef-name">c11_pct</span><span class="ef-type">Float</span><span class="ef-desc">Core 11 allocation (0–10)</span></div>
+        <div class="entity-field"><span class="ef-name">c22_pct</span><span class="ef-type">Float</span><span class="ef-desc">Core 22 allocation (0–10)</span></div>
+        <div class="entity-field"><span class="ef-name">rn_blend</span><span class="ef-type">Integer</span><span class="ef-desc">Calculated blended RN</span></div>
+        <div class="entity-field"><span class="ef-name">expected_return_pct</span><span class="ef-type">Float</span><span class="ef-desc">Annual expected return</span></div>
+        <div class="entity-field"><span class="ef-name">expected_drawdown_pct</span><span class="ef-type">Float</span><span class="ef-desc">Max expected drawdown</span></div>
+        <div class="entity-field"><span class="ef-name">p_goal</span><span class="ef-type">Float</span><span class="ef-desc">Probability of reaching target</span></div>
+        <div class="entity-field"><span class="ef-name">time_to_target_years</span><span class="ef-type">Float</span><span class="ef-desc">Estimated years to goal</span></div>
+        <div class="entity-field"><span class="ef-name">alignment_zone</span><span class="ef-type">Enum</span><span class="ef-desc">optimal | limit | danger | under</span></div>
+        <div class="entity-field"><span class="ef-name">status</span><span class="ef-type">Enum</span><span class="ef-desc">simulated | applied | exported</span></div>
+        <div class="entity-field"><span class="ef-name">confidence_level</span><span class="ef-type">Enum</span><span class="ef-desc">low | medium | high</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════════════
+     07. CALCULATION LOGIC
+══════════════════════════════════════ -->
+<div class="section" id="s07">
+  <div class="section-num">SECTION 07</div>
+  <div class="section-title">Calculation Logic</div>
+
+  <div class="sub-title">Risk Number — Portfolio (3-Step Engine)</div>
+  <div class="code-block"><span class="code-comment">// STEP 1: Base weighted sum</span>
+RN_raw = Σ ( weight_i × RN_i )
+<span class="code-comment">// weight_i = position allocation %, RN_i = per-asset risk score (0–99)</span>
+
+<span class="code-comment">// STEP 2: Structural adjustments (non-linear)</span>
+Δ_concentration = f(max_single_weight, top3_weight)
+    <span class="code-comment">// if max position > 20%: +up to 8pts | if top-3 > 50%: +up to 5pts</span>
+Δ_correlation   = f(avg_pairwise_corr_trailing_6m)
+    <span class="code-comment">// if avg_corr > 0.7: +up to 10pts | crisis regime uses ρ_stress ≈ 0.85</span>
+Δ_diversification = f(avg_cross_asset_corr)
+    <span class="code-comment">// if avg_corr < 0.3: -up to 8pts | floor: cannot reduce below 60% of RN_raw</span>
+Δ_liquidity     = f(illiquid_weight)
+    <span class="code-comment">// T+30 assets: +3pts per 10% | locked structures: +6pts flat</span>
+
+<span class="code-comment">// STEP 3: Final score</span>
+RN_portfolio = RN_raw + Δ_concentration + Δ_correlation − Δ_diversification + Δ_liquidity
+<span class="code-comment">// Result: RN_portfolio ∈ [0, 99]</span></div>
+
+  <div class="sub-title">Blended RN — With Harpian Allocation</div>
+  <div class="code-block"><span class="code-comment">// Weights</span>
+w_exist = (100 - c11_pct - c22_pct) / 100
+w_c11   = c11_pct / 100
+w_c22   = c22_pct / 100
+<span class="code-comment">// Constraint: w_exist + w_c11 + w_c22 = 1.0</span>
+
+<span class="code-comment">// Linear blend</span>
+RN_blend_linear = w_exist × RN_portfolio + w_c11 × RN_C11 + w_c22 × RN_C22
+<span class="code-comment">// RN_C11 = 42 (fixed) | RN_C22 = 58 (fixed)</span>
+
+<span class="code-comment">// Correlation correction</span>
+corr_discount = (c11_pct + c22_pct) × 0.15   <span class="code-comment">// approx. — low corr to LatAm mix</span>
+
+RN_blend = max(RN_blend_linear - corr_discount, 10)</div>
+
+  <div class="sub-title">Secondary Metrics — Simulator Outputs</div>
+  <div class="code-block"><span class="code-comment">// Expected return (linear)</span>
+R_blend = w_exist × R_portfolio + w_c11 × R_C11 + w_c22 × R_C22
+
+<span class="code-comment">// Blended volatility (non-linear — 3-block covariance)</span>
+σ_blend = √(Σ w_i² × σ_i² + Σ_{i≠j} 2 × w_i × w_j × ρ_ij × σ_i × σ_j)
+
+<span class="code-comment">// Expected max drawdown (stress-corrected)</span>
+DD_max ≈ σ_blend × k_stress     <span class="code-comment">// k_stress derived from product regime history</span>
+
+<span class="code-comment">// Probability of achieving goal (log-normal model)</span>
+Gap = log(target_aum / current_aum)
+P_goal = Φ( (R_blend × T − Gap) / (σ_blend × √T) )
+<span class="code-comment">// Φ = normal CDF | T = time_horizon_years</span>
+
+<span class="code-comment">// Risk Budget accounting</span>
+Risk_Budget    = min(RN_individual, RN_capacity)
+Risk_Used      = RN_blend
+Risk_Available = Risk_Budget − Risk_Used</div>
+
+  <div class="sub-title">Constraint Enforcement — 10% Cap</div>
+  <div class="code-block"><span class="code-comment">// Hard constraint — enforced in slider JS and backend validation</span>
+MAX_harpian_pct = FamilyOffice.max_harpian_pct    <span class="code-comment">// default: 10</span>
+
+IF (c11_pct + c22_pct) > MAX_harpian_pct:
+    <span class="code-comment">// Auto-reduce last-moved slider to enforce cap</span>
+    IF active_slider == 'c11':
+        c11_pct = MAX_harpian_pct - c22_pct
+    ELSE:
+        c22_pct = MAX_harpian_pct - c11_pct
+
+<span class="code-comment">// Additional hard stops (block UI and API)</span>
+IF RN_blend > RN_FO:       → "FO mandate breach" — hard block
+IF Risk_Available < 0:     → "Budget overdrawn" — reduction mode only</div>
+
+  <div class="sub-title">Zone Classification</div>
+  <div class="zone-strip">
+    <div class="zone-seg" style="width:18%;background:rgba(45,122,192,0.3);color:var(--blue-l);">Under-Risk</div>
+    <div class="zone-seg" style="width:16%;background:rgba(42,96,64,0.3);color:#5AAA7A;">Safe</div>
+    <div class="zone-seg" style="width:22%;background:rgba(26,122,74,0.35);color:var(--green-l);">Optimal ★</div>
+    <div class="zone-seg" style="width:16%;background:rgba(212,134,10,0.3);color:var(--amber-l);">Limit</div>
+    <div class="zone-seg" style="width:28%;background:rgba(192,57,43,0.3);color:var(--red-l);">Danger</div>
+  </div>
+  <div class="code-block">zone = CLASSIFY(RN_blend, RN_requirement, RN_individual):
+    IF RN_blend < RN_requirement - 10    → "under_risk"
+    IF RN_blend < RN_requirement         → "safe"
+    IF RN_blend <= RN_individual         → "optimal"
+    IF RN_blend <= RN_individual + 10    → "limit"
+    IF RN_blend > RN_individual + 10     → "danger"</div>
+
+  <div class="sub-title">RN Requirement — Goal-Derived</div>
+  <div class="code-block">R_required = (target_aum / current_aum)^(1/T) − 1      <span class="code-comment">// geometric annual return needed</span>
+RN_requirement = g(R_required, asset_class_universe)    <span class="code-comment">// lookup / interpolation from product universe history</span></div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════════════
+     08. INTELLIGENCE LAYER
+══════════════════════════════════════ -->
+<div class="section" id="s08">
+  <div class="section-num">SECTION 08</div>
+  <div class="section-title">Intelligence Layer</div>
+
+  <div class="critical">⚠ Intelligence layer is informational only. It does not expose Harpian's internal positions. Its purpose is to deliver institutional authority and daily utility, not to replicate the full strategy.</div>
+
+  <div class="sub-title">StormGuard Armor (SGA)</div>
+  <div class="g2">
+    <div class="card ga">
+      <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--amber-l);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;">What Is Shown</div>
+      <ul class="clean">
+        <li>Current SGA status: RISK-ON / NEGATIVE / DEFENSIVE</li>
+        <li>Signal value (±numeric)</li>
+        <li>Days in current regime</li>
+        <li>Core 11 position % (0 = cash, 100 = invested)</li>
+        <li>Historical event log with dates and outcomes</li>
+        <li>3-step protocol explanation (signal → Day 0 → Day 1)</li>
+      </ul>
+    </div>
+    <div class="card gg">
+      <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--green-l);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;">What Is NOT Shown</div>
+      <ul class="clean">
+        <li>SGA formula internals</li>
+        <li>Which assets are currently held</li>
+        <li>Next expected signal direction</li>
+        <li>Full AlphaDroid model output</li>
+      </ul>
+    </div>
+  </div>
+  <div class="note">SGA state drives the topbar pill color (green = Risk-On / red = Defensive) and the stormguard mini widget on the Overview dashboard. State is fetched from API on page load and auto-refreshes every 60 seconds.</div>
+
+  <div class="sub-title">Don't Touch List (DTL)</div>
+  <table class="dt">
+    <thead><tr><th>Aspect</th><th>Specification</th></tr></thead>
+    <tbody>
+      <tr><td>Content</td><td>ETFs and individual equities with below-threshold momentum scores in the Harpian universe</td></tr>
+      <tr><td>Methodology</td><td>Signal-to-noise ratio filtering. Assets stretched excessively above mean or with weak relative momentum relative to investable universe</td></tr>
+      <tr><td>What it shows</td><td>Ticker · Full name · Sector · Momentum score (0–99) · Classification (Weak / Caution / Avoid)</td></tr>
+      <tr><td>What it does NOT show</td><td>Position sizing, current holdings, full ranking methodology, strategy decisions</td></tr>
+      <tr><td>Update cadence</td><td>Daily refresh · Timestamp always visible</td></tr>
+      <tr><td>Disclaimer</td><td>Informational only — not investment advice. Presence on list ≠ "will fall"</td></tr>
+    </tbody>
+  </table>
+
+  <div class="sub-title">Market Signals — Data Architecture</div>
+  <table class="dt">
+    <thead><tr><th>Signal Type</th><th>Data Source</th><th>Screen</th><th>Update Frequency</th></tr></thead>
+    <tbody>
+      <tr><td>ETP live pricing (C11, C22)</td><td>Market data API (Vienna Stock Exchange / Euroclear feed)</td><td>Topbar, /strategies</td><td>Real-time (15-min delay)</td></tr>
+      <tr><td>ETF prices (SPY, QQQ, etc.)</td><td>Market data API (US market data provider)</td><td>Topbar ticker, /intelligence watchlist</td><td>Real-time</td></tr>
+      <tr><td>Sector momentum scores</td><td>Harpian internal calculation (not exposed)</td><td>/intelligence heatmap + momentum map</td><td>Daily (post-market)</td></tr>
+      <tr><td>SGA status</td><td>Harpian proprietary signal</td><td>Topbar pill, /overview, /stormguard</td><td>Real-time (on signal change)</td></tr>
+      <tr><td>Don't Touch List</td><td>Harpian proprietary momentum filter</td><td>/dtl, /intelligence mini</td><td>Daily (post-market)</td></tr>
+      <tr><td>Tactical note</td><td>Harpian research (manual CMS entry)</td><td>/intelligence</td><td>Weekly (Monday AM)</td></tr>
+      <tr><td>USD/BRL exchange rate</td><td>FX data API</td><td>Topbar ticker</td><td>Real-time</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════════════
+     09. REUSABLE COMPONENTS
+══════════════════════════════════════ -->
+<div class="section" id="s09">
+  <div class="section-num">SECTION 09</div>
+  <div class="section-title">Reusable Components</div>
+  <div class="section-desc">All components below are already implemented in the source HTMLs. Re-use them — do not rebuild. They share the same CSS variable system.</div>
+
+  <div class="sub-title">Layout Primitives</div>
+  <div class="comp-row"><div class="comp-name">Topbar</div><div class="comp-desc">Fixed 48px bar with ticker strip, SGA pill, live clock, user avatar. Always visible. Height: <code>var(--topbar-h)</code></div><div class="comp-used">All screens</div></div>
+  <div class="comp-row"><div class="comp-name">Sidebar</div><div class="comp-desc">Fixed 220px left nav with section groups, nav items (icon + label + badge), FO card at bottom. Width: <code>var(--sidebar-w)</code></div><div class="comp-used">All screens</div></div>
+  <div class="comp-row"><div class="comp-name">Page Header</div><div class="comp-desc">Top of each page: overline (breadcrumb), title (Syne 22px), subtitle (DM Mono), right-aligned action buttons</div><div class="comp-used">All screens</div></div>
+  <div class="comp-row"><div class="comp-name">Grid System</div><div class="comp-desc"><code>.g2</code> (2-col), <code>.g3</code> (3-col), <code>.g4</code> (4-col), <code>.g32</code> (2:1 ratio), <code>.g23</code> (1:2 ratio) — all 10px gap</div><div class="comp-used">All screens</div></div>
+
+  <div class="sub-title" style="margin-top:24px;">Data Display</div>
+  <div class="comp-row"><div class="comp-name">Card</div><div class="comp-desc">Base container. Variants: <code>.gl</code> (gold accent), <code>.gg</code> (green), <code>.gr</code> (red), <code>.gb</code> (blue), <code>.ga</code> (amber)</div><div class="comp-used">All screens</div></div>
+  <div class="comp-row"><div class="comp-name">KPI Card</div><div class="comp-desc">Large metric card with top color bar (2px), label, value (28px Syne 800), sub-text, delta badge. Variants by color.</div><div class="comp-used">Overview, Risk</div></div>
+  <div class="comp-row"><div class="comp-name">Data Table (.dt)</div><div class="comp-desc">Full-width bordered table. TH: gold mono 8px. TD: 12px DM Sans. Hover: background var(--s2). Clickable rows supported.</div><div class="comp-used">Clients, Risk, Portfolio, DTL</div></div>
+  <div class="comp-row"><div class="comp-name">Tag / Badge</div><div class="comp-desc">Inline status chips: <code>.tg</code> (green), <code>.ta</code> (amber), <code>.tr</code> (red), <code>.tb</code> (blue), <code>.tgd</code> (gold). 8px DM Mono.</div><div class="comp-used">All screens</div></div>
+  <div class="comp-row"><div class="comp-name">RN Box (4-grid)</div><div class="comp-desc">Client detail RN comparison: 4 boxes with label, large value (28px Syne 800), sub-text. Color by context.</div><div class="comp-used">Client Detail, Risk Assessment</div></div>
+  <div class="comp-row"><div class="comp-name">Before/After Panel</div><div class="comp-desc">3-column grid: before col / arrow / after col. Current metrics vs simulated. Delta badges per row.</div><div class="comp-used">Client Detail, Simulator, Final Output</div></div>
+  <div class="comp-row"><div class="comp-name">Activity Row</div><div class="comp-desc">32px avatar + name/desc block + right-aligned timestamp. For client overview and timeline feeds.</div><div class="comp-used">Overview, Client Detail</div></div>
+  <div class="comp-row"><div class="comp-name">Alert Item</div><div class="comp-desc">Left-border colored block with label (8px DM Mono) and text body. Variants: amber, red, blue, green.</div><div class="comp-used">Overview, Intelligence, StormGuard</div></div>
+
+  <div class="sub-title" style="margin-top:24px;">Interactive / Visualization</div>
+  <div class="comp-row"><div class="comp-name">RN Rail</div><div class="comp-desc">Horizontal 0–99 track with colored zone fills and positioned dot markers per RN. Pointer labels above/below.</div><div class="comp-used">Overview, Risk Assessment</div></div>
+  <div class="comp-row"><div class="comp-name">Hexagon Radar SVG</div><div class="comp-desc">6-axis SVG polygon chart (Volatility / Country / Liquidity / Concentration / Correlation / Drawdown). Morphs on data change.</div><div class="comp-used">Client Detail, Portfolio</div></div>
+  <div class="comp-row"><div class="comp-name">Slider Block</div><div class="comp-desc">Labeled range input with header (name + live % value), styled thumb, range labels (0 / optimal / max).</div><div class="comp-used">Simulator</div></div>
+  <div class="comp-row"><div class="comp-name">Sim Metric Row</div><div class="comp-desc">4-column: label / progress bar / before value / after value (colored). Used for all 6 simulator outputs.</div><div class="comp-used">Simulator</div></div>
+  <div class="comp-row"><div class="comp-name">Delta Card</div><div class="comp-desc">Small card with metric name, large change value, colored bottom border (2px). 4-up grid layout.</div><div class="comp-used">Simulator, Outcome Impact</div></div>
+  <div class="comp-row"><div class="comp-name">Heatmap Grid</div><div class="comp-desc">12-cell CSS grid with colored backgrounds (green→red) by value. Each cell: sector name + % return.</div><div class="comp-used">Market Intelligence</div></div>
+  <div class="comp-row"><div class="comp-name">Momentum Bar Row</div><div class="comp-desc">Sector label + 100px track + fill (color by value) + numeric score. Used for 7-sector rankings.</div><div class="comp-used">Intelligence, Client Detail</div></div>
+  <div class="comp-row"><div class="comp-name">Watchlist Row</div><div class="comp-desc">Ticker (DM Mono bold) + full name + price + % change (colored). Stacked list of ETFs.</div><div class="comp-used">Market Intelligence</div></div>
+  <div class="comp-row"><div class="comp-name">DTL Row</div><div class="comp-desc">Ticker + name + small red progress bar + momentum score. Used in Don't Touch List.</div><div class="comp-used">DTL, Intelligence mini</div></div>
+  <div class="comp-row"><div class="comp-name">Zone Strip</div><div class="comp-desc">Horizontal colored band showing 5 zones (blue/safe-green/green/amber/red). Used for allocation range visualization.</div><div class="comp-used">Simulator, Risk Assessment, Decision Layer</div></div>
+  <div class="comp-row"><div class="comp-name">Trajectory Chart</div><div class="comp-desc">SVG line chart with 3 curves (conservative/current/adjusted) + shaded band + target line. Updates on slider drag.</div><div class="comp-used">Outcome Impact Layer</div></div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════════════
+     10. FRONTEND STRUCTURE
+══════════════════════════════════════ -->
+<div class="section" id="s10">
+  <div class="section-num">SECTION 10</div>
+  <div class="section-title">Frontend Structure</div>
+
+  <div class="sub-title">Recommended Directory Structure (React / Next.js)</div>
+  <div class="code-block">harpian-terminal/
+├── app/
+│   ├── layout.tsx                    <span class="code-comment">// Shell: Topbar + Sidebar + main wrapper</span>
+│   ├── page.tsx                      <span class="code-comment">// Redirect → /overview</span>
+│   ├── overview/page.tsx
+│   ├── fo-profile/page.tsx
+│   ├── clients/
+│   │   ├── page.tsx                  <span class="code-comment">// All Clients</span>
+│   │   └── [id]/page.tsx             <span class="code-comment">// Client Detail</span>
+│   ├── risk/page.tsx
+│   ├── portfolio/page.tsx
+│   ├── simulator/page.tsx            <span class="code-comment">// with [clientId] context</span>
+│   ├── strategies/page.tsx
+│   ├── intelligence/page.tsx
+│   ├── stormguard/page.tsx
+│   ├── dtl/page.tsx
+│   ├── reports/page.tsx
+│   └── settings/page.tsx
+│
+├── components/
+│   ├── layout/
+│   │   ├── Topbar.tsx
+│   │   ├── Sidebar.tsx
+│   │   └── PageHeader.tsx
+│   ├── shared/
+│   │   ├── Card.tsx
+│   │   ├── Tag.tsx
+│   │   ├── DataTable.tsx
+│   │   ├── KpiCard.tsx
+│   │   ├── AlertItem.tsx
+│   │   └── ActivityRow.tsx
+│   ├── risk/
+│   │   ├── RnRail.tsx                <span class="code-comment">// RN comparison bar</span>
+│   │   ├── RnBoxGrid.tsx             <span class="code-comment">// 4-box RN display</span>
+│   │   ├── HexagonRadar.tsx          <span class="code-comment">// SVG 6D radar</span>
+│   │   └── ZoneStrip.tsx
+│   ├── simulator/
+│   │   ├── SliderBlock.tsx
+│   │   ├── SimMetricRow.tsx
+│   │   ├── DeltaCard.tsx
+│   │   ├── VerdictBox.tsx
+│   │   └── ConstraintBar.tsx
+│   ├── intelligence/
+│   │   ├── SectorHeatmap.tsx
+│   │   ├── MomentumMap.tsx
+│   │   ├── WatchlistRow.tsx
+│   │   ├── DtlRow.tsx
+│   │   └── TacticalNote.tsx
+│   ├── client/
+│   │   ├── BeforeAfterPanel.tsx
+│   │   └── TimelineItem.tsx
+│   └── charts/
+│       └── TrajectoryChart.tsx       <span class="code-comment">// SVG 3-curve wealth path</span>
+│
+├── lib/
+│   ├── calculations.ts               <span class="code-comment">// All RN formulas, blended RN, P(Goal)</span>
+│   ├── zoneClassifier.ts             <span class="code-comment">// Zone detection logic</span>
+│   ├── constraintEngine.ts           <span class="code-comment">// 10% cap enforcement</span>
+│   └── portfolioParser.ts            <span class="code-comment">// File upload parsing</span>
+│
+├── hooks/
+│   ├── useSimulator.ts               <span class="code-comment">// Real-time slider state + calculations</span>
+│   ├── useClient.ts                  <span class="code-comment">// Client data fetching</span>
+│   └── useMarketData.ts              <span class="code-comment">// Prices, SGA, DTL polling</span>
+│
+├── styles/
+│   └── globals.css                   <span class="code-comment">// CSS variables (ALL from existing HTMLs)</span>
+│
+└── types/
+    ├── client.ts
+    ├── portfolio.ts
+    ├── allocation.ts
+    └── market.ts</div>
+
+  <div class="sub-title">CSS Variables — Design System (from existing HTMLs)</div>
+  <div class="code-block">/* globals.css — exact values from all 6 HTML source files */
+:root {
+  /* Backgrounds */
+  --bg:   #090E14;    /* page background */
+  --s1:   #0F1820;    /* card surface */
+  --s2:   #162130;    /* elevated surface */
+  --s3:   #1C2D40;    /* table headers, sidebar hover */
+
+  /* Brand */
+  --gold:     #B8972A;
+  --gold-l:   #D4AF45;
+  --gold-bg:  rgba(184,151,42,0.10);
+
+  /* Text */
+  --text:   #C8D8E8;  /* body */
+  --dim:    #6A8AA8;  /* secondary */
+  --bright: #EBF1F7;  /* headings */
+
+  /* Semantic */
+  --green:     #1A7A4A;  --green-l:  #3DBE78;  --green-bg:  rgba(26,122,74,0.08);
+  --amber:     #D4860A;  --amber-l:  #F0A830;  --amber-bg:  rgba(212,134,10,0.08);
+  --red:       #C0392B;  --red-l:    #E87060;  --red-bg:    rgba(192,57,43,0.08);
+  --blue:      #2D7AC0;  --blue-l:   #5BA8E8;  --blue-bg:   rgba(45,122,192,0.08);
+  --purple:    #7B3FA0;  --purple-l: #B07AE0;
+
+  /* Layout */
+  --sidebar-w:  220px;
+  --topbar-h:   48px;
+
+  /* Borders */
+  --bsub:  rgba(235,241,247,0.06);
+  --bgold: rgba(184,151,42,0.14);
+}
+
+/* Typography stack */
+font-family: 'DM Sans', sans-serif;           /* body */
+font-family: 'Syne', sans-serif;              /* headings, values, numbers */
+font-family: 'DM Mono', monospace;            /* labels, codes, metadata */</div>
+
+  <div class="sub-title">Simulator — JavaScript Logic (from existing HTML)</div>
+  <div class="code-block">// useSimulator.ts — core calculation hook
+const RN_C11 = 42, RN_C22 = 58  // fixed product values
+
+function calculateBlend(c11: number, c22: number, client: Client) {
+  const combined = c11 + c22
+  if (combined > client.fo.max_harpian_pct) throw Error("Cap exceeded")
+
+  const w_exist = (100 - combined) / 100
+  const rn_linear = w_exist * client.rn_portfolio + (c11/100) * RN_C11 + (c22/100) * RN_C22
+  const corr_discount = combined * 0.15
+  const rn_blend = Math.max(rn_linear - corr_discount, 10)
+
+  const r_blend = w_exist * client.expected_return + (c11/100) * R_C11 + (c22/100) * R_C22
+  const vol_blend = calculateVolatility(w_exist, c11/100, c22/100, client)
+  const dd_max = vol_blend * K_STRESS
+  const gap = Math.log(client.target_aum / client.current_aum)
+  const p_goal = normalCDF((r_blend * client.horizon - gap) / (vol_blend * Math.sqrt(client.horizon)))
+
+  return { rn_blend, r_blend, vol_blend, dd_max, p_goal, zone: classifyZone(rn_blend, client) }
+}
+
+// Fires on every slider input event — must complete in &lt;10ms</div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════════════
+     11. BACKEND API
+══════════════════════════════════════ -->
+<div class="section" id="s11">
+  <div class="section-num">SECTION 11</div>
+  <div class="section-title">Backend API — Recommended Endpoints</div>
+
+  <div class="sub-title">Family Office</div>
+  <div class="endpoint"><div class="ep-method ep-get">GET</div><div><div class="ep-path">/api/fo/:id</div><div class="ep-desc">Fetch FO profile, RN_FO, max_harpian_pct, AUM summary, questionnaire status</div></div></div>
+  <div class="endpoint"><div class="ep-method ep-put">PUT</div><div><div class="ep-path">/api/fo/:id</div><div class="ep-desc">Update FO profile fields (philosophy, mandate settings)</div></div></div>
+  <div class="endpoint"><div class="ep-method ep-post">POST</div><div><div class="ep-path">/api/fo/:id/questionnaire</div><div class="ep-desc">Submit FO questionnaire answers → returns RN_FO</div></div></div>
+
+  <div class="sub-title">Clients</div>
+  <div class="endpoint"><div class="ep-method ep-get">GET</div><div><div class="ep-path">/api/fo/:id/clients</div><div class="ep-desc">List all clients for FO with computed RN fields and zone classification</div></div></div>
+  <div class="endpoint"><div class="ep-method ep-post">POST</div><div><div class="ep-path">/api/clients</div><div class="ep-desc">Create new client record. Returns questionnaire token.</div></div></div>
+  <div class="endpoint"><div class="ep-method ep-get">GET</div><div><div class="ep-path">/api/clients/:id</div><div class="ep-desc">Full client detail: profile, RNs, portfolio, scenarios, timeline</div></div></div>
+  <div class="endpoint"><div class="ep-method ep-get">GET</div><div><div class="ep-path">/api/questionnaire/:token</div><div class="ep-desc">Public endpoint — load questionnaire for client (no auth required)</div></div></div>
+  <div class="endpoint"><div class="ep-method ep-post">POST</div><div><div class="ep-path">/api/questionnaire/:token/submit</div><div class="ep-desc">Submit questionnaire answers → calculates and stores RN_individual</div></div></div>
+
+  <div class="sub-title">Portfolio</div>
+  <div class="endpoint"><div class="ep-method ep-post">POST</div><div><div class="ep-path">/api/clients/:id/portfolio/upload</div><div class="ep-desc">Upload portfolio file (multipart). Returns parsed positions + RN_portfolio.</div></div></div>
+  <div class="endpoint"><div class="ep-method ep-get">GET</div><div><div class="ep-path">/api/clients/:id/portfolio</div><div class="ep-desc">Fetch latest parsed portfolio with positions and computed metrics</div></div></div>
+
+  <div class="sub-title">Simulation & Allocation</div>
+  <div class="endpoint"><div class="ep-method ep-post">POST</div><div><div class="ep-path">/api/clients/:id/simulate</div><div class="ep-desc">Body: {c11_pct, c22_pct}. Returns all computed metrics. Used for persistence only — live calc runs in frontend.</div></div></div>
+  <div class="endpoint"><div class="ep-method ep-post">POST</div><div><div class="ep-path">/api/clients/:id/allocation/apply</div><div class="ep-desc">Confirm and save a simulation as "applied". Updates client status. Logs to timeline.</div></div></div>
+  <div class="endpoint"><div class="ep-method ep-get">GET</div><div><div class="ep-path">/api/clients/:id/scenarios</div><div class="ep-desc">History of all simulated and applied allocation scenarios</div></div></div>
+
+  <div class="sub-title">Market Data & Intelligence</div>
+  <div class="endpoint"><div class="ep-method ep-get">GET</div><div><div class="ep-path">/api/market/prices</div><div class="ep-desc">Live ETP + ETF prices (C11, C22, SPY, QQQ, GLD, USD/BRL, sector ETFs)</div></div></div>
+  <div class="endpoint"><div class="ep-method ep-get">GET</div><div><div class="ep-path">/api/market/sga-status</div><div class="ep-desc">Current SGA state: {status, signal_value, days_in_regime, c11_position_pct}</div></div></div>
+  <div class="endpoint"><div class="ep-method ep-get">GET</div><div><div class="ep-path">/api/market/dtl</div><div class="ep-desc">Don't Touch List: [{ticker, name, sector, momentum_score, classification}]</div></div></div>
+  <div class="endpoint"><div class="ep-method ep-get">GET</div><div><div class="ep-path">/api/market/sector-momentum</div><div class="ep-desc">Sector momentum scores and heatmap data (20-day trailing)</div></div></div>
+  <div class="endpoint"><div class="ep-method ep-get">GET</div><div><div class="ep-path">/api/market/tactical-note</div><div class="ep-desc">Latest tactical note: {date, body_text, author}</div></div></div>
+
+  <div class="sub-title">Reports</div>
+  <div class="endpoint"><div class="ep-method ep-post">POST</div><div><div class="ep-path">/api/reports/client-risk/:id</div><div class="ep-desc">Generate PDF client risk report. Returns download URL.</div></div></div>
+  <div class="endpoint"><div class="ep-method ep-post">POST</div><div><div class="ep-path">/api/reports/portfolio-overview</div><div class="ep-desc">FO-wide portfolio overview PDF</div></div></div>
+  <div class="endpoint"><div class="ep-method ep-get">GET</div><div><div class="ep-path">/api/clients/:id/export.json</div><div class="ep-desc">Structured JSON export for IPS or CRM integration</div></div></div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════════════
+     12. DEV NOTES
+══════════════════════════════════════ -->
+<div class="section" id="s12">
+  <div class="section-num">SECTION 12</div>
+  <div class="section-title">Development Notes & Critical Points</div>
+
+  <div class="sub-title">Performance — Simulator</div>
+  <div class="critical">⚡ CRITICAL: Simulator recalculation must complete in &lt;10ms from slider input. All math runs in frontend. Backend is only called to PERSIST confirmed scenarios — never for live calculation. Delay = broken UX.</div>
+  <ul class="clean" style="margin-bottom:16px;">
+    <li>All calculation logic lives in <code>lib/calculations.ts</code> — pure functions, no async, no API calls</li>
+    <li>Slider event fires <code>oninput</code>, not <code>onchange</code> — continuous feedback</li>
+    <li>Animate metric values with CSS transitions (<code>transition: width 0.3s</code> on bars)</li>
+    <li>Hexagon SVG path morphs with <code>transition: all 0.3s ease</code> on the polygon points</li>
+    <li>Delta cards update instantly — no animation delay</li>
+  </ul>
+
+  <div class="sub-title">Constraint Enforcement — 10% Cap</div>
+  <div class="critical">⚠ The 10% cap on combined Harpian exposure is a HARD CONSTRAINT at both frontend and backend level. It is not a soft warning — it is a hard lock. Violation must be impossible, not just discouraged.</div>
+  <ul class="clean" style="margin-bottom:16px;">
+    <li>Frontend: slider auto-reduces when cap is hit (existing JS logic in Simulator HTML)</li>
+    <li>Backend: <code>POST /simulate</code> and <code>POST /allocation/apply</code> must validate and reject if c11+c22 > max_harpian_pct</li>
+    <li><code>max_harpian_pct</code> comes from the FamilyOffice record, not a constant</li>
+    <li>FO Admin can change this value in Settings — must immediately affect all active simulators</li>
+    <li>Constraint bar visual changes color: green → amber (70%) → red (90%+)</li>
+  </ul>
+
+  <div class="sub-title">Intelligence Data Refresh</div>
+  <table class="dt">
+    <thead><tr><th>Data</th><th>Refresh Strategy</th><th>Stale Threshold</th></tr></thead>
+    <tbody>
+      <tr><td>ETP prices (C11, C22)</td><td>Poll every 5min during market hours</td><td>15min</td></tr>
+      <tr><td>ETF/index prices (topbar)</td><td>Poll every 60s during market hours</td><td>5min</td></tr>
+      <tr><td>SGA status</td><td>Poll every 60s always</td><td>5min — show stale indicator if older</td></tr>
+      <tr><td>DTL + sector momentum</td><td>Fetch on page load, daily cache</td><td>24h</td></tr>
+      <tr><td>Tactical note</td><td>Fetch on page load, weekly cache</td><td>7 days</td></tr>
+      <tr><td>USD/BRL rate</td><td>Poll every 60s during market hours</td><td>5min</td></tr>
+    </tbody>
+  </table>
+
+  <div class="sub-title">Security & Permissions</div>
+  <ul class="clean" style="margin-bottom:16px;">
+    <li>Questionnaire link uses a single-use token — expires after completion or 72h</li>
+    <li>Client (external) has NO access to the terminal — questionnaire is a completely separate surface</li>
+    <li>All API endpoints require authenticated FO session (JWT or session cookie)</li>
+    <li>Read-Only users: block all POST/PUT endpoints at middleware level</li>
+    <li>Intelligence data endpoints (DTL, sector momentum, SGA): no PII, safe to cache at CDN layer</li>
+  </ul>
+
+  <div class="sub-title">State Management</div>
+  <ul class="clean" style="margin-bottom:16px;">
+    <li>Simulator state is local component state — never persisted until "Apply" is clicked</li>
+    <li>Active client context (which client is being viewed) lives in React context or URL param</li>
+    <li>SGA status and prices live in a global polling store (Zustand or React Query)</li>
+    <li>FO config (max_harpian_pct, RN_FO) fetched once at login and cached in context</li>
+  </ul>
+
+  <div class="sub-title">Portfolio File Parsing</div>
+  <ul class="clean" style="margin-bottom:16px;">
+    <li>Parsing runs server-side — uploaded files never touch the frontend calculations</li>
+    <li>Expected columns: position name, allocation %, asset class (or auto-classify by ticker)</li>
+    <li>Country and currency are inferred from ticker where possible; manual override allowed</li>
+    <li>Liquidity bucket: default T+2 for ETFs, T+0 for cash, custom for PE / real estate</li>
+    <li>For positions unrecognized by the system: prompt FO to classify manually before RN calc</li>
+    <li>Maximum 500 positions — above this, show warning and request aggregation</li>
+  </ul>
+
+  <div class="sub-title">Scalability Notes</div>
+  <ul class="clean">
+    <li>Each FO is isolated — multi-tenancy at the data level (FO ID on every record)</li>
+    <li>Intelligence data is shared across all FOs — single feed, no per-FO computation needed</li>
+    <li>Simulator runs entirely client-side — no scaling concern for real-time recalculation</li>
+    <li>PDF report generation should be async — queue job, return URL when ready</li>
+    <li>Portfolio uploads should be processed asynchronously — show "Parsing..." state during processing</li>
+    <li>SGA signal webhook: Harpian backend pushes SGA changes → frontend subscribes via WebSocket or SSE</li>
+  </ul>
+
+  <!-- FINAL SUMMARY BOX -->
+  <div style="background:var(--s2);border:1px solid rgba(184,151,42,.25);padding:24px 28px;margin-top:32px;">
+    <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--gold);text-transform:uppercase;letter-spacing:.14em;margin-bottom:16px;">Document Summary</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+      <div style="text-align:center;padding:14px;background:var(--s3);border:1px solid var(--bsub);">
+        <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--dim);text-transform:uppercase;margin-bottom:6px;">Total Screens</div>
+        <div style="font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--gold)">12</div>
+      </div>
+      <div style="text-align:center;padding:14px;background:var(--s3);border:1px solid var(--bsub);">
+        <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--dim);text-transform:uppercase;margin-bottom:6px;">Reusable Components</div>
+        <div style="font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--gold)">22</div>
+      </div>
+      <div style="text-align:center;padding:14px;background:var(--s3);border:1px solid var(--bsub);">
+        <div style="font-family:'DM Mono',monospace;font-size:8px;color:var(--dim);text-transform:uppercase;margin-bottom:6px;">API Endpoints</div>
+        <div style="font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--gold)">18</div>
+      </div>
+    </div>
+    <div style="margin-top:16px;font-family:'DM Mono',monospace;font-size:9.5px;color:var(--dim);line-height:2;">
+      Design system: preserved from 6 source HTML files. No redesign required. — 
+      Critical constraint: 10% Harpian cap enforced at frontend + backend. — 
+      Simulator: all calculation client-side &lt;10ms. Backend for persistence only. — 
+      Intelligence: standalone module, no client data required. —
+      Design tokens: copy CSS variables from <code>Harpian_Intelligence_Terminal.html</code> globals.css section.
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div style="border-top:1px solid var(--bsub);padding:24px 0;display:flex;justify-content:space-between;align-items:center;margin-top:40px;">
+  <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);letter-spacing:.1em;line-height:2;">HARPIAN LLC · ARCHITECTURE DOCUMENT · HRD-ARCH-001 · v1.0<br>BASED ON: 6 SOURCE HTML FILES — INTELLIGENCE TERMINAL SERIES</div>
+  <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);letter-spacing:.1em;text-align:right;line-height:2;">FOR DEVELOPER USE ONLY<br>March 2026</div>
+</div>
+
+</div><!-- end doc-content -->
+</div><!-- end doc-shell -->
+</body>
+</html>

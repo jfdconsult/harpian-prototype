@@ -1,0 +1,1045 @@
+{
+  "schema_version": "2.0",
+  "last_updated": "2026-05-01",
+  "description": "JIM v2 Intent Classification Map — 38 intents with dual-engine metadata",
+  "compatibility": "Backward-compatible with intents.json v1.0",
+  "intents": [
+    {
+      "intent_id": "INT-001",
+      "category": "RISK_NUMBER",
+      "subcategory": "CURRENT_VALUE",
+      "examples_en": [
+        "What is my client's Risk Number?",
+        "What is the current Risk Number?",
+        "Show me the Risk Number"
+      ],
+      "examples_pt": [
+        "Qual é o Número de Risco do meu cliente?",
+        "Qual é o Número de Risco atual?",
+        "Me mostre o Número de Risco"
+      ],
+      "required_data": ["risk_number", "target", "mandate"],
+      "response_type": "DIAGNOSTIC",
+      "regulatory_risk": "Low",
+      "disclaimers": ["DISC-003"],
+      "escalate": false,
+      "escalate_condition": null,
+      "dual_engine_mode": true,
+      "adversarial_trigger": false,
+      "output_2_template": "CAT-1",
+      "response_level_override": null,
+      "blocks": ["DIAGNOSTIC", "CAUSE", "NEUTRAL_CONCLUSION"]
+    },
+    {
+      "intent_id": "INT-002",
+      "category": "RISK_NUMBER",
+      "subcategory": "EDUCATION_DEFINITION",
+      "examples_en": [
+        "What does a Risk Number of 65 mean?",
+        "Explain the Risk Number scale",
+        "What is Risk Number?"
+      ],
+      "examples_pt": [
+        "O que significa um Número de Risco de 65?",
+        "Explique a escala do Número de Risco",
+        "O que é Número de Risco?"
+      ],
+      "required_data": [],
+      "response_type": "EDUCATION",
+      "regulatory_risk": "Low",
+      "disclaimers": [],
+      "escalate": false,
+      "escalate_condition": null,
+      "dual_engine_mode": true,
+      "adversarial_trigger": false,
+      "output_2_template": "CAT-1",
+      "response_level_override": null,
+      "blocks": ["DIAGNOSTIC", "NEUTRAL_CONCLUSION"]
+    },
+    {
+      "intent_id": "INT-003",
+      "category": "RISK_NUMBER",
+      "subcategory": "METHODOLOGY",
+      "examples_en": [
+        "How is Risk Number calculated?",
+        "What methodology is used for Risk Number?"
+      ],
+      "examples_pt": [
+        "Como o Número de Risco é calculado?",
+        "Qual metodologia é usada para o Número de Risco?"
+      ],
+      "required_data": [],
+      "response_type": "EDUCATION",
+      "regulatory_risk": "Low",
+      "disclaimers": [],
+      "escalate": false,
+      "escalate_condition": null,
+      "dual_engine_mode": true,
+      "adversarial_trigger": false,
+      "output_2_template": "CAT-1",
+      "response_level_override": null,
+      "blocks": ["DIAGNOSTIC", "MODEL_LIMITATION", "NEUTRAL_CONCLUSION"]
+    },
+    {
+      "intent_id": "INT-004",
+      "category": "QUANTITATIVE_METRICS",
+      "subcategory": "SHARPE_SORTINO",
+      "examples_en": [
+        "What is the Sharpe Ratio?",
+        "Show the Sortino Ratio",
+        "What is the risk-adjusted return?"
+      ],
+      "examples_pt": [
+        "Qual é o Sharpe Ratio?",
+        "Mostre o Índice Sortino",
+        "Qual é o retorno ajustado ao risco?"
+      ],
+      "required_data": ["sharpe", "sortino", "benchmark", "period"],
+      "response_type": "DIAGNOSTIC",
+      "regulatory_risk": "Low",
+      "disclaimers": ["DISC-001"],
+      "escalate": false,
+      "escalate_condition": null,
+      "dual_engine_mode": true,
+      "adversarial_trigger": false,
+      "output_2_template": "CAT-1",
+      "response_level_override": null,
+      "blocks": ["DIAGNOSTIC", "RISK", "MODEL_LIMITATION", "NEUTRAL_CONCLUSION"]
+    },
+    {
+      "intent_id": "INT-005",
+      "category": "QUANTITATIVE_METRICS",
+      "subcategory": "CAGR_DRAWDOWN",
+      "examples_en": [
+        "What is the CAGR?",
+        "Show the max drawdown",
+        "What are the portfolio returns?"
+      ],
+      "examples_pt": [
+        "Qual é o CAGR?",
+        "Mostre o drawdown máximo",
+        "Quais são os retornos do portfólio?"
+      ],
+      "required_data": ["cagr", "max_drawdown", "period"],
+      "response_type": "DIAGNOSTIC",
+      "regulatory_risk": "Medium",
+      "disclaimers": ["DISC-001"],
+      "escalate": false,
+      "escalate_condition": null,
+      "dual_engine_mode": true,
+      "adversarial_trigger": false,
+      "output_2_template": "CAT-1",
+      "response_level_override": null,
+      "blocks": ["DIAGNOSTIC", "RISK", "MODEL_LIMITATION", "NEUTRAL_CONCLUSION"]
+    },
+    {
+      "intent_id": "INT-006",
+      "category": "QUANTITATIVE_METRICS",
+      "subcategory": "ALIGNMENT_SCORE",
+      "examples_en": [
+        "What is the Alignment Score?",
+        "How aligned is the portfolio?",
+        "Show the alignment metric"
+      ],
+      "examples_pt": [
+        "Qual é o Alignment Score?",
+        "Quão alinhado está o portfólio?",
+        "Mostre a métrica de alinhamento"
+      ],
+      "required_data": ["alignment_score", "target"],
+      "response_type": "DIAGNOSTIC",
+      "regulatory_risk": "Low",
+      "disclaimers": ["DISC-007"],
+      "escalate": true,
+      "escalate_condition": "alignment_score < 50",
+      "escalate_route": "FA_OF_RECORD",
+      "escalation_code": "ESC-003",
+      "dual_engine_mode": true,
+      "adversarial_trigger": false,
+      "output_2_template": "CAT-2",
+      "response_level_override": null,
+      "blocks": ["DIAGNOSTIC", "CAUSE", "NEUTRAL_CONCLUSION"]
+    },
+    {
+      "intent_id": "INT-007",
+      "category": "QUANTITATIVE_METRICS",
+      "subcategory": "HORIZON_GAP",
+      "examples_en": [
+        "What is the Horizon Gap?",
+        "Am I on track for retirement?",
+        "Show the long-term projection gap"
+      ],
+      "examples_pt": [
+        "Qual é o Horizon Gap?",
+        "Estou no caminho certo para a aposentadoria?",
+        "Mostre a lacuna de projeção de longo prazo"
+      ],
+      "required_data": ["horizon_gap", "retirement_date"],
+      "response_type": "DIAGNOSTIC",
+      "regulatory_risk": "Medium",
+      "disclaimers": ["DISC-013"],
+      "escalate": true,
+      "escalate_condition": "horizon_gap < 0",
+      "escalate_route": "FA_OF_RECORD",
+      "escalation_code": "ESC-005",
+      "dual_engine_mode": true,
+      "adversarial_trigger": false,
+      "output_2_template": "CAT-2",
+      "response_level_override": null,
+      "blocks": ["DIAGNOSTIC", "RISK", "MODEL_LIMITATION", "NEUTRAL_CONCLUSION"]
+    },
+    {
+      "intent_id": "INT-008",
+      "category": "STORMGUARD",
+      "subcategory": "STATUS",
+      "examples_en": [
+        "Is StormGuard active?",
+        "What is the current regime?",
+        "Show StormGuard status"
+      ],
+      "examples_pt": [
+        "O StormGuard está ativo?",
+        "Qual é o regime atual?",
+        "Mostre o status do StormGuard"
+      ],
+      "required_data": ["stormguard_status", "regime"],
+      "response_type": "DIAGNOSTIC",
+      "regulatory_risk": "Low",
+      "disclaimers": ["DISC-004"],
+      "escalate": false,
+      "escalate_condition": null,
+      "dual_engine_mode": true,
+      "adversarial_trigger": false,
+      "output_2_template": "CAT-5",
+      "response_level_override": null,
+      "blocks": ["DIAGNOSTIC", "MODEL_LIMITATION", "NEUTRAL_CONCLUSION"]
+    },
+    {
+      "intent_id": "INT-009",
+      "category": "STORMGUARD",
+      "subcategory": "METHODOLOGY",
+      "examples_en": [
+        "How does StormGuard protect the portfolio?",
+        "What triggers StormGuard?",
+        "Explain StormGuard methodology"
+      ],
+      "examples_pt": [
+        "Como o StormGuard protege o portfólio?",
+        "O que aciona o StormGuard?",
+        "Explique a metodologia do StormGuard"
+      ],
+      "required_data": [],
+      "response_type": "EDUCATION",
+      "regulatory_risk": "Medium",
+      "disclaimers": ["DISC-004"],
+      "escalate": false,
+      "escalate_condition": null,
+      "dual_engine_mode": true,
+      "adversarial_trigger": false,
+      "output_2_template": "CAT-1",
+      "response_level_override": null,
+      "blocks": ["DIAGNOSTIC", "MODEL_LIMITATION", "NEUTRAL_CONCLUSION"]
+    },
+    {
+      "intent_id": "INT-010",
+      "category": "STORMGUARD",
+      "subcategory": "HISTORY",
+      "examples_en": [
+        "When was the last StormGuard trigger?",
+        "Show StormGuard history",
+        "How many times has StormGuard activated?"
+      ],
+      "examples_pt": [
+        "Quando foi o último acionamento do StormGuard?",
+        "Mostre o histórico do StormGuard",
+        "Quantas vezes o StormGuard foi ativado?"
+      ],
+      "required_data": ["stormguard_history"],
+      "response_type": "DIAGNOSTIC",
+      "regulatory_risk": "Low",
+      "disclaimers": ["DISC-004", "DISC-001"],
+      "escalate": false,
+      "escalate_condition": null,
+      "dual_engine_mode": true,
+      "adversarial_trigger": false,
+      "output_2_template": "CAT-1",
+      "response_level_override": null,
+      "blocks": ["DIAGNOSTIC", "MODEL_LIMITATION", "NEUTRAL_CONCLUSION"]
+    },
+    {
+      "intent_id": "INT-011",
+      "category": "ALPHADROID",
+      "subcategory": "SIGNAL",
+      "examples_en": [
+        "What is AlphaDroid showing?",
+        "What is the AlphaDroid signal?",
+        "Show the current momentum signal"
+      ],
+      "examples_pt": [
+        "O que o AlphaDroid está mostrando?",
+        "Qual é o sinal do AlphaDroid?",
+        "Mostre o sinal de momentum atual"
+      ],
+      "required_data": ["alphadroid_signal", "date"],
+      "response_type": "DIAGNOSTIC",
+      "regulatory_risk": "Medium",
+      "disclaimers": ["DISC-005"],
+      "escalate": false,
+      "escalate_condition": null,
+      "tier_required": "FA_LITE",
+      "dual_engine_mode": true,
+      "adversarial_trigger": false,
+      "output_2_template": "CAT-1",
+      "response_level_override": null,
+      "blocks": ["DIAGNOSTIC", "MODEL_LIMITATION", "NEUTRAL_CONCLUSION"]
+    },
+    {
+      "intent_id": "INT-012",
+      "category": "ALPHADROID",
+      "subcategory": "METHODOLOGY",
+      "examples_en": [
+        "How does AlphaDroid work?",
+        "Explain the AlphaDroid model",
+        "What is AlphaDroid's signal methodology?"
+      ],
+      "examples_pt": [
+        "Como o AlphaDroid funciona?",
+        "Explique o modelo AlphaDroid",
+        "Qual é a metodologia de sinal do AlphaDroid?"
+      ],
+      "required_data": [],
+      "response_type": "EDUCATION",
+      "regulatory_risk": "Low",
+      "disclaimers": ["DISC-005"],
+      "escalate": false,
+      "escalate_condition": null,
+      "dual_engine_mode": true,
+      "adversarial_trigger": false,
+      "output_2_template": "CAT-1",
+      "response_level_override": null,
+      "blocks": ["DIAGNOSTIC", "MODEL_LIMITATION", "NEUTRAL_CONCLUSION"]
+    },
+    {
+      "intent_id": "INT-013",
+      "category": "PORTFOLIO_ALIGNMENT",
+      "subcategory": "STATUS_DIAGNOSTIC",
+      "examples_en": [
+        "Is this portfolio aligned?",
+        "What is misaligned in the portfolio?",
+        "Show portfolio alignment status"
+      ],
+      "examples_pt": [
+        "Este portfólio está alinhado?",
+        "O que está desalinhado no portfólio?",
+        "Mostre o status de alinhamento do portfólio"
+      ],
+      "required_data": ["risk_number", "alignment_score", "flags"],
+      "response_type": "DIAGNOSTIC",
+      "regulatory_risk": "Medium",
+      "disclaimers": ["DISC-007"],
+      "escalate": true,
+      "escalate_condition": "alignment_score < 50",
+      "escalate_route": "FA_OF_RECORD",
+      "escalation_code": "ESC-003",
+      "dual_engine_mode": true,
+      "adversarial_trigger": true,
+      "adversarial_levels": ["L3", "L4"],
+      "output_2_template": "CAT-2",
+      "response_level_override": null,
+      "blocks": ["DIAGNOSTIC", "CAUSE", "RISK", "ADVERSE_SCENARIO", "NEUTRAL_CONCLUSION"]
+    },
+    {
+      "intent_id": "INT-014",
+      "category": "PORTFOLIO_ALIGNMENT",
+      "subcategory": "CAUSE_ANALYSIS",
+      "examples_en": [
+        "Why is the portfolio misaligned?",
+        "What caused the alignment drop?",
+        "Explain the misalignment factors"
+      ],
+      "examples_pt": [
+        "Por que o portfólio está desalinhado?",
+        "O que causou a queda no alinhamento?",
+        "Explique os fatores de desalinhamento"
+      ],
+      "required_data": ["risk_number", "factors"],
+      "response_type": "CAUSE",
+      "regulatory_risk": "Medium",
+      "disclaimers": ["DISC-007"],
+      "escalate": false,
+      "escalate_condition": null,
+      "dual_engine_mode": true,
+      "adversarial_trigger": false,
+      "output_2_template": "CAT-2",
+      "response_level_override": null,
+      "blocks": ["DIAGNOSTIC", "CAUSE", "NEUTRAL_CONCLUSION"]
+    },
+    {
+      "intent_id": "INT-015",
+      "category": "SIMULATION_ENGINE",
+      "subcategory": "HYPOTHETICAL_ALLOCATION",
+      "examples_en": [
+        "What if I add 10% to HPC22?",
+        "Show the impact of adding fixed income",
+        "Run a simulation with 20% HPC11"
+      ],
+      "examples_pt": [
+        "E se eu adicionar 10% ao HPC22?",
+        "Mostre o impacto de adicionar renda fixa",
+        "Execute uma simulação com 20% HPC11"
+      ],
+      "required_data": ["hrd_simulation_output"],
+      "response_type": "SIMULATION",
+      "regulatory_risk": "High",
+      "disclaimers": ["DISC-002", "DISC-003"],
+      "escalate": false,
+      "escalate_condition": null,
+      "dual_engine_mode": true,
+      "adversarial_trigger": true,
+      "adversarial_levels": ["L2", "L3", "L4"],
+      "output_2_template": "CAT-6",
+      "response_level_override": null,
+      "blocks": ["DIAGNOSTIC", "SIMULATION", "RISK", "ADVERSE_SCENARIO", "MODEL_LIMITATION", "NEUTRAL_CONCLUSION"]
+    },
+    {
+      "intent_id": "INT-016",
+      "category": "SIMULATION_ENGINE",
+      "subcategory": "STRESS_TEST",
+      "examples_en": [
+        "Run a stress test for 2008",
+        "How would the portfolio perform in a recession?",
+        "Show a rate shock scenario"
+      ],
+      "examples_pt": [
+        "Execute um stress test para 2008",
+        "Como o portfólio se sairia em uma recessão?",
+        "Mostre um cenário de choque de taxas"
+      ],
+      "required_data": ["hrd_stress_test_output"],
+      "response_type": "SIMULATION",
+      "regulatory_risk": "High",
+      "disclaimers": ["DISC-002", "DISC-009"],
+      "escalate": false,
+      "escalate_condition": null,
+      "dual_engine_mode": true,
+      "adversarial_trigger": true,
+      "adversarial_levels": ["L2", "L3", "L4"],
+      "output_2_template": "CAT-6",
+      "response_level_override": null,
+      "blocks": ["DIAGNOSTIC", "SIMULATION", "RISK", "ADVERSE_SCENARIO", "MODEL_LIMITATION", "NEUTRAL_CONCLUSION"]
+    },
+    {
+      "intent_id": "INT-017",
+      "category": "DAILY_DASHBOARD",
+      "subcategory": "DASHBOARD_SUMMARY",
+      "examples_en": [
+        "What does the dashboard show today?",
+        "Give me today's summary",
+        "What are the key metrics today?"
+      ],
+      "examples_pt": [
+        "O que o dashboard mostra hoje?",
+        "Me dê o resumo de hoje",
+        "Quais são as métricas principais hoje?"
+      ],
+      "required_data": ["dashboard_data", "date"],
+      "response_type": "DIAGNOSTIC",
+      "regulatory_risk": "Low",
+      "disclaimers": [],
+      "escalate": false,
+      "escalate_condition": null,
+      "dual_engine_mode": true,
+      "adversarial_trigger": false,
+      "output_2_template": "CAT-1",
+      "response_level_override": "L2",
+      "blocks": ["DIAGNOSTIC"]
+    },
+    {
+      "intent_id": "INT-018",
+      "category": "DAILY_DASHBOARD",
+      "subcategory": "ALERTS",
+      "examples_en": [
+        "What are the alerts today?",
+        "Show critical alerts",
+        "Any portfolio alerts?"
+      ],
+      "examples_pt": [
+        "Quais são os alertas de hoje?",
+        "Mostre alertas críticos",
+        "Algum alerta de portfólio?"
+      ],
+      "required_data": ["alerts_list", "severity"],
+      "response_type": "ALERT",
+      "regulatory_risk": "Low",
+      "disclaimers": [],
+      "escalate": true,
+      "escalate_condition": "severity = 1",
+      "escalate_route": "FA_OF_RECORD",
+      "escalation_code": "ESC-001",
+      "dual_engine_mode": true,
+      "adversarial_trigger": false,
+      "output_2_template": "CAT-3",
+      "response_level_override": null,
+      "blocks": ["DIAGNOSTIC", "NEUTRAL_CONCLUSION"]
+    },
+    {
+      "intent_id": "INT-019",
+      "category": "HIDDEN_RISK",
+      "subcategory": "RISK_IDENTIFICATION",
+      "examples_en": [
+        "Are there hidden risks in this portfolio?",
+        "Show correlation risks",
+        "What are the non-obvious risks?"
+      ],
+      "examples_pt": [
+        "Há riscos ocultos neste portfólio?",
+        "Mostre riscos de correlação",
+        "Quais são os riscos não óbvios?"
+      ],
+      "required_data": ["risk_factors", "correlation"],
+      "response_type": "DIAGNOSTIC",
+      "regulatory_risk": "Medium",
+      "disclaimers": ["DISC-007", "DISC-011"],
+      "escalate": false,
+      "escalate_condition": null,
+      "dual_engine_mode": true,
+      "adversarial_trigger": true,
+      "adversarial_levels": ["L3", "L4"],
+      "output_2_template": "CAT-2",
+      "response_level_override": null,
+      "blocks": ["DIAGNOSTIC", "RISK", "ADVERSE_SCENARIO", "MODEL_LIMITATION", "NEUTRAL_CONCLUSION"]
+    },
+    {
+      "intent_id": "INT-020",
+      "category": "STRESS_TESTING",
+      "subcategory": "RATE_SHOCK",
+      "examples_en": [
+        "How does the portfolio perform in a rate shock?",
+        "Show rate sensitivity",
+        "Test against a 200bps rate increase"
+      ],
+      "examples_pt": [
+        "Como o portfólio se comporta em um choque de juros?",
+        "Mostre a sensibilidade a juros",
+        "Teste contra um aumento de 200bps"
+      ],
+      "required_data": ["hrd_stress_output"],
+      "response_type": "SIMULATION",
+      "regulatory_risk": "High",
+      "disclaimers": ["DISC-002", "DISC-009"],
+      "escalate": false,
+      "escalate_condition": null,
+      "dual_engine_mode": true,
+      "adversarial_trigger": true,
+      "adversarial_levels": ["L2", "L3", "L4"],
+      "output_2_template": "CAT-6",
+      "response_level_override": null,
+      "blocks": ["DIAGNOSTIC", "SIMULATION", "RISK", "ADVERSE_SCENARIO", "MODEL_LIMITATION", "NEUTRAL_CONCLUSION"]
+    },
+    {
+      "intent_id": "INT-021",
+      "category": "COMPLIANCE_SUITABILITY",
+      "subcategory": "SUITABILITY_CHECK",
+      "examples_en": [
+        "Is this portfolio suitable for the client?",
+        "Does this meet suitability requirements?",
+        "Is this client in the right portfolio?"
+      ],
+      "examples_pt": [
+        "Este portfólio é adequado para o cliente?",
+        "Isso atende aos requisitos de adequação?",
+        "O cliente está no portfólio certo?"
+      ],
+      "required_data": ["mandate", "risk_number", "client_profile"],
+      "response_type": "COMPLIANCE",
+      "regulatory_risk": "Critical",
+      "disclaimers": ["DISC-006", "DISC-008"],
+      "escalate": true,
+      "escalate_condition": "always",
+      "escalate_route": "FA_OF_RECORD",
+      "escalation_code": "ESC-009",
+      "dual_engine_mode": false,
+      "adversarial_trigger": false,
+      "output_2_template": null,
+      "response_level_override": "COMPLIANCE_ONLY",
+      "blocks": []
+    },
+    {
+      "intent_id": "INT-022",
+      "category": "COMPLIANCE_SUITABILITY",
+      "subcategory": "APPROVAL_REQUEST",
+      "examples_en": [
+        "Can I approve this portfolio?",
+        "Is this portfolio ready for compliance sign-off?"
+      ],
+      "examples_pt": [
+        "Posso aprovar este portfólio?",
+        "Este portfólio está pronto para aprovação de compliance?"
+      ],
+      "required_data": [],
+      "response_type": "ESCALATION",
+      "regulatory_risk": "Critical",
+      "disclaimers": ["DISC-006"],
+      "escalate": true,
+      "escalate_condition": "always",
+      "escalate_route": "FA_OF_RECORD",
+      "escalation_code": "ESC-009",
+      "dual_engine_mode": false,
+      "adversarial_trigger": false,
+      "output_2_template": null,
+      "response_level_override": "COMPLIANCE_ONLY",
+      "blocks": []
+    },
+    {
+      "intent_id": "INT-023",
+      "category": "FO_INSTITUTIONAL",
+      "subcategory": "PROSPECT_PRESENTATION",
+      "examples_en": [
+        "Can I show this to a prospect?",
+        "Is this output shareable externally?"
+      ],
+      "examples_pt": [
+        "Posso mostrar isso para um prospecto?",
+        "Esta saída pode ser compartilhada externamente?"
+      ],
+      "required_data": [],
+      "response_type": "COMPLIANCE",
+      "regulatory_risk": "High",
+      "disclaimers": ["DISC-010"],
+      "escalate": true,
+      "escalate_condition": "always",
+      "escalate_route": "COMPLIANCE_ADMIN",
+      "escalation_code": "ESC-010",
+      "dual_engine_mode": false,
+      "adversarial_trigger": false,
+      "output_2_template": null,
+      "response_level_override": null,
+      "blocks": []
+    },
+    {
+      "intent_id": "INT-024",
+      "category": "FO_INSTITUTIONAL",
+      "subcategory": "CLIENT_REPORT",
+      "examples_en": [
+        "Generate a client report",
+        "Create a portfolio summary for the client",
+        "Export the portfolio analysis"
+      ],
+      "examples_pt": [
+        "Gere um relatório do cliente",
+        "Crie um resumo do portfólio para o cliente",
+        "Exporte a análise do portfólio"
+      ],
+      "required_data": ["report_template", "client_data"],
+      "response_type": "OUTPUT",
+      "regulatory_risk": "Medium",
+      "disclaimers": ["DISC-001", "DISC-002"],
+      "escalate": false,
+      "escalate_condition": null,
+      "dual_engine_mode": true,
+      "adversarial_trigger": false,
+      "output_2_template": null,
+      "response_level_override": null,
+      "blocks": ["DIAGNOSTIC", "SIMULATION", "RISK", "MODEL_LIMITATION", "NEUTRAL_CONCLUSION"]
+    },
+    {
+      "intent_id": "INT-025",
+      "category": "UX_NAVIGATION",
+      "subcategory": "TERMINAL_NAVIGATION",
+      "examples_en": [
+        "Where is the stress test module?",
+        "How do I open the simulation panel?",
+        "Where can I find the client profile?"
+      ],
+      "examples_pt": [
+        "Onde fica o módulo de stress test?",
+        "Como abro o painel de simulação?",
+        "Onde encontro o perfil do cliente?"
+      ],
+      "required_data": ["terminal_nav_map"],
+      "response_type": "NAVIGATION",
+      "regulatory_risk": "Low",
+      "disclaimers": [],
+      "escalate": false,
+      "escalate_condition": null,
+      "dual_engine_mode": false,
+      "adversarial_trigger": false,
+      "output_2_template": null,
+      "response_level_override": "L1",
+      "blocks": ["DIAGNOSTIC"]
+    },
+    {
+      "intent_id": "INT-026",
+      "category": "UX_NAVIGATION",
+      "subcategory": "SETTINGS_NAVIGATION",
+      "examples_en": [
+        "How do I set a client's risk target?",
+        "Where do I update the mandate?",
+        "How do I configure AlphaDroid settings?"
+      ],
+      "examples_pt": [
+        "Como defino o alvo de risco do cliente?",
+        "Onde atualizo o mandato?",
+        "Como configuro as definições do AlphaDroid?"
+      ],
+      "required_data": ["terminal_nav_map"],
+      "response_type": "NAVIGATION",
+      "regulatory_risk": "Low",
+      "disclaimers": [],
+      "escalate": false,
+      "escalate_condition": null,
+      "dual_engine_mode": false,
+      "adversarial_trigger": false,
+      "output_2_template": null,
+      "response_level_override": "L1",
+      "blocks": ["DIAGNOSTIC"]
+    },
+    {
+      "intent_id": "INT-027",
+      "category": "ACTION_REQUEST",
+      "subcategory": "BUY_SELL_INVEST",
+      "examples_en": [
+        "What should I do now?",
+        "Should I buy HPC22?",
+        "What is the right action for this portfolio?"
+      ],
+      "examples_pt": [
+        "O que eu faço agora?",
+        "Devo comprar HPC22?",
+        "Qual é a ação certa para este portfólio?"
+      ],
+      "required_data": [],
+      "response_type": "ACTION_REQUEST",
+      "regulatory_risk": "Critical",
+      "disclaimers": ["DISC-006"],
+      "escalate": true,
+      "escalate_condition": "always",
+      "escalate_route": "FA_OF_RECORD",
+      "escalation_code": "ESC-001",
+      "dual_engine_mode": false,
+      "adversarial_trigger": false,
+      "output_2_template": "CAT-7",
+      "response_level_override": "MANDATORY_RESPONSE",
+      "blocks": []
+    },
+    {
+      "intent_id": "INT-028",
+      "category": "ACTION_REQUEST",
+      "subcategory": "SOCIAL_MEDIA",
+      "examples_en": [
+        "Post this to LinkedIn",
+        "Share this analysis on social media",
+        "Can I publish this?"
+      ],
+      "examples_pt": [
+        "Poste isso no LinkedIn",
+        "Compartilhe esta análise nas redes sociais",
+        "Posso publicar isso?"
+      ],
+      "required_data": [],
+      "response_type": "COMPLIANCE",
+      "regulatory_risk": "High",
+      "disclaimers": ["DISC-010"],
+      "escalate": true,
+      "escalate_condition": "always",
+      "escalate_route": "COMPLIANCE_ADMIN",
+      "escalation_code": "ESC-011",
+      "dual_engine_mode": false,
+      "adversarial_trigger": false,
+      "output_2_template": null,
+      "response_level_override": "MANDATORY_RESPONSE",
+      "blocks": []
+    },
+    {
+      "intent_id": "INT-029",
+      "category": "ACTION_REQUEST",
+      "subcategory": "ALLOCATION_CHANGE",
+      "examples_en": [
+        "Increase risk",
+        "Move to HPC22",
+        "Decrease fixed income exposure"
+      ],
+      "examples_pt": [
+        "Aumentar o risco",
+        "Mover para HPC22",
+        "Diminuir exposição à renda fixa"
+      ],
+      "required_data": [],
+      "response_type": "ACTION_REQUEST",
+      "regulatory_risk": "Critical",
+      "disclaimers": ["DISC-006"],
+      "escalate": true,
+      "escalate_condition": "always",
+      "escalate_route": "FA_OF_RECORD",
+      "escalation_code": "ESC-001",
+      "dual_engine_mode": false,
+      "adversarial_trigger": false,
+      "output_2_template": "CAT-7",
+      "response_level_override": "MANDATORY_RESPONSE",
+      "blocks": []
+    },
+    {
+      "intent_id": "INT-030",
+      "category": "ACTION_REQUEST",
+      "subcategory": "BEST_PRODUCT",
+      "examples_en": [
+        "What's the best product for me?",
+        "Which portfolio should I choose?",
+        "What is the best option for this client?"
+      ],
+      "examples_pt": [
+        "Qual é o melhor produto para mim?",
+        "Qual portfólio devo escolher?",
+        "Qual é a melhor opção para este cliente?"
+      ],
+      "required_data": [],
+      "response_type": "ACTION_REQUEST",
+      "regulatory_risk": "Critical",
+      "disclaimers": ["DISC-006"],
+      "escalate": true,
+      "escalate_condition": "always",
+      "escalate_route": "FA_OF_RECORD",
+      "escalation_code": "ESC-001",
+      "dual_engine_mode": false,
+      "adversarial_trigger": false,
+      "output_2_template": "CAT-7",
+      "response_level_override": "MANDATORY_RESPONSE",
+      "blocks": []
+    },
+    {
+      "intent_id": "INT-031",
+      "category": "MARKET_TRENDS",
+      "subcategory": "TREND_STATE",
+      "examples_en": [
+        "What is the current market trend state?",
+        "Is the market bullish or bearish?",
+        "What does the Trend Engine show?",
+        "What is the current macro trend?"
+      ],
+      "examples_pt": [
+        "Qual é o estado de tendência do mercado?",
+        "O mercado está em alta ou em baixa?",
+        "O que o Motor de Tendências mostra?",
+        "Qual é a tendência macro atual?"
+      ],
+      "required_data": ["trend_state", "trend_score", "confidence_score", "date"],
+      "response_type": "DIAGNOSTIC",
+      "regulatory_risk": "Medium",
+      "disclaimers": ["DISC-001", "DISC-013"],
+      "escalate": false,
+      "escalate_condition": null,
+      "dual_engine_mode": true,
+      "adversarial_trigger": false,
+      "output_2_template": "CAT-5",
+      "response_level_override": null,
+      "blocks": ["DIAGNOSTIC", "MODEL_LIMITATION", "NEUTRAL_CONCLUSION"],
+      "note": "NEW — Market Trends gap. JIM must never state trend as a recommendation. Read-only diagnostic of engine output."
+    },
+    {
+      "intent_id": "INT-032",
+      "category": "MARKET_TRENDS",
+      "subcategory": "RISK_MODE",
+      "examples_en": [
+        "What is the current Risk Mode?",
+        "Is the portfolio in defense mode?",
+        "What does the Risk Mode say?",
+        "Show Risk Mode status"
+      ],
+      "examples_pt": [
+        "Qual é o Risk Mode atual?",
+        "O portfólio está em modo de defesa?",
+        "O que o Risk Mode indica?",
+        "Mostre o status do Risk Mode"
+      ],
+      "required_data": ["risk_mode", "hpc11_pct", "hpc22_pct", "trend_state"],
+      "response_type": "DIAGNOSTIC",
+      "regulatory_risk": "High",
+      "disclaimers": ["DISC-001", "DISC-002", "DISC-013"],
+      "escalate": false,
+      "escalate_condition": null,
+      "dual_engine_mode": true,
+      "adversarial_trigger": true,
+      "adversarial_levels": ["L2", "L3"],
+      "output_2_template": "CAT-5",
+      "response_level_override": null,
+      "blocks": ["DIAGNOSTIC", "RISK", "MODEL_LIMITATION", "NEUTRAL_CONCLUSION"],
+      "note": "NEW — Market Trends gap. HPC split is an engine output, not a recommendation. DISC-002 required if showing allocation percentages."
+    },
+    {
+      "intent_id": "INT-033",
+      "category": "MARKET_TRENDS",
+      "subcategory": "TREND_SCORE",
+      "examples_en": [
+        "What is the Trend Score?",
+        "How is the trend score calculated?",
+        "What is the composite score today?",
+        "Explain the macro score"
+      ],
+      "examples_pt": [
+        "Qual é o Trend Score?",
+        "Como o Trend Score é calculado?",
+        "Qual é o score composto hoje?",
+        "Explique o score macro"
+      ],
+      "required_data": ["trend_score", "signal_blocks", "confidence_score"],
+      "response_type": "DIAGNOSTIC",
+      "regulatory_risk": "Medium",
+      "disclaimers": ["DISC-001", "DISC-011"],
+      "escalate": false,
+      "escalate_condition": null,
+      "dual_engine_mode": true,
+      "adversarial_trigger": false,
+      "output_2_template": "CAT-1",
+      "response_level_override": null,
+      "blocks": ["DIAGNOSTIC", "CAUSE", "MODEL_LIMITATION", "NEUTRAL_CONCLUSION"],
+      "note": "NEW — Market Trends gap. JIM explains score components, not the implied action. If confidence_score < 0.70, DISC-012 required."
+    },
+    {
+      "intent_id": "INT-034",
+      "category": "MARKET_TRENDS",
+      "subcategory": "BREAK_CONDITION",
+      "examples_en": [
+        "Are any break conditions active?",
+        "Is VIX above the threshold?",
+        "Has any override triggered?",
+        "Show break condition status"
+      ],
+      "examples_pt": [
+        "Alguma condição de quebra está ativa?",
+        "O VIX está acima do limite?",
+        "Algum override foi acionado?",
+        "Mostre o status das condições de quebra"
+      ],
+      "required_data": ["break_conditions", "vix", "yield_10y", "trend_score"],
+      "response_type": "ALERT",
+      "regulatory_risk": "High",
+      "disclaimers": ["DISC-001", "DISC-009"],
+      "escalate": true,
+      "escalate_condition": "any_break_condition_active = true",
+      "escalate_route": "FA_OF_RECORD",
+      "escalation_code": "ESC-004",
+      "dual_engine_mode": true,
+      "adversarial_trigger": true,
+      "adversarial_levels": ["L3", "L4"],
+      "output_2_template": "CAT-3",
+      "response_level_override": null,
+      "blocks": ["DIAGNOSTIC", "RISK", "ADVERSE_SCENARIO", "MODEL_LIMITATION", "NEUTRAL_CONCLUSION"],
+      "note": "NEW — Market Trends gap. Active break condition escalates regardless of risk mode. JIM must describe the condition, not prescribe action."
+    },
+    {
+      "intent_id": "INT-035",
+      "category": "MARKET_TRENDS",
+      "subcategory": "SIGNAL_BLOCK",
+      "examples_en": [
+        "What are the macro signals saying?",
+        "Show the signal blocks",
+        "What is the monetary policy signal?",
+        "Break down the signal components"
+      ],
+      "examples_pt": [
+        "O que os sinais macro estão indicando?",
+        "Mostre os blocos de sinal",
+        "Qual é o sinal de política monetária?",
+        "Decomponha os componentes de sinal"
+      ],
+      "required_data": ["signal_blocks", "date"],
+      "response_type": "DIAGNOSTIC",
+      "regulatory_risk": "Medium",
+      "disclaimers": ["DISC-001", "DISC-013"],
+      "escalate": false,
+      "escalate_condition": null,
+      "dual_engine_mode": true,
+      "adversarial_trigger": false,
+      "output_2_template": "CAT-1",
+      "response_level_override": null,
+      "blocks": ["DIAGNOSTIC", "CAUSE", "MODEL_LIMITATION", "NEUTRAL_CONCLUSION"],
+      "note": "NEW — Market Trends gap. 6 Signal Blocks: Monetary Policy, Liquidity/Credit, Earnings/Fundamental, Macro Momentum, Geopolitical Risk, Technical/Flow."
+    },
+    {
+      "intent_id": "INT-036",
+      "category": "MARKET_TRENDS",
+      "subcategory": "MACRO_REGIME",
+      "examples_en": [
+        "What is the current macroeconomic regime?",
+        "Are we in a risk-on or risk-off environment?",
+        "What is the structural regime?",
+        "Explain the three-tier architecture reading"
+      ],
+      "examples_pt": [
+        "Qual é o regime macroeconômico atual?",
+        "Estamos em ambiente de risk-on ou risk-off?",
+        "Qual é o regime estrutural?",
+        "Explique a leitura da arquitetura de três camadas"
+      ],
+      "required_data": ["trend_state", "risk_mode", "signal_blocks", "timeframe_matrix"],
+      "response_type": "DIAGNOSTIC",
+      "regulatory_risk": "Medium",
+      "disclaimers": ["DISC-001", "DISC-013"],
+      "escalate": false,
+      "escalate_condition": null,
+      "dual_engine_mode": true,
+      "adversarial_trigger": false,
+      "output_2_template": "CAT-1",
+      "response_level_override": null,
+      "blocks": ["DIAGNOSTIC", "CAUSE", "MODEL_LIMITATION", "NEUTRAL_CONCLUSION"],
+      "note": "NEW — Market Trends gap. Three-tier: Structural 50% (6-24M), Tactical 35% (1-6M), Execution 15% (1D-4W). JIM explains regime, never prescribes."
+    },
+    {
+      "intent_id": "INT-037",
+      "category": "MARKET_TRENDS",
+      "subcategory": "HPC_ALLOCATION_REFERENCE",
+      "examples_en": [
+        "What is the HPC11/HPC22 split for this mode?",
+        "What allocation does the Risk Mode suggest?",
+        "Show the capital weight reference for current regime"
+      ],
+      "examples_pt": [
+        "Qual é o split HPC11/HPC22 para este modo?",
+        "Qual alocação o Risk Mode sugere?",
+        "Mostre a referência de peso de capital para o regime atual"
+      ],
+      "required_data": ["risk_mode", "hpc11_pct", "hpc22_pct"],
+      "response_type": "SIMULATION",
+      "regulatory_risk": "High",
+      "disclaimers": ["DISC-002", "DISC-006", "DISC-013"],
+      "escalate": false,
+      "escalate_condition": null,
+      "dual_engine_mode": true,
+      "adversarial_trigger": true,
+      "adversarial_levels": ["L2", "L3", "L4"],
+      "output_2_template": "CAT-6",
+      "response_level_override": null,
+      "blocks": ["DIAGNOSTIC", "SIMULATION", "RISK", "MODEL_LIMITATION", "NEUTRAL_CONCLUSION"],
+      "note": "NEW — Market Trends gap. CRITICAL: HPC split is a MODEL REFERENCE OUTPUT, not a recommendation. DISC-002 BEFORE table. CGE must detect if phrased as recommendation and rewrite per SEVERITY-2 rules."
+    },
+    {
+      "intent_id": "INT-038",
+      "category": "MARKET_TRENDS",
+      "subcategory": "MEMORY_STATE",
+      "examples_en": [
+        "What was the previous trend state?",
+        "When did the regime change last?",
+        "Show trend state history",
+        "How long have we been in this state?"
+      ],
+      "examples_pt": [
+        "Qual era o estado de tendência anterior?",
+        "Quando foi a última mudança de regime?",
+        "Mostre o histórico de estados de tendência",
+        "Há quanto tempo estamos neste estado?"
+      ],
+      "required_data": ["memory_state", "state_history", "days_in_state"],
+      "response_type": "DIAGNOSTIC",
+      "regulatory_risk": "Low",
+      "disclaimers": ["DISC-001"],
+      "escalate": false,
+      "escalate_condition": null,
+      "dual_engine_mode": true,
+      "adversarial_trigger": false,
+      "output_2_template": "CAT-1",
+      "response_level_override": null,
+      "blocks": ["DIAGNOSTIC", "MODEL_LIMITATION", "NEUTRAL_CONCLUSION"],
+      "note": "NEW — Market Trends gap. Memory Engine: 90-day score history, state transition log, days_in_state counter. 7-year immutable audit. JIM reads memory, does not modify it."
+    }
+  ]
+}
