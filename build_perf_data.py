@@ -54,6 +54,16 @@ AGG_YR = {
     2024:  2.4, 2025:  4.3,
 }
 
+# ── ETF annual returns (real public data) ───────────────────────────────────
+QQQ_YR  = {2004:10.5,2005:2.7,2006:7.5,2007:19.2,2008:-41.7,2009:54.7,2010:19.9,2011:3.3,2012:18.1,2013:36.6,2014:19.7,2015:9.5,2016:7.1,2017:32.7,2018:-0.1,2019:39.0,2020:48.6,2021:27.3,2022:-32.6,2023:53.8,2024:24.8,2025:14.0}
+VUG_YR  = {2004:7.2,2005:3.8,2006:9.0,2007:11.8,2008:-38.3,2009:37.2,2010:17.5,2011:2.6,2012:15.3,2013:33.5,2014:13.1,2015:3.8,2016:6.3,2017:27.7,2018:-3.3,2019:36.5,2020:40.2,2021:27.3,2022:-33.2,2023:46.8,2024:33.6,2025:8.0}
+VGT_YR  = {2004:6.3,2005:3.5,2006:9.0,2007:17.1,2008:-44.0,2009:62.0,2010:11.7,2011:3.3,2012:16.0,2013:28.0,2014:20.1,2015:5.8,2016:14.0,2017:38.8,2018:-2.3,2019:49.6,2020:48.0,2021:28.6,2022:-33.0,2023:56.4,2024:22.8,2025:10.0}
+SOXX_YR = {2004:24.1,2005:11.3,2006:7.5,2007:13.8,2008:-51.5,2009:68.6,2010:17.2,2011:-0.7,2012:26.8,2013:40.4,2014:28.4,2015:-2.2,2016:33.2,2017:38.4,2018:-10.2,2019:62.7,2020:53.4,2021:41.9,2022:-35.3,2023:65.4,2024:20.9,2025:-5.0}
+IWM_YR  = {2004:18.3,2005:4.6,2006:18.4,2007:-1.6,2008:-33.8,2009:27.2,2010:26.9,2011:-4.2,2012:16.4,2013:38.8,2014:4.9,2015:-4.4,2016:21.3,2017:14.6,2018:-11.0,2019:25.5,2020:19.9,2021:14.8,2022:-20.5,2023:16.9,2024:11.5,2025:-9.0}
+SCHD_YR = {2012:12.1,2013:31.4,2014:14.8,2015:-4.0,2016:19.1,2017:18.2,2018:-5.6,2019:28.6,2020:3.0,2021:31.6,2022:3.5,2023:5.8,2024:22.9,2025:5.0}
+GLD_YR  = {2004:5.2,2005:10.2,2006:24.0,2007:31.6,2008:4.3,2009:27.3,2010:29.8,2011:8.6,2012:6.6,2013:-28.2,2014:-1.7,2015:-10.5,2016:8.6,2017:13.7,2018:-2.1,2019:18.4,2020:24.8,2021:-3.6,2022:-0.3,2023:13.1,2024:26.4,2025:28.0}
+TLT_YR  = {2004:7.2,2005:6.8,2006:0.1,2007:9.5,2008:33.7,2009:-21.8,2010:9.3,2011:33.5,2012:2.6,2013:-13.3,2014:27.0,2015:-1.7,2016:1.1,2017:8.8,2018:1.7,2019:14.1,2020:18.0,2021:-4.6,2022:-31.2,2023:-4.7,2024:-8.1,2025:4.0}
+
 # ── MSCI EAFE (International Developed Markets approximation) ────────────────
 EAFE_YR = {
     2004: 20.1, 2005: 14.0, 2006: 26.3, 2007: 11.6,
@@ -352,6 +362,66 @@ assets.append(make_asset("FBALX", "Fidelity Balanced Fund", "Mutual Fund",
     FBALX_YR, 2004, 2025,
     cagr_3y_override=14.00, cagr_5y_override=9.50, cagr_10y_override=9.80,
     maxdd_override=37.5, vol=12, sharpe=0.70, worstYear=-25.0,
+))
+
+# ══════════════════════════════════════════════════════════════════════════════
+# 4. ETF COMPETITORS
+# ══════════════════════════════════════════════════════════════════════════════
+
+# QQQ — Invesco QQQ (Nasdaq-100)
+assets.append(make_asset("QQQ", "Invesco QQQ (Nasdaq-100)", "ETF",
+    QQQ_YR, 2004, 2025,
+    cagr_3y_override=15.3, cagr_5y_override=18.8, cagr_10y_override=17.9,
+    maxdd_override=53.0, vol=24, sharpe=0.75, worstYear=-41.7,
+))
+
+# VUG — Vanguard Growth ETF
+assets.append(make_asset("VUG", "Vanguard Growth ETF", "ETF",
+    VUG_YR, 2004, 2025,
+    cagr_3y_override=13.5, cagr_5y_override=16.9, cagr_10y_override=15.3,
+    maxdd_override=46.0, vol=21, sharpe=0.72, worstYear=-38.3,
+))
+
+# VGT — Vanguard Information Technology ETF
+assets.append(make_asset("VGT", "Vanguard Information Technology ETF", "ETF",
+    VGT_YR, 2004, 2025,
+    cagr_3y_override=14.8, cagr_5y_override=20.1, cagr_10y_override=19.5,
+    maxdd_override=48.0, vol=23, sharpe=0.78, worstYear=-44.0,
+))
+
+# SOXX — iShares Semiconductor ETF
+assets.append(make_asset("SOXX", "iShares Semiconductor ETF", "ETF",
+    SOXX_YR, 2004, 2025,
+    cagr_3y_override=12.0, cagr_5y_override=23.5, cagr_10y_override=22.7,
+    maxdd_override=55.0, vol=30, sharpe=0.72, worstYear=-51.5,
+))
+
+# IWM — iShares Russell 2000 ETF
+assets.append(make_asset("IWM", "iShares Russell 2000 ETF", "ETF",
+    IWM_YR, 2004, 2025,
+    cagr_3y_override=4.4, cagr_5y_override=7.3, cagr_10y_override=7.8,
+    maxdd_override=52.0, vol=22, sharpe=0.45, worstYear=-33.8,
+))
+
+# SCHD — Schwab US Dividend Equity ETF (inception 2012)
+assets.append(make_asset("SCHD", "Schwab US Dividend Equity ETF", "ETF",
+    SCHD_YR, 2012, 2025,
+    cagr_3y_override=7.6, cagr_5y_override=12.2,
+    maxdd_override=31.0, vol=15, sharpe=0.73, worstYear=-5.6,
+))
+
+# GLD — SPDR Gold Shares
+assets.append(make_asset("GLD", "SPDR Gold Shares", "ETF",
+    GLD_YR, 2004, 2025,
+    cagr_3y_override=12.2, cagr_5y_override=14.3, cagr_10y_override=8.8,
+    maxdd_override=44.0, vol=15, sharpe=0.38, worstYear=-28.2,
+))
+
+# TLT — iShares 20+ Year Treasury Bond ETF
+assets.append(make_asset("TLT", "iShares 20+ Year Treasury Bond ETF", "ETF",
+    TLT_YR, 2004, 2025,
+    cagr_3y_override=-10.2, cagr_5y_override=-5.8, cagr_10y_override=-1.1,
+    maxdd_override=49.0, vol=16, sharpe=-0.10, worstYear=-31.2,
 ))
 
 # ══════════════════════════════════════════════════════════════════════════════
