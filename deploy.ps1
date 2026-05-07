@@ -74,7 +74,7 @@ if ($diff) {
     $deployMsg = if ($msg) { "deploy: $msg" } else { "deploy: sync static files from harpian-prototype" }
     git add public/harpian/
     git commit -m $deployMsg -c user.email=jfdconsult@gmail.com -c user.name=jfdconsult 2>&1 | Out-Null
-    git push jp main
+    git push jp HEAD:main
     if ($LASTEXITCODE -ne 0) { Write-Host "  [ERRO] Push jp falhou."; Set-Location $BASE; exit 1 }
     Write-Host "  [OK] Jinstronda/harpian-front atualizado"
 } else {
