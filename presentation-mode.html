@@ -180,43 +180,43 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
 .rec-tag{position:absolute;top:14px;right:14px;font-family:var(--mono);font-size:10px;letter-spacing:0.16em;background:rgba(91,191,122,0.15);color:var(--green);padding:3px 8px;border:1px solid rgba(91,191,122,0.3);}
 
 /* SIMULATION */
-.sim-layout{flex:1;display:grid;grid-template-columns:320px 1fr;min-height:0;}
-.sim-ctrl{background:var(--bg2);border-right:1px solid var(--border);padding:20px 22px;overflow-y:auto;display:flex;flex-direction:column;gap:18px;}
-.slider-lbl{font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:6px;}
-.slider-val{font-family:var(--syne);font-size:42px;font-weight:800;line-height:1;margin-bottom:8px;}
+.sim-layout{flex:1;display:grid;grid-template-columns:300px 1fr;min-height:0;}
+.sim-ctrl{background:var(--bg2);border-right:1px solid var(--border);padding:14px 16px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;}
+.slider-lbl{font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:4px;}
+.slider-val{font-family:var(--syne);font-size:28px;font-weight:800;line-height:1;margin-bottom:4px;}
 .slider-val.hpc11-color{color:var(--gold);}
 .slider-val.hpc22-color{color:var(--green);}
 input[type=range]{width:100%;-webkit-appearance:none;height:4px;background:rgba(255,255,255,0.1);border-radius:2px;outline:none;margin-bottom:4px;cursor:pointer;}
 input[type=range].hpc11::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--gold);cursor:pointer;box-shadow:0 0 8px rgba(212,175,69,0.5);}
 input[type=range].hpc22::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--green);cursor:pointer;box-shadow:0 0 8px rgba(91,191,122,0.5);}
 .slider-range-lbl{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--text4);}
-.remain-box{background:var(--panel);border:1px solid var(--border);padding:12px 14px;}
+.remain-box{background:var(--panel);border:1px solid var(--border);padding:8px 12px;}
 .remain-lbl{font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text3);margin-bottom:4px;}
-.remain-val{font-family:var(--syne);font-size:26px;font-weight:700;}
+.remain-val{font-family:var(--syne);font-size:20px;font-weight:700;}
 .status-checks{display:flex;flex-direction:column;gap:8px;}
 .status-check{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--text2);}
 .status-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;transition:background 0.3s;}
-.sim-results{padding:24px 28px;overflow-y:auto;display:flex;flex-direction:column;gap:18px;}
+.sim-results{padding:14px 20px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;}
 .ba-grid{display:grid;grid-template-columns:1fr auto 1fr;}
-.ba-col{background:var(--panel);border:1px solid var(--border);padding:22px 20px;}
+.ba-col{background:var(--panel);border:1px solid var(--border);padding:12px 14px;}
 .ba-col.after{border-color:rgba(91,191,122,0.3);background:linear-gradient(135deg,var(--panel),rgba(91,191,122,0.03));}
-.ba-head{font-family:var(--mono);font-size:11px;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:10px;}
-.ba-rn{font-family:var(--syne);font-size:70px;font-weight:800;line-height:1;letter-spacing:-0.03em;margin-bottom:2px;}
-.ba-rn-lbl{font-family:var(--mono);font-size:10px;color:var(--text4);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:16px;}
-.ba-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:15px;}
+.ba-head{font-family:var(--mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:6px;}
+.ba-rn{font-family:var(--syne);font-size:38px;font-weight:800;line-height:1;letter-spacing:-0.03em;margin-bottom:0;}
+.ba-rn-lbl{font-family:var(--mono);font-size:9px;color:var(--text4);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:8px;}
+.ba-row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:13px;}
 .ba-row:last-child{border-bottom:none;}
 .ba-row-lbl{color:var(--text3);}
 .ba-row-val{font-family:var(--mono);font-weight:600;}
 .ba-arrow-col{width:52px;background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;}
 .ba-arrow-sym{font-size:22px;color:var(--green);}
 .ba-arrow-lbl{font-family:var(--mono);font-size:10px;color:var(--text4);text-align:center;letter-spacing:0.08em;}
-.delta-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
-.delta-card{background:var(--panel);border:1px solid rgba(91,191,122,0.18);padding:12px;}
+.delta-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.delta-card{background:var(--panel);border:1px solid rgba(91,191,122,0.18);padding:8px 10px;}
 .delta-lbl{font-family:var(--mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text3);margin-bottom:4px;}
 .delta-prev{font-family:var(--mono);font-size:12px;color:var(--red);text-decoration:line-through;margin-bottom:2px;}
 .delta-now{font-family:var(--syne);font-size:24px;font-weight:700;color:var(--green);line-height:1;}
 .delta-chg{font-family:var(--mono);font-size:11px;color:var(--green);margin-top:3px;}
-.proj-bar-wrap{background:var(--panel);border:1px solid var(--border);padding:18px 22px;}
+.proj-bar-wrap{background:var(--panel);border:1px solid var(--border);padding:10px 16px;}
 .proj-title{font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:14px;}
 
 /* MODEL CARD */
@@ -1522,27 +1522,27 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
       </div>
       <div class="proj-bar-wrap">
         <div class="proj-title">5-Year Projection — $8.2M AUM</div>
-        <svg width="100%" height="130" viewBox="0 0 600 130" preserveAspectRatio="none">
+        <svg width="100%" height="110" viewBox="0 0 600 110" preserveAspectRatio="none">
           <defs>
             <linearGradient id="gGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#5BBF7A" stop-opacity="0.22"/><stop offset="100%" stop-color="#5BBF7A" stop-opacity="0"/></linearGradient>
             <linearGradient id="rGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#D0463C" stop-opacity="0.12"/><stop offset="100%" stop-color="#D0463C" stop-opacity="0"/></linearGradient>
           </defs>
-          <line x1="0" y1="32" x2="600" y2="32" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
-          <line x1="0" y1="65" x2="600" y2="65" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
-          <line x1="0" y1="98" x2="600" y2="98" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
-          <path d="M0,118 L120,98 L240,76 L360,57 L480,40 L600,24 L600,130 L0,130 Z" fill="url(#gGrad)"/>
-          <path d="M0,118 L120,110 L240,102 L360,95 L480,89 L600,83 L600,130 L0,130 Z" fill="url(#rGrad)"/>
-          <path d="M0,118 L120,98 L240,76 L360,57 L480,40 L600,24" fill="none" stroke="#5BBF7A" stroke-width="2.5"/>
-          <path d="M0,118 L120,110 L240,102 L360,95 L480,89 L600,83" fill="none" stroke="#D0463C" stroke-width="2" stroke-dasharray="8,4"/>
-          <circle cx="0" cy="118" r="4" fill="#D4AF45"/>
-          <text x="6"   y="113" font-family="monospace" font-size="10" fill="#D4AF45">$8.2M</text>
-          <text x="550" y="20"  font-family="monospace" font-size="10" fill="#5BBF7A">$14.1M</text>
-          <text x="550" y="79"  font-family="monospace" font-size="10" fill="#D0463C">$11.6M</text>
+          <line x1="0" y1="25" x2="600" y2="25" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+          <line x1="0" y1="55" x2="600" y2="55" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+          <line x1="0" y1="85" x2="600" y2="85" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+          <path id="proj-green-fill" d="M0,98 L120,78 L240,58 L360,40 L480,24 L600,10 L600,110 L0,110 Z" fill="url(#gGrad)"/>
+          <path id="proj-red-fill"   d="M0,98 L120,90 L240,83 L360,76 L480,70 L600,64 L600,110 L0,110 Z" fill="url(#rGrad)"/>
+          <path id="proj-green-path" d="M0,98 L120,78 L240,58 L360,40 L480,24 L600,10" fill="none" stroke="#5BBF7A" stroke-width="2.5"/>
+          <path id="proj-red-path"   d="M0,98 L120,90 L240,83 L360,76 L480,70 L600,64" fill="none" stroke="#D0463C" stroke-width="2" stroke-dasharray="8,4"/>
+          <circle cx="0" cy="98" r="4" fill="#D4AF45"/>
+          <text x="6" y="93" font-family="monospace" font-size="10" fill="#D4AF45">$8.2M</text>
+          <text id="proj-green-lbl" x="530" y="14" font-family="monospace" font-size="10" fill="#5BBF7A">$14.1M</text>
+          <text id="proj-red-lbl"   x="530" y="60" font-family="monospace" font-size="10" fill="#D0463C">$11.6M</text>
         </svg>
-        <div style="display:flex;gap:20px;font-family:var(--mono);font-size:12px;margin-top:8px;">
-          <span style="color:var(--green);">— With HPC · ~9.6% p.a.</span>
+        <div style="display:flex;gap:20px;font-family:var(--mono);font-size:11px;margin-top:6px;">
+          <span style="color:var(--green);" id="proj-green-legend">— With HPC · ~9.6% p.a.</span>
           <span style="color:var(--red);">- - Without HPC · ~7.2% p.a.</span>
-          <span style="color:var(--gold);margin-left:auto;">5-year difference: <strong>+$2.5M</strong></span>
+          <span style="color:var(--gold);margin-left:auto;" id="proj-diff-label">5-year difference: <strong>+$2.5M</strong></span>
         </div>
       </div>
     </div>
@@ -2575,6 +2575,33 @@ function runSim() {
   setCheck('sd-ret', 'sc-ret', r.cagr >= 9.5,'Return: '      + r.cagr + '%' + (r.cagr >= 9.5 ? ' ✓ Target met' : ' ⚠ Below target'));
 
   updateBlendDot(r.vol, r.cagr);
+  updateProjectionChart(r.cagr);
+}
+
+function updateProjectionChart(cagr) {
+  const AUM = 8.2, BASE_CAGR = 0.072;
+  const afterCAGR = cagr / 100;
+  const xs = [0, 120, 240, 360, 480, 600];
+  const gVals = xs.map((_, i) => AUM * Math.pow(1 + afterCAGR, i));
+  const rVals = xs.map((_, i) => AUM * Math.pow(1 + BASE_CAGR, i));
+  const maxV = Math.max(gVals[5], rVals[5]) * 1.08;
+  const minV = AUM * 0.97;
+  const Y_BOT = 98, Y_TOP = 6;
+  const toY = v => (Y_BOT - (v - minV) / (maxV - minV) * (Y_BOT - Y_TOP)).toFixed(1);
+  const gPts = xs.map((x, i) => x + ',' + toY(gVals[i])).join(' L');
+  const rPts = xs.map((x, i) => x + ',' + toY(rVals[i])).join(' L');
+  document.getElementById('proj-green-path').setAttribute('d', 'M' + gPts);
+  document.getElementById('proj-green-fill').setAttribute('d', 'M' + gPts + ' L600,110 L0,110 Z');
+  document.getElementById('proj-red-path').setAttribute('d',   'M' + rPts);
+  document.getElementById('proj-red-fill').setAttribute('d',   'M' + rPts + ' L600,110 L0,110 Z');
+  const gEnd = gVals[5].toFixed(1), rEnd = rVals[5].toFixed(1);
+  const diff = (gVals[5] - rVals[5]).toFixed(1);
+  document.getElementById('proj-green-lbl').textContent = '$' + gEnd + 'M';
+  document.getElementById('proj-green-lbl').setAttribute('y', (parseFloat(toY(gVals[5])) + 4).toFixed(0));
+  document.getElementById('proj-red-lbl').textContent   = '$' + rEnd + 'M';
+  document.getElementById('proj-red-lbl').setAttribute('y',   (parseFloat(toY(rVals[5])) + 4).toFixed(0));
+  document.getElementById('proj-green-legend').textContent = '— With HPC · ~' + cagr + '% p.a.';
+  document.getElementById('proj-diff-label').innerHTML = '5-year difference: <strong>+$' + diff + 'M</strong>';
 }
 
 function setCheck(dotId, textId, ok, text) {
