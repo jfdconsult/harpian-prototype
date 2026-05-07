@@ -887,160 +887,188 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
 
 <!-- ═══ STEP 8 — DIAGNOSIS + CHARTS ═══ -->
 <div class="step" id="step8">
-  <div style="flex:1;padding:36px 52px;overflow-y:auto;">
-    <div class="kicker">Step 8 · Diagnosis</div>
-    <div class="section-title" style="font-size:33px;margin-bottom:6px;">Misalignment<br>identified.</div>
-    <div class="section-sub" style="margin-bottom:14px;">Here is where your current positioning diverges from your selected risk path.</div>
-    <div style="font-size:13px;color:var(--text4);font-family:var(--mono);margin-bottom:18px;padding:8px 14px;border-left:2px solid rgba(212,175,69,0.3);">Alignment reference: <strong id="diag-ref-label" style="color:var(--gold);">—</strong></div>
+  <div style="flex:1;display:flex;flex-direction:column;overflow:hidden;">
 
-    <div class="diag-tri">
-      <div class="diag-col warn">
-        <div class="diag-lbl">Family Office · Mandate</div>
-        <div class="diag-rn" id="diag-fo-rn" style="color:var(--gold);">—</div>
-        <div style="font-family:var(--mono);font-size:10px;color:var(--text4);letter-spacing:0.12em;">/ 99 SCALE</div>
-        <div class="diag-cat" id="diag-fo-cat" style="color:var(--gold);"></div>
+    <!-- Header strip -->
+    <div style="flex-shrink:0;padding:12px 36px 10px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:24px;">
+      <div>
+        <div class="kicker" style="margin-bottom:2px;">Step 8 · Diagnosis</div>
+        <div style="font-family:var(--syne);font-size:22px;font-weight:800;color:var(--text);line-height:1.1;">Misalignment identified.</div>
       </div>
-      <div class="diag-arr">
-        <div class="diag-gap" id="diag-gap1" style="color:var(--red);">—</div>
-        <div class="diag-gap-lbl" id="diag-gap1-lbl">GAP</div>
-      </div>
-      <div class="diag-col danger">
-        <div class="diag-lbl">Current Portfolio</div>
-        <div class="diag-rn" id="diag-port-rn" style="color:var(--red);">—</div>
-        <div style="font-family:var(--mono);font-size:10px;color:var(--text4);letter-spacing:0.12em;">/ 99 SCALE</div>
-        <div class="diag-cat" id="diag-port-cat" style="color:var(--red);"></div>
-      </div>
-      <div class="diag-arr">
-        <div class="diag-gap" id="diag-gap2" style="color:var(--red);">—</div>
-        <div class="diag-gap-lbl" id="diag-gap2-lbl">GAP</div>
-      </div>
-      <div class="diag-col ok">
-        <div class="diag-lbl">Client · Real Tolerance</div>
-        <div class="diag-rn" id="diag-client-rn" style="color:var(--green);">—</div>
-        <div style="font-family:var(--mono);font-size:10px;color:var(--text4);letter-spacing:0.12em;">/ 99 SCALE</div>
-        <div class="diag-cat" id="diag-client-cat" style="color:var(--green);"></div>
-      </div>
+      <div style="font-size:12px;color:var(--text4);font-family:var(--mono);padding:6px 12px;border-left:2px solid rgba(212,175,69,0.3);">Alignment reference: <strong id="diag-ref-label" style="color:var(--gold);">—</strong></div>
+      <!-- Hidden elements for JS compat -->
+      <span id="diag-excess-client" style="display:none;"></span>
+      <span id="diag-excess-fo" style="display:none;"></span>
+      <span id="diag-cagr-gap" style="display:none;"></span>
     </div>
 
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:22px;">
-      <div class="kpi alert"><div class="kpi-lbl">Excess Risk vs Client</div><div class="kpi-val red" id="diag-excess-client" style="font-size:31px;">—</div><div class="kpi-desc">The portfolio is running more risk than the client explicitly accepts.</div></div>
-      <div class="kpi alert"><div class="kpi-lbl">FO Mandate Violation</div><div class="kpi-val red" id="diag-excess-fo" style="font-size:31px;">—</div><div class="kpi-desc">Exceeds the limit defined by the Family Office in the institutional mandate.</div></div>
-      <div class="kpi alert"><div class="kpi-lbl">Goal vs Current CAGR</div><div class="kpi-val red" id="diag-cagr-gap" style="font-size:31px;">—</div><div class="kpi-desc">At the current return rate, the portfolio won't reach the financial goal in 5 years.</div></div>
-    </div>
+    <!-- Body: LEFT chain | RIGHT charts -->
+    <div style="flex:1;display:grid;grid-template-columns:370px 1fr;overflow:hidden;min-height:0;">
 
-    <div style="background:linear-gradient(135deg,rgba(208,70,60,0.06),var(--panel));border:1px solid rgba(208,70,60,0.25);padding:22px 28px;margin-bottom:28px;">
-      <div style="font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--red);margin-bottom:10px;">Diagnosis · Summary</div>
-      <div style="font-size:16px;color:var(--text2);line-height:1.7;">This portfolio is taking on more risk than the client declared they can tolerate — and more than the Family Office mandate allows. And yet it still delivers insufficient return to meet the financial goal. This is the incongruence that needs to be resolved.</div>
-    </div>
+      <!-- LEFT: Narrative chain -->
+      <div style="display:flex;flex-direction:column;padding:16px 24px;border-right:1px solid var(--border);overflow:hidden;">
 
-    <!-- CHARTS -->
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
-      <!-- Compounding Gap Chart -->
-      <div style="background:var(--panel);border:1px solid var(--border);padding:22px;">
-        <div style="font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:4px;">What You're Costing Your Clients</div>
-        <div style="font-size:14px;color:var(--text3);margin-bottom:16px;">$8.2M AUM · 7.2% current vs 9.6% CORE22 · 5-year projection</div>
-        <svg viewBox="0 0 500 160" width="100%" style="display:block;">
-          <defs>
-            <linearGradient id="gapFill" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#5BBF7A" stop-opacity="0.22"/>
-              <stop offset="100%" stop-color="#5BBF7A" stop-opacity="0.03"/>
-            </linearGradient>
-          </defs>
-          <line x1="50" y1="53" x2="440" y2="53" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
-          <line x1="50" y1="80" x2="440" y2="80" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
-          <line x1="50" y1="109" x2="440" y2="109" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
-          <line x1="50" y1="136" x2="440" y2="136" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
-          <line x1="50" y1="10" x2="50" y2="145" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-          <line x1="50" y1="145" x2="440" y2="145" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-          <text x="44" y="57" font-family="monospace" font-size="9" fill="#3A4A5A" text-anchor="end">$13M</text>
-          <text x="44" y="84" font-family="monospace" font-size="9" fill="#3A4A5A" text-anchor="end">$12M</text>
-          <text x="44" y="113" font-family="monospace" font-size="9" fill="#3A4A5A" text-anchor="end">$11M</text>
-          <text x="44" y="140" font-family="monospace" font-size="9" fill="#3A4A5A" text-anchor="end">$10M</text>
-          <text x="50"  y="155" font-family="monospace" font-size="9" fill="#3A4A5A" text-anchor="middle">Y0</text>
-          <text x="128" y="155" font-family="monospace" font-size="9" fill="#3A4A5A" text-anchor="middle">Y1</text>
-          <text x="206" y="155" font-family="monospace" font-size="9" fill="#3A4A5A" text-anchor="middle">Y2</text>
-          <text x="284" y="155" font-family="monospace" font-size="9" fill="#3A4A5A" text-anchor="middle">Y3</text>
-          <text x="362" y="155" font-family="monospace" font-size="9" fill="#3A4A5A" text-anchor="middle">Y4</text>
-          <text x="440" y="155" font-family="monospace" font-size="9" fill="#3A4A5A" text-anchor="middle">Y5</text>
-          <path d="M50,136 L128,119 L206,100 L284,80 L362,58 L440,34 L440,63 L362,80 L284,96 L206,110 L128,123 L50,136 Z" fill="url(#gapFill)"/>
-          <path d="M50,136 L128,119 L206,100 L284,80 L362,58 L440,34" fill="none" stroke="#5BBF7A" stroke-width="2.5"/>
-          <path d="M50,136 L128,123 L206,110 L284,96 L362,80 L440,63" fill="none" stroke="#D0463C" stroke-width="2" stroke-dasharray="8,4"/>
-          <circle cx="50" cy="136" r="4" fill="#D4AF45"/>
-          <text x="54" y="131" font-family="monospace" font-size="9" fill="#D4AF45">$8.2M</text>
-          <text x="444" y="37" font-family="monospace" font-size="9" fill="#5BBF7A">$13.0M</text>
-          <text x="444" y="66" font-family="monospace" font-size="9" fill="#D0463C">$11.6M</text>
-          <text x="310" y="48" font-family="monospace" font-size="10" fill="#5BBF7A" font-weight="bold">+$1.4M gap</text>
-        </svg>
-        <div style="display:flex;gap:18px;font-family:var(--mono);font-size:11px;margin-top:6px;">
-          <span style="color:var(--green);">— CORE22 · 9.6% p.a.</span>
-          <span style="color:var(--red);">- - Current · 7.2% p.a.</span>
+        <!-- Box 1: FO Mandate -->
+        <div style="flex:1;min-height:0;background:rgba(212,175,69,0.05);border:1px solid rgba(212,175,69,0.35);padding:12px 18px;display:flex;align-items:center;gap:16px;">
+          <div id="diag-fo-rn" style="font-family:var(--syne);font-size:54px;font-weight:800;line-height:1;color:var(--gold);flex-shrink:0;min-width:72px;text-align:center;">—</div>
+          <div>
+            <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:3px;">Family Office · Mandate</div>
+            <div id="diag-fo-cat" style="font-family:var(--syne);font-size:15px;font-weight:700;color:var(--gold);margin-bottom:4px;">—</div>
+            <div style="font-size:11px;color:var(--text4);font-family:var(--mono);">Teto institucional · / 99 scale</div>
+          </div>
         </div>
+
+        <!-- Connector 1: FO → Portfolio -->
+        <div style="flex-shrink:0;height:68px;display:flex;align-items:center;padding:0 4px;">
+          <div style="width:2px;height:100%;background:rgba(208,70,60,0.35);flex-shrink:0;margin-right:16px;"></div>
+          <div style="font-family:var(--syne);font-size:20px;font-weight:800;color:var(--red);flex-shrink:0;min-width:72px;" id="diag-gap1">—</div>
+          <div style="margin-left:10px;">
+            <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text4);" id="diag-gap1-lbl">GAP FO</div>
+            <div style="font-size:11px;color:var(--text3);font-family:var(--mono);margin-top:2px;line-height:1.4;" id="diag-gap1-desc"></div>
+          </div>
+        </div>
+
+        <!-- Box 2: Current Portfolio -->
+        <div style="flex:1;min-height:0;background:rgba(208,70,60,0.06);border:1px solid rgba(208,70,60,0.45);padding:12px 18px;display:flex;align-items:center;gap:16px;">
+          <div id="diag-port-rn" style="font-family:var(--syne);font-size:54px;font-weight:800;line-height:1;color:var(--red);flex-shrink:0;min-width:72px;text-align:center;">—</div>
+          <div>
+            <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--red);margin-bottom:3px;">Current Portfolio</div>
+            <div id="diag-port-cat" style="font-family:var(--syne);font-size:15px;font-weight:700;color:var(--red);margin-bottom:4px;">—</div>
+            <div style="font-size:11px;color:var(--text4);font-family:var(--mono);">Risco assumido pelo cliente · / 99 scale</div>
+          </div>
+        </div>
+
+        <!-- Connector 2: Portfolio → Client (critical) -->
+        <div style="flex-shrink:0;height:68px;display:flex;align-items:center;padding:0 4px;">
+          <div style="width:2px;height:100%;background:var(--red);flex-shrink:0;margin-right:16px;"></div>
+          <div style="font-family:var(--syne);font-size:20px;font-weight:800;color:var(--red);flex-shrink:0;min-width:72px;" id="diag-gap2">—</div>
+          <div style="margin-left:10px;">
+            <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--red);" id="diag-gap2-lbl">GAP CLIENTE</div>
+            <div style="font-size:11px;color:var(--text3);font-family:var(--mono);margin-top:2px;line-height:1.4;" id="diag-gap2-desc"></div>
+          </div>
+        </div>
+
+        <!-- Box 3: Client Tolerance -->
+        <div style="flex:1;min-height:0;background:rgba(91,191,122,0.04);border:1px solid rgba(91,191,122,0.35);padding:12px 18px;display:flex;align-items:center;gap:16px;">
+          <div id="diag-client-rn" style="font-family:var(--syne);font-size:54px;font-weight:800;line-height:1;color:var(--green);flex-shrink:0;min-width:72px;text-align:center;">—</div>
+          <div>
+            <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--green);margin-bottom:3px;">Client · Real Tolerance</div>
+            <div id="diag-client-cat" style="font-family:var(--syne);font-size:15px;font-weight:700;color:var(--green);margin-bottom:4px;">—</div>
+            <div style="font-size:11px;color:var(--text4);font-family:var(--mono);">Tolerância revelada pelo questionário · / 99 scale</div>
+          </div>
+        </div>
+
+        <!-- Summary -->
+        <div style="flex-shrink:0;margin-top:12px;background:linear-gradient(135deg,rgba(208,70,60,0.06),var(--panel));border:1px solid rgba(208,70,60,0.2);padding:11px 16px;">
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--red);margin-bottom:5px;">Diagnosis · Summary</div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.6;">O portfólio assume mais risco do que o cliente tolera — e mais do que o mandato permite. E ainda entrega retorno insuficiente para atingir o objetivo financeiro. Esta é a incongruência que precisa ser resolvida.</div>
+        </div>
+
       </div>
 
-      <!-- Crisis Scenarios -->
-      <div style="background:var(--panel);border:1px solid var(--border);padding:22px;">
-        <div style="font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:4px;">Crisis Scenarios</div>
-        <div style="font-size:14px;color:var(--text3);margin-bottom:20px;">How CORE22's StormGuard protected capital in real drawdowns</div>
-        <div style="margin-bottom:18px;">
-          <div style="font-family:var(--mono);font-size:11px;letter-spacing:0.14em;color:var(--text3);margin-bottom:8px;">2022 · Bear Market</div>
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-            <div style="font-family:var(--mono);font-size:12px;color:var(--text3);width:80px;flex-shrink:0;">Portfolio</div>
-            <div style="flex:1;height:20px;background:rgba(255,255,255,0.04);border-radius:2px;overflow:hidden;">
-              <div style="height:100%;width:85%;background:var(--red);border-radius:2px;display:flex;align-items:center;padding-left:8px;">
-                <span style="font-family:var(--mono);font-size:11px;font-weight:600;color:#fff;">−34%</span>
+      <!-- RIGHT: Two charts stacked -->
+      <div style="display:flex;flex-direction:column;overflow:hidden;background:var(--bg2);">
+
+        <!-- Chart 1: Compounding Gap -->
+        <div style="flex:1;min-height:0;padding:16px 24px 10px;border-bottom:1px solid var(--border);display:flex;flex-direction:column;">
+          <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:2px;">What You're Costing Your Clients</div>
+          <div style="font-size:12px;color:var(--text4);margin-bottom:8px;font-family:var(--mono);">$8.2M AUM · 7.2% current vs 9.6% HPC22 · 5-year projection</div>
+          <div style="flex:1;min-height:0;">
+            <svg viewBox="0 0 500 130" width="100%" height="100%" style="display:block;">
+              <defs>
+                <linearGradient id="gapFill" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#5BBF7A" stop-opacity="0.22"/>
+                  <stop offset="100%" stop-color="#5BBF7A" stop-opacity="0.03"/>
+                </linearGradient>
+              </defs>
+              <line x1="50" y1="20" x2="440" y2="20" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+              <line x1="50" y1="45" x2="440" y2="45" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+              <line x1="50" y1="70" x2="440" y2="70" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+              <line x1="50" y1="95" x2="440" y2="95" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+              <line x1="50" y1="10" x2="50" y2="105" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+              <line x1="50" y1="105" x2="440" y2="105" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+              <text x="44" y="24"  font-family="monospace" font-size="9" fill="#3A4A5A" text-anchor="end">$13M</text>
+              <text x="44" y="49"  font-family="monospace" font-size="9" fill="#3A4A5A" text-anchor="end">$12M</text>
+              <text x="44" y="74"  font-family="monospace" font-size="9" fill="#3A4A5A" text-anchor="end">$11M</text>
+              <text x="44" y="99"  font-family="monospace" font-size="9" fill="#3A4A5A" text-anchor="end">$10M</text>
+              <text x="50"  y="116" font-family="monospace" font-size="9" fill="#3A4A5A" text-anchor="middle">Y0</text>
+              <text x="128" y="116" font-family="monospace" font-size="9" fill="#3A4A5A" text-anchor="middle">Y1</text>
+              <text x="206" y="116" font-family="monospace" font-size="9" fill="#3A4A5A" text-anchor="middle">Y2</text>
+              <text x="284" y="116" font-family="monospace" font-size="9" fill="#3A4A5A" text-anchor="middle">Y3</text>
+              <text x="362" y="116" font-family="monospace" font-size="9" fill="#3A4A5A" text-anchor="middle">Y4</text>
+              <text x="440" y="116" font-family="monospace" font-size="9" fill="#3A4A5A" text-anchor="middle">Y5</text>
+              <path d="M50,95 L128,79 L206,61 L284,41 L362,19 L440,0 L440,28 L362,43 L284,56 L206,70 L128,82 L50,95 Z" fill="url(#gapFill)"/>
+              <path d="M50,95 L128,79 L206,61 L284,41 L362,19 L440,0"  fill="none" stroke="#5BBF7A" stroke-width="2.5"/>
+              <path d="M50,95 L128,82 L206,70 L284,56 L362,43 L440,28" fill="none" stroke="#D0463C" stroke-width="2" stroke-dasharray="8,4"/>
+              <circle cx="50" cy="95" r="4" fill="#D4AF45"/>
+              <text x="54" y="90" font-family="monospace" font-size="9" fill="#D4AF45">$8.2M</text>
+              <text x="444" y="4"  font-family="monospace" font-size="9" fill="#5BBF7A">$13.0M</text>
+              <text x="444" y="31" font-family="monospace" font-size="9" fill="#D0463C">$11.6M</text>
+              <text x="300" y="30" font-family="monospace" font-size="10" fill="#5BBF7A" font-weight="bold">+$1.4M gap</text>
+            </svg>
+          </div>
+          <div style="display:flex;gap:18px;font-family:var(--mono);font-size:11px;margin-top:4px;">
+            <span style="color:var(--green);">— HPC22 · 9.6% p.a.</span>
+            <span style="color:var(--red);">- - Current · 7.2% p.a.</span>
+          </div>
+        </div>
+
+        <!-- Chart 2: Crisis Scenarios -->
+        <div style="flex:1;min-height:0;padding:16px 24px;display:flex;flex-direction:column;overflow:hidden;">
+          <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:2px;">Crisis Scenarios</div>
+          <div style="font-size:12px;color:var(--text4);margin-bottom:12px;font-family:var(--mono);">How HPC22's StormGuard protected capital in real drawdowns</div>
+          <div style="flex:1;min-height:0;display:flex;flex-direction:column;justify-content:space-between;">
+            <div>
+              <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.12em;color:var(--text3);margin-bottom:7px;">2022 · Bear Market</div>
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;">
+                <div style="font-family:var(--mono);font-size:11px;color:var(--text3);width:72px;flex-shrink:0;">Portfolio</div>
+                <div style="flex:1;height:18px;background:rgba(255,255,255,0.04);border-radius:2px;overflow:hidden;">
+                  <div style="height:100%;width:85%;background:var(--red);border-radius:2px;display:flex;align-items:center;padding-left:8px;"><span style="font-family:var(--mono);font-size:11px;font-weight:600;color:#fff;">−34%</span></div>
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <div style="font-family:var(--mono);font-size:11px;color:var(--green);width:72px;flex-shrink:0;">HPC22</div>
+                <div style="flex:1;height:18px;background:rgba(255,255,255,0.04);border-radius:2px;overflow:hidden;">
+                  <div style="height:100%;width:21%;background:var(--green);border-radius:2px;display:flex;align-items:center;padding-left:8px;"><span style="font-family:var(--mono);font-size:11px;font-weight:600;color:#fff;">−8.4%</span></div>
+                </div>
               </div>
             </div>
-          </div>
-          <div style="display:flex;align-items:center;gap:8px;">
-            <div style="font-family:var(--mono);font-size:12px;color:var(--green);width:80px;flex-shrink:0;">CORE22</div>
-            <div style="flex:1;height:20px;background:rgba(255,255,255,0.04);border-radius:2px;overflow:hidden;">
-              <div style="height:100%;width:21%;background:var(--green);border-radius:2px;display:flex;align-items:center;padding-left:8px;">
-                <span style="font-family:var(--mono);font-size:11px;font-weight:600;color:#fff;">−8.4%</span>
+            <div>
+              <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.12em;color:var(--text3);margin-bottom:7px;">2020 · COVID Crash</div>
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;">
+                <div style="font-family:var(--mono);font-size:11px;color:var(--text3);width:72px;flex-shrink:0;">Portfolio</div>
+                <div style="flex:1;height:18px;background:rgba(255,255,255,0.04);border-radius:2px;overflow:hidden;">
+                  <div style="height:100%;width:70%;background:var(--red);border-radius:2px;display:flex;align-items:center;padding-left:8px;"><span style="font-family:var(--mono);font-size:11px;font-weight:600;color:#fff;">−28%</span></div>
+                </div>
               </div>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <div style="font-family:var(--mono);font-size:11px;color:var(--green);width:72px;flex-shrink:0;">HPC22</div>
+                <div style="flex:1;height:18px;background:rgba(255,255,255,0.04);border-radius:2px;overflow:hidden;">
+                  <div style="height:100%;width:28%;background:var(--green);border-radius:2px;display:flex;align-items:center;padding-left:8px;"><span style="font-family:var(--mono);font-size:11px;font-weight:600;color:#fff;">−11.2%</span></div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.12em;color:var(--text3);margin-bottom:7px;">2018 · Q4 Sell-off</div>
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;">
+                <div style="font-family:var(--mono);font-size:11px;color:var(--text3);width:72px;flex-shrink:0;">Portfolio</div>
+                <div style="flex:1;height:18px;background:rgba(255,255,255,0.04);border-radius:2px;overflow:hidden;">
+                  <div style="height:100%;width:47.5%;background:var(--red);border-radius:2px;display:flex;align-items:center;padding-left:8px;"><span style="font-family:var(--mono);font-size:11px;font-weight:600;color:#fff;">−19%</span></div>
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <div style="font-family:var(--mono);font-size:11px;color:var(--green);width:72px;flex-shrink:0;">HPC22</div>
+                <div style="flex:1;height:18px;background:rgba(255,255,255,0.04);border-radius:2px;overflow:hidden;">
+                  <div style="height:100%;width:14.5%;background:var(--green);border-radius:2px;display:flex;align-items:center;padding-left:6px;"><span style="font-family:var(--mono);font-size:11px;font-weight:600;color:#fff;">−5.8%</span></div>
+                </div>
+              </div>
+            </div>
+            <div style="padding-top:10px;border-top:1px solid var(--border);font-family:var(--mono);font-size:10px;color:var(--text4);letter-spacing:0.06em;line-height:1.6;">
+              StormGuard detecta deterioração de regime e rotaciona para T-Bills automaticamente — limitando drawdown sem intervenção manual.
             </div>
           </div>
         </div>
-        <div style="margin-bottom:18px;">
-          <div style="font-family:var(--mono);font-size:11px;letter-spacing:0.14em;color:var(--text3);margin-bottom:8px;">2020 · COVID Crash</div>
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-            <div style="font-family:var(--mono);font-size:12px;color:var(--text3);width:80px;flex-shrink:0;">Portfolio</div>
-            <div style="flex:1;height:20px;background:rgba(255,255,255,0.04);border-radius:2px;overflow:hidden;">
-              <div style="height:100%;width:70%;background:var(--red);border-radius:2px;display:flex;align-items:center;padding-left:8px;">
-                <span style="font-family:var(--mono);font-size:11px;font-weight:600;color:#fff;">−28%</span>
-              </div>
-            </div>
-          </div>
-          <div style="display:flex;align-items:center;gap:8px;">
-            <div style="font-family:var(--mono);font-size:12px;color:var(--green);width:80px;flex-shrink:0;">CORE22</div>
-            <div style="flex:1;height:20px;background:rgba(255,255,255,0.04);border-radius:2px;overflow:hidden;">
-              <div style="height:100%;width:28%;background:var(--green);border-radius:2px;display:flex;align-items:center;padding-left:8px;">
-                <span style="font-family:var(--mono);font-size:11px;font-weight:600;color:#fff;">−11.2%</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div>
-          <div style="font-family:var(--mono);font-size:11px;letter-spacing:0.14em;color:var(--text3);margin-bottom:8px;">2018 · Q4 Sell-off</div>
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-            <div style="font-family:var(--mono);font-size:12px;color:var(--text3);width:80px;flex-shrink:0;">Portfolio</div>
-            <div style="flex:1;height:20px;background:rgba(255,255,255,0.04);border-radius:2px;overflow:hidden;">
-              <div style="height:100%;width:47.5%;background:var(--red);border-radius:2px;display:flex;align-items:center;padding-left:8px;">
-                <span style="font-family:var(--mono);font-size:11px;font-weight:600;color:#fff;">−19%</span>
-              </div>
-            </div>
-          </div>
-          <div style="display:flex;align-items:center;gap:8px;">
-            <div style="font-family:var(--mono);font-size:12px;color:var(--green);width:80px;flex-shrink:0;">CORE22</div>
-            <div style="flex:1;height:20px;background:rgba(255,255,255,0.04);border-radius:2px;overflow:hidden;">
-              <div style="height:100%;width:14.5%;background:var(--green);border-radius:2px;display:flex;align-items:center;padding-left:6px;">
-                <span style="font-family:var(--mono);font-size:11px;font-weight:600;color:#fff;">−5.8%</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--border);font-family:var(--mono);font-size:11px;color:var(--text4);letter-spacing:0.08em;line-height:1.6;">
-          StormGuard detects regime deterioration and rotates to T-Bills automatically — limiting drawdown without manual intervention.
-        </div>
+
       </div>
     </div>
   </div>
@@ -2485,10 +2513,18 @@ function populateDiagnosis() {
 
   const gap1 = portRN - foFinal;
   const gap2 = portRN - indFinal;
-  document.getElementById('diag-gap1').textContent     = gap1 > 0 ? '+' + gap1 : gap1;
-  document.getElementById('diag-gap1-lbl').textContent = 'GAP\nFO';
-  document.getElementById('diag-gap2').textContent     = gap2 > 0 ? '+' + gap2 : gap2;
-  document.getElementById('diag-gap2-lbl').textContent = 'GAP\nClient';
+  document.getElementById('diag-gap1').textContent     = (gap1 > 0 ? '+' : '') + gap1 + ' pts';
+  document.getElementById('diag-gap1-lbl').textContent = 'GAP FO';
+  document.getElementById('diag-gap1-desc').textContent = gap1 > 0
+    ? 'O portfólio excede em ' + gap1 + ' pts o teto institucional do mandato'
+    : 'Dentro do teto institucional do mandato';
+  document.getElementById('diag-gap2').textContent     = (gap2 > 0 ? '+' : '') + gap2 + ' pts';
+  document.getElementById('diag-gap2-lbl').textContent = gap2 > 20 ? '⚠ CRÍTICO' : 'GAP CLIENTE';
+  document.getElementById('diag-gap2-desc').textContent = gap2 > 20
+    ? 'O portfólio assume ' + gap2 + ' pts acima da tolerância real do cliente. Situação grave.'
+    : gap2 > 0
+      ? 'O portfólio assume ' + gap2 + ' pts acima da tolerância do cliente'
+      : 'Alinhado com a tolerância do cliente';
 
   document.getElementById('diag-excess-client').textContent = (gap2 > 0 ? '+' : '') + gap2 + ' pts';
   document.getElementById('diag-excess-fo').textContent     = (gap1 > 0 ? '+' : '') + gap1 + ' pts';
