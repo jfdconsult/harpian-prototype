@@ -44,3 +44,6 @@ package-lock.json
 
 # Zip exports (not needed in repo)
 *.zip
+
+# Claude Code local config
+.claude/
