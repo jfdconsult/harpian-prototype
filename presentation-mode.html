@@ -184,11 +184,11 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
 .sim-ctrl{background:var(--bg2);border-right:1px solid var(--border);padding:14px 16px;overflow:hidden;display:flex;flex-direction:column;gap:10px;}
 .slider-lbl{font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:4px;}
 .slider-val{font-family:var(--syne);font-size:28px;font-weight:800;line-height:1;margin-bottom:4px;}
-.slider-val.hpc11-color{color:var(--gold);}
-.slider-val.hpc22-color{color:var(--green);}
+.slider-val.hpc11-color{color:#6AAED6;}
+.slider-val.hpc22-color{color:#9DD4E8;}
 input[type=range]{width:100%;-webkit-appearance:none;height:4px;background:rgba(255,255,255,0.1);border-radius:2px;outline:none;margin-bottom:4px;cursor:pointer;}
-input[type=range].hpc11::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--gold);cursor:pointer;box-shadow:0 0 8px rgba(212,175,69,0.5);}
-input[type=range].hpc22::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--green);cursor:pointer;box-shadow:0 0 8px rgba(91,191,122,0.5);}
+input[type=range].hpc11::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:#6AAED6;cursor:pointer;box-shadow:0 0 8px rgba(106,174,214,0.5);}
+input[type=range].hpc22::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:#9DD4E8;cursor:pointer;box-shadow:0 0 8px rgba(157,212,232,0.5);}
 .slider-range-lbl{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--text4);}
 .remain-box{background:var(--panel);border:1px solid var(--border);padding:8px 12px;}
 .remain-lbl{font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text3);margin-bottom:4px;}
@@ -227,6 +227,26 @@ input[type=range].hpc22::-webkit-slider-thumb{-webkit-appearance:none;width:18px
 .model-card.sel{border-color:var(--gold);background:var(--gold-bg);}
 .model-name{font-family:var(--syne);font-size:19px;font-weight:700;color:var(--text);margin-bottom:4px;}
 .model-desc{font-size:14px;color:var(--text3);line-height:1.5;}
+
+/* PORTFOLIO MAP — Step 7 */
+.map-port-card{background:var(--panel);border:1px solid var(--border);padding:13px 15px;cursor:pointer;transition:all 0.15s;margin-bottom:6px;}
+.map-port-card:hover{border-color:rgba(212,175,69,0.35);transform:translateX(3px);}
+.map-port-card.sel{border-color:var(--gold);background:var(--gold-bg);}
+/* PORTFOLIO CARDS — Step 7 redesign */
+.pf-card{background:var(--panel);border:1px solid var(--border);padding:16px 15px;cursor:pointer;transition:border-color 0.2s,background 0.2s,box-shadow 0.25s;display:flex;flex-direction:column;}
+.pf-card:hover{border-color:rgba(212,175,69,0.45);background:rgba(212,175,69,0.03);}
+.pf-card.sel{border-color:var(--gold);background:rgba(212,175,69,0.07);box-shadow:0 0 24px rgba(212,175,69,0.09);}
+.map-port-name{font-family:var(--syne);font-size:15px;font-weight:700;color:var(--text);margin-bottom:2px;}
+.map-port-sub{font-size:12px;color:var(--text4);margin-bottom:7px;font-family:var(--mono);}
+.geo-bar{height:3px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden;display:flex;margin-bottom:5px;}
+.geo-bar-br{background:#C0362C;transition:width 0.4s;}
+.geo-bar-us{background:#4A8AB5;transition:width 0.4s;}
+.geo-bar-eu{background:#4AAF72;transition:width 0.4s;}
+.map-region{cursor:pointer;transition:fill 0.45s,stroke 0.45s,filter 0.2s;}
+.map-region:hover{filter:brightness(1.25);}
+.rdp-asset-chip{background:var(--panel);border:1px solid var(--border);padding:4px 10px;font-family:var(--mono);font-size:11px;display:inline-flex;gap:7px;align-items:center;}
+.rdp-asset-chip span:first-child{color:var(--gold);font-weight:600;}
+.rdp-asset-chip span:last-child{color:var(--text4);}
 
 /* SCORE RING */
 .score-ring{width:140px;height:140px;border-radius:50%;border:5px solid var(--green);display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle,rgba(91,191,122,0.12),transparent 70%);box-shadow:0 0 50px rgba(91,191,122,0.18);}
@@ -270,8 +290,8 @@ input[type=range].hpc22::-webkit-slider-thumb{-webkit-appearance:none;width:18px
    MODULE 1 — TARGET RISK ENGINE
 ══════════════════════════════════════ */
 .tre-layout{display:grid;grid-template-columns:1fr 1fr;flex:1;overflow:hidden;min-height:0;}
-.tre-left{padding:28px 36px;overflow-y:auto;border-right:1px solid var(--border);}
-.tre-right{padding:28px 36px;overflow-y:auto;display:flex;flex-direction:column;gap:12px;background:var(--bg2);}
+.tre-left{padding:8px 36px 0;overflow-y:hidden;border-right:1px solid var(--border);}
+.tre-right{padding:20px 36px;overflow-y:auto;display:flex;flex-direction:column;gap:12px;background:var(--bg2);}
 .tre-goal-wrap{display:flex;align-items:baseline;gap:8px;border-bottom:2px solid var(--border);padding-bottom:8px;transition:border-color 0.25s;}
 .tre-goal-wrap:focus-within{border-color:rgba(212,175,69,0.55);}
 .tre-goal-symbol{font-family:var(--syne);font-size:35px;font-weight:700;color:var(--text3);}
@@ -282,9 +302,9 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
 .tre-slider-ends{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--text4);margin-top:2px;}
 .tre-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .tre-card{background:var(--panel);border:1px solid var(--border);padding:14px 16px;transition:border-color 0.3s;}
-.tre-card-lbl{font-family:var(--mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text4);margin-bottom:6px;}
+.tre-card-lbl{font-family:var(--mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text4);margin-bottom:6px;}
 .tre-card-val{font-family:var(--syne);font-size:24px;font-weight:800;color:var(--text);transition:color 0.35s;line-height:1.1;}
-.tre-card-sub{font-family:var(--mono);font-size:10px;color:var(--text4);margin-top:4px;line-height:1.4;}
+.tre-card-sub{font-family:var(--mono);font-size:12px;color:var(--text4);margin-top:4px;line-height:1.4;}
 .tre-rn-card{background:var(--panel);border:1px solid var(--border);padding:18px 20px;display:flex;align-items:center;gap:18px;transition:border-color 0.35s;}
 .tre-rn-ring{width:70px;height:70px;border-radius:50%;border:3px solid var(--text4);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;transition:border-color 0.35s,background 0.35s;}
 .tre-rn-ring-val{font-family:var(--syne);font-size:24px;font-weight:800;line-height:1;transition:color 0.35s;}
@@ -293,7 +313,7 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
 .tre-rn-title{font-family:var(--syne);font-size:14px;font-weight:700;color:var(--text);margin-bottom:3px;}
 .tre-rn-desc{font-size:13px;color:var(--text3);line-height:1.5;}
 .tre-nitrogen{font-family:var(--mono);font-size:9px;color:var(--text4);letter-spacing:0.1em;margin-top:4px;}
-.tre-alert{background:rgba(208,70,60,0.05);border:1px solid rgba(208,70,60,0.25);padding:16px 20px;margin-top:20px;display:none;animation:fadeInSlide 0.25s ease;}
+.tre-alert{background:rgba(208,70,60,0.05);border:1px solid rgba(208,70,60,0.25);padding:12px 20px 4px;margin-top:10px;display:none;animation:fadeInSlide 0.25s ease;}
 .tre-alert.visible{display:block;}
 @keyframes fadeInSlide{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
 .tre-alert-title{font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--red);margin-bottom:8px;}
@@ -311,7 +331,7 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
 .tre-ring-mid{border-color:var(--gold);background:rgba(212,175,69,0.08);}
 .tre-ring-high{border-color:var(--orange);background:rgba(201,120,48,0.08);}
 .tre-ring-vhigh{border-color:var(--red);background:rgba(208,70,60,0.08);}
-.tre-microcopy{font-family:var(--mono);font-size:11px;color:var(--text4);line-height:1.7;padding:14px 0;border-top:1px solid var(--border);letter-spacing:0.05em;}
+.tre-microcopy{font-family:var(--mono);font-size:12px;color:var(--text4);line-height:1.7;padding:14px 0;border-top:1px solid var(--border);letter-spacing:0.05em;}
 .tre-confirm-area{margin-top:20px;}
 
 /* ══════════════════════════════════════
@@ -341,7 +361,7 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
 .ace-group-lbl{font-family:var(--mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text4);margin-top:10px;margin-bottom:4px;}
 .ace-main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
 .ace-chart-area{flex:1;display:flex;flex-direction:column;padding:20px 24px;overflow:hidden;}
-.ace-microcopy{font-family:var(--mono);font-size:10px;color:var(--text4);margin-bottom:10px;letter-spacing:0.06em;}
+.ace-microcopy{font-family:var(--mono);font-size:12px;color:var(--text4);margin-bottom:10px;letter-spacing:0.05em;}
 .ace-chart-wrap{flex:1;min-height:0;position:relative;overflow:hidden;}
 .ace-insight-bar{flex-shrink:0;display:flex;align-items:flex-start;justify-content:space-between;gap:20px;padding:10px 24px;border-top:1px solid var(--border);background:var(--bg2);}
 .ace-insight-text{font-family:var(--mono);font-size:11px;color:var(--text3);line-height:1.6;max-width:580px;letter-spacing:0.04em;}
@@ -402,7 +422,7 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
 .pae-rn-num{font-family:var(--syne);font-size:64px;font-weight:800;line-height:1;transition:color 0.3s;}
 .pae-metrics{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;flex-shrink:0;}
 .pae-metric{background:var(--panel);border:1px solid var(--border);padding:11px 13px;transition:border-color 0.3s;}
-.pae-metric-lbl{font-family:var(--mono);font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text4);margin-bottom:4px;}
+.pae-metric-lbl{font-family:var(--mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text4);margin-bottom:4px;}
 .pae-metric-val{font-family:var(--syne);font-size:22px;font-weight:800;line-height:1;transition:color 0.3s;}
 .pae-badge-mis{display:inline-flex;align-items:center;gap:4px;padding:4px 9px;background:rgba(208,70,60,0.08);border:1px solid rgba(208,70,60,0.28);font-family:var(--mono);font-size:9px;letter-spacing:0.13em;text-transform:uppercase;color:var(--red);}
 .pae-badge-ok{display:inline-flex;align-items:center;gap:4px;padding:4px 9px;background:rgba(91,191,122,0.06);border:1px solid rgba(91,191,122,0.25);font-family:var(--mono);font-size:9px;letter-spacing:0.13em;text-transform:uppercase;color:var(--green);}
@@ -606,7 +626,7 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
         <div class="kicker" style="margin-bottom:2px;">Step 5 · Financial Objective</div>
         <div style="font-family:var(--syne);font-size:26px;font-weight:800;color:var(--text);line-height:1.1;">Target Risk Engine</div>
       </div>
-      <div style="font-size:14px;color:var(--text3);line-height:1.5;max-width:440px;">Over a <strong style="color:var(--gold)">5-year horizon</strong> from <strong style="color:var(--gold)">$100,000</strong> — every target implies a level of risk you must be prepared to take.</div>
+      <div style="font-size:14px;color:var(--text3);line-height:1.5;max-width:440px;">Over a <strong style="color:var(--gold)">5-year horizon</strong> from <strong style="color:var(--gold)">$110,000</strong> — every target implies a level of risk you must be prepared to take.</div>
     </div>
 
     <!-- Two-column body -->
@@ -618,15 +638,15 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
 
         <div class="tre-goal-wrap" id="goal-input-wrap">
           <span class="tre-goal-symbol">$</span>
-          <input type="number" id="goalInput" placeholder="200000" min="100001" max="500000" step="5000"
+          <input type="number" id="goalInput" placeholder="200000" min="110000" max="300000" step="2500"
             class="tre-goal-input" oninput="onGoalInput(this.value)" value="200000">
         </div>
 
         <!-- Slider -->
         <div style="margin-top:20px;">
           <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text3);margin-bottom:8px;">Adjust your target outcome</div>
-          <input type="range" id="goalSlider" class="tre-slider" min="110000" max="500000" step="5000" value="200000" oninput="onGoalSlider(this.value)">
-          <div class="tre-slider-ends"><span>$100k</span><span>$200k</span><span>$300k</span><span>$400k</span><span>$500k</span></div>
+          <input type="range" id="goalSlider" class="tre-slider" min="110000" max="300000" step="2500" value="200000" oninput="onGoalSlider(this.value)">
+          <div class="tre-slider-ends"><span>$110k</span><span>$160k</span><span>$205k</span><span>$255k</span><span>$300k</span></div>
         </div>
 
         <!-- Risk Number card — updated live as slider moves -->
@@ -660,10 +680,6 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
           </div>
         </div>
 
-        <!-- Bottom note -->
-        <div style="margin-top:24px;font-family:var(--mono);font-size:11px;color:var(--text4);letter-spacing:0.08em;">
-          * Required to proceed · Initial investment: $100,000
-        </div>
       </div>
 
       <!-- RIGHT — live calculation cards -->
@@ -704,6 +720,11 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
         <!-- Contextual summary -->
         <div style="padding:12px 14px;background:rgba(212,175,69,0.04);border:1px solid rgba(212,175,69,0.12);margin-top:4px;font-size:13px;color:var(--text3);line-height:1.6;font-family:var(--mono);" id="tre-summary">
           Set a target value above to see your full risk profile.
+        </div>
+
+        <!-- Footnote -->
+        <div style="margin-top:auto;padding-top:12px;font-family:var(--mono);font-size:11px;color:var(--text4);letter-spacing:0.08em;">
+          * Required to proceed · Initial investment: $110,000
         </div>
       </div>
 
@@ -778,9 +799,9 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
         <!-- Primary: Selected RN -->
         <div class="pae-rn-main-card" id="pae-rn-card">
           <div style="flex-shrink:0;">
-            <div style="font-family:var(--mono);font-size:8px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text4);margin-bottom:3px;">Selected Risk Number</div>
+            <div style="font-family:var(--mono);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text4);margin-bottom:3px;">Selected Risk Number</div>
             <div class="pae-rn-num" id="pae-m-rn">—</div>
-            <div style="font-family:var(--mono);font-size:9px;color:var(--text4);letter-spacing:0.08em;margin-top:4px;">RN powered by Nitrogen</div>
+            <div style="font-family:var(--mono);font-size:11px;color:var(--text4);letter-spacing:0.08em;margin-top:4px;">RN powered by Nitrogen</div>
           </div>
           <div style="flex:1;border-left:1px solid var(--border);padding-left:18px;">
             <div style="font-size:13px;color:var(--text2);line-height:1.65;" id="pae-rn-interpret">Select a reference path on the left to begin.</div>
@@ -814,12 +835,12 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
         <!-- Slider -->
         <div style="background:var(--panel);border:1px solid var(--border);padding:15px 18px;flex-shrink:0;">
           <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:8px;">
-            <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text3);">Adjust Target Outcome</div>
+            <div style="font-family:var(--mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text3);">Adjust Target Outcome</div>
             <div style="font-family:var(--syne);font-size:18px;font-weight:800;color:var(--gold);" id="pae-target-display">$200,000</div>
           </div>
           <input type="range" id="paeSlider" class="tre-slider" min="100000" max="400000" step="10000" value="200000" oninput="paeSliderMove(this.value)">
           <div class="tre-slider-ends"><span>$100k</span><span>$200k</span><span>$300k</span><span>$400k</span></div>
-          <div style="font-family:var(--mono);font-size:10px;color:var(--text4);line-height:1.6;margin-top:8px;letter-spacing:0.04em;">Target return is not risk tolerance. This engine translates the desired outcome into the volatility and downside the client may need to withstand.</div>
+          <div style="font-family:var(--mono);font-size:12px;color:var(--text4);line-height:1.6;margin-top:8px;letter-spacing:0.03em;">Target return is not risk tolerance. This engine translates the desired outcome into the volatility and downside the client may need to withstand.</div>
         </div>
 
         <!-- High-risk alert -->
@@ -844,45 +865,314 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
 
 <!-- ═══ STEP 7 — PORTFOLIO SELECTION ═══ -->
 <div class="step" id="step7">
-  <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:40px 60px;overflow-y:auto;">
-    <div style="max-width:820px;width:100%;">
+  <!-- Header -->
+  <div style="flex-shrink:0;padding:12px 36px 12px;border-bottom:1px solid var(--border);">
+    <div style="display:flex;align-items:center;gap:16px;margin-bottom:5px;">
       <div class="kicker">Step 7 · Portfolio</div>
-      <div class="section-title" style="font-size:35px;">Which portfolio<br>to analyse?</div>
-      <div class="section-sub" style="margin-bottom:12px;">We now analyze how the current portfolio compares to the selected alignment reference.</div>
-      <div style="font-size:13px;color:var(--text4);font-family:var(--mono);margin-bottom:20px;padding:8px 14px;border-left:2px solid rgba(212,175,69,0.3);">Reference: <strong id="port-ref-label" style="color:var(--gold);">—</strong></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;">
-        <div class="model-card" onclick="choosePortMode('real')" id="port-mode-real" style="padding:28px 24px;">
-          <div style="font-size:31px;margin-bottom:12px;">📂</div>
-          <div class="model-name">Use your real portfolio</div>
-          <div class="model-desc">Upload via CSV or connect via API. Most precise simulation — based on actual holdings.</div>
-          <div style="margin-top:14px;"><span class="badge badge-gold">More Precise</span></div>
-        </div>
-        <div class="model-card" onclick="choosePortMode('model')" id="port-mode-model" style="padding:28px 24px;">
-          <div style="font-size:31px;margin-bottom:12px;">📊</div>
-          <div class="model-name">Use a model portfolio</div>
-          <div class="model-desc">Select from 5 representative portfolios. Faster — ideal for first meetings and demos.</div>
-          <div style="margin-top:14px;"><span class="badge badge-neutral">Faster</span></div>
-        </div>
+      <div style="font-size:11px;color:var(--text4);font-family:var(--mono);padding:3px 10px;border-left:1px solid var(--border);">Ref: <strong id="port-ref-label" style="color:var(--gold);">—</strong></div>
+    </div>
+    <div style="font-family:var(--syne);font-size:20px;font-weight:800;color:var(--text);line-height:1.1;margin-bottom:4px;">Arquitetura de Portfólio</div>
+    <div style="font-family:var(--mono);font-size:11px;color:var(--text4);line-height:1.5;">Selecione uma arquitetura de portfólio modelo baseada no <span style="color:var(--gold);">perfil comportamental</span> e na distribuição estratégica de ativos.</div>
+  </div>
+
+  <!-- Main body -->
+  <div style="flex:1;display:flex;flex-direction:column;overflow:hidden;padding:10px 20px 0;gap:9px;">
+
+    <!-- ── Upload Bar ── -->
+    <div style="flex-shrink:0;border:1px solid rgba(212,175,69,0.2);background:rgba(212,175,69,0.025);padding:13px 20px;display:flex;align-items:center;gap:18px;">
+      <div style="font-size:22px;flex-shrink:0;opacity:0.65;">📋</div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-family:var(--syne);font-size:14px;font-weight:700;color:var(--text);margin-bottom:2px;">Upload do Portfólio do Cliente</div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:2px;">CSV · XLSX · Custódia · Allocation File</div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--text4);">Faça upload do portfólio atual do cliente para análise comportamental, regional e estrutural.</div>
       </div>
-      <div id="real-upload-area" style="display:none;background:var(--panel);border:2px dashed var(--border);padding:40px;text-align:center;margin-bottom:16px;">
-        <div style="font-size:31px;margin-bottom:10px;">📎</div>
-        <div style="font-family:var(--syne);font-size:18px;font-weight:600;color:var(--text);margin-bottom:8px;">Upload Portfolio CSV</div>
-        <div style="font-size:14px;color:var(--text3);margin-bottom:16px;">CSV with ticker, weight, and asset class columns</div>
-        <button class="btn btn-secondary" style="margin-right:10px;" onclick="choosePortMode('model')">← Use Model Portfolio Instead</button>
-        <button class="btn btn-primary" onclick="simulateUpload()">Select File →</button>
-      </div>
-      <div id="model-selector-area" style="display:none;">
-        <div style="font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:12px;">Select a model portfolio:</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-          <div class="model-card" onclick="selectModel(this,'aggressive')" id="model-aggressive"><div style="display:flex;justify-content:space-between;align-items:flex-start;"><div><div class="model-name">Current Portfolio (Demo)</div><div class="model-desc" style="margin-top:4px;">RN 84 · 70% equity · Vol 18.4% · Misaligned — used to demonstrate the correction.</div></div><span class="badge badge-red" style="flex-shrink:0;margin-left:8px;">RN 84</span></div></div>
-          <div class="model-card" onclick="selectModel(this,'growth')" id="model-growth"><div style="display:flex;justify-content:space-between;align-items:flex-start;"><div><div class="model-name">Growth Portfolio</div><div class="model-desc" style="margin-top:4px;">RN 75 · 65% equity · Vol 14.8%</div></div><span class="badge badge-warn" style="flex-shrink:0;margin-left:8px;">RN 75</span></div></div>
-          <div class="model-card" onclick="selectModel(this,'balanced')" id="model-balanced"><div style="display:flex;justify-content:space-between;align-items:flex-start;"><div><div class="model-name">Balanced Portfolio</div><div class="model-desc" style="margin-top:4px;">RN 60 · 50% equity · Vol 11.2%</div></div><span class="badge badge-gold" style="flex-shrink:0;margin-left:8px;">RN 60</span></div></div>
-          <div class="model-card" onclick="selectModel(this,'conservative')" id="model-conservative"><div style="display:flex;justify-content:space-between;align-items:flex-start;"><div><div class="model-name">Conservative Portfolio</div><div class="model-desc" style="margin-top:4px;">RN 45 · 35% equity · Vol 8.1%</div></div><span class="badge badge-green" style="flex-shrink:0;margin-left:8px;">RN 45</span></div></div>
-          <div class="model-card" onclick="selectModel(this,'income')" id="model-income" style="grid-column:span 2;"><div style="display:flex;justify-content:space-between;align-items:flex-start;"><div><div class="model-name">Income / Dividend Portfolio</div><div class="model-desc" style="margin-top:4px;">RN 52 · 40% equity + 40% dividend stocks · Vol 9.8% · Focus on recurring income and low drawdown.</div></div><span class="badge badge-gold" style="flex-shrink:0;margin-left:8px;">RN 52</span></div></div>
-        </div>
+      <div style="flex-shrink:0;display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
+        <button onclick="alert('Upload em desenvolvimento — use um portfólio modelo por enquanto.')" style="font-family:var(--mono);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;background:transparent;border:1px solid var(--gold);color:var(--gold);padding:7px 16px;cursor:pointer;white-space:nowrap;transition:background 0.15s;" onmouseover="this.style.background='rgba(212,175,69,0.1)'" onmouseout="this.style.background='transparent'">Fazer Upload →</button>
+        <div style="font-family:var(--mono);font-size:9px;color:var(--text4);">ou use um modelo abaixo</div>
       </div>
     </div>
-  </div>
+
+    <!-- ── 5 Portfolio Cards ── -->
+    <div style="flex-shrink:0;display:grid;grid-template-columns:repeat(5,1fr);gap:8px;">
+
+      <!-- P3 — Conservative USA · RN 38 -->
+      <div class="pf-card" id="pf-card-p3" onclick="selectModel(this,'p3')">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
+          <div>
+            <div style="font-family:var(--mono);font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text4);margin-bottom:3px;">Conservative</div>
+            <div style="font-family:var(--syne);font-size:17px;font-weight:800;color:var(--text);line-height:1.1;">United States</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0;margin-left:6px;">
+            <div style="font-family:var(--mono);font-size:7px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text4);">Risk Number</div>
+            <div style="font-family:var(--syne);font-size:38px;font-weight:800;color:var(--gold);line-height:1;">38</div>
+          </div>
+        </div>
+        <div style="font-family:var(--mono);font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text4);margin-bottom:5px;">Regional</div>
+        <div style="margin-bottom:9px;">
+          <div style="height:4px;background:rgba(255,255,255,0.06);border-radius:2px;margin-bottom:4px;">
+            <div style="width:100%;height:100%;background:#4A8AB5;border-radius:2px;"></div>
+          </div>
+          <div style="font-family:var(--mono);font-size:11px;font-weight:600;color:#4A8AB5;">🇺🇸 US 100%</div>
+        </div>
+        <div style="font-family:var(--mono);font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text4);margin-bottom:5px;">Asset Mix</div>
+        <div style="margin-bottom:9px;">
+          <div style="height:4px;background:rgba(255,255,255,0.06);border-radius:2px;margin-bottom:4px;display:flex;">
+            <div style="width:57%;background:#4A8AB5;border-radius:2px 0 0 2px;"></div>
+            <div style="width:43%;background:var(--gold);border-radius:0 2px 2px 0;"></div>
+          </div>
+          <div style="display:flex;gap:8px;font-family:var(--mono);font-size:11px;font-weight:600;">
+            <span style="color:#4A8AB5;">RF 57%</span><span style="color:var(--gold);">RV 43%</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;font-family:var(--mono);font-size:10px;color:var(--text4);margin-bottom:8px;">
+          <span>VOL <strong style="color:var(--text3);">6–9%</strong></span><span style="color:rgba(255,255,255,0.15);">·</span><span>HRZ <strong style="color:var(--text3);">3y+</strong></span>
+        </div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--text4);line-height:1.5;border-top:1px solid rgba(255,255,255,0.05);padding-top:8px;margin-top:auto;">Preservação de capital em USD. Renda fixa americana de alta qualidade.</div>
+      </div>
+
+      <!-- P1 — Conservative Brazil · RN 48 (default selected) -->
+      <div class="pf-card sel" id="pf-card-p1" onclick="selectModel(this,'p1')">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
+          <div>
+            <div style="font-family:var(--mono);font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text4);margin-bottom:3px;">Conservative</div>
+            <div style="font-family:var(--syne);font-size:17px;font-weight:800;color:var(--text);line-height:1.1;">Brazil</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0;margin-left:6px;">
+            <div style="font-family:var(--mono);font-size:7px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text4);">Risk Number</div>
+            <div style="font-family:var(--syne);font-size:38px;font-weight:800;color:var(--gold);line-height:1;">48</div>
+          </div>
+        </div>
+        <div style="font-family:var(--mono);font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text4);margin-bottom:5px;">Regional</div>
+        <div style="margin-bottom:9px;">
+          <div style="height:4px;background:rgba(255,255,255,0.06);border-radius:2px;margin-bottom:4px;display:flex;">
+            <div style="width:80%;background:#3A8C5C;border-radius:2px 0 0 2px;"></div>
+            <div style="width:20%;background:#4A8AB5;border-radius:0 2px 2px 0;"></div>
+          </div>
+          <div style="display:flex;gap:5px;font-family:var(--mono);font-size:11px;font-weight:600;">
+            <span style="color:#3A8C5C;">🇧🇷 80%</span><span style="color:#4A8AB5;">🇺🇸 20%</span>
+          </div>
+        </div>
+        <div style="font-family:var(--mono);font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text4);margin-bottom:5px;">Asset Mix</div>
+        <div style="margin-bottom:9px;">
+          <div style="height:4px;background:rgba(255,255,255,0.06);border-radius:2px;margin-bottom:4px;display:flex;">
+            <div style="width:88%;background:#3A8C5C;border-radius:2px 0 0 2px;"></div>
+            <div style="width:12%;background:var(--gold);border-radius:0 2px 2px 0;"></div>
+          </div>
+          <div style="display:flex;gap:8px;font-family:var(--mono);font-size:11px;font-weight:600;">
+            <span style="color:#3A8C5C;">RF 88%</span><span style="color:var(--gold);">RV 12%</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;font-family:var(--mono);font-size:10px;color:var(--text4);margin-bottom:8px;">
+          <span>VOL <strong style="color:var(--text3);">7–10%</strong></span><span style="color:rgba(255,255,255,0.15);">·</span><span>HRZ <strong style="color:var(--text3);">3–5y</strong></span>
+        </div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--text4);line-height:1.5;border-top:1px solid rgba(255,255,255,0.05);padding-top:8px;margin-top:auto;">Mandato conservador em BRL com exposição mínima a equities e risco reduzido.</div>
+      </div>
+
+      <!-- P2 — Conservative-Moderate Global · RN 52 -->
+      <div class="pf-card" id="pf-card-p2" onclick="selectModel(this,'p2')">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
+          <div>
+            <div style="font-family:var(--mono);font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text4);margin-bottom:3px;">Cons.-Moderate</div>
+            <div style="font-family:var(--syne);font-size:17px;font-weight:800;color:var(--text);line-height:1.1;">Global</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0;margin-left:6px;">
+            <div style="font-family:var(--mono);font-size:7px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text4);">Risk Number</div>
+            <div style="font-family:var(--syne);font-size:38px;font-weight:800;color:var(--gold);line-height:1;">52</div>
+          </div>
+        </div>
+        <div style="font-family:var(--mono);font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text4);margin-bottom:5px;">Regional</div>
+        <div style="margin-bottom:9px;">
+          <div style="height:4px;background:rgba(255,255,255,0.06);border-radius:2px;margin-bottom:4px;display:flex;">
+            <div style="width:70%;background:#3A8C5C;border-radius:2px 0 0 2px;"></div>
+            <div style="width:20%;background:#4A8AB5;"></div>
+            <div style="width:10%;background:#5B7BA8;border-radius:0 2px 2px 0;"></div>
+          </div>
+          <div style="display:flex;gap:5px;font-family:var(--mono);font-size:11px;font-weight:600;">
+            <span style="color:#3A8C5C;">🇧🇷 70%</span><span style="color:#4A8AB5;">🇺🇸 20%</span><span style="color:#5B7BA8;">🇪🇺 10%</span>
+          </div>
+        </div>
+        <div style="font-family:var(--mono);font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text4);margin-bottom:5px;">Asset Mix</div>
+        <div style="margin-bottom:9px;">
+          <div style="height:4px;background:rgba(255,255,255,0.06);border-radius:2px;margin-bottom:4px;display:flex;">
+            <div style="width:58%;background:#3A8C5C;border-radius:2px 0 0 2px;"></div>
+            <div style="width:42%;background:var(--gold);border-radius:0 2px 2px 0;"></div>
+          </div>
+          <div style="display:flex;gap:8px;font-family:var(--mono);font-size:11px;font-weight:600;">
+            <span style="color:#3A8C5C;">RF 58%</span><span style="color:var(--gold);">RV 42%</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;font-family:var(--mono);font-size:10px;color:var(--text4);margin-bottom:8px;">
+          <span>VOL <strong style="color:var(--text3);">8–11%</strong></span><span style="color:rgba(255,255,255,0.15);">·</span><span>HRZ <strong style="color:var(--text3);">3–5y</strong></span>
+        </div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--text4);line-height:1.5;border-top:1px solid rgba(255,255,255,0.05);padding-top:8px;margin-top:auto;">Diversificação global ancorada em renda fixa brasileira e acesso internacional.</div>
+      </div>
+
+      <!-- P5 — Moderate USA · RN 58 -->
+      <div class="pf-card" id="pf-card-p5" onclick="selectModel(this,'p5')">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
+          <div>
+            <div style="font-family:var(--mono);font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text4);margin-bottom:3px;">Moderate</div>
+            <div style="font-family:var(--syne);font-size:17px;font-weight:800;color:var(--text);line-height:1.1;">United States</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0;margin-left:6px;">
+            <div style="font-family:var(--mono);font-size:7px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text4);">Risk Number</div>
+            <div style="font-family:var(--syne);font-size:38px;font-weight:800;color:var(--gold);line-height:1;">58</div>
+          </div>
+        </div>
+        <div style="font-family:var(--mono);font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text4);margin-bottom:5px;">Regional</div>
+        <div style="margin-bottom:9px;">
+          <div style="height:4px;background:rgba(255,255,255,0.06);border-radius:2px;margin-bottom:4px;">
+            <div style="width:100%;height:100%;background:#4A8AB5;border-radius:2px;"></div>
+          </div>
+          <div style="font-family:var(--mono);font-size:11px;font-weight:600;color:#4A8AB5;">🇺🇸 US 100%</div>
+        </div>
+        <div style="font-family:var(--mono);font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text4);margin-bottom:5px;">Asset Mix</div>
+        <div style="margin-bottom:9px;">
+          <div style="height:4px;background:rgba(255,255,255,0.06);border-radius:2px;margin-bottom:4px;display:flex;">
+            <div style="width:28%;background:#4A8AB5;border-radius:2px 0 0 2px;"></div>
+            <div style="width:70%;background:var(--gold);"></div>
+            <div style="width:2%;background:rgba(212,175,69,0.45);border-radius:0 2px 2px 0;"></div>
+          </div>
+          <div style="display:flex;gap:6px;font-family:var(--mono);font-size:11px;font-weight:600;">
+            <span style="color:#4A8AB5;">RF 28%</span><span style="color:var(--gold);">RV 70%</span><span style="color:rgba(212,175,69,0.65);">₿ 2%</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;font-family:var(--mono);font-size:10px;color:var(--text4);margin-bottom:8px;">
+          <span>VOL <strong style="color:var(--text3);">10–13%</strong></span><span style="color:rgba(255,255,255,0.15);">·</span><span>HRZ <strong style="color:var(--text3);">5y+</strong></span>
+        </div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--text4);line-height:1.5;border-top:1px solid rgba(255,255,255,0.05);padding-top:8px;margin-top:auto;">Crescimento moderado com maior peso em equities americanas e componente crypto.</div>
+      </div>
+
+      <!-- P4 — Balanced Moderate Global · RN 62 -->
+      <div class="pf-card" id="pf-card-p4" onclick="selectModel(this,'p4')">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
+          <div>
+            <div style="font-family:var(--mono);font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text4);margin-bottom:3px;">Balanced Moderate</div>
+            <div style="font-family:var(--syne);font-size:17px;font-weight:800;color:var(--text);line-height:1.1;">Global</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0;margin-left:6px;">
+            <div style="font-family:var(--mono);font-size:7px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text4);">Risk Number</div>
+            <div style="font-family:var(--syne);font-size:38px;font-weight:800;color:var(--gold);line-height:1;">62</div>
+          </div>
+        </div>
+        <div style="font-family:var(--mono);font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text4);margin-bottom:5px;">Regional</div>
+        <div style="margin-bottom:9px;">
+          <div style="height:4px;background:rgba(255,255,255,0.06);border-radius:2px;margin-bottom:4px;display:flex;">
+            <div style="width:55%;background:#3A8C5C;border-radius:2px 0 0 2px;"></div>
+            <div style="width:40%;background:#4A8AB5;"></div>
+            <div style="width:5%;background:#5B7BA8;border-radius:0 2px 2px 0;"></div>
+          </div>
+          <div style="display:flex;gap:5px;font-family:var(--mono);font-size:11px;font-weight:600;">
+            <span style="color:#3A8C5C;">🇧🇷 55%</span><span style="color:#4A8AB5;">🇺🇸 40%</span><span style="color:#5B7BA8;">🇪🇺 5%</span>
+          </div>
+        </div>
+        <div style="font-family:var(--mono);font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text4);margin-bottom:5px;">Asset Mix</div>
+        <div style="margin-bottom:9px;">
+          <div style="height:4px;background:rgba(255,255,255,0.06);border-radius:2px;margin-bottom:4px;display:flex;">
+            <div style="width:51%;background:#3A8C5C;border-radius:2px 0 0 2px;"></div>
+            <div style="width:49%;background:var(--gold);border-radius:0 2px 2px 0;"></div>
+          </div>
+          <div style="display:flex;gap:8px;font-family:var(--mono);font-size:11px;font-weight:600;">
+            <span style="color:#3A8C5C;">RF 51%</span><span style="color:var(--gold);">RV 49%</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;font-family:var(--mono);font-size:10px;color:var(--text4);margin-bottom:8px;">
+          <span>VOL <strong style="color:var(--text3);">11–14%</strong></span><span style="color:rgba(255,255,255,0.15);">·</span><span>HRZ <strong style="color:var(--text3);">5y+</strong></span>
+        </div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--text4);line-height:1.5;border-top:1px solid rgba(255,255,255,0.05);padding-top:8px;margin-top:auto;">Arquitetura multi-mercado com equilíbrio entre classes de ativos e regiões.</div>
+      </div>
+
+    </div><!-- end 5 cards -->
+
+    <!-- ── Regional Breakdown ── -->
+    <div style="flex:1;display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;min-height:0;">
+
+      <!-- 🇺🇸 USA -->
+      <div id="rp-card-us" style="border:1px solid rgba(74,138,181,0.22);background:rgba(74,138,181,0.05);padding:18px 22px;display:flex;flex-direction:column;transition:opacity 0.35s;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+          <span style="font-size:30px;line-height:1;flex-shrink:0;">🇺🇸</span>
+          <div>
+            <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(74,138,181,0.7);margin-bottom:2px;">Estados Unidos</div>
+            <div id="rp-pct-us" style="font-family:var(--syne);font-size:44px;font-weight:800;color:#4A8AB5;line-height:1;">—</div>
+          </div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;gap:10px;justify-content:center;">
+          <div>
+            <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:13px;color:var(--text4);margin-bottom:5px;"><span>Renda Fixa</span><span id="rp-rf-us" style="color:rgba(74,138,181,0.9);font-weight:600;">—</span></div>
+            <div style="height:5px;background:rgba(255,255,255,0.06);border-radius:2px;"><div id="rp-rf-us-bar" style="height:100%;background:#4A8AB5;border-radius:2px;width:0%;transition:width 0.5s ease;"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:13px;color:var(--text4);margin-bottom:5px;"><span>Renda Variável</span><span id="rp-rv-us" style="color:rgba(74,138,181,0.9);font-weight:600;">—</span></div>
+            <div style="height:5px;background:rgba(255,255,255,0.06);border-radius:2px;"><div id="rp-rv-us-bar" style="height:100%;background:#4A8AB5;border-radius:2px;width:0%;transition:width 0.5s ease;"></div></div>
+          </div>
+          <div id="rp-extra-us" style="font-family:var(--mono);font-size:12px;color:rgba(212,175,69,0.7);"></div>
+          <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:13px;color:var(--text4);margin-top:2px;border-top:1px solid rgba(255,255,255,0.05);padding-top:8px;"><span>Perfil</span><span id="rp-vol-us" style="color:rgba(74,138,181,0.9);font-weight:600;">—</span></div>
+        </div>
+      </div>
+
+      <!-- 🇧🇷 Brazil -->
+      <div id="rp-card-br" style="border:1px solid rgba(58,140,92,0.22);background:rgba(58,140,92,0.05);padding:18px 22px;display:flex;flex-direction:column;transition:opacity 0.35s;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+          <span style="font-size:30px;line-height:1;flex-shrink:0;">🇧🇷</span>
+          <div>
+            <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(58,140,92,0.7);margin-bottom:2px;">Brasil</div>
+            <div id="rp-pct-br" style="font-family:var(--syne);font-size:44px;font-weight:800;color:#3A8C5C;line-height:1;">—</div>
+          </div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;gap:10px;justify-content:center;">
+          <div>
+            <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:13px;color:var(--text4);margin-bottom:5px;"><span>Renda Fixa</span><span id="rp-rf-br" style="color:rgba(58,140,92,0.9);font-weight:600;">—</span></div>
+            <div style="height:5px;background:rgba(255,255,255,0.06);border-radius:2px;"><div id="rp-rf-br-bar" style="height:100%;background:#3A8C5C;border-radius:2px;width:0%;transition:width 0.5s ease;"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:13px;color:var(--text4);margin-bottom:5px;"><span>Renda Variável</span><span id="rp-rv-br" style="color:rgba(58,140,92,0.9);font-weight:600;">—</span></div>
+            <div style="height:5px;background:rgba(255,255,255,0.06);border-radius:2px;"><div id="rp-rv-br-bar" style="height:100%;background:#3A8C5C;border-radius:2px;width:0%;transition:width 0.5s ease;"></div></div>
+          </div>
+          <div id="rp-extra-br" style="font-family:var(--mono);font-size:12px;color:rgba(212,175,69,0.7);"></div>
+          <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:13px;color:var(--text4);margin-top:2px;border-top:1px solid rgba(255,255,255,0.05);padding-top:8px;"><span>Perfil</span><span id="rp-vol-br" style="color:rgba(58,140,92,0.9);font-weight:600;">—</span></div>
+        </div>
+      </div>
+
+      <!-- 🇪🇺 Europe -->
+      <div id="rp-card-eu" style="border:1px solid rgba(91,123,168,0.22);background:rgba(91,123,168,0.05);padding:18px 22px;display:flex;flex-direction:column;transition:opacity 0.35s;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+          <span style="font-size:30px;line-height:1;flex-shrink:0;">🇪🇺</span>
+          <div>
+            <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(91,123,168,0.7);margin-bottom:2px;">Europa</div>
+            <div id="rp-pct-eu" style="font-family:var(--syne);font-size:44px;font-weight:800;color:#5B7BA8;line-height:1;">—</div>
+          </div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;gap:10px;justify-content:center;">
+          <div>
+            <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:13px;color:var(--text4);margin-bottom:5px;"><span>Renda Fixa</span><span id="rp-rf-eu" style="color:rgba(91,123,168,0.9);font-weight:600;">—</span></div>
+            <div style="height:5px;background:rgba(255,255,255,0.06);border-radius:2px;"><div id="rp-rf-eu-bar" style="height:100%;background:#5B7BA8;border-radius:2px;width:0%;transition:width 0.5s ease;"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:13px;color:var(--text4);margin-bottom:5px;"><span>Renda Variável</span><span id="rp-rv-eu" style="color:rgba(91,123,168,0.9);font-weight:600;">—</span></div>
+            <div style="height:5px;background:rgba(255,255,255,0.06);border-radius:2px;"><div id="rp-rv-eu-bar" style="height:100%;background:#5B7BA8;border-radius:2px;width:0%;transition:width 0.5s ease;"></div></div>
+          </div>
+          <div id="rp-extra-eu" style="font-family:var(--mono);font-size:12px;color:rgba(212,175,69,0.7);"></div>
+          <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:13px;color:var(--text4);margin-top:2px;border-top:1px solid rgba(255,255,255,0.05);padding-top:8px;"><span>Perfil</span><span id="rp-vol-eu" style="color:rgba(91,123,168,0.9);font-weight:600;">—</span></div>
+        </div>
+      </div>
+
+    </div><!-- end regional breakdown -->
+
+    <!-- ── Advanced Mode: Upload ── -->
+    <div style="flex-shrink:0;padding:8px 0 12px;border-top:1px solid rgba(255,255,255,0.04);">
+      <button onclick="toggleUpload()" style="background:transparent;border:none;font-family:var(--mono);font-size:10px;letter-spacing:0.1em;color:var(--text4);cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:0;transition:color 0.15s;" onmouseover="this.style.color='var(--text3)'" onmouseout="this.style.color='var(--text4)'">📎 Usar Portfólio Próprio <span style="color:rgba(255,255,255,0.2);">· Upload CSV do cliente</span></button>
+      <div id="real-upload-area" style="display:none;margin-top:10px;padding:14px 16px;background:var(--panel);border:1px solid var(--border);max-width:320px;">
+        <div style="font-family:var(--syne);font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px;">Portfólio Próprio</div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--text4);margin-bottom:10px;">ticker · peso · classe de ativo</div>
+        <button class="btn btn-secondary" style="font-size:11px;" onclick="alert('Upload CSV — em desenvolvimento.')">Selecionar arquivo CSV</button>
+      </div>
+    </div>
+
+    <!-- hidden compat -->
+    <div id="model-list-area" style="display:none;"></div>
+    <div id="model-selector-area" style="display:none;"></div>
+
+  </div><!-- end main body -->
 </div>
 
 <!-- ═══ STEP 8 — DIAGNOSIS + CHARTS ═══ -->
@@ -909,10 +1199,10 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
       <div style="display:flex;flex-direction:column;padding:16px 24px;border-right:1px solid var(--border);overflow:hidden;">
 
         <!-- Box 1: FO Mandate -->
-        <div style="flex:1;min-height:0;background:rgba(212,175,69,0.05);border:1px solid rgba(212,175,69,0.35);padding:12px 18px;display:flex;align-items:center;gap:16px;">
+        <div id="diag-box-fo" style="flex:1;min-height:0;background:rgba(212,175,69,0.05);border:1px solid rgba(212,175,69,0.35);padding:12px 18px;display:flex;align-items:center;gap:16px;">
           <div id="diag-fo-rn" style="font-family:var(--syne);font-size:54px;font-weight:800;line-height:1;color:var(--gold);flex-shrink:0;min-width:72px;text-align:center;">—</div>
           <div>
-            <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:3px;">Family Office · Mandate</div>
+            <div id="diag-fo-lbl" style="font-family:var(--mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:3px;">Family Office · Mandate</div>
             <div id="diag-fo-cat" style="font-family:var(--syne);font-size:15px;font-weight:700;color:var(--gold);margin-bottom:4px;">—</div>
             <div style="font-size:11px;color:var(--text4);font-family:var(--mono);">Teto institucional · / 99 scale</div>
           </div>
@@ -929,10 +1219,10 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
         </div>
 
         <!-- Box 2: Current Portfolio -->
-        <div style="flex:1;min-height:0;background:rgba(208,70,60,0.06);border:1px solid rgba(208,70,60,0.45);padding:12px 18px;display:flex;align-items:center;gap:16px;">
+        <div id="diag-box-port" style="flex:1;min-height:0;background:rgba(208,70,60,0.06);border:1px solid rgba(208,70,60,0.45);padding:12px 18px;display:flex;align-items:center;gap:16px;">
           <div id="diag-port-rn" style="font-family:var(--syne);font-size:54px;font-weight:800;line-height:1;color:var(--red);flex-shrink:0;min-width:72px;text-align:center;">—</div>
           <div>
-            <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--red);margin-bottom:3px;">Current Portfolio</div>
+            <div id="diag-port-lbl" style="font-family:var(--mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--red);margin-bottom:3px;">Current Portfolio</div>
             <div id="diag-port-cat" style="font-family:var(--syne);font-size:15px;font-weight:700;color:var(--red);margin-bottom:4px;">—</div>
             <div style="font-size:11px;color:var(--text4);font-family:var(--mono);">Risco assumido pelo cliente · / 99 scale</div>
           </div>
@@ -949,10 +1239,10 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
         </div>
 
         <!-- Box 3: Client Tolerance -->
-        <div style="flex:1;min-height:0;background:rgba(91,191,122,0.04);border:1px solid rgba(91,191,122,0.35);padding:12px 18px;display:flex;align-items:center;gap:16px;">
+        <div id="diag-box-client" style="flex:1;min-height:0;background:rgba(91,191,122,0.04);border:1px solid rgba(91,191,122,0.35);padding:12px 18px;display:flex;align-items:center;gap:16px;">
           <div id="diag-client-rn" style="font-family:var(--syne);font-size:54px;font-weight:800;line-height:1;color:var(--green);flex-shrink:0;min-width:72px;text-align:center;">—</div>
           <div>
-            <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--green);margin-bottom:3px;">Client · Real Tolerance</div>
+            <div id="diag-client-lbl" style="font-family:var(--mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--green);margin-bottom:3px;">Client · Real Tolerance</div>
             <div id="diag-client-cat" style="font-family:var(--syne);font-size:15px;font-weight:700;color:var(--green);margin-bottom:4px;">—</div>
             <div style="font-size:11px;color:var(--text4);font-family:var(--mono);">Tolerância revelada pelo questionário · / 99 scale</div>
           </div>
@@ -1239,25 +1529,24 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
             <line x1="220" y1="215" x2="73"  y2="148" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
 
             <!-- HPC22 area — large (green) -->
-            <!-- Normalized: DD=0.35, CAGR=0.884, Align=0.98, Sharpe=0.76, VolCtrl=0.211 -->
-            <!-- axes θ=[-90,-18,54,126,198]°, center(220,215), r=160 -->
-            <polygon id="cmp9-poly-hpc" points="220,159 354.5,171.3 312.1,341.9 148.6,313.2 187.9,204.6"
+            <!-- axes θ=[-90,-18,54,126,198]° → [ALIGN,CAGR,DD,VOL,SHARPE], center(220,215), r=160 -->
+            <!-- Scales: ALIGN=0.98,CAGR=0.884,DD=0.74(1-26/100),VOL=0.724(1-27.6/100),SHARPE=0.76 -->
+            <polygon id="cmp9-poly-hpc" points="220.0,58.2 354.5,171.3 289.6,310.6 151.9,308.7 104.3,177.5"
               fill="rgba(91,191,122,0.15)" stroke="rgba(91,191,122,0.9)" stroke-width="2"/>
 
             <!-- Portfolio area — dynamic (red) -->
-            <!-- Default: aggressive DD=0.15,CAGR=0.16,Align=0.38,Sharpe=0.305,VolCtrl=0.474 -->
             <polygon id="cmp9-poly-port" points="220,191 244.3,207.1 255.7,264.1 191.3,254.5 148.0,191.6"
               fill="rgba(208,70,60,0.2)" stroke="rgba(208,70,60,0.95)" stroke-width="2"/>
 
             <!-- Center dot -->
             <circle cx="220" cy="215" r="3" fill="rgba(255,255,255,0.2)"/>
 
-            <!-- Data point dots: HPC22 -->
-            <circle id="cmp9-dot-h0" cx="220"   cy="159"   r="4" fill="#5BBF7A"/>
+            <!-- Data point dots: HPC22 [ALIGN,CAGR,DD,VOL,SHARPE] -->
+            <circle id="cmp9-dot-h0" cx="220.0" cy="58.2"  r="4" fill="#5BBF7A"/>
             <circle id="cmp9-dot-h1" cx="354.5" cy="171.3" r="4" fill="#5BBF7A"/>
-            <circle id="cmp9-dot-h2" cx="312.1" cy="341.9" r="4" fill="#5BBF7A"/>
-            <circle id="cmp9-dot-h3" cx="148.6" cy="313.2" r="4" fill="#5BBF7A"/>
-            <circle id="cmp9-dot-h4" cx="187.9" cy="204.6" r="4" fill="#5BBF7A"/>
+            <circle id="cmp9-dot-h2" cx="289.6" cy="310.6" r="4" fill="#5BBF7A"/>
+            <circle id="cmp9-dot-h3" cx="151.9" cy="308.7" r="4" fill="#5BBF7A"/>
+            <circle id="cmp9-dot-h4" cx="104.3" cy="177.5" r="4" fill="#5BBF7A"/>
 
             <!-- Data point dots: Portfolio (dynamic) -->
             <circle id="cmp9-dot-p0" cx="220"   cy="191"   r="4" fill="#D0463C"/>
@@ -1266,23 +1555,25 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
             <circle id="cmp9-dot-p3" cx="191.3" cy="254.5" r="4" fill="#D0463C"/>
             <circle id="cmp9-dot-p4" cx="148.0" cy="191.6" r="4" fill="#D0463C"/>
 
-            <!-- Axis labels (larger font, breathing room) -->
+            <!-- Axis labels: top 3 = higher-is-better; bottom 2 = 0-is-outer (inverted) -->
             <text x="220" y="38" text-anchor="middle"
-              font-family="'DM Mono',monospace" font-size="11" fill="rgba(255,255,255,0.5)" letter-spacing="0.08em">DRAWDOWN PROTECTION</text>
+              font-family="'DM Mono',monospace" font-size="11" fill="rgba(255,255,255,0.5)" letter-spacing="0.08em">ALIGNMENT</text>
 
             <text x="385" y="142" text-anchor="start"
               font-family="'DM Mono',monospace" font-size="11" fill="rgba(255,255,255,0.5)" letter-spacing="0.08em">CAGR</text>
 
-            <text x="318" y="356" text-anchor="middle"
-              font-family="'DM Mono',monospace" font-size="11" fill="rgba(255,255,255,0.5)" letter-spacing="0.08em">ALIGNMENT</text>
+            <text x="318" y="350" text-anchor="middle"
+              font-family="'DM Mono',monospace" font-size="11" fill="rgba(255,255,255,0.5)" letter-spacing="0.08em">DRAWDOWN</text>
+            <text x="318" y="365" text-anchor="middle"
+              font-family="'DM Mono',monospace" font-size="11" fill="rgba(255,255,255,0.5)" letter-spacing="0.08em">PROTECTION</text>
 
-            <text x="122" y="356" text-anchor="middle"
-              font-family="'DM Mono',monospace" font-size="11" fill="rgba(255,255,255,0.5)" letter-spacing="0.08em">SHARPE</text>
-
-            <text x="58" y="136" text-anchor="end"
+            <text x="122" y="350" text-anchor="middle"
               font-family="'DM Mono',monospace" font-size="11" fill="rgba(255,255,255,0.5)" letter-spacing="0.08em">VOL</text>
-            <text x="58" y="150" text-anchor="end"
+            <text x="122" y="365" text-anchor="middle"
               font-family="'DM Mono',monospace" font-size="11" fill="rgba(255,255,255,0.5)" letter-spacing="0.08em">CONTROL</text>
+
+            <text x="58" y="143" text-anchor="end"
+              font-family="'DM Mono',monospace" font-size="11" fill="rgba(255,255,255,0.5)" letter-spacing="0.08em">SHARPE</text>
 
             <!-- Grid scale labels -->
             <text x="225" y="97" font-family="'DM Mono',monospace" font-size="8" fill="rgba(255,255,255,0.2)">100%</text>
@@ -1344,20 +1635,20 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
         </button>
 
         <!-- HPC11 card -->
-        <div style="flex:1;min-height:0;background:rgba(212,175,69,0.04);border:1px solid rgba(212,175,69,0.2);padding:16px 18px;display:flex;flex-direction:column;overflow:hidden;">
-          <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold);margin-bottom:4px;">Strategy One · ETF-Based</div>
-          <div style="font-family:var(--syne);font-size:35px;font-weight:800;color:var(--gold);line-height:1;margin-bottom:4px;">HPC11</div>
+        <div style="flex:1;min-height:0;background:rgba(106,174,214,0.04);border:1px solid rgba(106,174,214,0.22);padding:16px 18px;display:flex;flex-direction:column;overflow:hidden;">
+          <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:#6AAED6;margin-bottom:4px;">Strategy One · ETF-Based</div>
+          <div style="font-family:var(--syne);font-size:35px;font-weight:800;color:#6AAED6;line-height:1;margin-bottom:4px;">HPC11</div>
           <div style="font-family:var(--mono);font-size:11px;color:var(--text3);margin-bottom:10px;">Conservative · Lower Drawdown · Defensive</div>
           <div style="display:flex;gap:6px;margin-bottom:14px;">
-            <span class="badge badge-gold" style="font-size:10px;padding:4px 9px;">RN 30–38</span>
+            <span class="badge badge-neutral" style="font-size:10px;padding:4px 9px;color:#6AAED6;border-color:rgba(106,174,214,0.35);">RN 30–38</span>
             <span class="badge badge-neutral" style="font-size:10px;padding:4px 9px;">StormGuard</span>
           </div>
-          <div style="border-top:1px solid rgba(212,175,69,0.12);">
+          <div style="border-top:1px solid rgba(106,174,214,0.12);">
             <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:14px;">Target Volatility</span><span class="hpc-row-val" style="font-size:15px;">10–15%</span></div>
-            <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:14px;">Max Drawdown</span><span class="hpc-row-val" style="color:var(--green);font-size:15px;">−18%</span></div>
-            <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:14px;">Expected Return</span><span class="hpc-row-val" style="color:var(--green);font-size:15px;">11–15%</span></div>
-            <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:14px;">Sharpe (5yr)</span><span class="hpc-row-val" style="color:var(--green);font-size:15px;">1.38</span></div>
-            <div class="hpc-row" style="padding:11px 0;border-bottom:none;"><span class="hpc-row-lbl" style="font-size:14px;">Suggested Allocation</span><span class="hpc-row-val" style="color:var(--gold);font-size:15px;">10–15% AUM</span></div>
+            <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:14px;">Max Drawdown</span><span class="hpc-row-val" style="color:#6AAED6;font-size:15px;">−18%</span></div>
+            <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:14px;">Expected Return</span><span class="hpc-row-val" style="color:#6AAED6;font-size:15px;">11–15%</span></div>
+            <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:14px;">Sharpe (5yr)</span><span class="hpc-row-val" style="color:#6AAED6;font-size:15px;">1.38</span></div>
+            <div class="hpc-row" style="padding:11px 0;border-bottom:none;"><span class="hpc-row-lbl" style="font-size:14px;">Suggested Allocation</span><span class="hpc-row-val" style="color:#6AAED6;font-size:15px;">10–15% AUM</span></div>
           </div>
         </div>
 
@@ -1370,27 +1661,27 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
       <div style="display:flex;flex-direction:column;gap:10px;padding:16px 28px 16px 20px;overflow:hidden;">
 
         <!-- HPC22 card -->
-        <div style="flex:1;min-height:0;background:rgba(91,191,122,0.04);border:1px solid rgba(91,191,122,0.25);padding:16px 18px;display:flex;flex-direction:column;position:relative;overflow:hidden;">
-          <div style="position:absolute;top:12px;right:14px;font-family:var(--mono);font-size:10px;letter-spacing:0.12em;color:var(--green);border:1px solid rgba(91,191,122,0.3);padding:3px 9px;">★ RECOMMENDED</div>
-          <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--green);margin-bottom:4px;">Strategy Two · Equities</div>
-          <div style="font-family:var(--syne);font-size:35px;font-weight:800;color:var(--green);line-height:1;margin-bottom:4px;">HPC22</div>
+        <div style="flex:1;min-height:0;background:rgba(157,212,232,0.04);border:1px solid rgba(157,212,232,0.25);padding:16px 18px;display:flex;flex-direction:column;position:relative;overflow:hidden;">
+          <div style="position:absolute;top:12px;right:14px;font-family:var(--mono);font-size:10px;letter-spacing:0.12em;color:#9DD4E8;border:1px solid rgba(157,212,232,0.3);padding:3px 9px;">★ RECOMMENDED</div>
+          <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:#9DD4E8;margin-bottom:4px;">Strategy Two · Equities</div>
+          <div style="font-family:var(--syne);font-size:35px;font-weight:800;color:#9DD4E8;line-height:1;margin-bottom:4px;">HPC22</div>
           <div style="font-family:var(--mono);font-size:11px;color:var(--text3);margin-bottom:10px;">Growth Alignment · Higher Return · Momentum</div>
           <div style="display:flex;gap:6px;margin-bottom:14px;">
-            <span class="badge badge-green" style="font-size:10px;padding:4px 9px;">RN 35–42</span>
+            <span class="badge badge-neutral" style="font-size:10px;padding:4px 9px;color:#9DD4E8;border-color:rgba(157,212,232,0.35);">RN 35–42</span>
             <span class="badge badge-neutral" style="font-size:10px;padding:4px 9px;">StormGuard + TLH</span>
           </div>
-          <div style="border-top:1px solid rgba(91,191,122,0.12);">
+          <div style="border-top:1px solid rgba(157,212,232,0.12);">
             <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:14px;">Target Volatility</span><span class="hpc-row-val" style="font-size:15px;">20–30%</span></div>
-            <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:14px;">Max Drawdown</span><span class="hpc-row-val" style="color:var(--green);font-size:15px;">−26%</span></div>
-            <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:14px;">Expected Return</span><span class="hpc-row-val" style="color:var(--green);font-size:15px;">35–45%</span></div>
-            <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:14px;">Sharpe (5yr)</span><span class="hpc-row-val" style="color:var(--green);font-size:15px;">1.52</span></div>
-            <div class="hpc-row" style="padding:11px 0;border-bottom:none;"><span class="hpc-row-lbl" style="font-size:14px;">Suggested Allocation</span><span class="hpc-row-val" style="color:var(--green);font-size:15px;">20–30% AUM</span></div>
+            <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:14px;">Max Drawdown</span><span class="hpc-row-val" style="color:#9DD4E8;font-size:15px;">−26%</span></div>
+            <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:14px;">Expected Return</span><span class="hpc-row-val" style="color:#9DD4E8;font-size:15px;">35–45%</span></div>
+            <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:14px;">Sharpe (5yr)</span><span class="hpc-row-val" style="color:#9DD4E8;font-size:15px;">1.52</span></div>
+            <div class="hpc-row" style="padding:11px 0;border-bottom:none;"><span class="hpc-row-lbl" style="font-size:14px;">Suggested Allocation</span><span class="hpc-row-val" style="color:#9DD4E8;font-size:15px;">20–30% AUM</span></div>
           </div>
         </div>
 
         <!-- StormGuard compacto -->
-        <div style="flex-shrink:0;background:linear-gradient(135deg,rgba(91,191,122,0.05),var(--panel));border:1px solid rgba(91,191,122,0.2);padding:10px 14px;">
-          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--green);margin-bottom:4px;">StormGuard · Automatic Protection</div>
+        <div style="flex-shrink:0;background:linear-gradient(135deg,rgba(157,212,232,0.05),var(--panel));border:1px solid rgba(157,212,232,0.2);padding:10px 14px;">
+          <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:#9DD4E8;margin-bottom:4px;">StormGuard · Automatic Protection</div>
           <div style="font-size:13px;color:var(--text2);line-height:1.55;">Detects market regime deterioration and rotates to T-Bills automatically. 2022: HPC22 <strong style="color:var(--green)">−8.4%</strong> vs S&amp;P <strong style="color:var(--red)">−19.4%</strong> · 2020: <strong style="color:var(--green)">−11.2%</strong> vs <strong style="color:var(--red)">−34%</strong>.</div>
         </div>
 
@@ -1480,35 +1771,34 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
         <!-- LEFT: Scatter chart (under BEFORE) — blend dot moves dynamically -->
         <div class="scatter-mini">
           <div class="proj-title">Risk vs Return · Market Positioning</div>
-          <svg viewBox="0 0 340 200" width="100%" style="flex:1;min-height:80px;">
-            <!-- Axis: X=vol 5–35% → x 50–320 (9px/%), Y=CAGR 0–45% → y 170–15 (3.444px/%) -->
-            <line x1="50" y1="15" x2="50" y2="170" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-            <line x1="50" y1="170" x2="320" y2="170" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-            <!-- Horizontal grid: CAGR 10%→y136, 20%→y101, 30%→y67, 40%→y33 -->
-            <line x1="50" y1="136" x2="320" y2="136" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
-            <line x1="50" y1="101" x2="320" y2="101" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
-            <line x1="50" y1="67"  x2="320" y2="67"  stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
-            <line x1="50" y1="33"  x2="320" y2="33"  stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
-            <!-- Vertical grid: vol 10%→x95, 15%→x140, 20%→x185, 25%→x230, 30%→x275 -->
-            <line x1="95"  y1="15" x2="95"  y2="170" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
-            <line x1="140" y1="15" x2="140" y2="170" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
-            <line x1="185" y1="15" x2="185" y2="170" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
-            <line x1="230" y1="15" x2="230" y2="170" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
-            <line x1="275" y1="15" x2="275" y2="170" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+          <svg viewBox="0 0 420 210" width="100%" style="flex:1;min-height:100px;">
+            <!-- Axis: X=RN 20–90 → x 55–390 (4.786px/RN), Y=CAGR 0–45% → y 180–18 (3.6px/%) -->
+            <line x1="55" y1="18" x2="55" y2="180" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+            <line x1="55" y1="180" x2="395" y2="180" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+            <!-- Horizontal grid: CAGR 10%→y144, 20%→y108, 30%→y72, 40%→y36 -->
+            <line x1="55" y1="144" x2="395" y2="144" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+            <line x1="55" y1="108" x2="395" y2="108" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+            <line x1="55" y1="72"  x2="395" y2="72"  stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+            <line x1="55" y1="36"  x2="395" y2="36"  stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+            <!-- Vertical grid: RN 30→x103, 50→x198, 70→x293, 90→x388 -->
+            <line x1="103" y1="18" x2="103" y2="180" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+            <line x1="198" y1="18" x2="198" y2="180" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+            <line x1="293" y1="18" x2="293" y2="180" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+            <line x1="388" y1="18" x2="388" y2="180" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
             <!-- Y labels (CAGR) -->
-            <text x="44" y="140" font-family="monospace" font-size="7" fill="#3A4A5A" text-anchor="end">10%</text>
-            <text x="44" y="105" font-family="monospace" font-size="7" fill="#3A4A5A" text-anchor="end">20%</text>
-            <text x="44" y="71"  font-family="monospace" font-size="7" fill="#3A4A5A" text-anchor="end">30%</text>
-            <text x="44" y="37"  font-family="monospace" font-size="7" fill="#3A4A5A" text-anchor="end">40%</text>
-            <!-- X labels (Volatility) -->
-            <text x="95"  y="180" font-family="monospace" font-size="7" fill="#3A4A5A" text-anchor="middle">10%</text>
-            <text x="140" y="180" font-family="monospace" font-size="7" fill="#3A4A5A" text-anchor="middle">15%</text>
-            <text x="185" y="180" font-family="monospace" font-size="7" fill="#3A4A5A" text-anchor="middle">20%</text>
-            <text x="230" y="180" font-family="monospace" font-size="7" fill="#3A4A5A" text-anchor="middle">25%</text>
-            <text x="185" y="193" font-family="monospace" font-size="7" fill="#3A4A5A" text-anchor="middle">← Volatility (lower is better)</text>
-            <!-- Efficient zone: vol 5–17% -->
-            <rect x="52" y="17" width="108" height="151" rx="2" fill="rgba(91,191,122,0.04)" stroke="rgba(91,191,122,0.08)" stroke-width="1"/>
-            <text x="58" y="28" font-family="monospace" font-size="7" fill="rgba(91,191,122,0.3)">EFFICIENT</text>
+            <text x="50" y="148" font-family="monospace" font-size="7" fill="#3A4A5A" text-anchor="end">10%</text>
+            <text x="50" y="112" font-family="monospace" font-size="7" fill="#3A4A5A" text-anchor="end">20%</text>
+            <text x="50" y="76"  font-family="monospace" font-size="7" fill="#3A4A5A" text-anchor="end">30%</text>
+            <text x="50" y="40"  font-family="monospace" font-size="7" fill="#3A4A5A" text-anchor="end">40%</text>
+            <!-- X labels (Risk Number) -->
+            <text x="103" y="190" font-family="monospace" font-size="7" fill="#3A4A5A" text-anchor="middle">30</text>
+            <text x="198" y="190" font-family="monospace" font-size="7" fill="#3A4A5A" text-anchor="middle">50</text>
+            <text x="293" y="190" font-family="monospace" font-size="7" fill="#3A4A5A" text-anchor="middle">70</text>
+            <text x="388" y="190" font-family="monospace" font-size="7" fill="#3A4A5A" text-anchor="middle">90</text>
+            <text x="222" y="202" font-family="monospace" font-size="7" fill="#3A4A5A" text-anchor="middle">← Risk Number (lower is better)</text>
+            <!-- Efficient zone: RN 20–50 → x 55–198 -->
+            <rect x="57" y="20" width="139" height="158" rx="2" fill="rgba(91,191,122,0.04)" stroke="rgba(91,191,122,0.08)" stroke-width="1"/>
+            <text x="63" y="31" font-family="monospace" font-size="7" fill="rgba(91,191,122,0.3)">EFFICIENT</text>
             <!-- Arrow marker -->
             <defs>
               <marker id="arr-s" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
@@ -1516,28 +1806,28 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
               </marker>
             </defs>
             <!-- Blend arrow (dynamic) -->
-            <line id="blend-arrow" x1="171" y1="145" x2="171" y2="145" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr-s)" display="none"/>
-            <!-- SPY: vol=19.87%, cagr=11.13% → (184,132) -->
-            <circle cx="184" cy="132" r="6" fill="rgba(91,155,191,0.25)" stroke="#5B9BBF" stroke-width="1.5"/>
-            <text x="192" y="129" font-family="monospace" font-size="8" fill="#5B9BBF">SPY</text>
-            <!-- HPC11: vol=12.3%, cagr=13.0% → (116,125) -->
-            <circle cx="116" cy="125" r="7" fill="rgba(212,175,69,0.2)" stroke="#D4AF45" stroke-width="2"/>
-            <text x="73" y="119" font-family="monospace" font-size="8" fill="#D4AF45" font-weight="bold">HPC11</text>
-            <!-- HPC22: vol=27.6%, cagr=39.8% → (253,33) -->
-            <circle cx="253" cy="33" r="8" fill="rgba(91,191,122,0.2)" stroke="#5BBF7A" stroke-width="2"/>
-            <text x="261" y="30" font-family="monospace" font-size="8" fill="#5BBF7A" font-weight="bold">HPC22</text>
-            <!-- Portfolio: vol=18.4%, cagr=7.2% → (171,145) -->
-            <circle cx="171" cy="145" r="8" fill="rgba(208,70,60,0.2)" stroke="#D0463C" stroke-width="2"/>
-            <text x="179" y="141" font-family="monospace" font-size="8" fill="#D0463C">Portfolio</text>
+            <line id="blend-arrow" x1="359" y1="154" x2="359" y2="154" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr-s)" display="none"/>
+            <!-- SPY: rn=72, cagr=11.13% → (302,140) -->
+            <circle cx="302" cy="140" r="6" fill="rgba(91,155,191,0.25)" stroke="#5B9BBF" stroke-width="1.5"/>
+            <text x="310" y="137" font-family="monospace" font-size="8" fill="#5B9BBF">SPY</text>
+            <!-- HPC11: rn=33, cagr=13.0% → (117,133) -->
+            <circle cx="117" cy="133" r="7" fill="rgba(106,174,214,0.2)" stroke="#6AAED6" stroke-width="2"/>
+            <text x="68" y="128" font-family="monospace" font-size="8" fill="#6AAED6" font-weight="bold">HPC11</text>
+            <!-- HPC22: rn=37, cagr=39.8% → (136,37) -->
+            <circle cx="136" cy="37" r="8" fill="rgba(157,212,232,0.2)" stroke="#9DD4E8" stroke-width="2"/>
+            <text x="145" y="34" font-family="monospace" font-size="8" fill="#9DD4E8" font-weight="bold">HPC22</text>
+            <!-- Portfolio (dynamic): starts at aggressive rn=84, cagr=7.2% → (359,154) -->
+            <circle id="port-dot" cx="359" cy="154" r="8" fill="rgba(208,70,60,0.2)" stroke="#D0463C" stroke-width="2"/>
+            <text id="port-dot-lbl" x="304" y="150" font-family="monospace" font-size="8" fill="#D0463C">Portfolio</text>
             <!-- Blend dot (dynamic, starts at Portfolio) -->
-            <circle id="blend-dot" cx="171" cy="145" r="6" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.8)" stroke-width="1.5" stroke-dasharray="3,2"/>
-            <text id="blend-dot-lbl" x="179" y="141" font-family="monospace" font-size="7" fill="rgba(255,255,255,0.75)">Blended</text>
+            <circle id="blend-dot" cx="359" cy="154" r="6" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.8)" stroke-width="1.5" stroke-dasharray="3,2"/>
+            <text id="blend-dot-lbl" x="304" y="146" font-family="monospace" font-size="7" fill="rgba(255,255,255,0.75)">Blended</text>
           </svg>
           <div style="display:flex;gap:12px;font-family:var(--mono);font-size:10px;margin-top:6px;flex-wrap:wrap;">
             <span style="color:var(--red);">● Portfolio</span>
             <span style="color:#5B9BBF;">● SPY</span>
-            <span style="color:var(--gold);">● HPC11</span>
-            <span style="color:var(--green);">● HPC22</span>
+            <span style="color:#6AAED6;">● HPC11</span>
+            <span style="color:#9DD4E8;">● HPC22</span>
             <span style="color:rgba(255,255,255,0.75);">◌ Blended</span>
           </div>
         </div>
@@ -1816,9 +2106,17 @@ function goStep(n) {
   document.getElementById('btnNext').textContent = cur === total ? '↺ Restart' : 'Continue →';
 
   if (cur === 6)  { paeTargetVal = parseFloat(document.getElementById('goalSlider')?.value || document.getElementById('paeSlider')?.value || '200000'); requestAnimationFrame(paeInit); }
-  if (cur === 7)  { const lbl = document.getElementById('port-ref-label'); if (lbl) lbl.textContent = paeRefLabel(paeActiveRef); }
+  if (cur === 7)  { const lbl = document.getElementById('port-ref-label'); if (lbl) lbl.textContent = paeRefLabel(paeActiveRef); document.querySelectorAll('.pf-card').forEach(c=>c.classList.remove('sel')); const dc=document.getElementById('pf-card-'+selectedPortKey); if(dc)dc.classList.add('sel'); updateFlagPanel(selectedPortKey); document.querySelectorAll('.pf-card').forEach(card => { const rnDiv = [...card.querySelectorAll('div')].find(d => /^\d{2}$/.test(d.textContent.trim())); if (rnDiv) { const rn = parseInt(rnDiv.textContent.trim()); rnDiv.style.color = getRNColor(rn); } }); }
   if (cur === 8)  { populateDiagnosis(); const lbl = document.getElementById('diag-ref-label'); if (lbl) lbl.textContent = paeRefLabel(paeActiveRef); }
   if (cur === 9)  { populateComparison(); }
+  if (cur === 5)  {
+    const carry = Math.min(300000, Math.max(110000, ree4Val >= 110000 ? ree4Val : (parseFloat(document.getElementById('goalInput')?.value) || 200000)));
+    const s5inp = document.getElementById('goalInput');
+    const s5sl  = document.getElementById('goalSlider');
+    if (s5inp) s5inp.value = Math.round(carry);
+    if (s5sl)  s5sl.value  = carry;
+    treUpdate(carry);
+  }
   if (cur === 11) { updateBeforePanel(); runSim(); }
 
   updateNextBtn();
@@ -1853,7 +2151,7 @@ function updateNextBtn() {
     disabled = Object.keys(indAnswers).length < 13;
   } else if (cur === 5) {
     const v = parseFloat(document.getElementById('goalInput').value);
-    disabled = !v || v <= 100000;
+    disabled = !v || v < 110000;
   }
   btn.disabled = disabled;
 }
@@ -2060,26 +2358,26 @@ let _treAlertDismissed = false;
 
 function treUpdate(target) {
   const v = parseFloat(target);
-  if (!v || v <= 100000) {
+  if (!v || v < 110000) {
     document.getElementById('goal-input-wrap').style.borderColor = 'var(--border)';
     updateNextBtn(); return;
   }
-  document.getElementById('goal-input-wrap').style.borderColor = 'rgba(212,175,69,0.5)';
-  const r = treCalc(v);
-  const c = treColorClass(r.rn);
+  const r      = treCalc(v);
+  const rnCol  = getRNColor(r.rn);
+  const rnColA = rnCol.replace('rgb(','rgba(').replace(')',',0.08)');
+  const rnBdr  = rnCol.replace('rgb(','rgba(').replace(')',',0.5)');
+  document.getElementById('goal-input-wrap').style.borderColor = rnBdr;
 
-  // Update cards
-  const set = (id, txt, cls) => {
+  // Update cards — all colored by getRNColor(rn)
+  const setCard = (id, txt) => {
     const el = document.getElementById(id);
-    if (!el) return;
-    el.textContent = txt;
-    el.className = 'tre-card-val ' + (cls||'');
+    if (el) { el.textContent = txt; el.className = 'tre-card-val'; el.style.color = rnCol; }
   };
-  set('tre-cagr', (r.cagr*100).toFixed(1) + '%', c.cls);
-  set('tre-r6',   (r.r6*100).toFixed(1) + '%',   c.cls);
-  set('tre-vol',  (r.vol*100).toFixed(1) + '%',   r.vol>0.20 ? 'tre-risk-vhigh' : r.vol>0.12 ? 'tre-risk-high' : 'tre-risk-mid');
-  set('tre-down', (r.down6*100).toFixed(1) + '%', r.rn>=80 ? 'tre-risk-vhigh' : 'tre-risk-high');
-  set('tre-up',   '+' + (r.up6*100).toFixed(1) + '%', 'tre-risk-low');
+  setCard('tre-cagr', (r.cagr*100).toFixed(1) + '%');
+  setCard('tre-r6',   (r.r6*100).toFixed(1) + '%');
+  setCard('tre-vol',  (r.vol*100).toFixed(1) + '%');
+  setCard('tre-down', (r.down6*100).toFixed(1) + '%');
+  setCard('tre-up',   '+' + (r.up6*100).toFixed(1) + '%');
 
   // RN ring
   const rnEl  = document.getElementById('tre-rn-val');
@@ -2088,19 +2386,19 @@ function treUpdate(target) {
   const desc  = document.getElementById('tre-rn-desc');
   const card  = document.getElementById('tre-rn-card');
   const atMax = r.rn >= 99;
-  if (rnEl)  { rnEl.textContent = atMax ? '99+' : r.rn; rnEl.style.color = c.hex; }
-  if (ring)  { ring.className = 'tre-rn-ring ' + c.ring; }
+  if (rnEl)  { rnEl.textContent = atMax ? '99+' : r.rn; rnEl.style.color = rnCol; }
+  if (ring)  { ring.className = 'tre-rn-ring'; ring.style.borderColor = rnCol; ring.style.background = rnColA; }
   if (lbl)   {
     lbl.textContent = atMax ? 'Maximum Calculable Risk' :
       r.rn < 40 ? 'Conservative Path' : r.rn < 65 ? 'Moderate Risk Path' : r.rn < 80 ? 'High-Risk Path' : 'Very High-Risk Path';
-    lbl.style.color = c.hex;
+    lbl.style.color = rnCol;
   }
   if (desc)  {
     desc.textContent = atMax
       ? 'This target exceeds the maximum risk level calculable by Nitrogen — the official Risk Number platform. The strategy required to pursue it falls outside standard portfolio modeling. You may still pursue this goal, but risk metrics beyond RN 99 are not defined by the methodology.'
       : 'To achieve your $' + Math.round(v).toLocaleString() + ' target, you must tolerate a portfolio with approximately RN ' + r.rn + '. This implies a potential 6-month downside of ' + (r.down6*100).toFixed(1) + '%.';
   }
-  if (card)  { card.style.borderColor = c.hex; }
+  if (card)  { card.style.borderColor = rnCol; }
 
   // Summary
   const sumEl = document.getElementById('tre-summary');
@@ -2129,7 +2427,7 @@ function onGoalInput(val) {
   const v = parseFloat(val || document.getElementById('goalInput').value);
   // Sync slider
   const sl = document.getElementById('goalSlider');
-  if (sl && v >= 110000 && v <= 1000000) sl.value = v;
+  if (sl && v >= 110000 && v <= 300000) sl.value = v;
   treUpdate(v);
 }
 
@@ -2250,12 +2548,7 @@ function paeGetParams(ref) {
   return paeRnToParams(paeGetRN(ref));
 }
 
-function paeRnColor(rn) {
-  if (rn < 40) return 'var(--green)';
-  if (rn < 65) return 'var(--gold)';
-  if (rn < 80) return 'var(--orange)';
-  return 'var(--red)';
-}
+function paeRnColor(rn) { return getRNColor(rn); }
 
 // Animated count helper
 function paeAnimateVal(el, newText) {
@@ -2281,9 +2574,9 @@ function paeUpdate() {
     const el = document.getElementById(id);
     if (el) { el.textContent = 'RN ' + val; el.style.color = color; }
   };
-  setCard('pae-rn-fo',     foRNval,  'var(--gold)');
-  setCard('pae-rn-client', cliRNval, cliRNval >= 80 ? 'var(--orange)' : 'var(--text)');
-  setCard('pae-rn-target', tgtRNval, paeRnColor(tgtRNval));
+  setCard('pae-rn-fo',     foRNval,  getRNColor(foRNval));
+  setCard('pae-rn-client', cliRNval, getRNColor(cliRNval));
+  setCard('pae-rn-target', tgtRNval, getRNColor(tgtRNval));
 
   // ── Right: metrics ──
   const rnEl = document.getElementById('pae-m-rn');
@@ -2302,7 +2595,7 @@ function paeUpdate() {
 
   // RN card border color
   const rnCard = document.getElementById('pae-rn-card');
-  if (rnCard) rnCard.style.borderColor = col + '70';
+  if (rnCard) rnCard.style.borderColor = col.replace('rgb(','rgba(').replace(')',',0.45)');
 
   // ── Interpretation ──
   const interp   = document.getElementById('pae-interpretation');
@@ -2384,6 +2677,12 @@ function paeSwitchRef(ref) {
 function paeSliderMove(val) {
   paeTargetVal = parseFloat(val);
   _paeAlertDismissed = false;
+  // Auto-switch to 'target' so live metrics update with the slider
+  paeActiveRef = 'target';
+  ['fo','client','target'].forEach(r => {
+    const card = document.getElementById('pae-card-' + r);
+    if (card) card.classList.toggle('active', r === 'target');
+  });
   // Sync REE4 and TRE sliders
   const ree4 = document.getElementById('ree4Slider');
   const s5sl = document.getElementById('goalSlider');
@@ -2405,6 +2704,29 @@ function paeAlertAdjust() {
   if (sl) sl.focus();
   const el = document.getElementById('pae-alert');
   if (el) el.classList.remove('visible');
+}
+
+/* ══════════════════════════════════════
+   RISK NUMBER COLOR SCALE
+   0–48 green → 52 yellow → 62 orange → 80+ red
+══════════════════════════════════════ */
+function getRNColor(rn) {
+  const stops = [
+    { n:0,  r:46,  g:160, b:92  },  // green
+    { n:48, r:46,  g:160, b:92  },  // green   (48 = verde)
+    { n:52, r:212, g:172, b:58  },  // warm gold (52 = dourado suave, tipo var(--gold))
+    { n:58, r:210, g:128, b:28  },  // amber   (58 = amarelo-laranja)
+    { n:62, r:206, g:90,  b:24  },  // orange  (62 = laranja)
+    { n:80, r:200, g:45,  b:28  },  // red-orange
+    { n:99, r:192, g:28,  b:28  },  // red
+  ];
+  rn = Math.max(0, Math.min(99, rn));
+  let lo = stops[0], hi = stops[stops.length - 1];
+  for (let i = 0; i < stops.length - 1; i++) {
+    if (rn >= stops[i].n && rn <= stops[i+1].n) { lo = stops[i]; hi = stops[i+1]; break; }
+  }
+  const t = lo.n === hi.n ? 0 : (rn - lo.n) / (hi.n - lo.n);
+  return `rgb(${Math.round(lo.r+t*(hi.r-lo.r))},${Math.round(lo.g+t*(hi.g-lo.g))},${Math.round(lo.b+t*(hi.b-lo.b))})`;
 }
 
 /* ══════════════════════════════════════
@@ -2457,30 +2779,94 @@ function populateReveal() {
    STEP 7 — PORTFOLIO SELECTION
 ══════════════════════════════════════ */
 const portfolios = {
-  aggressive:   { rn:84, vol:18.4, dd:-34, sharpe:0.61, cagr:7.2,  align:38 },
-  growth:       { rn:75, vol:14.8, dd:-27, sharpe:0.91, cagr:9.1,  align:55 },
-  balanced:     { rn:60, vol:11.2, dd:-19, sharpe:1.05, cagr:7.8,  align:68 },
-  conservative: { rn:45, vol:8.1,  dd:-13, sharpe:1.12, cagr:6.4,  align:78 },
-  income:       { rn:52, vol:9.8,  dd:-15, sharpe:1.08, cagr:7.0,  align:72 }
+  p3: { rn:38, vol:8.1,  dd:-12, sharpe:1.18, cagr:6.4, align:85 },
+  p2: { rn:52, vol:9.8,  dd:-15, sharpe:1.08, cagr:7.0, align:72 },
+  p1: { rn:48, vol:10.5, dd:-16, sharpe:1.05, cagr:7.5, align:65 },
+  p5: { rn:58, vol:12.8, dd:-19, sharpe:1.02, cagr:9.1, align:58 },
+  p4: { rn:62, vol:14.0, dd:-21, sharpe:0.98, cagr:9.5, align:52 }
 };
-let selectedPortKey = 'aggressive';
+const portfolioModels = {
+  p3:{ name:'Conservador EUA',
+    us:{ pct:100,rf:57,rv:43,assets:[{t:'T-Note 2Y',p:15},{t:'T-Bond 10Y',p:12},{t:'TLT',p:10},{t:'AGG',p:12},{t:'BND',p:8},{t:'SPY',p:10},{t:'IVV',p:8},{t:'VIG',p:8},{t:'QUAL',p:7},{t:'IYR',p:5},{t:'QQQ',p:5}]},
+    br:{ pct:0, rf:0, rv:0, assets:[]}, eu:{ pct:0, rf:0, rv:0, assets:[]}
+  },
+  p2:{ name:'Conservador-Moderado Global',
+    us:{ pct:20,rf:8, rv:12,assets:[{t:'AGG',p:8},{t:'SPY',p:7},{t:'QUAL',p:5}]},
+    br:{ pct:70,rf:45,rv:25,assets:[{t:'NTN-B 2029',p:12},{t:'CDB BTG',p:10},{t:'LCI Itaú',p:8},{t:'BTG Infra',p:7},{t:'Verde Asset',p:8},{t:'Alaska Black',p:7},{t:'BOVA11',p:8},{t:'KNRI11',p:5},{t:'IVVB11',p:5}]},
+    eu:{ pct:10,rf:5, rv:5, assets:[{t:'IEV',p:5},{t:'IBGX',p:5}]}
+  },
+  p1:{ name:'Conservador Brasil',
+    us:{ pct:20,rf:15,rv:5, assets:[{t:'AGG',p:8},{t:'TLT',p:7},{t:'SPY',p:5}]},
+    br:{ pct:80,rf:73,rv:7, assets:[{t:'NTN-B 2029',p:15},{t:'LFT 2026',p:12},{t:'CDB BTG',p:10},{t:'LCI Itaú',p:10},{t:'XP Crédito',p:8},{t:'BTG Infra',p:8},{t:'Verde Asset',p:10},{t:'BOVA11',p:7}]},
+    eu:{ pct:0, rf:0, rv:0, assets:[]}
+  },
+  p5:{ name:'Moderado EUA',
+    us:{ pct:100,rf:28,rv:70,crypto:2,assets:[{t:'T-Note 2Y',p:10},{t:'T-Bond 10Y',p:10},{t:'AGG',p:8},{t:'AAPL',p:7},{t:'MSFT',p:7},{t:'GOOGL',p:6},{t:'JPM',p:6},{t:'JNJ',p:5},{t:'BRK.B',p:4},{t:'SPY',p:10},{t:'QQQ',p:8},{t:'VIG',p:7},{t:'VYM',p:5},{t:'VHT',p:5},{t:'IBIT',p:2}]},
+    br:{ pct:0, rf:0, rv:0, assets:[]}, eu:{ pct:0, rf:0, rv:0, assets:[]}
+  },
+  p4:{ name:'Balanceado Moderado Global',
+    us:{ pct:40,rf:18,rv:22,assets:[{t:'T-Bond 10Y',p:10},{t:'AGG',p:8},{t:'SPY',p:8},{t:'IVV',p:7},{t:'VIG',p:7}]},
+    br:{ pct:55,rf:33,rv:22,assets:[{t:'NTN-B 2029',p:10},{t:'CDB BTG',p:8},{t:'LCI Itaú',p:7},{t:'Verde Asset',p:8},{t:'BOVA11',p:7},{t:'HASH11',p:5},{t:'KNRI11',p:5},{t:'PBR2030',p:5}]},
+    eu:{ pct:5, rf:0, rv:5, assets:[{t:'IEV',p:5}]}
+  }
+};
+let selectedPortKey = 'p1';
 
 function choosePortMode(mode) {
-  document.getElementById('port-mode-real').classList.remove('sel');
-  document.getElementById('port-mode-model').classList.remove('sel');
-  document.getElementById('port-mode-' + mode).classList.add('sel');
-  document.getElementById('real-upload-area').style.display    = mode === 'real'  ? 'block' : 'none';
-  document.getElementById('model-selector-area').style.display = mode === 'model' ? 'block' : 'none';
-  if (mode === 'model' && !document.querySelector('.model-card.sel[id^=model-]')) {
-    selectModel(document.getElementById('model-aggressive'), 'aggressive');
-  }
+  const isReal = mode === 'real';
+  const uploadArea = document.getElementById('real-upload-area');
+  const modelList  = document.getElementById('model-list-area');
+  const flagPanel  = document.getElementById('flag-detail-panel');
+  const btnReal    = document.getElementById('btn-port-real');
+  const btnModel   = document.getElementById('btn-port-model');
+  if (uploadArea) uploadArea.style.display = isReal ? 'block' : 'none';
+  if (modelList)  modelList.style.display  = isReal ? 'none'  : 'flex';
+  if (flagPanel)  flagPanel.style.display  = isReal ? 'none'  : 'flex';
+  if (btnReal)  { btnReal.style.borderColor  = isReal ? 'var(--gold)' : 'var(--border)';  btnReal.style.background  = isReal ? 'var(--gold-bg)' : 'var(--panel)'; }
+  if (btnModel) { btnModel.style.borderColor = isReal ? 'var(--border)' : 'var(--gold)'; btnModel.style.background = isReal ? 'var(--panel)' : 'var(--gold-bg)'; }
 }
 function selectModel(el, key) {
-  document.querySelectorAll('[id^=model-]').forEach(c => c.classList.remove('sel'));
-  el.classList.add('sel');
+  document.querySelectorAll('.pf-card,.map-port-card').forEach(c => c.classList.remove('sel'));
+  if (el) el.classList.add('sel');
   selectedPortKey = key;
   const p = portfolios[key];
-  if (p) { BEFORE.rn = p.rn; BEFORE.vol = p.vol; BEFORE.dd = p.dd; BEFORE.sharpe = p.sharpe; BEFORE.cagr = p.cagr; BEFORE.align = p.align; }
+  if (p) { BEFORE.rn=p.rn; BEFORE.vol=p.vol; BEFORE.dd=p.dd; BEFORE.sharpe=p.sharpe; BEFORE.cagr=p.cagr; BEFORE.align=p.align; }
+  updateFlagPanel(key);
+}
+
+/* ── REGION PANEL ── */
+function updateFlagPanel(key) {
+  const m = portfolioModels[key];
+  if (!m) return;
+  [{ id:'us', data:m.us }, { id:'br', data:m.br }, { id:'eu', data:m.eu }].forEach(({ id, data }) => {
+    const pctEl = document.getElementById('rp-pct-'   + id);
+    const rfEl  = document.getElementById('rp-rf-'    + id);
+    const rvEl  = document.getElementById('rp-rv-'    + id);
+    const rfBar = document.getElementById('rp-rf-'    + id + '-bar');
+    const rvBar = document.getElementById('rp-rv-'    + id + '-bar');
+    const extra = document.getElementById('rp-extra-' + id);
+    const volEl = document.getElementById('rp-vol-'   + id);
+    const card  = document.getElementById('rp-card-'  + id);
+    if (pctEl) pctEl.textContent  = data.pct > 0 ? data.pct + '%' : '—';
+    if (rfEl)  rfEl.textContent   = data.rf  > 0 ? data.rf  + '%' : '—';
+    if (rvEl)  rvEl.textContent   = data.rv  > 0 ? data.rv  + '%' : '—';
+    if (rfBar) rfBar.style.width  = data.rf  + '%';
+    if (rvBar) rvBar.style.width  = data.rv  + '%';
+    if (card)  card.style.opacity = data.pct > 0 ? '1' : '0.3';
+    if (extra) extra.textContent  = data.crypto ? '₿ Crypto ' + data.crypto + '%' : '';
+    if (volEl) {
+      if (data.pct > 0) {
+        const rv = data.rv || 0;
+        volEl.textContent = rv > 50 ? 'Alto' : rv > 25 ? 'Moderado' : 'Baixo';
+      } else {
+        volEl.textContent = '—';
+      }
+    }
+  });
+}
+function toggleUpload() {
+  const a = document.getElementById('real-upload-area');
+  if (a) a.style.display = a.style.display === 'none' ? 'block' : 'none';
 }
 function simulateUpload() {
   alert('Portfolio upload — feature in development.\nUsing a model portfolio for this demonstration.');
@@ -2500,16 +2886,36 @@ function populateDiagnosis() {
   const port   = portfolios[selectedPortKey] || portfolios.aggressive;
   const portRN = port.rn;
 
-  document.getElementById('diag-fo-rn').textContent     = foFinal;
-  document.getElementById('diag-port-rn').textContent   = portRN;
-  document.getElementById('diag-client-rn').textContent = indFinal;
+  const foColor   = getRNColor(foFinal);
+  const portColor = getRNColor(portRN);
+  const clColor   = getRNColor(indFinal);
+
+  function applyBox(boxId, lblId, rnId, catId, rnVal, col) {
+    const colBg  = col.replace('rgb(', 'rgba(').replace(')', ',0.06)');
+    const colBdr = col.replace('rgb(', 'rgba(').replace(')', ',0.35)');
+    const box = document.getElementById(boxId);
+    if (box) { box.style.background = colBg; box.style.borderColor = colBdr; }
+    const rnEl = document.getElementById(rnId);
+    if (rnEl) { rnEl.textContent = rnVal; rnEl.style.color = col; }
+    const lblEl = document.getElementById(lblId);
+    if (lblEl) lblEl.style.color = col;
+    const catEl = document.getElementById(catId);
+    if (catEl) catEl.style.color = col;
+  }
+
+  applyBox('diag-box-fo',     'diag-fo-lbl',     'diag-fo-rn',     'diag-fo-cat',     foFinal,  foColor);
+  applyBox('diag-box-port',   'diag-port-lbl',   'diag-port-rn',   'diag-port-cat',   portRN,   portColor);
+  applyBox('diag-box-client', 'diag-client-lbl', 'diag-client-rn', 'diag-client-cat', indFinal, clColor);
 
   const [foCat]  = rnCategory(foFinal,  'fo');
   const [indCat] = rnCategory(indFinal, 'ind');
-  document.getElementById('diag-fo-cat').textContent     = foCat;
-  document.getElementById('diag-client-cat').textContent = indCat;
-  document.getElementById('diag-port-cat').textContent   =
-    portRN >= 80 ? 'Ultra Aggressive' : portRN >= 65 ? 'Aggressive' : 'Moderate';
+  const foCatEl   = document.getElementById('diag-fo-cat');
+  const portCatEl = document.getElementById('diag-port-cat');
+  const clCatEl   = document.getElementById('diag-client-cat');
+  if (foCatEl)   { foCatEl.textContent   = foCat;  foCatEl.style.color   = foColor; }
+  if (clCatEl)   { clCatEl.textContent   = indCat; clCatEl.style.color   = clColor; }
+  if (portCatEl) { portCatEl.textContent = portRN >= 80 ? 'Ultra Aggressive' : portRN >= 65 ? 'Aggressive' : 'Moderate';
+                   portCatEl.style.color  = portColor; }
 
   const gap1 = portRN - foFinal;
   const gap2 = portRN - indFinal;
@@ -2542,7 +2948,7 @@ function populateDiagnosis() {
 /* ══════════════════════════════════════
    SIMULATION ENGINE
 ══════════════════════════════════════ */
-let BEFORE = { rn:84, vol:18.4, dd:-34, sharpe:0.61, cagr:7.2, align:38 };
+let BEFORE = { rn:52, vol:10.5, dd:-16, sharpe:1.05, cagr:7.5, align:65 };
 const HPC11  = { rn:33, vol:12.3, dd:-18, sharpe:1.38, cagr:13.0 };
 const HPC22  = { rn:37, vol:27.6, dd:-26, sharpe:1.52, cagr:39.8 };
 
@@ -2558,24 +2964,39 @@ function blend(h11p, h22p) {
   };
 }
 
-function updateBlendDot(vol, cagr) {
+function updateBlendDot(blendRN, blendCagr) {
+  // Axis: X=RN 20–90 → x 55–390 (4.786px/RN), Y=CAGR 0–45% → y 180–18 (3.6px/%)
+  const rnToX   = rn => Math.max(57, Math.min(388, 55 + (rn - 20) * 4.786));
+  const cagrToY = c  => Math.max(20, Math.min(178, 180 - c * 3.6));
+
+  // Update Portfolio dot (follows BEFORE)
+  const px = rnToX(BEFORE.rn);
+  const py = cagrToY(BEFORE.cagr);
+  const portDot = document.getElementById('port-dot');
+  const portLbl = document.getElementById('port-dot-lbl');
+  if (portDot) { portDot.setAttribute('cx', px.toFixed(1)); portDot.setAttribute('cy', py.toFixed(1)); }
+  if (portLbl) {
+    const lx = px < 340 ? px - 55 : px - 62;
+    portLbl.setAttribute('x', lx.toFixed(1));
+    portLbl.setAttribute('y', (py - 4).toFixed(1));
+  }
+
+  // Update Blend dot
   const dot = document.getElementById('blend-dot');
   const lbl = document.getElementById('blend-dot-lbl');
   const arr = document.getElementById('blend-arrow');
   if (!dot) return;
-  // Axis: X vol 5–35% → x 50–320 (9px/1%), Y CAGR 0–45% → y 170–15 (3.444px/1%)
-  const cx = Math.max(53, Math.min(317, 50 + (vol - 5) * 9));
-  const cy = Math.max(18, Math.min(168, 170 - cagr * 3.444));
+  const cx = rnToX(blendRN);
+  const cy = cagrToY(blendCagr);
   dot.setAttribute('cx', cx.toFixed(1));
   dot.setAttribute('cy', cy.toFixed(1));
   if (lbl) {
-    const lblX = cx < 280 ? cx + 8 : cx - 46;
+    const lblX = cx < 340 ? cx + 8 : cx - 50;
     lbl.setAttribute('x', lblX.toFixed(1));
     lbl.setAttribute('y', (cy - 4).toFixed(1));
   }
-  // Arrow from Portfolio (171,145) to Blend
+  // Arrow from Portfolio to Blend
   if (arr) {
-    const px = 171, py = 145;
     const dx = cx - px, dy = cy - py;
     const dist = Math.sqrt(dx * dx + dy * dy);
     if (dist > 14) {
@@ -2606,17 +3027,20 @@ function radarPolyPts9(scales) {
 function populateComparison() {
   const port = portfolios[selectedPortKey] || portfolios.aggressive;
   const hpc  = HPC22;
-  const volBetter = port.vol <= hpc.vol;
+  const riskBandColor = v => v <= 10 ? 'var(--green)' : v <= 30 ? 'var(--gold)' : v <= 50 ? '#D07820' : 'var(--red)';
   const rows = [
     { lbl: 'Volatility', portVal: port.vol + '%', hpcVal: hpc.vol + '%',
-      portBar: Math.min(100, port.vol / 35 * 100), hpcBar: Math.min(100, hpc.vol / 35 * 100),
-      portColor: volBetter ? 'var(--green)' : 'var(--red)', hpcColor: volBetter ? 'var(--gold)' : 'var(--green)',
-      delta: volBetter ? '+' + ((hpc.vol - port.vol) / port.vol * 100).toFixed(0) + '% higher (active)'
-                       : ((port.vol - hpc.vol) / port.vol * 100).toFixed(0) + '% lower ↓' },
+      portBar: Math.min(100, port.vol / 50 * 100), hpcBar: Math.min(100, hpc.vol / 50 * 100),
+      portColor: riskBandColor(port.vol),
+      hpcColor:  riskBandColor(hpc.vol),
+      delta: '+' + ((hpc.vol - port.vol) / port.vol * 100).toFixed(0) + '% higher (active)' },
     { lbl: 'Max Drawdown', portVal: port.dd + '%', hpcVal: hpc.dd + '%',
-      portBar: Math.min(100, Math.abs(port.dd) / 40 * 100), hpcBar: Math.min(100, Math.abs(hpc.dd) / 40 * 100),
-      portColor: 'var(--red)', hpcColor: 'var(--green)',
-      delta: ((Math.abs(port.dd) - Math.abs(hpc.dd)) / Math.abs(port.dd) * 100).toFixed(0) + '% shallower ↓' },
+      portBar: Math.min(100, Math.abs(port.dd) / 50 * 100), hpcBar: Math.min(100, Math.abs(hpc.dd) / 50 * 100),
+      portColor: riskBandColor(Math.abs(port.dd)),
+      hpcColor:  riskBandColor(Math.abs(hpc.dd)),
+      delta: Math.abs(hpc.dd) < Math.abs(port.dd)
+        ? ((Math.abs(port.dd) - Math.abs(hpc.dd)) / Math.abs(port.dd) * 100).toFixed(0) + '% shallower ↓'
+        : ((Math.abs(hpc.dd) - Math.abs(port.dd)) / Math.abs(port.dd) * 100).toFixed(0) + '% deeper ↑' },
     { lbl: 'Sharpe Ratio', portVal: port.sharpe.toFixed(2), hpcVal: hpc.sharpe.toFixed(2),
       portBar: Math.min(100, port.sharpe / 2 * 100), hpcBar: Math.min(100, hpc.sharpe / 2 * 100),
       portColor: 'var(--red)', hpcColor: 'var(--green)',
@@ -2626,7 +3050,7 @@ function populateComparison() {
       portColor: 'var(--gold)', hpcColor: 'var(--green)',
       delta: '+' + ((hpc.cagr / port.cagr - 1) * 100).toFixed(0) + '% higher ↑' },
     { lbl: 'Risk Number', portVal: 'RN ' + port.rn, hpcVal: 'RN ' + hpc.rn,
-      portBar: port.rn, hpcBar: hpc.rn, portColor: 'var(--red)', hpcColor: 'var(--green)',
+      portBar: port.rn, hpcBar: hpc.rn, portColor: getRNColor(port.rn), hpcColor: getRNColor(hpc.rn),
       delta: '−' + (port.rn - hpc.rn) + ' pts aligned ↓',
       portSub: 'Exceeds mandate', hpcSub: 'Within mandate' }
   ];
@@ -2651,11 +3075,11 @@ function populateComparison() {
     </div>`).join('');
 
   const portScales = [
-    Math.max(0, 1 - Math.abs(port.dd) / 40),
-    Math.min(1, port.cagr / 45),
-    (port.align || 38) / 100,
-    Math.min(1, port.sharpe / 2.0),
-    Math.max(0, 1 - port.vol / 35)
+    (port.align || 38) / 100,                   // axis 0 TOP   — ALIGNMENT
+    Math.min(1, port.cagr / 45),                // axis 1 UP-R  — CAGR
+    Math.max(0, 1 - Math.abs(port.dd) / 100),   // axis 2 LOW-R — DRAWDOWN (0=outer, 100%=-center)
+    Math.max(0, 1 - port.vol / 100),            // axis 3 LOW-L — VOL CTRL (0=outer, 100%=center)
+    Math.min(1, port.sharpe / 2.0)              // axis 4 UP-L  — SHARPE
   ];
   const portPolyEl = document.getElementById('cmp9-poly-port');
   if (portPolyEl) portPolyEl.setAttribute('points', radarPolyPts9(portScales));
@@ -2664,7 +3088,7 @@ function populateComparison() {
     if (dot) { const p = radarPt9(s, k); dot.setAttribute('cx', p.x); dot.setAttribute('cy', p.y); }
   });
 
-  const hpcScales = [0.35, 0.884, 0.98, 0.76, 0.211];
+  const hpcScales = [0.98, 0.884, 0.74, 0.724, 0.76]; // [ALIGN,CAGR,DD(1-26/100),VOL(1-27.6/100),SHARPE]
   const hpcArea  = hpcScales.reduce((acc, s, i) => acc + s * hpcScales[(i + 1) % 5], 0);
   const portArea = portScales.reduce((acc, s, i) => acc + s * portScales[(i + 1) % 5], 0);
   const coverage = portArea / hpcArea;
@@ -2681,13 +3105,13 @@ function populateComparison() {
 ══════════════════════════════════════ */
 function updateBeforePanel() {
   const g = id => document.getElementById(id);
-  if (g('beforeRN'))    g('beforeRN').textContent    = BEFORE.rn;
+  if (g('beforeRN'))    { g('beforeRN').textContent = BEFORE.rn; g('beforeRN').style.color = getRNColor(BEFORE.rn); }
   if (g('beforeVol'))   g('beforeVol').textContent   = BEFORE.vol + '%';
   if (g('beforeDD'))    g('beforeDD').textContent    = BEFORE.dd + '%';
   if (g('beforeSharpe'))g('beforeSharpe').textContent= BEFORE.sharpe;
   if (g('beforeCAGR'))  g('beforeCAGR').textContent  = BEFORE.cagr + '%';
   if (g('beforeAlign')) g('beforeAlign').textContent = BEFORE.align + '/100';
-  if (g('prev-rn'))  g('prev-rn').textContent  = BEFORE.rn;
+  if (g('prev-rn'))  { g('prev-rn').textContent = BEFORE.rn; g('prev-rn').style.color = getRNColor(BEFORE.rn); }
   if (g('prev-vol')) g('prev-vol').textContent = BEFORE.vol + '%';
   if (g('prev-sh'))  g('prev-sh').textContent  = BEFORE.sharpe;
   if (g('prev-al'))  g('prev-al').textContent  = BEFORE.align;
@@ -2707,13 +3131,15 @@ function runSim() {
   const r     = blend(h11, h22);
   const align = Math.min(98, Math.round(BEFORE.align + (BEFORE.rn - r.rn) * 3.5));
 
-  document.getElementById('afterRN').textContent     = r.rn;
+  const afterRNEl = document.getElementById('afterRN');
+  if (afterRNEl) { afterRNEl.textContent = r.rn; afterRNEl.style.color = getRNColor(r.rn); }
   document.getElementById('afterVol').textContent    = r.vol + '%';
   document.getElementById('afterDD').textContent     = r.dd + '%';
   document.getElementById('afterSharpe').textContent = r.sharpe;
   document.getElementById('afterCAGR').textContent   = r.cagr + '%';
   document.getElementById('afterAlign').textContent  = align + '/100';
-  document.getElementById('dn-rn').textContent  = r.rn;
+  const dnRnEl = document.getElementById('dn-rn');
+  if (dnRnEl) { dnRnEl.textContent = r.rn; dnRnEl.style.color = getRNColor(r.rn); }
   document.getElementById('dc-rn').textContent  = '↓ −' + (BEFORE.rn - r.rn) + ' pts';
   document.getElementById('dn-vol').textContent = r.vol + '%';
   document.getElementById('dc-vol').textContent = '↓ −' + (BEFORE.vol - r.vol).toFixed(1) + ' pts';
@@ -2728,7 +3154,7 @@ function runSim() {
   setCheck('sd-vol', 'sc-vol', r.vol <= 15,  'Volatility: '  + r.vol  + '%' + (r.vol <= 15 ? ' ✓ FO Mandate OK' : ' ⚠ Exceeds mandate'));
   setCheck('sd-ret', 'sc-ret', r.cagr >= 9.5,'Return: '      + r.cagr + '%' + (r.cagr >= 9.5 ? ' ✓ Target met' : ' ⚠ Below target'));
 
-  updateBlendDot(r.vol, r.cagr);
+  updateBlendDot(r.rn, r.cagr);
   updateProjectionChart(r.cagr);
 }
 
