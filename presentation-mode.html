@@ -629,6 +629,19 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
           <div class="tre-slider-ends"><span>$100k</span><span>$200k</span><span>$300k</span><span>$400k</span><span>$500k</span></div>
         </div>
 
+        <!-- Risk Number card — updated live as slider moves -->
+        <div class="tre-rn-card" id="tre-rn-card" style="margin-top:20px;">
+          <div class="tre-rn-ring" id="tre-rn-ring">
+            <div class="tre-rn-ring-val" id="tre-rn-val">—</div>
+            <div class="tre-rn-ring-lbl">Risk No.</div>
+          </div>
+          <div class="tre-rn-body">
+            <div class="tre-rn-title" id="tre-rn-label">Enter a target to calculate</div>
+            <div class="tre-rn-desc" id="tre-rn-desc">Estimated Risk Number based on the Nitrogen downside-to-RN interpolation model. This is the implied risk appetite required to pursue your target.</div>
+            <div class="tre-nitrogen">RN powered by Nitrogen</div>
+          </div>
+        </div>
+
         <!-- Microcopy -->
         <div class="tre-microcopy" style="margin-top:16px;">
           Target return is not risk tolerance. This engine translates your desired outcome into the volatility and downside you may need to withstand. Two clients can share the same return target while having very different risk capacities.
@@ -678,19 +691,6 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
             <div class="tre-card-lbl">Potential 6-Month Downside</div>
             <div class="tre-card-val" id="tre-down">—</div>
             <div class="tre-card-sub">95th percentile · Nitrogen method</div>
-          </div>
-        </div>
-
-        <!-- Risk Number card (full width) -->
-        <div class="tre-rn-card" id="tre-rn-card">
-          <div class="tre-rn-ring" id="tre-rn-ring">
-            <div class="tre-rn-ring-val" id="tre-rn-val">—</div>
-            <div class="tre-rn-ring-lbl">Risk No.</div>
-          </div>
-          <div class="tre-rn-body">
-            <div class="tre-rn-title" id="tre-rn-label">Enter a target to calculate</div>
-            <div class="tre-rn-desc" id="tre-rn-desc">Estimated Risk Number based on the Nitrogen downside-to-RN interpolation model. This is the implied risk appetite required to pursue your target.</div>
-            <div class="tre-nitrogen">RN powered by Nitrogen</div>
           </div>
         </div>
 
