@@ -1054,7 +1054,7 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
     <div style="flex-shrink:0;padding:18px 40px 14px;border-bottom:1px solid var(--border);display:flex;align-items:baseline;gap:20px;">
       <div>
         <div class="kicker" style="margin-bottom:2px;">Step 9 · Comparison</div>
-        <div style="font-family:var(--syne);font-size:29px;font-weight:800;color:var(--text);line-height:1.1;">Portfolio vs CORE22</div>
+        <div style="font-family:var(--syne);font-size:29px;font-weight:800;color:var(--text);line-height:1.1;">Portfolio vs HPC22</div>
       </div>
       <div style="font-size:13px;color:var(--text3);max-width:420px;line-height:1.5;">Relative to your selected alignment, here is how your portfolio performs against the target structure.</div>
     </div>
@@ -1073,12 +1073,12 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
             <span style="font-family:var(--mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text4);">Metric</span>
           </div>
           <div style="padding:10px 16px;background:rgba(91,191,122,0.06);border:1px solid rgba(91,191,122,0.15);border-left:none;">
-            <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--green);">CORE22 (HPC22)</div>
+            <div style="font-family:var(--mono);font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--green);">HPC22</div>
             <div style="font-family:var(--syne);font-size:13px;font-weight:600;color:var(--text3);margin-top:2px;">Aligned Strategy</div>
           </div>
         </div>
 
-        <div style="border:1px solid var(--border);overflow:hidden;">
+        <div id="cmp9-rows" style="border:1px solid var(--border);overflow:hidden;">
           <div class="comp-row">
             <div class="comp-left-cell">
               <div class="comp-val-big" style="color:var(--red);">18.4%</div>
@@ -1160,7 +1160,7 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
 
         <div style="margin-top:14px;background:linear-gradient(135deg,rgba(91,191,122,0.05),var(--panel));border:1px solid rgba(91,191,122,0.2);padding:14px 18px;display:flex;align-items:center;gap:16px;">
           <div style="font-size:26px;">🏆</div>
-          <div style="font-size:14px;color:var(--text2);line-height:1.6;">CORE22 wins on <strong style="color:var(--green)">every single metric</strong>. Lower risk. Higher return. Better protection in every crisis scenario. Aligned with both the client and the FO mandate.</div>
+          <div id="cmp9-narrative" style="font-size:14px;color:var(--text2);line-height:1.6;">HPC22 leads on <strong style="color:var(--green)">risk-adjusted return</strong>. Superior drawdown protection and a Risk Number of <strong style="color:var(--green)">37</strong> — aligned with the mandate.</div>
         </div>
       </div>
 
@@ -1176,7 +1176,7 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
           <div style="display:flex;gap:14px;align-items:center;">
             <div style="display:flex;align-items:center;gap:6px;">
               <div style="width:10px;height:10px;background:rgba(91,191,122,0.35);border:1.5px solid rgba(91,191,122,0.85);border-radius:2px;"></div>
-              <span style="font-family:var(--mono);font-size:10px;letter-spacing:0.1em;color:var(--green);">CORE22</span>
+              <span style="font-family:var(--mono);font-size:10px;letter-spacing:0.1em;color:var(--green);">HPC22</span>
             </div>
             <div style="display:flex;align-items:center;gap:6px;">
               <div style="width:10px;height:10px;background:rgba(208,70,60,0.3);border:1.5px solid rgba(208,70,60,0.9);border-radius:2px;"></div>
@@ -1210,43 +1210,33 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
             <line x1="220" y1="215" x2="126" y2="332" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
             <line x1="220" y1="215" x2="73"  y2="148" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
 
-            <!-- CORE22 area — large (green) -->
-            <!-- Normalized scores: DD=0.79, CAGR=0.733, Align=0.86, Sharpe=0.76, VolCtrl=0.55 -->
-            <!-- Points: top(0.79), TR(0.733), BR(0.86), BL(0.76), TL(0.55) -->
-            <!-- top:    220, 215-(0.79*160)=215-126.4=88.6 → 220,88.6 -->
-            <!-- TR:     220+sin72°*(0.733*160), 215-cos72°*(0.733*160) = 220+111.5, 215-36.3 → 331.5,178.7 -->
-            <!-- BR:     220+sin36°*(0.86*160), 215+cos36°*(0.86*160) = 220+80.9, 215+111.4 → 300.9,326.4 -->
-            <!-- BL:     220-sin36°*(0.76*160), 215+cos36°*(0.76*160) = 220-71.5, 215+98.4 → 148.5,313.4 -->
-            <!-- TL:     220-sin72°*(0.55*160), 215-cos72°*(0.55*160) = 220-83.8, 215-27.2 → 136.2,187.8 -->
-            <polygon points="220,88.6 331.5,178.7 300.9,326.4 148.5,313.4 136.2,187.8"
+            <!-- HPC22 area — large (green) -->
+            <!-- Normalized: DD=0.35, CAGR=0.884, Align=0.98, Sharpe=0.76, VolCtrl=0.211 -->
+            <!-- axes θ=[-90,-18,54,126,198]°, center(220,215), r=160 -->
+            <polygon id="cmp9-poly-hpc" points="220,159 354.5,171.3 312.1,341.9 148.6,313.2 187.9,204.6"
               fill="rgba(91,191,122,0.15)" stroke="rgba(91,191,122,0.9)" stroke-width="2"/>
 
-            <!-- Portfolio area — small (red) -->
-            <!-- Normalized: DD=0.15, CAGR=0.48, Align=0.38, Sharpe=0.305, VolCtrl=0.33 -->
-            <!-- top:    220, 215-(0.15*160)=215-24=191 → 220,191 -->
-            <!-- TR:     220+sin72°*0.48*160, 215-cos72°*0.48*160 = 220+73.1, 215-23.8 → 293.1,191.2 -->
-            <!-- BR:     220+sin36°*0.38*160, 215+cos36°*0.38*160 = 220+35.7, 215+49.2 → 255.7,264.2 -->
-            <!-- BL:     220-sin36°*0.305*160, 215+cos36°*0.305*160 = 220-28.7, 215+39.5 → 191.3,254.5 -->
-            <!-- TL:     220-sin72°*0.33*160, 215-cos72°*0.33*160 = 220-50.2, 215-16.4 → 169.8,198.6 -->
-            <polygon points="220,191 293.1,191.2 255.7,264.2 191.3,254.5 169.8,198.6"
+            <!-- Portfolio area — dynamic (red) -->
+            <!-- Default: aggressive DD=0.15,CAGR=0.16,Align=0.38,Sharpe=0.305,VolCtrl=0.474 -->
+            <polygon id="cmp9-poly-port" points="220,191 244.3,207.1 255.7,264.1 191.3,254.5 148.0,191.6"
               fill="rgba(208,70,60,0.2)" stroke="rgba(208,70,60,0.95)" stroke-width="2"/>
 
             <!-- Center dot -->
             <circle cx="220" cy="215" r="3" fill="rgba(255,255,255,0.2)"/>
 
-            <!-- Data point dots: CORE22 -->
-            <circle cx="220"   cy="88.6"  r="4" fill="#5BBF7A"/>
-            <circle cx="331.5" cy="178.7" r="4" fill="#5BBF7A"/>
-            <circle cx="300.9" cy="326.4" r="4" fill="#5BBF7A"/>
-            <circle cx="148.5" cy="313.4" r="4" fill="#5BBF7A"/>
-            <circle cx="136.2" cy="187.8" r="4" fill="#5BBF7A"/>
+            <!-- Data point dots: HPC22 -->
+            <circle id="cmp9-dot-h0" cx="220"   cy="159"   r="4" fill="#5BBF7A"/>
+            <circle id="cmp9-dot-h1" cx="354.5" cy="171.3" r="4" fill="#5BBF7A"/>
+            <circle id="cmp9-dot-h2" cx="312.1" cy="341.9" r="4" fill="#5BBF7A"/>
+            <circle id="cmp9-dot-h3" cx="148.6" cy="313.2" r="4" fill="#5BBF7A"/>
+            <circle id="cmp9-dot-h4" cx="187.9" cy="204.6" r="4" fill="#5BBF7A"/>
 
-            <!-- Data point dots: Portfolio -->
-            <circle cx="220"   cy="191"   r="4" fill="#D0463C"/>
-            <circle cx="293.1" cy="191.2" r="4" fill="#D0463C"/>
-            <circle cx="255.7" cy="264.2" r="4" fill="#D0463C"/>
-            <circle cx="191.3" cy="254.5" r="4" fill="#D0463C"/>
-            <circle cx="169.8" cy="198.6" r="4" fill="#D0463C"/>
+            <!-- Data point dots: Portfolio (dynamic) -->
+            <circle id="cmp9-dot-p0" cx="220"   cy="191"   r="4" fill="#D0463C"/>
+            <circle id="cmp9-dot-p1" cx="244.3" cy="207.1" r="4" fill="#D0463C"/>
+            <circle id="cmp9-dot-p2" cx="255.7" cy="264.1" r="4" fill="#D0463C"/>
+            <circle id="cmp9-dot-p3" cx="191.3" cy="254.5" r="4" fill="#D0463C"/>
+            <circle id="cmp9-dot-p4" cx="148.0" cy="191.6" r="4" fill="#D0463C"/>
 
             <!-- Axis labels (larger font, breathing room) -->
             <text x="220" y="38" text-anchor="middle"
@@ -1277,11 +1267,11 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
         <div style="flex-shrink:0;padding:14px 28px;border-top:1px solid var(--border);background:rgba(208,70,60,0.04);display:flex;align-items:center;gap:20px;">
           <div style="flex-shrink:0;">
             <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--red);margin-bottom:3px;">Efficiency Gap</div>
-            <div style="font-family:var(--syne);font-size:24px;font-weight:800;color:var(--red);">~77%</div>
-            <div style="font-family:var(--mono);font-size:10px;color:var(--text4);">of CORE22 coverage<br>not being captured</div>
+            <div id="cmp9-eff-pct" style="font-family:var(--syne);font-size:24px;font-weight:800;color:var(--red);">~81%</div>
+            <div id="cmp9-eff-cov" style="font-family:var(--mono);font-size:10px;color:var(--text4);">of HPC22 coverage<br>not being captured</div>
           </div>
           <div style="width:1px;height:44px;background:var(--border);flex-shrink:0;"></div>
-          <div style="font-size:14px;color:var(--text3);line-height:1.6;">The red polygon occupies <strong style="color:var(--red)">~23%</strong> of the area of CORE22's green polygon. Every unit of return the client earns costs disproportionately more risk — this is the misalignment in visual form.</div>
+          <div id="cmp9-eff-desc" style="font-size:14px;color:var(--text3);line-height:1.6;">The red polygon occupies <strong style="color:var(--red)">~19%</strong> of the area of HPC22's green polygon. Every unit of return the client earns costs disproportionately more risk — this is the misalignment in visual form.</div>
         </div>
       </div>
 
@@ -1429,13 +1419,13 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
       <div class="ba-grid">
         <div class="ba-col">
           <div class="ba-head" style="color:var(--red)">Before · Current Portfolio</div>
-          <div class="ba-rn" style="color:var(--red)">84</div>
+          <div id="beforeRN" class="ba-rn" style="color:var(--red)">84</div>
           <div class="ba-rn-lbl">Risk Number</div>
-          <div class="ba-row"><span class="ba-row-lbl">Volatility</span><span class="ba-row-val" style="color:var(--red)">18.4%</span></div>
-          <div class="ba-row"><span class="ba-row-lbl">Max Drawdown</span><span class="ba-row-val" style="color:var(--red)">−34%</span></div>
-          <div class="ba-row"><span class="ba-row-lbl">Sharpe Ratio</span><span class="ba-row-val" style="color:var(--red)">0.61</span></div>
-          <div class="ba-row"><span class="ba-row-lbl">CAGR</span><span class="ba-row-val" style="color:var(--red)">7.2%</span></div>
-          <div class="ba-row"><span class="ba-row-lbl">Alignment</span><span class="ba-row-val" style="color:var(--red)">38/100</span></div>
+          <div class="ba-row"><span class="ba-row-lbl">Volatility</span><span id="beforeVol" class="ba-row-val" style="color:var(--red)">18.4%</span></div>
+          <div class="ba-row"><span class="ba-row-lbl">Max Drawdown</span><span id="beforeDD" class="ba-row-val" style="color:var(--red)">−34%</span></div>
+          <div class="ba-row"><span class="ba-row-lbl">Sharpe Ratio</span><span id="beforeSharpe" class="ba-row-val" style="color:var(--red)">0.61</span></div>
+          <div class="ba-row"><span class="ba-row-lbl">CAGR</span><span id="beforeCAGR" class="ba-row-val" style="color:var(--red)">7.2%</span></div>
+          <div class="ba-row"><span class="ba-row-lbl">Alignment</span><span id="beforeAlign" class="ba-row-val" style="color:var(--red)">38/100</span></div>
         </div>
         <div class="ba-arrow-col">
           <div class="ba-arrow-sym">→</div>
@@ -1453,57 +1443,74 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
         </div>
       </div>
       <div class="delta-grid">
-        <div class="delta-card"><div class="delta-lbl">Risk Number</div><div class="delta-prev">84</div><div class="delta-now" id="dn-rn">72</div><div class="delta-chg" id="dc-rn">↓ −12 pts</div></div>
-        <div class="delta-card"><div class="delta-lbl">Volatility</div><div class="delta-prev">18.4%</div><div class="delta-now" id="dn-vol">14.2%</div><div class="delta-chg" id="dc-vol">↓ −4.2 pts</div></div>
-        <div class="delta-card"><div class="delta-lbl">Sharpe Ratio</div><div class="delta-prev">0.61</div><div class="delta-now" id="dn-sh">1.30</div><div class="delta-chg" id="dc-sh">↑ +0.69</div></div>
-        <div class="delta-card"><div class="delta-lbl">Alignment</div><div class="delta-prev">38</div><div class="delta-now" id="dn-al">86</div><div class="delta-chg" id="dc-al">↑ +48 pts</div></div>
+        <div class="delta-card"><div class="delta-lbl">Risk Number</div><div id="prev-rn" class="delta-prev">84</div><div class="delta-now" id="dn-rn">72</div><div class="delta-chg" id="dc-rn">↓ −12 pts</div></div>
+        <div class="delta-card"><div class="delta-lbl">Volatility</div><div id="prev-vol" class="delta-prev">18.4%</div><div class="delta-now" id="dn-vol">14.2%</div><div class="delta-chg" id="dc-vol">↓ −4.2 pts</div></div>
+        <div class="delta-card"><div class="delta-lbl">Sharpe Ratio</div><div id="prev-sh" class="delta-prev">0.61</div><div class="delta-now" id="dn-sh">1.30</div><div class="delta-chg" id="dc-sh">↑ +0.69</div></div>
+        <div class="delta-card"><div class="delta-lbl">Alignment</div><div id="prev-al" class="delta-prev">38</div><div class="delta-now" id="dn-al">86</div><div class="delta-chg" id="dc-al">↑ +48 pts</div></div>
       </div>
       <div class="charts-row">
         <!-- LEFT: Scatter chart (under BEFORE) — blend dot moves dynamically -->
         <div class="scatter-mini">
           <div class="proj-title">Risk vs Return · Market Positioning</div>
           <svg viewBox="0 0 340 200" width="100%" style="flex:1;min-height:80px;">
+            <!-- Axis: X=vol 5–35% → x 50–320 (9px/%), Y=CAGR 0–45% → y 170–15 (3.444px/%) -->
             <line x1="50" y1="15" x2="50" y2="170" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
             <line x1="50" y1="170" x2="320" y2="170" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-            <line x1="50" y1="153" x2="320" y2="153" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
-            <line x1="50" y1="118" x2="320" y2="118" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
-            <line x1="50" y1="84"  x2="320" y2="84"  stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
-            <line x1="50" y1="49"  x2="320" y2="49"  stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
-            <line x1="84"  y1="15" x2="84"  y2="170" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
-            <line x1="151" y1="15" x2="151" y2="170" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
-            <line x1="219" y1="15" x2="219" y2="170" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
-            <line x1="286" y1="15" x2="286" y2="170" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
-            <text x="44" y="157" font-family="monospace" font-size="8" fill="#3A4A5A" text-anchor="end">6%</text>
-            <text x="44" y="122" font-family="monospace" font-size="8" fill="#3A4A5A" text-anchor="end">8%</text>
-            <text x="44" y="88"  font-family="monospace" font-size="8" fill="#3A4A5A" text-anchor="end">10%</text>
-            <text x="44" y="53"  font-family="monospace" font-size="8" fill="#3A4A5A" text-anchor="end">12%</text>
-            <text x="84"  y="180" font-family="monospace" font-size="8" fill="#3A4A5A" text-anchor="middle">8%</text>
-            <text x="151" y="180" font-family="monospace" font-size="8" fill="#3A4A5A" text-anchor="middle">12%</text>
-            <text x="219" y="180" font-family="monospace" font-size="8" fill="#3A4A5A" text-anchor="middle">16%</text>
-            <text x="286" y="180" font-family="monospace" font-size="8" fill="#3A4A5A" text-anchor="middle">20%</text>
-            <text x="185" y="195" font-family="monospace" font-size="7" fill="#3A4A5A" text-anchor="middle">← Volatility (lower is better)</text>
-            <rect x="52" y="17" width="125" height="88" rx="2" fill="rgba(91,191,122,0.04)" stroke="rgba(91,191,122,0.08)" stroke-width="1"/>
-            <text x="60" y="30" font-family="monospace" font-size="7" fill="rgba(91,191,122,0.35)">EFFICIENT ZONE</text>
-            <circle cx="202" cy="75" r="7" fill="rgba(91,155,191,0.25)" stroke="#5B9BBF" stroke-width="1.5"/>
-            <text x="212" y="72" font-family="monospace" font-size="8" fill="#5B9BBF">SPY</text>
-            <circle cx="185" cy="67" r="8" fill="rgba(91,191,122,0.2)" stroke="#5BBF7A" stroke-width="2"/>
-            <text x="140" y="62" font-family="monospace" font-size="8" fill="#5BBF7A" font-weight="bold">CORE22</text>
-            <circle id="blend-dot" cx="244" cy="119" r="7" fill="rgba(212,175,69,0.25)" stroke="#D4AF45" stroke-width="2"/>
-            <text id="blend-dot-lbl" x="251" y="115" font-family="monospace" font-size="7" fill="#D4AF45">Blended</text>
-            <circle cx="259" cy="132" r="8" fill="rgba(208,70,60,0.2)" stroke="#D0463C" stroke-width="2"/>
-            <text x="269" y="128" font-family="monospace" font-size="8" fill="#D0463C">Portfolio</text>
+            <!-- Horizontal grid: CAGR 10%→y136, 20%→y101, 30%→y67, 40%→y33 -->
+            <line x1="50" y1="136" x2="320" y2="136" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+            <line x1="50" y1="101" x2="320" y2="101" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+            <line x1="50" y1="67"  x2="320" y2="67"  stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+            <line x1="50" y1="33"  x2="320" y2="33"  stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+            <!-- Vertical grid: vol 10%→x95, 15%→x140, 20%→x185, 25%→x230, 30%→x275 -->
+            <line x1="95"  y1="15" x2="95"  y2="170" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+            <line x1="140" y1="15" x2="140" y2="170" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+            <line x1="185" y1="15" x2="185" y2="170" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+            <line x1="230" y1="15" x2="230" y2="170" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+            <line x1="275" y1="15" x2="275" y2="170" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+            <!-- Y labels (CAGR) -->
+            <text x="44" y="140" font-family="monospace" font-size="7" fill="#3A4A5A" text-anchor="end">10%</text>
+            <text x="44" y="105" font-family="monospace" font-size="7" fill="#3A4A5A" text-anchor="end">20%</text>
+            <text x="44" y="71"  font-family="monospace" font-size="7" fill="#3A4A5A" text-anchor="end">30%</text>
+            <text x="44" y="37"  font-family="monospace" font-size="7" fill="#3A4A5A" text-anchor="end">40%</text>
+            <!-- X labels (Volatility) -->
+            <text x="95"  y="180" font-family="monospace" font-size="7" fill="#3A4A5A" text-anchor="middle">10%</text>
+            <text x="140" y="180" font-family="monospace" font-size="7" fill="#3A4A5A" text-anchor="middle">15%</text>
+            <text x="185" y="180" font-family="monospace" font-size="7" fill="#3A4A5A" text-anchor="middle">20%</text>
+            <text x="230" y="180" font-family="monospace" font-size="7" fill="#3A4A5A" text-anchor="middle">25%</text>
+            <text x="185" y="193" font-family="monospace" font-size="7" fill="#3A4A5A" text-anchor="middle">← Volatility (lower is better)</text>
+            <!-- Efficient zone: vol 5–17% -->
+            <rect x="52" y="17" width="108" height="151" rx="2" fill="rgba(91,191,122,0.04)" stroke="rgba(91,191,122,0.08)" stroke-width="1"/>
+            <text x="58" y="28" font-family="monospace" font-size="7" fill="rgba(91,191,122,0.3)">EFFICIENT</text>
+            <!-- Arrow marker -->
             <defs>
-              <marker id="arr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
-                <path d="M0,0 L0,6 L6,3 Z" fill="rgba(212,175,69,0.45)"/>
+              <marker id="arr-s" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+                <path d="M0,0 L0,6 L6,3 Z" fill="rgba(255,255,255,0.55)"/>
               </marker>
             </defs>
-            <path id="blend-arrow" d="M251,126 L244,119" fill="none" stroke="rgba(212,175,69,0.4)" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr)"/>
+            <!-- Blend arrow (dynamic) -->
+            <line id="blend-arrow" x1="171" y1="145" x2="171" y2="145" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr-s)" display="none"/>
+            <!-- SPY: vol=19.87%, cagr=11.13% → (184,132) -->
+            <circle cx="184" cy="132" r="6" fill="rgba(91,155,191,0.25)" stroke="#5B9BBF" stroke-width="1.5"/>
+            <text x="192" y="129" font-family="monospace" font-size="8" fill="#5B9BBF">SPY</text>
+            <!-- HPC11: vol=12.3%, cagr=13.0% → (116,125) -->
+            <circle cx="116" cy="125" r="7" fill="rgba(212,175,69,0.2)" stroke="#D4AF45" stroke-width="2"/>
+            <text x="73" y="119" font-family="monospace" font-size="8" fill="#D4AF45" font-weight="bold">HPC11</text>
+            <!-- HPC22: vol=27.6%, cagr=39.8% → (253,33) -->
+            <circle cx="253" cy="33" r="8" fill="rgba(91,191,122,0.2)" stroke="#5BBF7A" stroke-width="2"/>
+            <text x="261" y="30" font-family="monospace" font-size="8" fill="#5BBF7A" font-weight="bold">HPC22</text>
+            <!-- Portfolio: vol=18.4%, cagr=7.2% → (171,145) -->
+            <circle cx="171" cy="145" r="8" fill="rgba(208,70,60,0.2)" stroke="#D0463C" stroke-width="2"/>
+            <text x="179" y="141" font-family="monospace" font-size="8" fill="#D0463C">Portfolio</text>
+            <!-- Blend dot (dynamic, starts at Portfolio) -->
+            <circle id="blend-dot" cx="171" cy="145" r="6" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.8)" stroke-width="1.5" stroke-dasharray="3,2"/>
+            <text id="blend-dot-lbl" x="179" y="141" font-family="monospace" font-size="7" fill="rgba(255,255,255,0.75)">Blended</text>
           </svg>
           <div style="display:flex;gap:12px;font-family:var(--mono);font-size:10px;margin-top:6px;flex-wrap:wrap;">
             <span style="color:var(--red);">● Portfolio</span>
             <span style="color:#5B9BBF;">● SPY</span>
-            <span style="color:var(--green);">● CORE22</span>
-            <span style="color:var(--gold);">● Blended</span>
+            <span style="color:var(--gold);">● HPC11</span>
+            <span style="color:var(--green);">● HPC22</span>
+            <span style="color:rgba(255,255,255,0.75);">◌ Blended</span>
           </div>
         </div>
         <!-- RIGHT: Projection chart (under AFTER) — line updates dynamically -->
@@ -1783,7 +1790,8 @@ function goStep(n) {
   if (cur === 6)  { paeTargetVal = parseFloat(document.getElementById('goalSlider')?.value || document.getElementById('paeSlider')?.value || '200000'); requestAnimationFrame(paeInit); }
   if (cur === 7)  { const lbl = document.getElementById('port-ref-label'); if (lbl) lbl.textContent = paeRefLabel(paeActiveRef); }
   if (cur === 8)  { populateDiagnosis(); const lbl = document.getElementById('diag-ref-label'); if (lbl) lbl.textContent = paeRefLabel(paeActiveRef); }
-  if (cur === 11) runSim();
+  if (cur === 9)  { populateComparison(); }
+  if (cur === 11) { updateBeforePanel(); runSim(); }
 
   updateNextBtn();
 }
@@ -2421,11 +2429,11 @@ function populateReveal() {
    STEP 7 — PORTFOLIO SELECTION
 ══════════════════════════════════════ */
 const portfolios = {
-  aggressive:   { rn:84, vol:18.4, dd:-34, sharpe:0.61, cagr:7.2 },
-  growth:       { rn:75, vol:14.8, dd:-27, sharpe:0.91, cagr:9.1 },
-  balanced:     { rn:60, vol:11.2, dd:-19, sharpe:1.05, cagr:7.8 },
-  conservative: { rn:45, vol:8.1,  dd:-13, sharpe:1.12, cagr:6.4 },
-  income:       { rn:52, vol:9.8,  dd:-15, sharpe:1.08, cagr:7.0 }
+  aggressive:   { rn:84, vol:18.4, dd:-34, sharpe:0.61, cagr:7.2,  align:38 },
+  growth:       { rn:75, vol:14.8, dd:-27, sharpe:0.91, cagr:9.1,  align:55 },
+  balanced:     { rn:60, vol:11.2, dd:-19, sharpe:1.05, cagr:7.8,  align:68 },
+  conservative: { rn:45, vol:8.1,  dd:-13, sharpe:1.12, cagr:6.4,  align:78 },
+  income:       { rn:52, vol:9.8,  dd:-15, sharpe:1.08, cagr:7.0,  align:72 }
 };
 let selectedPortKey = 'aggressive';
 
@@ -2443,6 +2451,8 @@ function selectModel(el, key) {
   document.querySelectorAll('[id^=model-]').forEach(c => c.classList.remove('sel'));
   el.classList.add('sel');
   selectedPortKey = key;
+  const p = portfolios[key];
+  if (p) { BEFORE.rn = p.rn; BEFORE.vol = p.vol; BEFORE.dd = p.dd; BEFORE.sharpe = p.sharpe; BEFORE.cagr = p.cagr; BEFORE.align = p.align; }
 }
 function simulateUpload() {
   alert('Portfolio upload — feature in development.\nUsing a model portfolio for this demonstration.');
@@ -2496,7 +2506,7 @@ function populateDiagnosis() {
 /* ══════════════════════════════════════
    SIMULATION ENGINE
 ══════════════════════════════════════ */
-const BEFORE = { rn:84, vol:18.4, dd:-34, sharpe:0.61, cagr:7.2, align:38 };
+let BEFORE = { rn:84, vol:18.4, dd:-34, sharpe:0.61, cagr:7.2, align:38 };
 const HPC11  = { rn:33, vol:12.3, dd:-18, sharpe:1.38, cagr:13.0 };
 const HPC22  = { rn:37, vol:27.6, dd:-26, sharpe:1.52, cagr:39.8 };
 
@@ -2515,16 +2525,136 @@ function blend(h11p, h22p) {
 function updateBlendDot(vol, cagr) {
   const dot = document.getElementById('blend-dot');
   const lbl = document.getElementById('blend-dot-lbl');
+  const arr = document.getElementById('blend-arrow');
   if (!dot) return;
-  // cx = 50 + (vol-6)*16.875, cy = 170 - (cagr-5)*17.22
-  const cx = Math.max(53, Math.min(317, 50 + (vol - 6) * 16.875));
-  const cy = Math.max(18, Math.min(168, 170 - (cagr - 5) * 17.22));
+  // Axis: X vol 5–35% → x 50–320 (9px/1%), Y CAGR 0–45% → y 170–15 (3.444px/1%)
+  const cx = Math.max(53, Math.min(317, 50 + (vol - 5) * 9));
+  const cy = Math.max(18, Math.min(168, 170 - cagr * 3.444));
   dot.setAttribute('cx', cx.toFixed(1));
   dot.setAttribute('cy', cy.toFixed(1));
   if (lbl) {
-    lbl.setAttribute('x', (cx + 8).toFixed(1));
+    const lblX = cx < 280 ? cx + 8 : cx - 46;
+    lbl.setAttribute('x', lblX.toFixed(1));
     lbl.setAttribute('y', (cy - 4).toFixed(1));
   }
+  // Arrow from Portfolio (171,145) to Blend
+  if (arr) {
+    const px = 171, py = 145;
+    const dx = cx - px, dy = cy - py;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    if (dist > 14) {
+      const scale = (dist - 12) / dist;
+      arr.setAttribute('x1', px.toFixed(1));
+      arr.setAttribute('y1', py.toFixed(1));
+      arr.setAttribute('x2', (px + dx * scale).toFixed(1));
+      arr.setAttribute('y2', (py + dy * scale).toFixed(1));
+      arr.removeAttribute('display');
+    } else {
+      arr.setAttribute('display', 'none');
+    }
+  }
+}
+
+/* ══════════════════════════════════════
+   STEP 9 — COMPARISON
+══════════════════════════════════════ */
+function radarPt9(s, axisIdx) {
+  const cx = 220, cy = 215, r = 160;
+  const rad = [-90, -18, 54, 126, 198][axisIdx] * Math.PI / 180;
+  return { x: (cx + s * r * Math.cos(rad)).toFixed(1), y: (cy + s * r * Math.sin(rad)).toFixed(1) };
+}
+function radarPolyPts9(scales) {
+  return scales.map((s, i) => { const p = radarPt9(s, i); return p.x + ',' + p.y; }).join(' ');
+}
+
+function populateComparison() {
+  const port = portfolios[selectedPortKey] || portfolios.aggressive;
+  const hpc  = HPC22;
+  const volBetter = port.vol <= hpc.vol;
+  const rows = [
+    { lbl: 'Volatility', portVal: port.vol + '%', hpcVal: hpc.vol + '%',
+      portBar: Math.min(100, port.vol / 35 * 100), hpcBar: Math.min(100, hpc.vol / 35 * 100),
+      portColor: volBetter ? 'var(--green)' : 'var(--red)', hpcColor: volBetter ? 'var(--gold)' : 'var(--green)',
+      delta: volBetter ? '+' + ((hpc.vol - port.vol) / port.vol * 100).toFixed(0) + '% higher (active)'
+                       : ((port.vol - hpc.vol) / port.vol * 100).toFixed(0) + '% lower ↓' },
+    { lbl: 'Max Drawdown', portVal: port.dd + '%', hpcVal: hpc.dd + '%',
+      portBar: Math.min(100, Math.abs(port.dd) / 40 * 100), hpcBar: Math.min(100, Math.abs(hpc.dd) / 40 * 100),
+      portColor: 'var(--red)', hpcColor: 'var(--green)',
+      delta: ((Math.abs(port.dd) - Math.abs(hpc.dd)) / Math.abs(port.dd) * 100).toFixed(0) + '% shallower ↓' },
+    { lbl: 'Sharpe Ratio', portVal: port.sharpe.toFixed(2), hpcVal: hpc.sharpe.toFixed(2),
+      portBar: Math.min(100, port.sharpe / 2 * 100), hpcBar: Math.min(100, hpc.sharpe / 2 * 100),
+      portColor: 'var(--red)', hpcColor: 'var(--green)',
+      delta: '+' + ((hpc.sharpe / port.sharpe - 1) * 100).toFixed(0) + '% higher ↑' },
+    { lbl: 'CAGR (5yr)', portVal: port.cagr + '%', hpcVal: hpc.cagr + '%',
+      portBar: Math.min(100, port.cagr / 45 * 100), hpcBar: Math.min(100, hpc.cagr / 45 * 100),
+      portColor: 'var(--gold)', hpcColor: 'var(--green)',
+      delta: '+' + ((hpc.cagr / port.cagr - 1) * 100).toFixed(0) + '% higher ↑' },
+    { lbl: 'Risk Number', portVal: 'RN ' + port.rn, hpcVal: 'RN ' + hpc.rn,
+      portBar: port.rn, hpcBar: hpc.rn, portColor: 'var(--red)', hpcColor: 'var(--green)',
+      delta: '−' + (port.rn - hpc.rn) + ' pts aligned ↓',
+      portSub: 'Exceeds mandate', hpcSub: 'Within mandate' }
+  ];
+  const rowsEl = document.getElementById('cmp9-rows');
+  if (rowsEl) rowsEl.innerHTML = rows.map((row, i) => `
+    <div class="comp-row"${i === 4 ? ' style="border-bottom:none;"' : ''}>
+      <div class="comp-left-cell">
+        <div class="comp-val-big" style="color:${row.portColor};">${row.portVal}</div>
+        <div style="width:100%;max-width:200px;height:4px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden;display:flex;justify-content:flex-end;">
+          <div style="height:100%;width:${row.portBar.toFixed(1)}%;background:${row.portColor};border-radius:2px;"></div>
+        </div>
+        ${row.portSub ? `<div style="font-family:var(--mono);font-size:10px;color:var(--text4);">${row.portSub}</div>` : ''}
+      </div>
+      <div class="comp-center-cell"><div class="comp-metric-name">${row.lbl}</div><div class="comp-delta">${row.delta}</div></div>
+      <div class="comp-right-cell">
+        <div class="comp-val-big" style="color:${row.hpcColor};">${row.hpcVal}</div>
+        <div style="width:100%;max-width:200px;height:4px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden;">
+          <div style="height:100%;width:${row.hpcBar.toFixed(1)}%;background:${row.hpcColor};border-radius:2px;"></div>
+        </div>
+        ${row.hpcSub ? `<div style="font-family:var(--mono);font-size:10px;color:var(--green);">${row.hpcSub}</div>` : ''}
+      </div>
+    </div>`).join('');
+
+  const portScales = [
+    Math.max(0, 1 - Math.abs(port.dd) / 40),
+    Math.min(1, port.cagr / 45),
+    (port.align || 38) / 100,
+    Math.min(1, port.sharpe / 2.0),
+    Math.max(0, 1 - port.vol / 35)
+  ];
+  const portPolyEl = document.getElementById('cmp9-poly-port');
+  if (portPolyEl) portPolyEl.setAttribute('points', radarPolyPts9(portScales));
+  portScales.forEach((s, k) => {
+    const dot = document.getElementById('cmp9-dot-p' + k);
+    if (dot) { const p = radarPt9(s, k); dot.setAttribute('cx', p.x); dot.setAttribute('cy', p.y); }
+  });
+
+  const hpcScales = [0.35, 0.884, 0.98, 0.76, 0.211];
+  const hpcArea  = hpcScales.reduce((acc, s, i) => acc + s * hpcScales[(i + 1) % 5], 0);
+  const portArea = portScales.reduce((acc, s, i) => acc + s * portScales[(i + 1) % 5], 0);
+  const coverage = portArea / hpcArea;
+  const gapPct   = Math.round((1 - coverage) * 100);
+  const covPct   = Math.round(coverage * 100);
+  const effPct  = document.getElementById('cmp9-eff-pct');
+  const effDesc = document.getElementById('cmp9-eff-desc');
+  if (effPct)  effPct.textContent = '~' + gapPct + '%';
+  if (effDesc) effDesc.innerHTML  = `The red polygon occupies <strong style="color:var(--red)">~${covPct}%</strong> of the area of HPC22's green polygon. Every unit of return the client earns costs disproportionately more risk — this is the misalignment in visual form.`;
+}
+
+/* ══════════════════════════════════════
+   SIMULATION ENGINE
+══════════════════════════════════════ */
+function updateBeforePanel() {
+  const g = id => document.getElementById(id);
+  if (g('beforeRN'))    g('beforeRN').textContent    = BEFORE.rn;
+  if (g('beforeVol'))   g('beforeVol').textContent   = BEFORE.vol + '%';
+  if (g('beforeDD'))    g('beforeDD').textContent    = BEFORE.dd + '%';
+  if (g('beforeSharpe'))g('beforeSharpe').textContent= BEFORE.sharpe;
+  if (g('beforeCAGR'))  g('beforeCAGR').textContent  = BEFORE.cagr + '%';
+  if (g('beforeAlign')) g('beforeAlign').textContent = BEFORE.align + '/100';
+  if (g('prev-rn'))  g('prev-rn').textContent  = BEFORE.rn;
+  if (g('prev-vol')) g('prev-vol').textContent = BEFORE.vol + '%';
+  if (g('prev-sh'))  g('prev-sh').textContent  = BEFORE.sharpe;
+  if (g('prev-al'))  g('prev-al').textContent  = BEFORE.align;
 }
 
 function runSim() {
@@ -2539,7 +2669,7 @@ function runSim() {
     (h11 > 0 ? '+' + h11 + '% HPC11\n' : '') + (h22 > 0 ? '+' + h22 + '% HPC22' : '');
 
   const r     = blend(h11, h22);
-  const align = Math.min(98, Math.round(38 + (84 - r.rn) * 3.5));
+  const align = Math.min(98, Math.round(BEFORE.align + (BEFORE.rn - r.rn) * 3.5));
 
   document.getElementById('afterRN').textContent     = r.rn;
   document.getElementById('afterVol').textContent    = r.vol + '%';
@@ -2548,13 +2678,13 @@ function runSim() {
   document.getElementById('afterCAGR').textContent   = r.cagr + '%';
   document.getElementById('afterAlign').textContent  = align + '/100';
   document.getElementById('dn-rn').textContent  = r.rn;
-  document.getElementById('dc-rn').textContent  = '↓ −' + (84 - r.rn) + ' pts';
+  document.getElementById('dc-rn').textContent  = '↓ −' + (BEFORE.rn - r.rn) + ' pts';
   document.getElementById('dn-vol').textContent = r.vol + '%';
-  document.getElementById('dc-vol').textContent = '↓ −' + (18.4 - r.vol).toFixed(1) + ' pts';
+  document.getElementById('dc-vol').textContent = '↓ −' + (BEFORE.vol - r.vol).toFixed(1) + ' pts';
   document.getElementById('dn-sh').textContent  = r.sharpe;
-  document.getElementById('dc-sh').textContent  = '↑ +' + (r.sharpe - 0.61).toFixed(2);
+  document.getElementById('dc-sh').textContent  = '↑ +' + (r.sharpe - BEFORE.sharpe).toFixed(2);
   document.getElementById('dn-al').textContent  = align;
-  document.getElementById('dc-al').textContent  = '↑ +' + (align - 38) + ' pts';
+  document.getElementById('dc-al').textContent  = '↑ +' + (align - BEFORE.align) + ' pts';
   document.getElementById('cta-score').textContent = align;
 
   setCheck('sd-rn',  'sc-rn',  r.rn  <= 73, 'Risk Number: '  + r.rn   + (r.rn  <= 73 ? ' ✓ Within tolerance' : ' ⚠ Exceeds limit'));
