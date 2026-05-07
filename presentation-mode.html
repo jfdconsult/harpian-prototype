@@ -1331,13 +1331,13 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
           <div style="font-family:var(--syne);font-size:35px;font-weight:800;color:var(--gold);line-height:1;margin-bottom:4px;">HPC11</div>
           <div style="font-family:var(--mono);font-size:11px;color:var(--text3);margin-bottom:10px;">Conservative · Lower Drawdown · Defensive</div>
           <div style="display:flex;gap:6px;margin-bottom:14px;">
-            <span class="badge badge-gold" style="font-size:10px;padding:4px 9px;">RN 45–60</span>
+            <span class="badge badge-gold" style="font-size:10px;padding:4px 9px;">RN 30–38</span>
             <span class="badge badge-neutral" style="font-size:10px;padding:4px 9px;">StormGuard</span>
           </div>
           <div style="border-top:1px solid rgba(212,175,69,0.12);">
-            <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:14px;">Target Volatility</span><span class="hpc-row-val" style="font-size:15px;">8–12%</span></div>
-            <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:14px;">Max Drawdown</span><span class="hpc-row-val" style="color:var(--green);font-size:15px;">−14%</span></div>
-            <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:14px;">Expected Return</span><span class="hpc-row-val" style="color:var(--green);font-size:15px;">7.5–9.0%</span></div>
+            <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:14px;">Target Volatility</span><span class="hpc-row-val" style="font-size:15px;">10–15%</span></div>
+            <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:14px;">Max Drawdown</span><span class="hpc-row-val" style="color:var(--green);font-size:15px;">−18%</span></div>
+            <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:14px;">Expected Return</span><span class="hpc-row-val" style="color:var(--green);font-size:15px;">11–15%</span></div>
             <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:14px;">Sharpe (5yr)</span><span class="hpc-row-val" style="color:var(--green);font-size:15px;">1.38</span></div>
             <div class="hpc-row" style="padding:11px 0;border-bottom:none;"><span class="hpc-row-lbl" style="font-size:14px;">Suggested Allocation</span><span class="hpc-row-val" style="color:var(--gold);font-size:15px;">10–15% AUM</span></div>
           </div>
@@ -1358,13 +1358,13 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
           <div style="font-family:var(--syne);font-size:35px;font-weight:800;color:var(--green);line-height:1;margin-bottom:4px;">HPC22</div>
           <div style="font-family:var(--mono);font-size:11px;color:var(--text3);margin-bottom:10px;">Growth Alignment · Higher Return · Momentum</div>
           <div style="display:flex;gap:6px;margin-bottom:14px;">
-            <span class="badge badge-green" style="font-size:10px;padding:4px 9px;">RN 60–80</span>
+            <span class="badge badge-green" style="font-size:10px;padding:4px 9px;">RN 35–42</span>
             <span class="badge badge-neutral" style="font-size:10px;padding:4px 9px;">StormGuard + TLH</span>
           </div>
           <div style="border-top:1px solid rgba(91,191,122,0.12);">
-            <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:14px;">Target Volatility</span><span class="hpc-row-val" style="font-size:15px;">12–16%</span></div>
-            <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:14px;">Max Drawdown</span><span class="hpc-row-val" style="color:var(--green);font-size:15px;">−19%</span></div>
-            <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:14px;">Expected Return</span><span class="hpc-row-val" style="color:var(--green);font-size:15px;">9.5–12.0%</span></div>
+            <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:14px;">Target Volatility</span><span class="hpc-row-val" style="font-size:15px;">20–30%</span></div>
+            <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:14px;">Max Drawdown</span><span class="hpc-row-val" style="color:var(--green);font-size:15px;">−26%</span></div>
+            <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:14px;">Expected Return</span><span class="hpc-row-val" style="color:var(--green);font-size:15px;">35–45%</span></div>
             <div class="hpc-row" style="padding:11px 0;"><span class="hpc-row-lbl" style="font-size:14px;">Sharpe (5yr)</span><span class="hpc-row-val" style="color:var(--green);font-size:15px;">1.52</span></div>
             <div class="hpc-row" style="padding:11px 0;border-bottom:none;"><span class="hpc-row-lbl" style="font-size:14px;">Suggested Allocation</span><span class="hpc-row-val" style="color:var(--green);font-size:15px;">20–30% AUM</span></div>
           </div>
@@ -2497,8 +2497,8 @@ function populateDiagnosis() {
    SIMULATION ENGINE
 ══════════════════════════════════════ */
 const BEFORE = { rn:84, vol:18.4, dd:-34, sharpe:0.61, cagr:7.2, align:38 };
-const HPC11  = { rn:40, vol:9.5,  dd:-14, sharpe:1.38, cagr:8.5 };
-const HPC22  = { rn:65, vol:14.0, dd:-19, sharpe:1.52, cagr:11.0 };
+const HPC11  = { rn:33, vol:12.3, dd:-18, sharpe:1.38, cagr:13.0 };
+const HPC22  = { rn:37, vol:27.6, dd:-26, sharpe:1.52, cagr:39.8 };
 
 function blend(h11p, h22p) {
   const w0 = (100 - h11p - h22p) / 100;
@@ -2642,8 +2642,8 @@ document.getElementById('scheduleModal').addEventListener('click', function(e) {
    MODULE 2 — ASSET EFFICIENCY ENGINE
 ══════════════════════════════════════ */
 const ACE_DATA = [
-  { ticker:'HPC11',  name:'Harpian HPC11',                 cat:'Harpian Strategy',    rn:40,  ret:8.25,  vol:9.50,  d6:-6.97,  u6:15.03 },
-  { ticker:'HPC22',  name:'Harpian HPC22',                 cat:'Harpian Strategy',    rn:65,  ret:38.00, vol:14.00, d6:+1.26,  u6:33.72 },
+  { ticker:'HPC11',  name:'Harpian HPC11',                 cat:'Harpian Strategy',    rn:33,  ret:13.0,  vol:12.3,  d6:-5.6,   u6:19.0  },
+  { ticker:'HPC22',  name:'Harpian HPC22',                 cat:'Harpian Strategy',    rn:37,  ret:39.8,  vol:27.6,  d6:-8.9,   u6:46.3  },
   { ticker:'CLIENT', name:'Current Portfolio',             cat:'Client Portfolio',    rn:84,  ret:7.20,  vol:18.40, d6:-17.82, u6:24.86 },
   { ticker:'SHY',    name:'iShares 1-3yr Treasury',        cat:'US Treasury',         rn:10,  ret:1.60,  vol:1.49,  d6:-0.94,  u6:2.53  },
   { ticker:'IEF',    name:'iShares 7-10yr Treasury',       cat:'US Treasury',         rn:40,  ret:2.92,  vol:7.00,  d6:-6.67,  u6:9.56  },
