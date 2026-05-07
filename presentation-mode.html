@@ -216,7 +216,9 @@ input[type=range].hpc22::-webkit-slider-thumb{-webkit-appearance:none;width:18px
 .delta-prev{font-family:var(--mono);font-size:12px;color:var(--red);text-decoration:line-through;margin-bottom:2px;}
 .delta-now{font-family:var(--syne);font-size:24px;font-weight:700;color:var(--green);line-height:1;}
 .delta-chg{font-family:var(--mono);font-size:11px;color:var(--green);margin-top:3px;}
-.proj-bar-wrap{background:var(--panel);border:1px solid var(--border);padding:10px 16px;flex:1;display:flex;flex-direction:column;}
+.charts-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;flex:1;min-height:0;}
+.scatter-mini{background:var(--panel);border:1px solid var(--border);padding:10px 14px;display:flex;flex-direction:column;min-height:0;}
+.proj-bar-wrap{background:var(--panel);border:1px solid var(--border);padding:10px 16px;display:flex;flex-direction:column;min-height:0;}
 .proj-title{font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text3);margin-bottom:14px;}
 
 /* MODEL CARD */
@@ -1456,29 +1458,79 @@ input[type=range].tre-slider::-moz-range-thumb{width:18px;height:18px;border-rad
         <div class="delta-card"><div class="delta-lbl">Sharpe Ratio</div><div class="delta-prev">0.61</div><div class="delta-now" id="dn-sh">1.30</div><div class="delta-chg" id="dc-sh">↑ +0.69</div></div>
         <div class="delta-card"><div class="delta-lbl">Alignment</div><div class="delta-prev">38</div><div class="delta-now" id="dn-al">86</div><div class="delta-chg" id="dc-al">↑ +48 pts</div></div>
       </div>
-      <div class="proj-bar-wrap">
-        <div class="proj-title">5-Year Projection — $8.2M AUM</div>
-        <svg width="100%" style="flex:1;min-height:100px;" viewBox="0 0 600 110" preserveAspectRatio="none">
-          <defs>
-            <linearGradient id="gGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#5BBF7A" stop-opacity="0.22"/><stop offset="100%" stop-color="#5BBF7A" stop-opacity="0"/></linearGradient>
-            <linearGradient id="rGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#D0463C" stop-opacity="0.12"/><stop offset="100%" stop-color="#D0463C" stop-opacity="0"/></linearGradient>
-          </defs>
-          <line x1="0" y1="25" x2="600" y2="25" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
-          <line x1="0" y1="55" x2="600" y2="55" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
-          <line x1="0" y1="85" x2="600" y2="85" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
-          <path id="proj-green-fill" d="M0,98 L120,78 L240,58 L360,40 L480,24 L600,10 L600,110 L0,110 Z" fill="url(#gGrad)"/>
-          <path id="proj-red-fill"   d="M0,98 L120,90 L240,83 L360,76 L480,70 L600,64 L600,110 L0,110 Z" fill="url(#rGrad)"/>
-          <path id="proj-green-path" d="M0,98 L120,78 L240,58 L360,40 L480,24 L600,10" fill="none" stroke="#5BBF7A" stroke-width="2.5"/>
-          <path id="proj-red-path"   d="M0,98 L120,90 L240,83 L360,76 L480,70 L600,64" fill="none" stroke="#D0463C" stroke-width="2" stroke-dasharray="8,4"/>
-          <circle cx="0" cy="98" r="4" fill="#D4AF45"/>
-          <text x="6" y="93" font-family="monospace" font-size="10" fill="#D4AF45">$8.2M</text>
-          <text id="proj-green-lbl" x="530" y="14" font-family="monospace" font-size="10" fill="#5BBF7A">$14.1M</text>
-          <text id="proj-red-lbl"   x="530" y="60" font-family="monospace" font-size="10" fill="#D0463C">$11.6M</text>
-        </svg>
-        <div style="display:flex;gap:20px;font-family:var(--mono);font-size:11px;margin-top:6px;">
-          <span style="color:var(--green);" id="proj-green-legend">— With HPC · ~9.6% p.a.</span>
-          <span style="color:var(--red);">- - Without HPC · ~7.2% p.a.</span>
-          <span style="color:var(--gold);margin-left:auto;" id="proj-diff-label">5-year difference: <strong>+$2.5M</strong></span>
+      <div class="charts-row">
+        <!-- LEFT: Scatter chart (under BEFORE) — blend dot moves dynamically -->
+        <div class="scatter-mini">
+          <div class="proj-title">Risk vs Return · Market Positioning</div>
+          <svg viewBox="0 0 340 200" width="100%" style="flex:1;min-height:80px;">
+            <line x1="50" y1="15" x2="50" y2="170" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+            <line x1="50" y1="170" x2="320" y2="170" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+            <line x1="50" y1="153" x2="320" y2="153" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+            <line x1="50" y1="118" x2="320" y2="118" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+            <line x1="50" y1="84"  x2="320" y2="84"  stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+            <line x1="50" y1="49"  x2="320" y2="49"  stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+            <line x1="84"  y1="15" x2="84"  y2="170" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+            <line x1="151" y1="15" x2="151" y2="170" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+            <line x1="219" y1="15" x2="219" y2="170" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+            <line x1="286" y1="15" x2="286" y2="170" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+            <text x="44" y="157" font-family="monospace" font-size="8" fill="#3A4A5A" text-anchor="end">6%</text>
+            <text x="44" y="122" font-family="monospace" font-size="8" fill="#3A4A5A" text-anchor="end">8%</text>
+            <text x="44" y="88"  font-family="monospace" font-size="8" fill="#3A4A5A" text-anchor="end">10%</text>
+            <text x="44" y="53"  font-family="monospace" font-size="8" fill="#3A4A5A" text-anchor="end">12%</text>
+            <text x="84"  y="180" font-family="monospace" font-size="8" fill="#3A4A5A" text-anchor="middle">8%</text>
+            <text x="151" y="180" font-family="monospace" font-size="8" fill="#3A4A5A" text-anchor="middle">12%</text>
+            <text x="219" y="180" font-family="monospace" font-size="8" fill="#3A4A5A" text-anchor="middle">16%</text>
+            <text x="286" y="180" font-family="monospace" font-size="8" fill="#3A4A5A" text-anchor="middle">20%</text>
+            <text x="185" y="195" font-family="monospace" font-size="7" fill="#3A4A5A" text-anchor="middle">← Volatility (lower is better)</text>
+            <rect x="52" y="17" width="125" height="88" rx="2" fill="rgba(91,191,122,0.04)" stroke="rgba(91,191,122,0.08)" stroke-width="1"/>
+            <text x="60" y="30" font-family="monospace" font-size="7" fill="rgba(91,191,122,0.35)">EFFICIENT ZONE</text>
+            <circle cx="202" cy="75" r="7" fill="rgba(91,155,191,0.25)" stroke="#5B9BBF" stroke-width="1.5"/>
+            <text x="212" y="72" font-family="monospace" font-size="8" fill="#5B9BBF">SPY</text>
+            <circle cx="185" cy="67" r="8" fill="rgba(91,191,122,0.2)" stroke="#5BBF7A" stroke-width="2"/>
+            <text x="140" y="62" font-family="monospace" font-size="8" fill="#5BBF7A" font-weight="bold">CORE22</text>
+            <circle id="blend-dot" cx="244" cy="119" r="7" fill="rgba(212,175,69,0.25)" stroke="#D4AF45" stroke-width="2"/>
+            <text id="blend-dot-lbl" x="251" y="115" font-family="monospace" font-size="7" fill="#D4AF45">Blended</text>
+            <circle cx="259" cy="132" r="8" fill="rgba(208,70,60,0.2)" stroke="#D0463C" stroke-width="2"/>
+            <text x="269" y="128" font-family="monospace" font-size="8" fill="#D0463C">Portfolio</text>
+            <defs>
+              <marker id="arr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+                <path d="M0,0 L0,6 L6,3 Z" fill="rgba(212,175,69,0.45)"/>
+              </marker>
+            </defs>
+            <path id="blend-arrow" d="M251,126 L244,119" fill="none" stroke="rgba(212,175,69,0.4)" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr)"/>
+          </svg>
+          <div style="display:flex;gap:12px;font-family:var(--mono);font-size:10px;margin-top:6px;flex-wrap:wrap;">
+            <span style="color:var(--red);">● Portfolio</span>
+            <span style="color:#5B9BBF;">● SPY</span>
+            <span style="color:var(--green);">● CORE22</span>
+            <span style="color:var(--gold);">● Blended</span>
+          </div>
+        </div>
+        <!-- RIGHT: Projection chart (under AFTER) — line updates dynamically -->
+        <div class="proj-bar-wrap">
+          <div class="proj-title">5-Year Projection — $8.2M AUM</div>
+          <svg width="100%" style="flex:1;min-height:80px;" viewBox="0 0 600 110" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="gGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#5BBF7A" stop-opacity="0.22"/><stop offset="100%" stop-color="#5BBF7A" stop-opacity="0"/></linearGradient>
+              <linearGradient id="rGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#D0463C" stop-opacity="0.12"/><stop offset="100%" stop-color="#D0463C" stop-opacity="0"/></linearGradient>
+            </defs>
+            <line x1="0" y1="25" x2="600" y2="25" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <line x1="0" y1="55" x2="600" y2="55" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <line x1="0" y1="85" x2="600" y2="85" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <path id="proj-green-fill" d="M0,98 L120,78 L240,58 L360,40 L480,24 L600,10 L600,110 L0,110 Z" fill="url(#gGrad)"/>
+            <path id="proj-red-fill"   d="M0,98 L120,90 L240,83 L360,76 L480,70 L600,64 L600,110 L0,110 Z" fill="url(#rGrad)"/>
+            <path id="proj-green-path" d="M0,98 L120,78 L240,58 L360,40 L480,24 L600,10" fill="none" stroke="#5BBF7A" stroke-width="2.5"/>
+            <path id="proj-red-path"   d="M0,98 L120,90 L240,83 L360,76 L480,70 L600,64" fill="none" stroke="#D0463C" stroke-width="2" stroke-dasharray="8,4"/>
+            <circle cx="0" cy="98" r="4" fill="#D4AF45"/>
+            <text x="6" y="93" font-family="monospace" font-size="10" fill="#D4AF45">$8.2M</text>
+            <text id="proj-green-lbl" x="530" y="14" font-family="monospace" font-size="10" fill="#5BBF7A">$14.1M</text>
+            <text id="proj-red-lbl"   x="530" y="60" font-family="monospace" font-size="10" fill="#D0463C">$11.6M</text>
+          </svg>
+          <div style="display:flex;gap:14px;font-family:var(--mono);font-size:11px;margin-top:6px;flex-wrap:wrap;">
+            <span style="color:var(--green);" id="proj-green-legend">— With HPC · ~9.6% p.a.</span>
+            <span style="color:var(--red);">- - Without HPC · ~7.2% p.a.</span>
+            <span style="color:var(--gold);margin-left:auto;" id="proj-diff-label">5-year diff: <strong>+$2.5M</strong></span>
+          </div>
         </div>
       </div>
     </div>
